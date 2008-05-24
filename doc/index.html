@@ -1,0 +1,148 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
+
+  <title>assert{ 2.0 }</title>
+</head>
+
+<body bgcolor='white' style='font-family: Times, serif; background-image: url(ramp.png); background-repeat: repeat-x;'>
+  <table width='100%' cellpadding='6px'>
+    <tr width='25%'>
+      <td></td>
+
+      <td width='600' style='background-color: #ffffef'>
+        <table width='100%'>
+          <tr>
+            <td valign='top'>
+              <h1><code>assert{ 2.0 }</code></h1>
+            </td>
+
+            <td align='right' rowspan='2'><img src=
+            'the_test_button.png' width='67' height='64' /></td>
+          </tr>
+
+          <tr>
+            <td>This library obsoletes the following <a href='http://www.ruby-doc.org/stdlib/libdoc/test/unit/rdoc/classes/Test/Unit.html'><strong>RubyUnit</strong></a>
+            assertions:</td>
+          </tr>
+        </table>
+
+        <center>
+          <table>
+            <tr>
+              <td align='left'><code>assert</code><br />
+              <code>assert_block</code><br />
+              <code>assert_equal</code><br />
+              <code>assert_instance_of</code></td>
+
+              <td align='left'><code>assert_kind_of</code><br />
+              <code>assert_operator</code><br />
+              <code>assert_match</code><br />
+              <code>assert_nil</code></td>
+
+              <td align='left' valign='top'>
+              <code>assert_no_match</code><br />
+              <code>assert_not_equal</code><br />
+              <code>assert_not_nil</code></td>
+            </tr>
+          </table>
+        </center>
+
+        <p>The next time you think to type any of them, use
+        <strong><code>assert{ 2.0 }</code></strong> instead. Put
+        whatever you like inside the
+        <strong><code>{</code></strong> block
+        <strong><code>}</code></strong>.</p>
+
+        <blockquote>
+          <strong><code>assert_equal(x, y)</code></strong> becomes
+          <strong><code>assert{ x == y }</code></strong>.<br />
+          <strong><code>assert_nil(x)</code></strong> becomes <strong><code>deny{ x
+          }</code></strong>.<br />
+          <strong><code>assert_not_nil(x)</code></strong> becomes ... just
+          <strong><code>assert{ x }</code></strong>!
+        </blockquote>
+
+        <p>If the last statement in that block fails, your test
+        runner will reflect the name and value of every variable in
+        your assertion, like this:</p>
+
+        <center><table>
+          <tr>
+            <td valign="top" align='center' style=
+            'border:solid windowtext 1.0pt; padding:.1in 5.75pt .1in 5.75pt'>
+            __source__</td>
+
+            <td valign="top" align='center' style=
+            'border:solid windowtext 1.0pt; border-left:none;padding:.1in 5.75pt .1in 5.75pt'>
+            __failure_diagnostic__</td>
+          </tr>
+
+          <tr>
+            <td valign="top" style=
+            'border:solid windowtext 1.0pt; border-top:none;padding:.1in 5.75pt .1in 5.75pt'>
+            <pre>
+x = 43
+assert{ x == 42 }
+</pre>
+            </td>
+
+            <td valign="top" style=
+            'border-top:none;border-left: none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt; padding:.1in 5.75pt .1in 5.75pt'>
+            <pre>
+assert{ <b>x == 42</b> } --&gt; false - should pass
+    x --&gt; <b>43</b>
+</pre>
+            </td>
+          </tr>
+
+          <tr>
+            <td valign="top" style=
+            'border:solid windowtext 1.0pt; border-top:none; padding:.1in 5.75pt .1in 5.75pt'>
+            <pre>
+deny{ x == 43 }
+</pre>
+            </td>
+
+            <td valign="top" style=
+            'border-top:none;border-left: none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt; padding:.1in 5.75pt .1in 5.75pt'>
+            <pre>
+deny{ <b>x == 43</b> } --&gt; true - should not pass
+    x --&gt; <b>43</b>
+</pre>
+            </td>
+          </tr>
+        </table></center>
+
+        <p>See the <a href=
+        'http://www.oreillynet.com/ruby/blog/2008/02/assert2.html'>assert{
+        2.0 } <strong>blog</strong></a> to learn more about the philosophy behind
+        this "nice <a href='www.ruby-lang.org'>Ruby</a> hack".</p>
+
+<p>To add even more information, pass a <strong>diagnostic message</strong> to either <code>assert{}</code> or <code>deny{}</code>:</p>
+
+<pre>
+  assert("my colleague made me do this"){ foo() == 42 }
+</pre>
+
+        <h2>Installation</h2>
+
+          Get <code>assert{ 2.0 }</code> the usual way:
+          <pre>
+  <strong>gem</strong> install assert2
+</pre>
+It will require the crucial &amp; conscious <a href='http://rubynode.rubyforge.org/'>RubyNode</a> library, by Dominik Bathon.
+<p>Then add these lines to your test suites:</p>
+
+<pre>  require 'rubygems'
+  require 'assert2'</pre>
+
+Send any suggestions to <a href='mailto:phlip2000@gmail.com'>phlip2000@gmail.com</a>!
+
+      </td>
+      <td></td>
+    </tr>
+  </table>
+</body>
+</html>

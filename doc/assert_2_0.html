@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org">
+
+  <title></title>
+</head>
+
+<body>
+  <table width='600'><tr><td>
+  <h3><code>assert{&nbsp;2.0&nbsp;}</code></h3>
+  <p>I like developer tests, but I don't like
+  the primitive assertions - <code>assert_equal</code>,
+  <code>assert_match</code>, <code>assert_not_nil</code>, etc. They
+  only exist for one reason - to print out their input values when
+  they fail. And they don't even reflect their variable names.</p>
+
+  <p>So I wrote an assertion to replace all of them. Put whatever you want
+  into it; it prints out your expression, and all its values.
+  Essentially like this:</p>
+
+  <table>
+    <tr>
+      <td valign="top" align='center' style=
+      'border:solid windowtext 1.0pt; padding:.1in 5.75pt .1in 5.75pt'>
+      __source__</td>
+
+      <td valign="top" align='center' style=
+      'border:solid windowtext 1.0pt; border-left:none;padding:.1in 5.75pt .1in 5.75pt'>
+      __failure_diagnostic__</td>
+    </tr>
+
+    <tr>
+      <td valign="top" style=
+      'border:solid windowtext 1.0pt; border-top:none;padding:.1in 5.75pt .1in 5.75pt'>
+      <pre>x = 43
+assert{ x == 42 }</pre>
+      </td>
+
+      <td valign="top" style=
+      'border-top:none;border-left: none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt; padding:.1in 5.75pt .1in 5.75pt'>
+      <pre>assert{ <b>x == 42</b> } --&gt; false - should pass
+&nbsp;&nbsp;&nbsp;&nbsp;x --&gt; <b>43</b></pre>
+      </td>
+    </tr>
+
+    <tr>
+      <td valign="top" style=
+      'border:solid windowtext 1.0pt; border-top:none; padding:.1in 5.75pt .1in 5.75pt'>
+      <pre>deny{ x == 43 }</pre>
+      </td>
+
+      <td valign="top" style=
+      'border-top:none;border-left: none;border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt; padding:.1in 5.75pt .1in 5.75pt'>
+      <pre>deny{ <b>x == 43</b> } --&gt; true - should not pass
+&nbsp;&nbsp;&nbsp;&nbsp;x --&gt; <b>43</b></pre>
+      </td>
+    </tr>
+  </table>
+
+  <p>The classic versions require a lot more typing, and reflect
+  much less information:</p>
+
+  <pre>
+  assert_equal(x, 42)     --&gt; &lt;43&gt; expected but was \n&lt;42&gt; 
+  assert_not_equal(x, 43) --&gt; &lt;43&gt; expected to be != to \n&lt;43&gt;</pre>
+
+  <p>Install this system with:</p>
+  <pre>
+  <b>gem install assert2</b></pre>
+  <p>Some systems might require <strong><code>sudo</code></strong>, to tell the 'puter who's boss. 
+  The "<code>assert2</code>" gem will pull in rubynode. 
+  Then add <strong><code>require 'assert2'</code></strong>
+  to your test suites, or to your <code>test_helper.rb</code> file.</p>
+  <hr/>
+  <p>A student on a forum
+  recently asked why anyone should ever use any assertion besides
+  <code>assert_equal</code>. The answer relates to why we use
+  <code>assert_equal</code>
+  instead of just <code>assert</code>. When the classic statement 
+  <code>assert x == 42</code> fails, it can only print out "false!". 
+  The <code>assert()</code> method cannot 
+  see the name of <code>x</code>, its value, the <code>==</code>, or the <code>42</code>. So 
+  <code>assert_equal</code> is a feeble compromise. It attempts to reconstruct
+  an expression from two input arguments.</p>
+
+  <p>This is a problem in all of unit testing - the cobbler's 
+  own children always get the worst shoes! Our platform knows
+  everything we know about <code>assert x == 42</code>, but it
+  can't tell us everything for one reason: Languages optimize
+  for the needs of production code, not test code. So our 
+  customers will always get better tools than we get!</p>
+
+  <p>Ruby supplies just enough reflection for an assertion to
+  reconstruct a block of code.</p>
+
+    <strong>Version 2.0</strong>
+  <p>This new assertion simplifies the heck 
+  out of developer tests. Before:</b>
+  
+<pre>  def test_attributes 
+    topics = create_topics 
+    assert_equal 'a topic', topics['first'] 
+    assert_not_nil topics['second'] 
+    assert_match 'substring', topics['third'] 
+  end</pre>
+
+  <p>After:</p> 
+  
+<pre>  def test_attributes 
+    topics = create_topics 
+    assert{ 'a topic' == topics['first'] } 
+    assert{ topics['second'] }
+    assert{ topics['third'].index('substring') }
+  end </pre>
+  
+  <p>If the
+  first <code>assert_equal</code> failed, 
+  it would only print out the two
+  values. When <code>assert{&nbsp;2.0&nbsp;}</code> fails, 
+  it prints its complete expression,
+  with each intermediate term and its value: </p>
+  
+<pre>  assert{ <b>"a topic" == ( topics["first"] )</b> } --&gt; false - should pass
+      topics      --&gt; <b>{"first"=&gt;"wrong topic"}</b>
+  topics["first"] --&gt; <b>"wrong topic"</b></pre>
+
+  <p>And if the <code>assert_not_nil</code> failed, 
+  it would only reward us with
+  the infamous diagnostic <code>"&lt;nil&gt; expected to not be nil"</code>.</p>
+
+  <p>Traditional assertions don't work very well with elaborate, 
+  multiple arguments. <code>assert{&nbsp;2.0&nbsp;}</code> works best using elaborate
+  arguments, with lots of variables, because it will print out each of 
+  their intermediate values.
+  </p>
+  <p>
+  This research makes lowly test suites more competitive with a professional 
+  debugger. A failure diagnostic is more useful than a breakpoint and a
+  list of watched variables!
+  </p>
+
+    <strong>Influence</strong>
+  <p><code>assert{&nbsp;2.0&nbsp;}</code> improves 
+  <a href="http://c2.com/cgi/wiki?TestDrivenDevelopment">Test-Driven Development</a>.
+  Instead of carefully picking an assertion, just write whatever you like, and
+  inspect the diagnostic. If your production code is failing for 
+  the correct reason, the diagnostic should clearly reflect this. If it does not,
+  upgrade the source in the assertion. This process reviews the test
+  diagnostic, to improve the odds it assists maintenance. That, in turn, encourages
+  helpful variable names and suggestive sample data values.
+  </p>
+  <p>When a test fails unexpectedly, that diagostic will help decrease the research
+  required to determine whether to debug the test failure, or revert the code.</p>
+  <p>To help more, <code>assert{&nbsp;2.0&nbsp;}</code> and <code>deny{&nbsp;2.0&nbsp;}</code> 
+  both take diagnostic message strings.
+  Use <code>assert("my colleague made me do this"){...}</code>, to ensure 
+  test failures route to the correct department!</p>
+  <p>When <code>assert{&nbsp;2.0&nbsp;}</code> fails, it calls <code>.inspect</code>
+  on each variable in its block. To help diagnose your application objects, such as your 
+  Models, override their <code>.inspect</code> methods,
+  and put descriptive strings in there. My <code>ActiveRecord</code> projects inspect like this:</p>
+<pre>TODO</pre>
+    <strong>Fine Print</strong>
+  <p>The assertion was developed under Ruby 1.8.6...</p>
+  <p>When an assertion passes, Ruby only evaluates it once. However, when
+  an assertion fails, the module <code>RubyNodeReflector</code> will re-evaluate
+  each element in your block. (You <em>knew</em> there was a "gotcha", right?;)
+  This effect will hammer your side-effects, and will disable boolean 
+  short-circuiting. So once again sloppy developer tests help inspire us to write
+  clean and decoupled code!</p>
+  <p>Don't enthusiastically replace your classic assertions 
+  with <code>assert{&nbsp;2.0&nbsp;}</code>. Use it only on 
+  fresh code, so you can review how it works with your expressions.</p>
+
+    <strong>Conclusion</strong>
+
+<p>The following RubyUnit assertions are now obsolete:</p>
+<ul>
+  <li>assert</li>
+  <li>assert_block</li>
+  <li>assert_equal</li>
+  <li>assert_instance_of</li>
+  <li>assert_kind_of</li>
+  <li>assert_operator</li>
+  <li>assert_match</li>
+  <li>assert_nil</li>
+  <li>assert_no_match</li>
+  <li>assert_not_equal</li>
+  <li>assert_not_nil</li>
+</ul>
+<p>The next time you think to type any of them, use <code>assert{&nbsp;2.0&nbsp;}</code> 
+instead, and put whatever you need inside the <code>{</code> block <code>}</code>!</p>
+</td></tr></table>
+</body>
+</html>
