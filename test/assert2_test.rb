@@ -79,11 +79,27 @@ class Assert_2_0_Test < Test::Unit::TestCase #:nodoc:
 
     assert_yin_yang _{ q +=  1 },
                     _{ q == 42 }
+  end
+  
+  def test_deny_yin_yang_postfix_style
+    q = 41
+    
+    deny_yin_yang _{ q +=  0 },
+                  _{ q == 41 }
 
-    assert_raise NoMethodError, 'deny_yin_yang dont work like that!' do
+    assert_flunked /fault before calling/ do
       deny_yin_yang _{ q +=  0 },
                     _{ q == 42 }
     end
+  end
+
+  def test_deny_multiple_yin_yangs
+    q = 41
+    whatever = 1
+
+    deny_yin_yang _{ q +=  0 },
+                  _{ q == 41 },
+                  _{ whatever == 1 }
   end
 
   def test_assert_yin_yang_corn_plain

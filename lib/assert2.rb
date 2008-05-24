@@ -170,7 +170,7 @@ module Assert_2_0
   #    end
   #
   def assert_yin_yang(*args, &block)
-      # prock, diagnostic = nil, &block)
+      # prock(s), diagnostic = nil, &block)
     procks, diagnostic = args.partition{|p| p.respond_to? :call }
     block ||= procks.shift
     source = reflect_source(&block)
@@ -183,13 +183,16 @@ module Assert_2_0
 
   #  the prock assertion must pass on both sides of the called block
   #
-  def deny_yin_yang(prock, diagnostic = nil, &block)
+  def deny_yin_yang(*args, &block)
+      # prock(s), diagnostic = nil, &block)
+    procks, diagnostic = args.partition{|p| p.respond_to? :call }
+    block ||= procks.shift
     source = reflect_source(&block)
     fuss = [diagnostic, "fault before calling:", source].compact.join("\n")
-    assert fuss, &prock
+    procks.each do |prock|  assert(fuss, &prock);  end
     block.call
     fuss = [diagnostic, "fault after calling:", source].compact.join("\n")
-    assert fuss, &prock
+    procks.each do |prock|  assert(fuss, &prock);  end
   end
 
   private
