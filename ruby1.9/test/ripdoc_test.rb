@@ -1,8 +1,12 @@
 require 'test/unit'
+$:.unshift 'lib'; $:.unshift '../lib'
 require 'assert21'
-require 'pp'
 require 'ripdoc'
 require 'assert_xhtml'
+require 'pathname'
+
+HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path
+p HomePath
 
 #  TODO  no <tt>&nbsp; yes <pre>
 #  TODO  assert{} should catch and decorate errors
@@ -21,7 +25,8 @@ class RipDocSuite < Test::Unit::TestCase
   end
 
   def test_generate_accordion
-    assert_xhtml RipDoc.generate('assert21.rb', 'assert{ 2.1 }')
+return # TODO
+    assert_xhtml RipDoc.generate(HomePath + 'lib/assert21.rb', 'assert{ 2.1 }')
     assert{ xpath('/html/head/title').text == 'assert{ 2.1 }' }
 
     #~ assert do
@@ -38,7 +43,7 @@ class RipDocSuite < Test::Unit::TestCase
   end
 
   def test_we_be_well_formed
-    f = File.open('assert21.rb')
+    f = (HomePath + 'lib/assert21.rb').open
     sauce = assert_rip_page(f)
     assert{ xpath(:span, style: 'display: none;').text.index('=begin') }
 
