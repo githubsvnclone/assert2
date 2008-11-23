@@ -3,7 +3,7 @@ $:.unshift 'lib'; $:.unshift '../lib'
 require 'assert2'
 require 'assert_flunk'
 
-class Assert21Suite < Test::Unit::TestCase
+class Assert2Suite < Test::Unit::TestCase
 
   def setup
     @effect = Test::Unit::Assertions::AssertionRipper.new()
@@ -317,9 +317,9 @@ class Assert21Suite < Test::Unit::TestCase
   end
 
   def test_const_ref
-    rippage = [:const_ref, [:@const, "Assert21Suite", [5, 6]]]
+    rippage = [:const_ref, [:@const, "Assert2Suite", [5, 6]]]
     @effect.sender rippage
-    assert_capture 'Assert21Suite', Assert21Suite
+    assert_capture self.class.name, self.class
     rippage = [:const_path_ref,
                [:const_path_ref,
                 [:var_ref, [:@const, "Test", [5, 22]]],

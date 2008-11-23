@@ -1,9 +1,9 @@
 
-task :test_assert21 do
-  sh 'ruby1.9 test/assert21_test.rb'
+task :test_assert2 do
+  sh 'ruby1.9 test/assert2_test.rb'
 end
 
-task :test_ripdoc => :test_assert21 do
+task :test_ripdoc => :test_assert2 do
   sh 'ruby1.9 test/ripdoc_test.rb'
 end
 
