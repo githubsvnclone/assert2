@@ -1,6 +1,6 @@
 require 'test/unit'
 $:.unshift 'lib'; $:.unshift '../lib'
-require 'assert21'
+require 'assert2'
 require 'assert_flunk'
 require 'assert_xhtml'
 

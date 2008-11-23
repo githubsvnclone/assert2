@@ -1,6 +1,6 @@
 require 'test/unit'
 $:.unshift 'lib'; $:.unshift '../lib'
-require 'assert21'
+require 'assert2'
 require 'assert_flunk'
 
 class Assert21Suite < Test::Unit::TestCase
@@ -88,7 +88,7 @@ class Assert21Suite < Test::Unit::TestCase
     assert_assert 'x + (1 * 2)', 44
     assert_assert 'x.to_s', '42'
     assert_assert 'Time.at(x)', Time.at(42)
-    assert_assert 'require "assert21.rb"', false
+    assert_assert 'require "assert2.rb"', false
     assert_assert '42.times.inject{ |x, b| b + x }', 861
     assert_assert 'array.first', 1
     assert_assert 'array[1]', 3
