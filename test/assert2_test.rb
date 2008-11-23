@@ -39,7 +39,7 @@ class Assert_2_0_Test < Test::Unit::TestCase #:nodoc:
     assert_flunked /RuntimeError.*me_too.*42/m do
       deny{ x; raise 'me_too' }
     end
-    
+
     assert_flunked /tolja.*RuntimeError.*me_too.*42/m do
       deny('tolja'){ x; raise 'me_too' }
     end
@@ -64,9 +64,11 @@ class Assert_2_0_Test < Test::Unit::TestCase #:nodoc:
 
   def test_assert_yin_yang
     q = 41
+
     assert_yin_yang lambda{ q == 42 } do
       q += 1
     end
+
     deny_yin_yang lambda{ q == 42 } do
       q += 0
     end
@@ -80,10 +82,9 @@ class Assert_2_0_Test < Test::Unit::TestCase #:nodoc:
     assert_yin_yang _{ q +=  1 },
                     _{ q == 42 }
   end
-  
+
   def test_deny_yin_yang_postfix_style
     q = 41
-    
     deny_yin_yang _{ q +=  0 },
                   _{ q == 41 }
 
@@ -96,7 +97,6 @@ class Assert_2_0_Test < Test::Unit::TestCase #:nodoc:
   def test_deny_multiple_yin_yangs
     q = 41
     whatever = 1
-
     deny_yin_yang _{ q +=  0 },
                   _{ q == 41 },
                   _{ whatever == 1 }
@@ -119,25 +119,25 @@ class Assert_2_0_Test < Test::Unit::TestCase #:nodoc:
   end
 
 # FIXME
-#> * you shouldn't use "+" for string concatenation, it is much faster to 
+#> * you shouldn't use "+" for string concatenation, it is much faster to
 #> use "<<" instead
 #
 #Noted!
 #
 #> * rescue with else does not work:
-#> 
+#>
 #>>> puts(reflect_source { begin 1; rescue Foo;2;else;3;end })
 #> begin
 #> 13rescue Foo
 #> 2
 #> end
 
-#> * flip2 and flip3 are for rubys flip-flop operator 
+#> * flip2 and flip3 are for rubys flip-flop operator
 #> (http://redhanded.hobix.com/inspect/hopscotchingArraysWithFlipFlops.html)
 
   #  use these to manually test the diagnostic failures
   #
-  def test_topics  
+  def test_topics
     topics = create_topics
     x = 43
 #    assert{ x == 42 }

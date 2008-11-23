@@ -1,0 +1,149 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>assert_yin_yang</title>
+</head>
+
+<body bgcolor='white' style=
+'font-family: Times, serif; background-image: url(ramp.png); background-repeat: repeat-x;'>
+  <table width='100%' cellpadding='6px'>
+    <tr width='25%'>
+      <td></td>
+
+      <td width='600' style='background-color: #ffffef'>
+        <table width='100%'>
+          <tr>
+            <td valign='top'>
+              <h1><code>assert_yin_yang</code></h1>
+            </td>
+
+            <td align='right' rowspan='2'><img src=
+            'the_test_button.png' width='67' height='64' /></td>
+          </tr>
+
+          <tr>
+            <td>This assertion extends <a href='http://www.ruby-doc.org/stdlib/libdoc/test/unit/rdoc/classes/Test/Unit.html'><strong><code>assert{ 2.0 }</code></strong></a> to wrap this common testing idiom:</td>
+          </tr>
+        </table>
+
+<pre>
+  q = method_that_might_return_41()
+  deny{ q == 42 }
+  q += method_that_should_return_one()
+  assert{ q == 42 }
+</pre>
+
+The upgrade is:
+
+<pre>
+  q = method_that_might_return_41()
+  assert_yin_yang \
+    proc{ q += method_that_should_return_one() },
+    proc{ q == 42 }
+</pre>
+
+In exchange for just a little verbosity, the expression <code>q == 42</code>
+is now more <a href="http://en.wikipedia.org/wiki/Don't_repeat_yourself" target='_blank'>DRY</a>.
+
+<p>Further, if <code>q</code> accidentally equals <code>42</code> before, or accidentally
+does not equal it after the call to <code>q += method_that_should_return_one()</code>, the 
+assertion reflects the source code (but not the values!) of the activation block.
+
+<h3>Assemble Activate Assert</h3>
+<p>All <a href="http://c2.com/cgi/wiki?TestCase">test cases</a><strong></strong> 
+follow some variation on this <a href='http://c2.com/cgi/wiki?AssembleActivateAssert' target='_blank'>pattern</a>:
+</p>
+<PRE>
+  def test_case
+    a = assemble
+    a.activate(41)
+    assert{ a.state == 42 }
+  end
+</PRE>
+<p>All cases first <em>Assemble</em> the data resources they intend to use.
+</p><p>Then they <em>Activate</em> a target method. (Preferably the one you name your real test case after!)
+</p>
+Then they <em>Assert</em> that some side-effect, from that method, is within tolerance.
+<p>
+However, in some situations the Assemble phase needs its own assertions. The example 
+<code>test_case</code> would not catch a bug if <code>a.state</code>
+already equaled <code>42</code> before the call to <code>a.activate</code>.
+</p>
+<p>The fix is to add <code>deny{ a.state == 42 }</code> before the <em>Assemble</em> step...
+<pre>  def test_case
+    a = assemble
+    deny{ a.state == 42 }
+    a.activate(41)
+    assert{ a.state == 42 }
+  end</pre>
+   ...and the fix for the fix is to use <code>assert_yin_yang</code>:
+
+<pre>  def test_case
+    a = assemble
+    assert_yin_yang proc{ a.activate(41) },
+                    proc{ a.state == 42 }
+  end</pre></p>
+<h3>Beautification</h3>
+
+<p>Writing <code>proc</code> twice is ugly, so (until Ruby invents a new "lambda" syntax) you can cheat by adding this to your tests:</p>
+
+<pre>  def _(&block);  lambda(&block);  end
+</pre>
+
+<p>It adds a secret method, <code>_{}</code>, to simplify your parameters. 
+The <em>assert2</em> gem does
+not supply this cheat, because abusing <code>_</code> is heinous in 
+other people's code, but awesome in our own code!</p>
+
+<h3>Parameters</h3>
+Every <code>assert</code> has a <code>deny</code>:
+<pre>
+    q = 41
+    deny_yin_yang _{ q +=  0 },
+                  _{ q == 41 }
+</pre>
+
+<p>That calls <code>assert{ q == 41 }</code> both before and
+after its activation block. In this case, <code>q</code> must
+not change.</p>
+
+<p>You can call <code>assert_</code> or <code>deny_yin_yang</code>
+with any number of assertions, so long as the activation block 
+is first:
+</p>
+
+<pre>  def test_deny_multiple_yin_yangs
+    q = 41
+    whatever = 1
+    deny_yin_yang _{ q +=  0 },
+                  _{ q == 41 },
+                  _{ whatever == 1 }
+  end
+</pre>
+
+<p>The assertion raises a fault if any of those blocks fails. It evaluates
+them in order, and will only reflect the values of the block that failed. 
+(A future version of <code>assert_yin_yang</code> might reflect all
+its assertion blocks if any of them fail.)</p>
+
+<h3>Diagnostic Messages</h3>
+
+Any argument could be a string instead of a block. This will
+decorate the fault diagnostic of any other block which fails:
+
+<pre>  def test_assert_yin_yang_corn_plain
+    q = 41
+
+    assert_flunked /it broke!/ do
+      assert_yin_yang _{ q +=  0 }, 'it broke!',
+                      _{ q == 42 }
+    end
+  end</pre>
+
+<p>You may put the string(s) anywhere you like.</p>
+
+ </td>
+      <td></td>
+    </tr>
+  </table>
+</body>
+</html>

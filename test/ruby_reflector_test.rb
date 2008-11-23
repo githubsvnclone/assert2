@@ -6,7 +6,7 @@ require 'pathname'
 class RubyReflectorTest < Test::Unit::TestCase
   include RubyNodeReflector
   include Assert_2_0
-  
+
   def setup;  colorize(true);  end
 
   def test_all_op_codes
@@ -72,12 +72,12 @@ class RubyReflectorTest < Test::Unit::TestCase
       'x = [42, 43, 44]',      'x == [42, 43, 44]',
       '[ 42, 43, 44 ] == x',   '[ 42, 43, 44 ].foo() == x',
       '[ 42, 43, 44 ].foo()',  '( a, b, c = x )',
-      "begin\nrescue Whatever\ne = $!\nend\n",
-      "begin\nrescue Whatever, MeToo\ne = $!\nend\n",
-      "begin\nrescue Whatever\n\nend\n",
-      "begin\nrescue Whatever, MeToo\n\nend\n",
-      "begin\nrescue\ne = $!\nend\n",  # note that => e is syntactic sugar for e = $!
-      "begin\nrescue\ne = $!\nfoo\n\nend\n",
+     # "begin\nrescue Whatever\ne = $!\nend\n",
+     # "begin\nrescue Whatever, MeToo\ne = $!\nend\n",
+     # "begin\nrescue Whatever\n\nend\n",
+     # "begin\nrescue Whatever, MeToo\n\nend\n",
+     # "begin\nrescue\ne = $!\nend\n",  # note that => e is syntactic sugar for e = $!
+     # "begin\nrescue\ne = $!\nfoo\n\nend\n",
       "ex = foo rescue nil",
       "yield(@@x = {})",
       'self.class().accessor()',
@@ -95,7 +95,7 @@ class RubyReflectorTest < Test::Unit::TestCase
       print '.'
     end
   end
-  
+
   def test_reflect_K_Sasada_s_rubynodes  # and props to her or him!
     rubynodes = Pathname.new(__FILE__).dirname + 'rubynodes/src/*.rb'
 
@@ -104,7 +104,7 @@ class RubyReflectorTest < Test::Unit::TestCase
       node_type = @node_rb.basename('.rb').to_s
 
       #  for dasgn see test_we_dont_do_plus_equals_like_that
-      
+
       unless %w( dasgn ).include?(node_type)
         @contents = @node_rb.read
 
@@ -121,10 +121,10 @@ class RubyReflectorTest < Test::Unit::TestCase
     pp @node_rb
     raise
   end
-  
+
   def test_bug_in_args_opcodes   #  can Ruby do this one??
     # colorize(:always)
-    
+
     assert do
       reflect_string("def foo(x, y = 42)\nz = x + y\nend\n") ==
                      "def foo(x, y = 42, z = nil)\nz = x + y\nend\n"
@@ -150,41 +150,41 @@ class RubyReflectorTest < Test::Unit::TestCase
     x = nil
     assert_equal 'x ||= 42', reflect_source{ x ||= 42 }
   end
-  
+
   def test_broken_parens
-    assert_equal '( ( ( node[:head] ).last() ) or ( [] ) ).each(){}', 
+    assert_equal '( ( ( node[:head] ).last() ) or ( [] ) ).each(){}',
       reflect_source{ (node[:head].last || []).each{} }
   end
 
   def test_violate_law_of_demeter
     assert_equal   'node[:body]',          reflect_source{ node[:body] }
     assert_equal '( node[:body] ).last()', reflect_source{ node[:body].last }
-      
-    assert_equal   '( node[:body] ).last().map(&:first)', 
+
+    assert_equal   '( node[:body] ).last().map(&:first)',
       reflect_source{ node[:body].last.map(&:first) }
   end
 
   def test_assign_splat
     assert_equal '( name, pops, rets, pushs1, pushs2 = ' +
                     '*calc_stack(insn, from, after, opops) )',
-      reflect_source{        
+      reflect_source{
         name, pops, rets, pushs1, pushs2 =
           *calc_stack(insn, from, after, opops)
       }
   end
-  
+
   def test_assign_arrays
     assert_equal '( a, b = 1, 2 )', reflect_source{ ( a, b = 1, 2 ) }
   end
-  
+
   def test_array_bug
     assert_equal '42, 43, 44', reflect_source{ [ 42, 43, 44 ] }
   end
-  
+
   def test_to_ary
     assert_equal '( a, b = foo )', reflect_source{ ( a, b = foo ) }
   end
-  
+
   def test_mix_conditionals_and_matchers
     assert_equal "def we_b_op(zone)\n" +
                    "return ( ( ( zone[:mid] ) and " +
@@ -218,10 +218,10 @@ class RubyReflectorTest < Test::Unit::TestCase
     assert{ eval_y    == ['y',               1,  nil] }
     assert{ eval_mash == ['"4#{ 1 + y }"', '42', nil] }
   end
-  
+
   def test_insert_critical_newlines
     assert_equal "begin\n\nrescue \nensure\nnil\nend\n",
-     reflect_source{ 
+     reflect_source{
               begin
                 #p 'begining'
               rescue
@@ -230,9 +230,9 @@ class RubyReflectorTest < Test::Unit::TestCase
                 #p 'ensuring'
               end }
   end
-  
+
   def test_cvasgn
-    assert_equal '@@cvasgn = @@froot_loop', 
+    assert_equal '@@cvasgn = @@froot_loop',
       reflect_source{ @@cvasgn = @@froot_loop }
   end
 
@@ -256,27 +256,27 @@ class RubyReflectorTest < Test::Unit::TestCase
     report = rf.format_evaluations.split("\n")
     assert{ report[0] =~ /    x\s+--> 42/ }
     assert{ report[1] =~ /    \( x \+ 21 \)\s+--> 63/ }
-    
+
     assert do
       report[2].index(
         "--? undefined local variable or method `z' for #<RubyReflectorTest" )
     end
-    
+
     assert{ report[3] =~ /    lambda\{\|z\| z \}\s+--\> \<Proc\>/ }
     assert{ report[4] =~ /    lambda\{\|z\| z \}.call\(41\)\s+--> 41/ }
   end
 
   #############################################################
   ######## blocks
-  
+
   def block_me(whatever = nil, &block) #:nodoc:
   end
-  
+
   def test_unless_else
     assert{ reflect_string('( unless ( exx ) then ( why ) else ( zee ) end )') ==
               '( if ( exx ) then ( zee ) else ( why ) end )' }
   end   #  each time you write unless..else, Satan waterboards a kitten!
-  
+
   def test_reflect_blocks
     x = 99
     y = 40
@@ -286,11 +286,11 @@ class RubyReflectorTest < Test::Unit::TestCase
     assert_match /proc\{|| y \+ 2 \}.*call\(\)\t--> 42/, reflect{ proc{ y + 2 }.call }
     assert_match /lambda\{|q| x \+ q \}.*call\(1\)\t--> 100.*q.*\?/m, reflect{ lambda{|q| x + q }.call(1) }
     assert_match "proc{ y + 2 }", reflect{ proc{ y + 2 }.call }
-    
+
     if respond_to? :returning
       assert_match 'returning(42){}', reflect{ returning(42){} }
     end
-    
+
     assert_match 'block_me{}', reflect{ block_me{} }
     assert_match 'block_me(42){}', reflect{ block_me(42){} }
     call_lambda = reflect{ lambda{|a, b| a + b }.call(40, 2) }
@@ -300,11 +300,11 @@ class RubyReflectorTest < Test::Unit::TestCase
     assert_{ call_lambda =~ /lambda\{\|a, b\| a \+ b \}.call\(40, 2\)\s+-->/ }
     assert_{ call_lambda.index("lambda{|a, b| a + b }.call(40, 2)\t--> 42") }
   end
-   
+
   def test_insert_critical_newlines
     assert_equal "( if ( 42 ) then ( foo << \" \"\n( if ( false ) then ( bar ) end )\n ) end )",
-      reflect_source{ 
-              if 42 
+      reflect_source{
+              if 42
                 foo << ' '
                 if false
                   bar()
@@ -314,7 +314,7 @@ class RubyReflectorTest < Test::Unit::TestCase
 
   #############################################################
   ######## intermediate evaluations
-  
+
   def test_cant_collect_intermediate_evaluations
     x = 42
     rf = RubyReflector.new(proc{ x == lambda{|z| z}.call(41) })
@@ -336,24 +336,24 @@ class RubyReflectorTest < Test::Unit::TestCase
 
   #############################################################
   ######## regices
-  
+
   def test_match3  #  note:  where's match3?
     q = 'foobar'
     r = /^foo(bar)$/
     assert_{ /foo(bar)/ =~ reflect{ q =~ r } }
     assert_{ $1 == 'bar' }
   end
-  
+
   def test_reflect_regices
     x = '42'
     foo = Foo.new
     assert_match "/4/ =~ x\t--> 0", reflect{ /4/ =~ x }
     assert_match "/4/ =~ x\t--> 0", reflect{ /4/ =~ x }
 
-    assert_match /\/4\/\ =~\ foo.bar\(\)\.to_s\(\)/m, 
+    assert_match /\/4\/\ =~\ foo.bar\(\)\.to_s\(\)/m,
                     reflect{ /4/ =~ foo.bar.to_s }
-                    
-    assert_match /foo.bar\(\)\.to_s\(\)\s+--> "42"/m, 
+
+    assert_match /foo.bar\(\)\.to_s\(\)\s+--> "42"/m,
                     reflect{ /4/ =~ foo.bar.to_s }
   end
 
@@ -362,7 +362,7 @@ class RubyReflectorTest < Test::Unit::TestCase
     assert{ reflect_source{ /solidus is \\/ } == "/solidus is \\\\/" }
     assert{ reflect_source{ /ticks are \`\'\"/ } == "/ticks are \\`\\'\\\"/" }
   end
-  
+
   def test_evaluate_mashed_regices
     y = 1
     rf = RubyReflector.new(proc{ /4#{ 1 + y }/ })
@@ -370,10 +370,10 @@ class RubyReflectorTest < Test::Unit::TestCase
     assert{ eval_y    == ['y',               1,  nil] }
     assert{ eval_mash == ['/4#{ 1 + y }/', /42/, nil] }
   end
-  
+
   #############################################################
   ######## primitives
-  
+
   LinkHogThrob = 'L7' #:nodoc:
 
   class Foo  #:nodoc:
@@ -381,34 +381,34 @@ class RubyReflectorTest < Test::Unit::TestCase
     def sym;  :bol;  end
     def inc(x, by = 1, nope = 2);  x + by;  end
   end
-  
+
   def snarf(options) #:nodoc:
     return options[:zone]
   end
 
   def test_reflect_constants
     y =   6
-    assert{ /LinkHogThrob == "L\#\{ 1 \+ y \}".*LinkHogThrob.*L7/m =~ 
+    assert{ /LinkHogThrob == "L\#\{ 1 \+ y \}".*LinkHogThrob.*L7/m =~
                reflect{ LinkHogThrob == "L#{ 1 + y }" } }
   end
-  
+
   def test_reflect_functions_with_arguments_splats_hashes_and_blockers
     foo      = Foo.new
     y        = 2
     splat_me = [40, 2]
     block_me = proc{ y + 1 }
-    
+
 # pp "def foo(*)\nend\n".parse_to_nodes.transform
-    
+
     assert_match /foo.*\.inc\(41\) == 42/, reflect{ foo.inc(41) == 42 }
-    
-    assert{ /foo.*\.inc\(41, y\) == 42/ =~ 
+
+    assert{ /foo.*\.inc\(41, y\) == 42/ =~
                  reflect{ foo.inc(41, y) == 42 } }
-                 
-    assert{ /foo.*\.inc\(\*\[41, y\]\) == 42/ =~ 
+
+    assert{ /foo.*\.inc\(\*\[41, y\]\) == 42/ =~
                  reflect{ foo.inc(*[41, y]) == 42 } }
-                 
-    assert{ /foo.*\.inc\(\*splat_me\)/ =~ 
+
+    assert{ /foo.*\.inc\(\*splat_me\)/ =~
                  reflect{ foo.inc(*splat_me) == 42 } }
 
     assert{ reflect{ foo.inc(2, *splat_me) == 42 }.
@@ -420,14 +420,14 @@ class RubyReflectorTest < Test::Unit::TestCase
     assert{ reflect{ snarf :zing => y, :zone => 42 }.
              index('snarf({ :zing => y, :zone => 42 })') }
 
-    assert{ /snarf\(\{ :zing => 41, :zone => 42 \}\)/ =~ 
+    assert{ /snarf\(\{ :zing => 41, :zone => 42 \}\)/ =~
                  reflect{ snarf({ :zing => 41, :zone => 42 }) } }
   end
 
   def test_reflect_arrays
     colorize(false)
     assert{ '4yo2'.index('yo')   }
-      deny{ '4yo2'.index('yoyo') }    
+      deny{ '4yo2'.index('yoyo') }
     q = 2
     zone = [4, q]
     assert_match 'zone == [4, 2]',       reflect{ zone == [4, 2] }
@@ -436,7 +436,7 @@ class RubyReflectorTest < Test::Unit::TestCase
     assert_match /\ \ \ \ q\s+--\> 2/,   reflect{ zone == [4, q] }
 
     if :to_s.respond_to? :to_proc
-      assert_match /zone.map\(&:to_s\) == \[\"4\", q/, 
+      assert_match /zone.map\(&:to_s\) == \[\"4\", q/,
                    reflect{ zone.map(&:to_s) == ['4', q.to_s] }
 
       assert_{ reflect{ zone.map(&:to_s) == ['4', q.to_s] } =~
@@ -452,18 +452,18 @@ class RubyReflectorTest < Test::Unit::TestCase
     assert_{ reflection.index("/opy$/ =~ a[:href]\t--> 3") }
     assert_{ reflection.index("--> {:href=>\"Snoopy\"}") }
   end
-  
+
   def test_reflect_instance_of
     that = self  #  ERGO  can't we bind to this context correctly?
     assert_match /that.*instance_of?.*Test::Unit::TestCase/, reflect{ that.instance_of?(Test::Unit::TestCase) }
     assert_match /that.*kind_of?.*Test::Unit::TestCase/, reflect{ that.kind_of?(Test::Unit::TestCase) }
   end
-  
+
   def test_reflect_operator
     f = -4.2
     assert_{ /f >= 0.0/ =~ reflect{ f >= 0.0 } }
   end
-  
+
   def test_reflect_nil_true_false
     q, @t, @f = nil, true, false
     assert_{ /nil/           =~ reflect{ nil         } }
@@ -481,7 +481,7 @@ class RubyReflectorTest < Test::Unit::TestCase
     n = 12
     m =  2
     madness = reflect{ (n == 12 and m == 2) ? n * 2 : 23 }
-    
+
     assert_ do
       madness.index('( if ( ( ( n == 12 ) and ( m == 2 ) ) ) then ( n * 2 ) else ( 23 ) end )')
     end
@@ -495,18 +495,18 @@ class RubyReflectorTest < Test::Unit::TestCase
     assert_{ madness.index('( n == 12 ) and ( m == 2 )') }
     madness = reflect{ n || m }
     assert_{ madness.index('( n ) or ( m )') }
-    
+
     assert_ do
       reflect{ if n == 12 then n * 2 else 23 end }.
                index('( if ( n == 12 ) then ( n * 2 ) else ( 23 ) end )')
     end
-    
+
     assert_ do
       reflect{ if n == 12 then n * 2 end }.
                index('( if ( n == 12 ) then ( n * 2 ) end )')
     end
   end
-  
+
   def test_reflect_linefeeds_and_parens
     reflection = reflect do
                    q = 42
@@ -518,7 +518,7 @@ class RubyReflectorTest < Test::Unit::TestCase
   def test_we_dont_do_plus_equals_like_that
     assert{ 'foo = foo + 1' == reflect_string('foo += 1') }
   end
-  
+
   def test_reflect_map_index
     colorize(false)
     mapper = { 'foo' => 'cue'}
@@ -532,7 +532,7 @@ class RubyReflectorTest < Test::Unit::TestCase
     reflection = reflect{ q = 21 + (21 * 1) }
     assert{ reflection.index("q = 21 + ( 21 * 1 )") }
   end
-  
+
   def test_reflect_functions
     x = 42
     y = 43
@@ -557,7 +557,7 @@ class RubyReflectorTest < Test::Unit::TestCase
     #  ERGO  is this a bug in the parser?
     # assert{ reflect_source{ `ticks are \`` } == "`ticks are \\`" }
   end
-    
+
   def test_reflect_literal_strings
     colorize(false)
     x = '42'
@@ -570,7 +570,7 @@ class RubyReflectorTest < Test::Unit::TestCase
     assert{ /"\#\{ 3 \+ y \}yo\#\{ 1 \+ y \}"/ =~ reflect{ x == "#{ 3 + y }yo#{ 1 + y }" } }
     assert{ /"\#\{ 3 \+ y \}\#\{ 1 \+ y \}"/   =~ reflect{ x == "#{ 3 + y }#{ 1 + y }" } }
   end
-    
+
   def test_reflect
     x = 42
     y = 43
@@ -594,14 +594,14 @@ class RubyReflectorTest < Test::Unit::TestCase
     [1, 2, 3, 7].in_groups_of(2){|a,z| twizzled << [a,z]}
     assert{ twizzled == [[1, 2], [3, 7]] }
   end
-  
+
   class BufferStdout #:nodoc:
     def tty?; false end
     def write(stuff)
-      (@output ||= '') << stuff  
+      (@output ||= '') << stuff
     end
     def <<(stuff)
-      (@output ||= '') << stuff  
+      (@output ||= '') << stuff
     end
     def output;  @output || ''  end
   end
@@ -623,5 +623,5 @@ class RubyReflectorTest < Test::Unit::TestCase
   ensure
     $stderr = waz
   end
-    
+
 end
