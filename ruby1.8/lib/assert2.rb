@@ -132,12 +132,12 @@ module Assert_2_0
     return exception.message
   end
 
-  def assert_flunked(gripe, diagnostic = nil, &block) #:nodoc:
-    assert_raise_message Test::Unit::AssertionFailedError,
-                         gripe,
-                         diagnostic,
-                        &block
-  end
+  #~ def assert_flunked(gripe, diagnostic = nil, &block) #:nodoc:
+    #~ assert_raise_message Test::Unit::AssertionFailedError,
+                         #~ gripe,
+                         #~ diagnostic,
+                        #~ &block
+  #~ end
 
   def deny_flunked(gripe, diagnostic = nil, &block) #:nodoc:
     deny_raise_message Test::Unit::AssertionFailedError,

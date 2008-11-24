@@ -29,7 +29,7 @@ class Assert_2_0_Test < Test::Unit::TestCase #:nodoc:
       assert{ x; raise 'gotcha' }
     end
 
-    assert_flunked /look out.*RuntimeError.*gotcha.*42/m do
+    assert_flunk /look out.*RuntimeError.*gotcha.*42/m do
       assert('look out!'){ x; raise 'gotcha' }
     end
   end
@@ -37,30 +37,30 @@ class Assert_2_0_Test < Test::Unit::TestCase #:nodoc:
   def test_catch_undeniable_exceptions
     x = 42
 
-    assert_flunked /RuntimeError.*me_too.*42/m do
+    assert_flunk /RuntimeError.*me_too.*42/m do
       deny{ x; raise 'me_too' }
     end
 
-    assert_flunked /tolja.*RuntimeError.*me_too.*42/m do
+    assert_flunk /tolja.*RuntimeError.*me_too.*42/m do
       deny('tolja'){ x; raise 'me_too' }
     end
   end
 
   def test_flunk_2_0
     x = 43
-    assert_flunked /43.*but.*42/m    do  assert_equal x, 42           end
-    assert_flunked /x == 42/         do  assert_{ x == 42 }           end
-    assert_flunked /43.*expect.*43/m do  assert_not_equal x, 43       end
-    assert_flunked /x > 43/          do  assert_{ x > 430 }           end
-    assert_flunked /nope/            do  assert('nope'){ x > 430 }    end
-    assert_flunked /x == 43.*should not.*x.*43/m do  deny{ x == 43 }  end
-    assert_flunked /x.* > 43/ do  assert x > 430, 'x should be > 43'  end
+    assert_flunk /43.*but.*42/m    do  assert_equal x, 42           end
+    assert_flunk /x == 42/         do  assert_{ x == 42 }           end
+    assert_flunk /43.*expect.*43/m do  assert_not_equal x, 43       end
+    assert_flunk /x > 43/          do  assert_{ x > 430 }           end
+    assert_flunk /nope/            do  assert('nope'){ x > 430 }    end
+    assert_flunk /x == 43.*should not.*x.*43/m do  deny{ x == 43 }  end
+    assert_flunk /x.* > 43/ do  assert x > 430, 'x should be > 43'  end
   end
 
   def test_assert_classic
     x = 41
-    assert_flunked /false/   do  assert x == 42             end
-    assert_flunked /message/ do  assert x == 42, 'message'  end
+    assert_flunk /false/   do  assert x == 42             end
+    assert_flunk /message/ do  assert x == 42, 'message'  end
   end
 
   def test_assert_yin_yang
@@ -89,7 +89,7 @@ class Assert_2_0_Test < Test::Unit::TestCase #:nodoc:
     deny_yin_yang _{ q +=  0 },
                   _{ q == 41 }
 
-    assert_flunked /fault before calling/ do
+    assert_flunk /fault before calling/ do
       deny_yin_yang _{ q +=  0 },
                     _{ q == 42 }
     end
@@ -106,7 +106,7 @@ class Assert_2_0_Test < Test::Unit::TestCase #:nodoc:
   def test_assert_yin_yang_corn_plain
     q = 41
 
-    assert_flunked /it broke!/ do
+    assert_flunk /it broke!/ do
       assert_yin_yang _{ q +=  0 }, 'it broke!',
                       _{ q == 42 }
     end
