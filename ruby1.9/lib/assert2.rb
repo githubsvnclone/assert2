@@ -35,7 +35,7 @@ their syntax-sugary equivalents!).
 =end
 
 require 'ripper'
-require 'test/unit/assertions'
+require 'common/assert2_utilities'
 require 'pp'
 
 module Test; module Unit; module Assertions
@@ -794,16 +794,6 @@ module Test; module Unit; module Assertions
     more_diagnostics = options.fetch(:diagnose, lambda{''}).call.to_s
     report << more_diagnostics if more_diagnostics.length > 0
     return report.compact.join("\n")
-  end
-
-  def add_diagnostic(whatever)
-    @__additional_diagnostics ||= []
-    
-    if whatever == :clear
-      @__additional_diagnostics = []
-    else
-      @__additional_diagnostics << whatever if whatever
-    end
   end
 
   def assert_(diagnostic = nil, options = {}, &block)
