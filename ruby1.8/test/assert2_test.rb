@@ -1,5 +1,6 @@
 require 'test/unit'
 require File.dirname(__FILE__) + '/../lib/assert2'
+require File.dirname(__FILE__) + '/../lib/assert_flunk'
 
 
 class Assert_2_0_Test < Test::Unit::TestCase #:nodoc:
@@ -24,7 +25,7 @@ class Assert_2_0_Test < Test::Unit::TestCase #:nodoc:
   def test_catch_exceptions
     x = 42
 
-    assert_flunked /RuntimeError.*gotcha.*42/m do
+    assert_flunk /RuntimeError.*gotcha.*42/m do
       assert{ x; raise 'gotcha' }
     end
 
