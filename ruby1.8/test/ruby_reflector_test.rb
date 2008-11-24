@@ -1,11 +1,12 @@
 require 'test/unit'
 require File.dirname(__FILE__) + '/../lib/assert2'
+require File.dirname(__FILE__) + '/../lib/ruby_reflector'
 require 'pathname'
 
 
 class RubyReflectorTest < Test::Unit::TestCase
   include RubyNodeReflector
-  include Assert_2_0
+  #include Assert_2_0
 
   def setup;  colorize(true);  end
 

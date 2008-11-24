@@ -6,7 +6,12 @@ require File.dirname(__FILE__) + '/ruby_reflector'
 #  ERGO  decorate assert_latest's block at fault time
 
 module Assert_2_0
-  include RubyNodeReflector
+  p 'the Assert_2_0 module is deprecated and will disappear soon!'
+end
+
+module Test; module Unit; module Assertions
+
+  include ::RubyNodeReflector
   include Coulor #:nodoc:
 
   #  This assertion calls a block, and faults if this returns
@@ -202,7 +207,7 @@ module Assert_2_0
     end
 
     def _flunk_2_0(polarity, diagnostic, block, result)
-      rf = RubyReflector.new(block)
+      rf = ::RubyNodeReflector::RubyReflector.new(block)
       effect = " - should #{ 'not ' if polarity =~ /deny/ }pass\n"
 
       report = magenta(polarity) + bold(rf.result) + magenta(" }") + 
@@ -212,8 +217,10 @@ module Assert_2_0
       flunk build_message_(diagnostic, report)
     end
   
-end  #  "Eagle-eyes it!"
+end ; end ; end  #  "Eagle-eyes it!"
 
 class Test::Unit::TestCase #:nodoc:
-  include Assert_2_0
+  include ::RubyNodeReflector::Coulor #:nodoc:
+  include ::RubyNodeReflector #:nodoc:
+  #~ include Assert_2_0
 end
