@@ -5,13 +5,16 @@ require 'stringio'
 require 'cgi'
 require 'erb'
 require 'optparse'
+require 'pathname'
+
 
 class RipDoc < Ripper::Filter
+  HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path
 
   def self.generate(filename, title)
     @sauce = compile_fragment(File.read(filename))
     @title = title
-    erb = ERB.new(File.read('ripdoc.html.erb'), nil, '>')
+    erb = ERB.new((HomePath + 'lib/ripdoc.html.erb').read, nil, '>')
     return erb.result(binding())
   end
 
@@ -21,10 +24,7 @@ class RipDoc < Ripper::Filter
     if line =~ /^\s/
       f << "</p>\n" if @owed_p
       @owed_p = false
-      f << '<tt>'
-      f << line 
-      f << '</tt><br/>'
-      f << "\n"
+      f << line << "\n"
       return
     end
     
@@ -170,13 +170,13 @@ class RipDoc < Ripper::Filter
   end
 
   def on_nl(tok, f)
-    finish_any_spans(f)
-    f << "</tt><br/>\n<tt>"
+    finish_any_spans(f)  # TODO  this can't be needed...
+    f << "\n"
   end
 
-  def on_sp(tok, f)
-    f << '&nbsp;' * tok.length
-  end
+  #~ def on_sp(tok, f)
+    #~ f << '&nbsp;' * tok.length
+  #~ end
 
   def on_lbrace(tok, f)  #  TODO  report this silly bug!
     spanit '', f, tok
@@ -232,8 +232,8 @@ DOCTYPE = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     return DOCTYPE +
             '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr"
             ><head>' + 
-           '</head><body><div id="content"><tt>' + result + 
-           '</tt></div></body></html>'
+           '</head><body><div id="content"><pre>' + result + 
+           '</pre></div></body></html>'
   end
 
   def RipDoc.compile_fragment(f)
@@ -243,14 +243,13 @@ DOCTYPE = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     result = buf.string
     parser.spans_owed.times{ result += '</span>' }
 
-    return '<div id="content"><tt>' + result + 
-           '</tt></div>'
+    return '<div id="content"><pre>' + result + '</pre></div>'
   end
 
 end
 
 if $0 == __FILE__
-  system 'ruby ripdoc_test.rb'
+  system 'ruby ../test/ripdoc_test.rb'
 #  main
 end
 

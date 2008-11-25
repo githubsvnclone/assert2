@@ -3,19 +3,16 @@ $:.unshift 'lib'; $:.unshift '../lib'
 require 'assert2'
 require 'ripdoc'
 require 'assert_xhtml'
-require 'pathname'
 
-HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path
+HomePath = RipDoc::HomePath
 
-#  TODO  no <tt>&nbsp; yes <pre>
 #  TODO  assert{} should catch and decorate errors
 #  TODO  deny{ xpath } decorates?
 #  TODO  make the add_diagnostic take a lambda
 #  TODO  censor TODOs from the pretty rip!
+#  TODO  censor the urchinTracker!!
 
 class RipDocSuite < Test::Unit::TestCase
-
-#  TODO  no mo <tt></tt><br/>
 
   def setup
     @rip = RipDoc.new('')
@@ -24,7 +21,6 @@ class RipDocSuite < Test::Unit::TestCase
   end
 
   def test_generate_accordion
-return # TODO
     assert_xhtml RipDoc.generate(HomePath + 'lib/assert2.rb', 'assert{ 2.1 }')
     assert{ xpath('/html/head/title').text == 'assert{ 2.1 }' }
 
@@ -33,8 +29,7 @@ return # TODO
     #~ <div id="vertical_container">
       #~ <%= @sauce %>
       #~ <h1 class="accordion_toggle">assert{ 2.1 } reinvents assert{ 2.0 } for Ruby 1.9</h1>
-    
-    
+
     assert{ xpath(:span, style: 'display: none;').text.index('=begin') }
 #    rap = Ripper.sexp(File.read('assert21.rb'))
 #    puts rap.pretty_inspect.split("\n").grep(/embdoc/)
@@ -46,7 +41,7 @@ return # TODO
     sauce = assert_rip_page(f)
     assert{ xpath(:span, style: 'display: none;').text.index('=begin') }
 
-#    reveal
+    reveal  #  TODO  put output in doc folder so CSS applies!
 #    @xdoc = Document.new(sauce)
   end
 
@@ -56,10 +51,11 @@ return # TODO
     assert_embdoc ['yo', ' indented', ' also indented', 'dude']
     denigh{ xpath(:'p[ contains(., "indented") ]') }
       #  TODO  assert forgot how to diagnose that...
-    assert do # the very next element must be the next tt, 
-              #   with the next line of contents!
-      xpath(:'tt[ contains(., "indented") ]/following-sibling::*[ position() = 1 and name() = "br" ]/following-sibling::*[ . = " also indented" and position() = 1 ]')
-    end
+    #~ assert do # the very next element must be the next tt, 
+              #~ #   with the next line of contents!
+      #~ xpath(:'tt[ contains(., "indented") ]/following-sibling::*[ 
+                  #~ . = " also indented" and position() = 1 ]')
+    #~ end
     denigh{ xpath(:'p[ . = " " ]') }
   end
 
@@ -103,7 +99,6 @@ return # TODO
     assert_embdoc ['yo', ' indented', 'dude']
     assert('TODO take out that little space'){ xpath :'p[ . = "yo " ]' }
     denigh{ xpath(:'p[ contains(., "indented") ]') }
-    assert{ xpath(:'tt[ contains(., "indented") ]') }
     assert{ xpath :'p[ . = "dude" ]' }
   end
 
@@ -126,7 +121,21 @@ return # TODO
   def test_comments_feed_lines
     lines = assert_rip('# comment
                         x = 42')
-    assert{ lines =~ /<\/span><\/tt><br\/>\n/ }
+    assert{ lines =~ /<\/span>\n/ }
+  end
+
+# TODO  assert{ xpath() { nada } }  should not be a problem
+
+#  TODO  add :verbose => option to xpath
+
+  def test_put_every_thing_into_a_pre_block
+    lines = assert_rip('x = 42')
+    assert do
+      xpath :div, :content do
+        #puts(@xdoc.to_s) and
+        xpath 'pre/span'
+      end
+    end
   end
 
   def style(kode)

@@ -11,6 +11,8 @@ task :test_assert_xhtml => :test_ripdoc do
   sh 'ruby1.9 test/assert_xhtml_test.rb'
 end
 
-task :default => :test_assert_xhtml do
-  # system 'zip -f assert21_fork.zip '
+task :default => :test_assert_xhtml
+
+task :zip => :default do
+  system 'zip -f assert21.zip '
 end
