@@ -34,9 +34,9 @@ their syntax-sugary equivalents!).
 
 =end
 
-require 'ripper'
-require 'common/assert2_utilities'
+require 'ripper'  #   note we only work with Ruby >= 1.9 !
 require 'pp'
+  # note there's more requires down there --V
 
 module Test; module Unit; module Assertions
   
@@ -761,10 +761,9 @@ module Test; module Unit; module Assertions
     @__additional_diagnostics = []
   end
   
-  alias denigh deny  #  to line assert{ ... } and 
-                     #          denigh{ ... } statements up neatly!
-
 end; end; end
+
+require File.dirname(__FILE__) + '/common/assert2_utilities'
 
 require '../test/assert2_test.rb' if $0 == __FILE__ and File.exist?('../test/assert2_test.rb')
 #require 'ripdoc_test.rb' if $0 == __FILE__ and File.exist?('ripdoc_test.rb')
