@@ -23,14 +23,8 @@ class RipDocSuite < Test::Unit::TestCase
   def test_generate_accordion_with_test_file
     assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
     assert{ xpath('/html/head/title').text == 'assert{ 2.1 }' }
-    # reveal
+    reveal
     # TODO  fix 'hash = {{ :x => 42, 43 => 44 }' has a duped {{ !
-
-  end
-
-  def test_generate_accordion
-    assert_xhtml RipDoc.generate(HomePath + 'lib/assert2.rb', 'assert{ 2.1 }')
-    assert{ xpath('/html/head/title').text == 'assert{ 2.1 }' }
 
     #~ assert do
       
@@ -42,15 +36,6 @@ class RipDocSuite < Test::Unit::TestCase
 #    rap = Ripper.sexp(File.read('assert21.rb'))
 #    puts rap.pretty_inspect.split("\n").grep(/embdoc/)
 #    reveal
-  end
-
-  def test_we_be_well_formed
-    f = (HomePath + 'lib/assert2.rb').open
-    sauce = assert_rip_page(f)
-    assert{ xpath(:span, style: 'display: none;').text.index('=begin') }
-
-#    reveal  #  TODO  put output in doc folder so CSS applies!
-#    @xdoc = Document.new(sauce)
   end
 
     #  TODO  are # markers leaking into the formatted outputs?
@@ -201,9 +186,10 @@ return # TODO
 #  TODO  respect linefeeds in parsed source when reflecting
 
   def reveal(xhtml = @sauce || @output)
-    File.write('yo.html', xhtml)
-#    system 'konqueror yo.html &'
-    system '"C:/Program Files/Mozilla Firefox/firefox.exe" yo.html &'
+    filename = HomePath + 'doc/yo.html'
+    File.write(filename, xhtml)  
+    filename = filename.relative_path_from(Pathname.pwd)
+    system "\"C:/Program Files/Mozilla Firefox/firefox.exe\" #{filename} &"
   end
   
 end

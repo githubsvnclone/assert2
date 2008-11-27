@@ -13,25 +13,23 @@ html {
 }
 
 body {
-	background: #171b20;
-	color: #ffffff;
+	background: #aaf; /*#171b20; */
+	color: #008;
 	font-family: 'Lucida Grande', Verdana, Arial;
 	font-size: 12px;
 	height: 100%;
 }
 
 h1 {
-	color: #96BF55;
 	font-size: 20px;
-	font-weight: normal;
+	font-weight: bolder;
 	margin: 5px 0 5px 0;
 	text-align: left;
 }
 
 	h1 span {
-		color: #ffffff;
 		font-size: 20px;
-		font-weight: normal;
+		font-weight: bolder;
 		margin: 5px 5px 5px 0;
 		text-align: left;
 	}
@@ -223,7 +221,7 @@ a.page-options {
 
 a.page-options:hover, 
 a.page-options:focus {
-	color: #fff; 
+	color: black; 
 	background: #09F;
 }		
 	p small, 
@@ -234,7 +232,7 @@ a.page-options:focus {
 	
 	p em, 
 	em {
-		color: #ffffff;
+		color: black;
 	}
 
 .hidden {
@@ -243,16 +241,17 @@ a.page-options:focus {
 
 
 pre {
+	color: #004;
   	font-size: 11px;
   	padding: 10px;
-  	background: #000000;
+  	background: white;
   	overflow: auto;
 	margin: 10px 0 10px 0;
 }
 
 code {
-  	color: #ffffff;
-  	background: #000000;
+  	color: black;
+  	/* background: white; */
   	font-family: Monaco, Courier, monotype;
 }
 

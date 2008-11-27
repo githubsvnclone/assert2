@@ -1,3 +1,39 @@
+
+=begin
+assert{ 2.1 } reinvents assert{ 2.0 } for Ruby 1.9.
+=end
+
+=begin
+assert{ 2.0 } is the industry's most aggressive TDD system
+
+...for Ruby, or any other language. Each time it fails, it analyzes the 
+reason and presents a complete report. This makes the cause very
+easy to rapidly identify and fix. assert{ 2.0 } is like a debugger's
+"inspect variable" system, and it makes your TDD cycle more
+effective.
+
+Here's an example of assert{ 2.1 } failing. The first line reflects the 
+source of the entire assertion:
+
+     assert{ z =~ /=begon/ } # complete with comments
+  --> nil
+             z --> "<span style=\"display: none;\">=begin</span>"
+ z =~ /=begon/ --> nil.
+
+The second line, --> nil, is the return value of the asserted expression.
+The next lines contain the complete source and re-evaluation of each
+terminal (z) and expression (z =~ /=begon/) in the assertion's block.
+
+The diagnostic lines are formatted to scan easily, and they use "pretty_inspect"
+to wrap complex outputs.
+
+The more creative your assertions, the more elaborate their diagnostics.
+These simple techniques free programmers from the tedium of squeezing
+assertions into preset patterns, such as assert_equal or assert_match (or
+their syntax-sugary equivalents!).
+
+=end
+
 require 'test/unit'
 $:.unshift 'lib'; $:.unshift '../lib'
 require 'assert2'
