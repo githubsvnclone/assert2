@@ -11,7 +11,10 @@ task :test_assert_xhtml => :test_ripdoc do
   sh 'ruby1.9 test/assert_xhtml_test.rb'
 end
 
-task :default => :test_assert_xhtml
+task :default => :test_assert_xhtml do
+  sh 'svn commit --message development'
+  sh 'svn commit --message development lib/common'
+end
 
 task :zip => :default do
   system 'zip -f assert21.zip '

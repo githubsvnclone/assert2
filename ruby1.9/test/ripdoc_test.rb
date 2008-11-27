@@ -41,7 +41,7 @@ class RipDocSuite < Test::Unit::TestCase
     sauce = assert_rip_page(f)
     assert{ xpath(:span, style: 'display: none;').text.index('=begin') }
 
-    reveal  #  TODO  put output in doc folder so CSS applies!
+#    reveal  #  TODO  put output in doc folder so CSS applies!
 #    @xdoc = Document.new(sauce)
   end
 
