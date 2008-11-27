@@ -110,6 +110,12 @@ class RipDocSuite < Test::Unit::TestCase
     deny{ line =~ />>/ }
   end
 
+  def test_rip_braces
+    assert_rip 'hash = { :x => 42, 43 => 44 }'
+    denigh{ xpath :'span[ contains( ., "{{" ) ]' }
+    assert{ xpath :'span[ contains( ., "{"  ) ]' }
+  end
+
   def test_comments_feed_lines
     lines = assert_rip('# comment
                         x = 42')

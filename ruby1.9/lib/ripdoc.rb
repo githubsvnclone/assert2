@@ -122,7 +122,7 @@ class RipDoc < Ripper::Filter
     elsif tok =~ /^[[:punct:]]+$/
       f << %Q[#{span(:operator)}#{CGI.escapeHTML(tok)}</span>]
     else
-      # p tok, event
+       #p tok, event
       on_kw tok, f, event.to_s.sub(/^on_/, '')
     end
     
@@ -174,12 +174,9 @@ class RipDoc < Ripper::Filter
     f << "\n"
   end
 
-  #~ def on_sp(tok, f)
-    #~ f << '&nbsp;' * tok.length
-  #~ end
-
-  def on_lbrace(tok, f)  #  TODO  report this silly bug!
-    spanit '', f, tok
+  def on_lbrace(tok, f)
+#p [tok, 'onlbrace']
+    spanit '', f, '' # tok  CONSIDER  wonder who is actually emitting the { ??
     f << tok
   end
   
@@ -267,7 +264,6 @@ end
 #~ :on_lbracket
 #~ :on_rbracket
 #~ :on_rbrace
-#~ :on_lbrace
 #~ :on_qwords_beg
 #~ :on_words_sep
 
