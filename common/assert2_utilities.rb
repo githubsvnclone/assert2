@@ -61,5 +61,8 @@ module Test; module Unit; module Assertions
     end
   end
 
+  alias denigh deny  #  to line assert{ ... } and 
+                     #          denigh{ ... } statements up neatly!
+
 end ; end ; end
 
