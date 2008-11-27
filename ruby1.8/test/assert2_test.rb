@@ -38,7 +38,7 @@ class Assert_2_0_Test < Test::Unit::TestCase #:nodoc:
     x = 42
 
     assert_flunk /RuntimeError.*me_too.*42/m do
-      deny{ x; raise 'me_too' }
+      denigh{ x; raise 'me_too' }
     end
 
     assert_flunk /tolja.*RuntimeError.*me_too.*42/m do

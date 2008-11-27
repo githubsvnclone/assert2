@@ -1,13 +1,10 @@
 require 'test/unit'
 require File.dirname(__FILE__) + '/ruby_reflector'
+ # note more requires lurk down there --V
 
 #  FIXME  evaluate parts[3]
 #  ERGO  if the block is a block, decorate with do-end
 #  ERGO  decorate assert_latest's block at fault time
-
-module Assert_2_0
-  p 'the Assert_2_0 module is deprecated and will disappear soon!'
-end
 
 module Test; module Unit; module Assertions
 
@@ -219,8 +216,9 @@ module Test; module Unit; module Assertions
   
 end ; end ; end  #  "Eagle-eyes it!"
 
+require File.dirname(__FILE__) + '/common/assert2_utilities'
+
 class Test::Unit::TestCase #:nodoc:
   include ::RubyNodeReflector::Coulor #:nodoc:
   include ::RubyNodeReflector #:nodoc:
-  #~ include Assert_2_0
-end
+end  #  ERGO remove these?
