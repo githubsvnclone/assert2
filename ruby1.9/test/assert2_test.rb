@@ -316,6 +316,7 @@ class Assert2Suite < Test::Unit::TestCase
     assert_reflect 'Class.new("yo"){ |block| p block }'
     assert_reflect "def naughty\nsuper(42)\nyield\nend"
     assert_reflect "def naughty\nsuper\nyield(42)\nend"
+    assert_reflect 'hash = { :x => 42, 43 => 44 }'
   end
   
   def test_trailing_nonsense_in_goal_posts
