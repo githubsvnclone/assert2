@@ -20,6 +20,14 @@ class RipDocSuite < Test::Unit::TestCase
     @f = StringIO.new(@output)
   end
 
+  def test_generate_accordion_with_test_file
+    assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
+    assert{ xpath('/html/head/title').text == 'assert{ 2.1 }' }
+    # reveal
+    # TODO  fix 'hash = {{ :x => 42, 43 => 44 }' has a duped {{ !
+
+  end
+
   def test_generate_accordion
     assert_xhtml RipDoc.generate(HomePath + 'lib/assert2.rb', 'assert{ 2.1 }')
     assert{ xpath('/html/head/title').text == 'assert{ 2.1 }' }
