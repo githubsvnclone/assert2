@@ -11,6 +11,9 @@ HomePath = RipDoc::HomePath
 #  TODO  make the add_diagnostic take a lambda
 #  TODO  censor TODOs from the pretty rip!
 #  TODO  censor the urchinTracker!!
+#  TODO  give the accordion div the finger emphasis?
+#  TODO  move styles like .accordion_toggle to a CSS file
+#  TODO  tidy gives a billion warnings. Fix.
 
 class RipDocSuite < Test::Unit::TestCase
 
@@ -23,18 +26,15 @@ class RipDocSuite < Test::Unit::TestCase
   def test_generate_accordion_with_test_file
     assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
     assert{ xpath('/html/head/title').text == 'assert{ 2.1 }' }
-#    reveal
-
-    #~ assert do
-      
-    #~ <div id="vertical_container">
-      #~ <%= @sauce %>
-      #~ <h1 class="accordion_toggle">assert{ 2.1 } reinvents assert{ 2.0 } for Ruby 1.9</h1>
-
     assert{ xpath(:span, style: 'display: none;').text.index('=begin') }
-#    rap = Ripper.sexp(File.read('assert21.rb'))
-#    puts rap.pretty_inspect.split("\n").grep(/embdoc/)
-#    reveal
+   
+    assert do
+        xpath :div, :vertical_container do
+          xpath(:'h1[ @class = "accordion_toggle accordion_toggle_active" ]').text =~ 
+                    /reinvents assert/
+        end
+    end
+    # reveal
   end
 
     #  TODO  are # markers leaking into the formatted outputs?
@@ -72,7 +72,7 @@ class RipDocSuite < Test::Unit::TestCase
   end
 
   def test_on_embdoc_end
-    assert_embdoc ['yo', 'dude', "\r\n", 'what', 'up?']
+    assert_embdoc ['banner', 'yo', 'dude', "\r\n", 'what', 'up?']
     assert{ xpath :'p[ . = "yo dude"  ]' }
     denigh{ xpath :"p[ . = '\r\n'     ]" }
     assert{ xpath :'p[ . = "what up?" ]' }
@@ -81,14 +81,14 @@ class RipDocSuite < Test::Unit::TestCase
   end
 
   def test_on_embdoc_end_with_unix_style_linefeeds
-    assert_embdoc ['yo', 'dude', "\n", 'what', 'up?']
+    assert_embdoc ['banner', 'yo', 'dude', "\n", 'what', 'up?']
     assert{ xpath :'p[ . = "yo dude"  ]' }
     denigh{ xpath :"p[ . = '\n'       ]" }
     assert{ xpath :p, :'.' => 'what up?' }
   end
 
   def test_embdoc_with_indented_samples
-    assert_embdoc ['yo', ' indented', 'dude']
+    assert_embdoc ['banner', 'yo', ' indented', 'dude']
     assert('TODO take out that little space'){ xpath :'p[ . = "yo " ]' }
     denigh{ xpath(:'p[ contains(., "indented") ]') }
     assert{ xpath :'p[ . = "dude" ]' }
@@ -164,7 +164,7 @@ return # TODO
   end
 
   def test_embdoc
-    assert_rip "=begin\nWe be\nembdoc\n=end"
+    assert_rip "=begin\nbanner\nWe be\nembdoc\n=end"
     assert{ xpath(:"span[ #{style(:embdoc)} ]/p").text =~ /We be/m }
   end
 

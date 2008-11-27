@@ -33,8 +33,25 @@ class RipDoc < Ripper::Filter
     f << line
   end
   
+  def on_embdoc_beg(tok, f)
+    @embdocs = []
+    on_kw tok, f, 'embdoc_beg'
+  end
+
+  def on_embdoc(tok, f)
+    @embdocs << tok
+    #on_kw tok, f, 'embdoc'
+    return f
+  end
+  
   def on_embdoc_end(tok, f)
     f << span(:embdoc)
+      if banner = @embdocs.shift
+        f << '<h1 class="accordion_toggle accordion_toggle_active">'
+        f << CGI.escapeHTML(banner)
+        f << '</h1>'
+      end
+      
       f << '<p>'
       @owed_p = true
       previous = false
@@ -56,17 +73,6 @@ class RipDoc < Ripper::Filter
     on_kw tok, f, 'embdoc_end'
   end
 
-  def on_embdoc_beg(tok, f)
-    @embdocs = []
-    on_kw tok, f, 'embdoc_beg'
-  end
-
-  def on_embdoc(tok, f)
-    @embdocs << tok
-    #on_kw tok, f, 'embdoc'
-    return f
-  end
-  
   STYLES = {
     const:              "color: #FF4F00; font-weight: bolder;",
     backref:            "color: #f4f; font-weight: bolder;",
