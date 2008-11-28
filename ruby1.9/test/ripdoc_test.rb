@@ -23,18 +23,33 @@ class RipDocSuite < Test::Unit::TestCase
     @f = StringIO.new(@output)
   end
 
-  def test_generate_accordion_with_test_file
+  def _test_generate_accordion_with_test_file
     assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
     assert{ xpath('/html/head/title').text == 'assert{ 2.1 }' }
     assert{ xpath(:span, style: 'display: none;').text.index('=begin') }
    
     assert do
-        xpath :div, :vertical_container do
-          xpath(:'h1[ @class = "accordion_toggle accordion_toggle_active" ]').text =~ 
-                    /reinvents assert/
-        end
+      xpath :div, :vertical_container do
+        xpath(:'h1[ @class = "accordion_toggle accordion_toggle_active" ]').text =~ 
+                  /reinvents assert/
+      end
     end
     # reveal
+  end
+
+#  TODO  pay for Staff Benda Bilili  ALBUM: Très Très Fort (Promo Sampler) !
+
+  def test_embdocs_form_accordions_with_contents
+    assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
+
+    assert do
+      xpath :div, :vertical_container do
+        xpath(:'h1/following-sibling::div[ @class = "accordion_content" ]') # .text =~ 
+    #              /complete report/
+      end
+    end
+      
+#    reveal
   end
 
     #  TODO  are # markers leaking into the formatted outputs?
@@ -165,7 +180,7 @@ return # TODO
 
   def test_embdoc
     assert_rip "=begin\nbanner\nWe be\nembdoc\n=end"
-    assert{ xpath(:"span[ #{style(:embdoc)} ]/p").text =~ /We be/m }
+    assert{ xpath(:"span[ #{style(:embdoc)} ]/div/p").text =~ /We be/m }
   end
 
   def test_color_backrefs

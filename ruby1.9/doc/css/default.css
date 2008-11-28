@@ -13,11 +13,17 @@ html {
 }
 
 body {
-	background: #aaf; /*#171b20; */
+	/*background: #aaf;*/ /*#171b20; */
 	color: #008;
-	font-family: 'Lucida Grande', Verdana, Arial;
+/*	font-family: 'Lucida Grande', Verdana, Arial;
+
+TODO  put the test button in the corner
+*/
 	font-size: 12px;
 	height: 100%;
+/*	background-image:url(sky_blue.jpg);
+	background-repeat:repeat-x;*/
+	font-family:Times,serif;
 }
 
 h1 {

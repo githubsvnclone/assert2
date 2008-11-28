@@ -1,12 +1,9 @@
 
 =begin
 assert{ 2.1 } reinvents assert{ 2.0 } for Ruby 1.9.
-=end
 
-=begin
-assert{ 2.0 } is the industry's most aggressive TDD system
-
-...for Ruby, or any other language. Each time it fails, it analyzes the 
+assert{ 2.0 } is the industry's most aggressive TDD system,
+for Ruby, or any other language. Each time it fails, it analyzes the 
 reason and presents a complete report. This makes the cause very
 easy to rapidly identify and fix. assert{ 2.0 } is like a debugger's
 "inspect variable" system, and it makes your TDD cycle more

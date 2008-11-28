@@ -52,22 +52,24 @@ class RipDoc < Ripper::Filter
         f << '</h1>'
       end
       
-      f << '<p>'
-      @owed_p = true
-      previous = false
-      
-      @embdocs.each do |doc|
-        if doc.strip == ''
-          f << "</p>\n<p>"
-          previous = false
-        else
-          f << ' ' if previous
-          deformat(CGI.escapeHTML(doc), f)
-          previous = true
+      f << '<div class="accordion_content">'
+        f << '<p>'
+        @owed_p = true
+        previous = false
+        
+        @embdocs.each do |doc|
+          if doc.strip == ''
+            f << "</p>\n<p>"
+            previous = false
+          else
+            f << ' ' if previous
+            deformat(CGI.escapeHTML(doc), f)
+            previous = true
+          end
         end
-      end
-      
-      f << '</p>' if @owed_p
+        
+        f << '</p>' if @owed_p  # TODO what is @owed_p giving us??
+      f << '</div>'  #  TODO  merge the div and the span!
     f << '</span>'
     @embdocs = []
     on_kw tok, f, 'embdoc_end'
