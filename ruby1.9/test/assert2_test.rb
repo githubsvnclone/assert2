@@ -32,6 +32,12 @@ as <code>assert_equal()</code> or
 
 =end
 
+=begin
+Installation
+  gem install assert2   # for Ruby 1.8, via RubyNode
+  gem install assert21  # for Ruby 1.9, via Ripper (comes with Ruby)
+=end
+
 require 'test/unit'
 $:.unshift 'lib'; $:.unshift '../lib'
 require 'assert2'

@@ -45,7 +45,7 @@ class RipDoc < Ripper::Filter
   def on_embdoc_beg(tok, f)
     @embdocs = []
     f << '</pre>'
-    on_kw tok, f, 'embdoc_beg'
+    # on_kw tok, f, 'embdoc_beg'
   end
 
   def on_embdoc(tok, f)
@@ -82,7 +82,8 @@ class RipDoc < Ripper::Filter
       f << '</div>'  #  TODO  merge the div and the span!
     f << '</span><pre>'
     @embdocs = []
-    on_kw tok, f, 'embdoc_end'
+    #on_kw tok, f, 'embdoc_end'
+    return f
   end
 
   STYLES = {

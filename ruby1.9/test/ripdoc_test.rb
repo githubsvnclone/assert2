@@ -75,7 +75,6 @@ class RipDocSuite < Test::Unit::TestCase
     assert{ @rip.embdocs.nil? }
     @rip.on_embdoc_beg('=begin', @f)
     assert{ @output =~ /^\<\/pre>/ }
-    assert{ @output =~ /=begin/ }
     assert{ @rip.embdocs == [] }
   end
 
@@ -102,7 +101,7 @@ class RipDocSuite < Test::Unit::TestCase
     assert{ xpath :'p[ . = "yo dude"  ]' }
     denigh{ xpath :"p[ . = '\r\n'     ]" }
     assert{ xpath :'p[ . = "what up?" ]' }
-    assert{ @output =~ /=end/ }
+    denigh{ @output =~ /=end/ }
     assert{ @output =~ /\<pre>/ }
     assert{ @rip.embdocs == [] }
   end
