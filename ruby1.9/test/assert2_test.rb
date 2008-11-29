@@ -17,17 +17,18 @@ source of the entire assertion:
              z --> "<span style=\"display: none;\">=begin</span>"
  z =~ /=begon/ --> nil.
 
-The second line, --> nil, is the return value of the asserted expression.
+The second line, <code>--> nil</code>, is the return value of the asserted expression.
 The next lines contain the complete source and re-evaluation of each
-terminal (z) and expression (z =~ /=begon/) in the assertion's block.
+terminal (<code>z</code>) and expression (<code>z =~ /=begon/</code>) in the assertion's block.
 
-The diagnostic lines are formatted to scan easily, and they use "pretty_inspect"
-to wrap complex outputs.
+The diagnostic lines are formatted to scan easily, and they use "<code>pretty_inspect()</code>"
+to wrap complex outputs. The diagostic contains the name and value of every variable and
+expression in the asserted block.
 
 The more creative your assertions, the more elaborate their diagnostics.
-These simple techniques free programmers from the tedium of squeezing
-assertions into preset patterns, such as assert_equal or assert_match (or
-their syntax-sugary equivalents!).
+These simple techniques free your assertions from restricted patterns, such 
+as <code>assert_equal()</code> or 
+<code>assert_match()</code> (or their syntax-sugary equivalents!).
 
 =end
 
