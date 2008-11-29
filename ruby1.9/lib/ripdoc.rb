@@ -56,8 +56,8 @@ class RipDoc < Ripper::Filter
   
   def on_embdoc_end(tok, f)
     f << span(:embdoc)
-      if banner = @embdocs.shift
-        f << '<h1 class="accordion_toggle accordion_toggle_active">'
+      if banner = @embdocs.shift  #  accordion_toggle_active
+        f << '<h1 class="accordion_toggle">'
         f << enline(CGI.escapeHTML(banner))
         f << '</h1>'
       end

@@ -26,7 +26,7 @@ to wrap complex outputs. The diagostic contains the name and value of every vari
 expression in the asserted block.
 
 The more creative your assertions, the more elaborate their diagnostics.
-These simple techniques free your assertions from restricted patterns, such 
+These simple techniques free your assertions from restricting patterns, such 
 as <code>assert_equal()</code> or 
 <code>assert_match()</code> (or their syntax-sugary equivalents!).
 
