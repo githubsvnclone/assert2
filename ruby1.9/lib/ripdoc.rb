@@ -15,26 +15,36 @@ class RipDoc < Ripper::Filter
     @sauce = compile_fragment(File.read(filename))
     @title = title
     erb = ERB.new((HomePath + 'lib/ripdoc.html.erb').read, nil, '>')
-    return erb.result(binding())
+    xhtml = erb.result(binding())
+    xhtml.gsub! /\<pre>\s*\<\/pre>/m, ''
+    xhtml.gsub! /\<p>\s*\<\/p>/m, ''
+    return xhtml
   end
 
   attr_accessor :embdocs
 
+  def enline(line)
+    return line.gsub( '&lt;code&gt;', '<code>').
+                gsub('&lt;/code&gt;', '</code>').
+                gsub("\r\n", "\n")
+  end
+
   def deformat(line, f)
     if line =~ /^\s/
-      f << "</p>\n" if @owed_p
+      f << "</p><pre>\n" if @owed_p
       @owed_p = false
-      f << line << "\n"
+      f << enline(line) << "\n"
       return
     end
     
-    f << '<p>' unless @owed_p
+    f << '</pre><p>' unless @owed_p  #  TODO  make sure we owe that pre!
     @owed_p = true
-    f << line
+    f << enline(line)
   end
   
   def on_embdoc_beg(tok, f)
     @embdocs = []
+    f << '</pre>'
     on_kw tok, f, 'embdoc_beg'
   end
 
@@ -48,7 +58,7 @@ class RipDoc < Ripper::Filter
     f << span(:embdoc)
       if banner = @embdocs.shift
         f << '<h1 class="accordion_toggle accordion_toggle_active">'
-        f << CGI.escapeHTML(banner)
+        f << enline(CGI.escapeHTML(banner))
         f << '</h1>'
       end
       
@@ -59,7 +69,7 @@ class RipDoc < Ripper::Filter
         
         @embdocs.each do |doc|
           if doc.strip == ''
-            f << "</p>\n<p>"
+            f << "</p>\n<p>" if @owed_p
             previous = false
           else
             f << ' ' if previous
@@ -70,7 +80,7 @@ class RipDoc < Ripper::Filter
         
         f << '</p>' if @owed_p  # TODO what is @owed_p giving us??
       f << '</div>'  #  TODO  merge the div and the span!
-    f << '</span>'
+    f << '</span><pre>'
     @embdocs = []
     on_kw tok, f, 'embdoc_end'
   end

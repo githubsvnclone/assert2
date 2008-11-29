@@ -16,12 +16,10 @@
 <link rel="stylesheet" type="text/css" href="css/default.css" />
 <script type="text/javascript">
 //<![CDATA[
-                        
                 //
                 //  In my case I want to load them onload, this is how you do it!
                 // 
                 Event.observe(window, 'load', loadAccordions, false);
-        
                 //
                 //      Set up all accordions
                 //
@@ -76,7 +74,8 @@
                         font-weight: normal;
                         text-decoration: none;
                         outline: none;
-                        font-size: 12px;
+                       /* font-size: 12px; */
+                       font-family: 'Lucida Grande', Verdana, Arial;
                         color: #000000;
                         border-bottom: 1px solid #cde99f;
                         cursor: pointer;
@@ -101,7 +100,7 @@
                         }
                         
                         .accordion_content p {
-                                line-height: 150%;
+                                line-height: 125%;
                                 padding: 5px 10px 15px 10px;
                         }
                         
@@ -116,7 +115,7 @@
                         font-weight: normal;
                         text-decoration: none;
                         outline: none;
-                        font-size: 12px;
+                       /* font-size: 12px; */
                         color: #000000;
                         border-bottom: 1px solid #cde99f;
                         cursor: pointer;
@@ -141,7 +140,7 @@
                         }
 
                         .vertical_accordion_content p {
-                                line-height: 150%;
+                                line-height: 125%;
                                 padding: 5px 10px 15px 10px;
                         }
                         
@@ -184,7 +183,7 @@
                         
                         .horizontal_accordion_content p {
                                 width: 450px;
-                                line-height: 150%;
+                                line-height: 125%;
                                 padding: 5px 10px 15px 10px;
                         }
                                         
@@ -209,10 +208,8 @@
  style="font-family: Times,serif; background-image: url(images/sky_blue.png); background-repeat: repeat-x;"
 >
 
-<img src="images/sky_ramp.png"/>
-
   <div id="container">
-    <h1><code><span>assert{</span> 2.1 <span>}</span></code></h1>
+    <h1><code><big>assert{ 2.1 }</big></code></h1>
     <!-- <p class="description" >assert{ 2.1 } reinvents assert{ 2.0 } for Ruby 1.9</p>
 -->
 

@@ -35,40 +35,46 @@ class RipDocSuite < Test::Unit::TestCase
       end
     end
     # reveal
-  end
+  end  #  TODO  why we crash when any other tests generate a ripped doc?
 
 #  TODO  pay for Staff Benda Bilili  ALBUM: Très Très Fort (Promo Sampler) !
 
+  def _test_a_ripped_doc_contains_no_empty_pre_tags
+    assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
+    
+#    xpath :div, :content do
+#      deny{ xpath(:'pre').text == "\n" }
+  #  end
+  end  #  TODO how to constrain the context and then deny inside it?
+  
+  #  TODO  what are &#13; doing in there?
+  
   def test_embdocs_form_accordions_with_contents
     assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
-
+    
     assert do
       xpath :div, :vertical_container do
         xpath(:'h1/following-sibling::div[ @class = "accordion_content" ]') # .text =~ 
     #              /complete report/
       end
     end
-      
-#    reveal
+    deny{ @sauce.match('<p><p>') }
+    reveal
   end
 
     #  TODO  are # markers leaking into the formatted outputs?
 
   def test_embdoc_two_indented_lines_have_no_p_between_them
-    assert_embdoc ['yo', ' indented', ' also indented', 'dude']
+    assert_embdoc ['yo', ' first indented', ' also indented', 'dude']
     denigh{ xpath(:'p[ contains(., "indented") ]') }
-      #  TODO  assert forgot how to diagnose that...
-    #~ assert do # the very next element must be the next tt, 
-              #~ #   with the next line of contents!
-      #~ xpath(:'tt[ contains(., "indented") ]/following-sibling::*[ 
-                  #~ . = " also indented" and position() = 1 ]')
-    #~ end
+    assert{ xpath(:'pre[ contains(., "first indented") and contains(., "also indented") ]') }
     denigh{ xpath(:'p[ . = " " ]') }
   end
 
   def test_on_embdoc_beg
     assert{ @rip.embdocs.nil? }
     @rip.on_embdoc_beg('=begin', @f)
+    assert{ @output =~ /^\<\/pre>/ }
     assert{ @output =~ /=begin/ }
     assert{ @rip.embdocs == [] }
   end
@@ -86,12 +92,18 @@ class RipDocSuite < Test::Unit::TestCase
     assert_xhtml "<html><body>#{ @output }</body></html>"
   end
 
+  def test_re_html_ize_embdoc_lines
+    assert{ @rip.enline('foo') == 'foo' }
+    assert{ @rip.enline('f&lt;code&gt;o&lt;/code&gt;o') == 'f<code>o</code>o' }
+  end
+
   def test_on_embdoc_end
     assert_embdoc ['banner', 'yo', 'dude', "\r\n", 'what', 'up?']
     assert{ xpath :'p[ . = "yo dude"  ]' }
     denigh{ xpath :"p[ . = '\r\n'     ]" }
     assert{ xpath :'p[ . = "what up?" ]' }
     assert{ @output =~ /=end/ }
+    assert{ @output =~ /\<pre>/ }
     assert{ @rip.embdocs == [] }
   end
 
