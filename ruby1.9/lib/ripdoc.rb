@@ -30,8 +30,8 @@ class RipDoc < Ripper::Filter
   end
 
   def deformat(line, f)
-    if line =~ /^\s/
-      f << "</p><pre>\n" if @owed_p
+    if line =~ /^\s/   #  CONSIDER why the line-height broke??
+      f << "</p><pre style='line-height: 75%;'>\n" if @owed_p
       @owed_p = false
       f << enline(line) << "\n"
       return
