@@ -14,6 +14,8 @@ HomePath = RipDoc::HomePath
 #  TODO  give the accordion div the finger emphasis?
 #  TODO  move styles like .accordion_toggle to a CSS file
 #  TODO  tidy gives a billion warnings. Fix.
+#  TODO  change all JPGs to transparently cool PNGs
+#  TODO  at scroll time keep the target panel in the viewport!
 
 class RipDocSuite < Test::Unit::TestCase
 
