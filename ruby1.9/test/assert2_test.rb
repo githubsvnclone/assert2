@@ -2,15 +2,15 @@
 =begin
 <code>assert{ 2.1 }</code> reinvents <code>assert{ 2.0 }</code> for Ruby 1.9.
 
-<code>assert{ 2.0 }</code> is the industry's most aggressive TDD system,
-for Ruby, or any other language. Each time it fails, it analyzes the 
+<code>assert{ 2.0 }</code> is the industry's most aggressive TDD 
+system&mdash;Ruby, or any other language. Each time it fails, it analyzes the 
 reason and presents a complete report. This makes the cause very
 easy to rapidly identify and fix. <code>assert{ 2.0 }</code> is like a 
 debugger's "inspect variable" system, and it makes your TDD cycle more
 effective.
 
-Here's an example of <code>assert{ 2.1 }</code> failing. The first line reflects the 
-source of the entire assertion:
+Here's an example of the output diagnostic when <code>assert{ 2.1 }</code> 
+fails. The first line reflects the source of the entire assertion:
 
      assert{ z =~ /=begon/ } # complete with comments
   --> nil
