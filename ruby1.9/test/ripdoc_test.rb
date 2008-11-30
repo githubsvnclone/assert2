@@ -61,7 +61,7 @@ class RipDocSuite < Test::Unit::TestCase
       end
     end
     deny{ @sauce.match('<p><p>') }
-    reveal
+#    reveal
   end
 
     #  TODO  are # markers leaking into the formatted outputs?
@@ -136,6 +136,16 @@ class RipDocSuite < Test::Unit::TestCase
   def test_nested_string_mashers_form_well
     line = assert_rip('return "#{ format_snip(width, snip) } --> #{ format_value(width, value) }"')
     deny{ line =~ />>/ }
+  end
+
+  def test_no_ripping_between_nodoc_tags
+    line = assert_rip("x = 42\n" #+
+          #            "#!nodoc!\n"
+    )
+    assert_xhtml line
+#puts @xdoc.to_s
+    assert{ xpath :span, :'.' => 'x'  }
+    assert{ xpath :span, :'.' => '42' }
   end
 
   def test_rip_braces

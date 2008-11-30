@@ -29,13 +29,14 @@ The more creative your assertions, the more elaborate their diagnostics.
 These simple techniques free your assertions from restricting patterns, such 
 as <code>assert_equal()</code> or 
 <code>assert_match()</code> (or their syntax-sugary equivalents!).
-
 =end
 
 =begin
 Installation
   gem install assert2   # for Ruby 1.8, via RubyNode
   gem install assert21  # for Ruby 1.9, via Ripper (comes with Ruby)
+
+Then <code>require "assert2"</code> (for either package) above your tests.
 =end
 
 require 'test/unit'
