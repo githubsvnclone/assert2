@@ -139,13 +139,16 @@ class RipDocSuite < Test::Unit::TestCase
   end
 
   def test_no_ripping_between_nodoc_tags
-    line = assert_rip("x = 42\n" #+
-          #            "#!nodoc!\n"
+    line = assert_rip("x = 42\n" +
+                      "#!nodoc!\n" +
+                      "y = 43\n"
     )
     assert_xhtml line
-#puts @xdoc.to_s
     assert{ xpath :span, :'.' => 'x'  }
     assert{ xpath :span, :'.' => '42' }
+    denigh{ xpath :span, :'.' => '#!nodoc!' }
+    denigh{ xpath :span, :'.' => 'y'  }
+    denigh{ xpath :span, :'.' => '43' }
   end
 
   def test_rip_braces

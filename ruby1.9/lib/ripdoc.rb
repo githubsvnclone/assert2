@@ -43,18 +43,21 @@ class RipDoc < Ripper::Filter
   end
   
   def on_embdoc_beg(tok, f)
+    return f if @in_nodoc
     @embdocs = []
     f << '</pre>'
     # on_kw tok, f, 'embdoc_beg'
   end
 
   def on_embdoc(tok, f)
+    return f if @in_nodoc
     @embdocs << tok
     #on_kw tok, f, 'embdoc'
     return f
   end
   
   def on_embdoc_end(tok, f)
+    return f if @in_nodoc
     f << span(:embdoc)
       if banner = @embdocs.shift  #  accordion_toggle_active
         f << '<h1 class="accordion_toggle">'
@@ -122,19 +125,27 @@ class RipDoc < Ripper::Filter
   end
 
   def on_kw(tok, f, klass = 'kw')
+    return f if @in_nodoc
     f << span(klass) << CGI.escapeHTML(tok)
     f << '</span>'
   end
 
   def on_comment(tok, f)
-    spanit :comment, f, tok.rstrip
-    on_nl nil, f
+    nodoc = tok =~ /^\#\!nodoc\!/
+    if nodoc.nil? and !@in_nodoc
+      spanit :comment, f, tok.rstrip
+      on_nl nil, f
+    else
+      @in_nodoc = nodoc # TODO  this will obscure until the next comment - fix
+    end
+    return f
   end
 
 # TODO linefeeds inside %w() and possibly ''
 #  TODO colorize :"" and :"#{}" correctly
 
   def on_default(event, tok, f)
+    return f if @in_nodoc
     if @symbol_begun
       @symbol_begun = false
       f << %Q[#{span(:symbol)}#{CGI.escapeHTML(tok)}</span>]
@@ -156,56 +167,68 @@ class RipDoc < Ripper::Filter
   end
 
   def on_tstring_beg(tok, f)
+    return f if @in_nodoc
     @spans_owed += 1
     f << span(:string)
     f << %Q[#{span(:string_delimiter)}#{CGI.escapeHTML(tok)}</span>]
   end
 
   def on_tstring_end(tok, f)
+    return f if @in_nodoc
     f << %Q[#{span(:string_delimiter)}#{CGI.escapeHTML(tok)}</span>]
     finish_one_span(f)
     return f
   end
 
   def on_regexp_beg(tok, f)
+    return f if @in_nodoc
     @spans_owed += 1
     f << span(:regexp)
     f << %Q[#{span(:regexp_delimiter)}#{CGI.escapeHTML(tok)}</span>]
   end
 
   def on_regexp_end(tok, f)
+    return f if @in_nodoc
     f << %Q[#{span(:regexp_delimiter)}#{CGI.escapeHTML(tok)}</span>]
     finish_one_span(f)
     return f
   end
 
   def on_embexpr_beg(tok, f)
+    return f if @in_nodoc
     spanit :embexpr, f, tok
     return f
-  end
+  end  #  TODO  don't interrupt a span or nothing with a nodoc!
+  
+  #  TODO single-line mode for nodoc
   
   def on_ignored_nl(tok, f)
+    return f if @in_nodoc
     on_nl nil, f
   end
 
   def on_nl(tok, f)
+    return f if @in_nodoc
     finish_any_spans(f)  # TODO  this can't be needed...
     f << "\n"
   end
 
   def on_lbrace(tok, f)
+    return f if @in_nodoc
 #p [tok, 'onlbrace']
     spanit '', f, '' # tok  CONSIDER  wonder who is actually emitting the { ??
     f << tok
   end
   
   def on_rbrace(tok, f)
+    return f if @in_nodoc
     f << tok
     finish_one_span(f)  #  TODO  these things might wrap lines!
     return f
   end
 
   def on_symbeg(tok, f)
+    return f if @in_nodoc
     on_default(:on_symbeg, tok, f)
     @symbol_begun = true
     return f
@@ -218,10 +241,12 @@ class RipDoc < Ripper::Filter
 #  TODO  syntax hilite the inner language of regices? how about XPathics?
 
   def on_tstring_content(tok, f)
+    return f if @in_nodoc
     f << CGI.escapeHTML(tok)
   end
 
   def on_ivar(tok, f)
+    return f if @in_nodoc
     f << %Q[#{span(:ivar)}#{CGI.escapeHTML(tok)}</span>]
   end
 
@@ -234,7 +259,7 @@ class RipDoc < Ripper::Filter
     #finish_any_spans(f)
   end
 
-DOCTYPE = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  DOCTYPE = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' +
               "\n"
 
@@ -252,9 +277,12 @@ DOCTYPE = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
            '</pre></div></body></html>'
   end
 
+  attr_accessor :in_nodoc
+
   def RipDoc.compile_fragment(f)
     buf = StringIO.new
     parser = RipDoc.new(f)
+    parser.in_nodoc = false
     parser.parse(buf, f)
     result = buf.string
     parser.spans_owed.times{ result += '</span>' }
