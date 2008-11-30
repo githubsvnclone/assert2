@@ -131,13 +131,15 @@ class RipDoc < Ripper::Filter
   end
 
   def on_comment(tok, f)
-    nodoc = tok =~ /^\#\!nodoc\!/
+    nodoc = tok.strip =~ /^\#\!nodoc\!/
+    
     if nodoc.nil? and !@in_nodoc
       spanit :comment, f, tok.rstrip
       on_nl nil, f
-    else
-      @in_nodoc = nodoc # TODO  this will obscure until the next comment - fix
     end
+    
+    @in_nodoc = nodoc # TODO  this will obscure until the next comment - fix
+    @in_nodoc = nil if tok.strip =~ /^\#\!doc\!/
     return f
   end
 

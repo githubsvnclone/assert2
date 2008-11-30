@@ -38,7 +38,7 @@ Installation
 
 Then <code>require "assert2"</code> (for either package) above your tests.
 =end
-
+#!nodoc!
 require 'test/unit'
 $:.unshift 'lib'; $:.unshift '../lib'
 require 'assert2'

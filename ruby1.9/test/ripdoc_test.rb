@@ -61,7 +61,7 @@ class RipDocSuite < Test::Unit::TestCase
       end
     end
     deny{ @sauce.match('<p><p>') }
-#    reveal
+   # reveal
   end
 
     #  TODO  are # markers leaking into the formatted outputs?
@@ -139,16 +139,32 @@ class RipDocSuite < Test::Unit::TestCase
   end
 
   def test_no_ripping_between_nodoc_tags
-    line = assert_rip("x = 42\n" +
-                      "#!nodoc!\n" +
-                      "y = 43\n"
-    )
+    line = assert_rip( "x = 42\n" +
+                       "#!nodoc!\n" +
+                       "y = 43\n"
+                      ) 
     assert_xhtml line
     assert{ xpath :span, :'.' => 'x'  }
     assert{ xpath :span, :'.' => '42' }
     denigh{ xpath :span, :'.' => '#!nodoc!' }
     denigh{ xpath :span, :'.' => 'y'  }
     denigh{ xpath :span, :'.' => '43' }
+  end
+
+  def test_nodoc_tags_end_at_doc_tags
+    line = assert_rip( "#!nodoc!\n" +
+                       "y = 43\n" +
+                       "# miss me\n" +
+                       "#!doc!\n" +
+                       "x = 42\n"
+                     )  #  TODO  interact correctly with =begin tags
+    assert_xhtml line
+    denigh{ xpath :span, :'.' => '#!nodoc!' }
+    denigh{ xpath :span, :'.' => 'y'  }
+    denigh{ xpath :span, :'.' => '43' }
+    denigh{ xpath :span, :'.' => '# miss me' }
+    assert{ xpath :span, :'.' => 'x'  }
+    assert{ xpath :span, :'.' => '42' }
   end
 
   def test_rip_braces
