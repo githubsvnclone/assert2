@@ -54,6 +54,17 @@ class Assert2Suite < Test::Unit::TestCase
     @effect.block = lambda{x}
   end
   
+  def test_diagnostic_reflections
+    x = 42
+
+    assert_flunk "assert{ x == 43 }\n" +
+                 " --> false\n"        +
+                 "      x --> 42\n"    +
+                 "x == 43 --> false." do
+      assert{ x == 43 }
+    end
+  end
+
   def test_assert_args
     assert 'the irony /is/ lost on us!', 
               :args => [42] do |x|
@@ -482,14 +493,6 @@ class Assert2Suite < Test::Unit::TestCase
   def test_cant_rip_entire_assertion
     x = assert_raise_message RuntimeError, /incorrectly formatted/ do
       rippage = @effect.rip('assert{ x == 42 ')
-    end
-  end
-
-  def test_diagnostic_reflections
-    x = 42
-
-    assert_flunk /assert.*x == 43.*x\s+--> 42/m do
-      assert{ x == 43 }
     end
   end
 

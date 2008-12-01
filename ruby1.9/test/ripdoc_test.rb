@@ -61,7 +61,7 @@ class RipDocSuite < Test::Unit::TestCase
       end
     end
     deny{ @sauce.match('<p><p>') }
-   # reveal
+    reveal
   end
 
     #  TODO  are # markers leaking into the formatted outputs?
