@@ -1,4 +1,3 @@
-
 =begin
 <code>assert{ 2.1 }</code> reinvents <code>assert{ 2.0 }</code> for Ruby 1.9.
 
@@ -25,10 +24,10 @@ The diagnostic lines are formatted to scan easily, and they use "<code>pretty_in
 to wrap complex outputs. The diagostic contains the name and value of every variable and
 expression in the asserted block.
 
-The more creative your assertions, the more elaborate their diagnostics.
 These simple techniques free your assertions from restricting patterns, such 
 as <code>assert_equal()</code> or 
 <code>assert_match()</code> (or their syntax-sugary equivalents!).
+The more creative your assertions, the more elaborate their diagnostics.
 =end
 
 =begin
@@ -60,6 +59,7 @@ Fault Diagnostics
 This test uses a semi-private assertion, <code>assert_flunk()</code>,
 to detect that when <code>assert{ 2.0 }</code> fails, it prints out a diagnostic
 containing the assertion's variables and values:
+#!nodoc!
 =end
   def test_diagnostic_reflections
     x = 42

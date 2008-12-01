@@ -1,0 +1,8 @@
+--- 
+:version: 0.0.1
+:author: Phlip
+:summary: reinvent assert{ 2.1 } for Ruby 1.9
+:email: phlip2005@gmail.com
+:homepage: assert2.rubyforge.org
+:name: assert21
+:rubyforge_project: assert2

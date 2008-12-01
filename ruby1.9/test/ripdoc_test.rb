@@ -10,7 +10,6 @@ HomePath = RipDoc::HomePath
 #  TODO  deny{ xpath } decorates?
 #  TODO  make the add_diagnostic take a lambda
 #  TODO  censor TODOs from the pretty rip!
-#  TODO  censor the urchinTracker!!
 #  TODO  give the accordion div the finger emphasis?
 #  TODO  move styles like .accordion_toggle to a CSS file
 #  TODO  tidy gives a billion warnings. Fix.
@@ -86,7 +85,7 @@ class RipDocSuite < Test::Unit::TestCase
     @rip.on_embdoc('yo', @f)
     denigh{ @output =~ /yo/ }
     assert{ @rip.embdocs == ['yo'] }
-  end
+  end  #  TODO  a #!nodoc! will skip an =end tag
 
   def assert_embdoc(array)
     @rip.embdocs = array

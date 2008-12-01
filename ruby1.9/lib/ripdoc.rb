@@ -58,6 +58,10 @@ class RipDoc < Ripper::Filter
   
   def on_embdoc_end(tok, f)
     return f if @in_nodoc
+    return end_panel(f)
+  end
+  
+  def end_panel(f)
     f << span(:embdoc)
       if banner = @embdocs.shift  #  accordion_toggle_active
         f << '<h1 class="accordion_toggle">'
