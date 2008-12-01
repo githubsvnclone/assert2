@@ -50,6 +50,7 @@ class RipDocSuite < Test::Unit::TestCase
   end  #  TODO how to constrain the context and then deny inside it?
   
   #  TODO  what are &#13; doing in there?
+  #  TODO  snarf all #! commentry
   
   def test_embdocs_form_accordions_with_contents
     assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')

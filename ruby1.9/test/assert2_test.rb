@@ -3,7 +3,7 @@
 <code>assert{ 2.1 }</code> reinvents <code>assert{ 2.0 }</code> for Ruby 1.9.
 
 <code>assert{ 2.0 }</code> is the industry's most aggressive TDD 
-system&mdash;Ruby, or any other language. Each time it fails, it analyzes the 
+system&mdash;for Ruby, or any other language. Each time it fails, it analyzes the 
 reason and presents a complete report. This makes the cause very
 easy to rapidly identify and fix. <code>assert{ 2.0 }</code> is like a 
 debugger's "inspect variable" system, and it makes your TDD cycle more
@@ -53,7 +53,14 @@ class Assert2Suite < Test::Unit::TestCase
     x = 42
     @effect.block = lambda{x}
   end
-  
+
+#!doc!
+=begin
+Fault Diagnostics
+This test uses a semi-private assertion, <code>assert_flunk()</code>,
+to detect that when <code>assert{ 2.0 }</code> fails, it prints out a diagnostic
+containing the assertion's variables and values:
+=end
   def test_diagnostic_reflections
     x = 42
 
@@ -64,6 +71,8 @@ class Assert2Suite < Test::Unit::TestCase
       assert{ x == 43 }
     end
   end
+
+#!nodoc!
 
   def test_assert_args
     assert 'the irony /is/ lost on us!', 
