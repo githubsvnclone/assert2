@@ -1,4 +1,4 @@
-require 'test/unit/assertions'
+require 'test/unit'
 require 'xml'
 # TODO  require 'pp'?
 

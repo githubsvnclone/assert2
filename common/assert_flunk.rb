@@ -1,4 +1,4 @@
-require 'test/unit/assertions'
+require 'test/unit'
 
 module Test; module Unit; module Assertions
 
@@ -9,12 +9,20 @@ module Test; module Unit; module Assertions
     return exception.message
   end
 
+  FlunkError = if defined? Test::Unit::AssertionFailedError
+                 Test::Unit::AssertionFailedError
+               else
+                 MiniTest::Assertion
+               end
+
   def assert_flunk(matcher, message = nil, &block)
-    assert_raise_message Test::Unit::AssertionFailedError, matcher, message, &block
+    assert_raise_message FlunkError, matcher, message, &block
   end
 
+# TODO reinstall ruby-1.9.0 and pass all cross-tests!!
+
       def _assert_raise(*args)
-        _wrap_assertion do
+#        _wrap_assertion do
           if Module === args.last
             message = ""
           else
@@ -34,9 +42,9 @@ module Test; module Unit; module Assertions
             false
           end
           full_message = build_message(message, "<?> exception expected but was\n?", expected, actual_exception)
-          assert_block(full_message) {_expected_exception?(actual_exception, exceptions, modules)}
+          assert_block(full_message) {exceptions.include?(actual_exception.class)}
           actual_exception
-        end
+  #      end
       end
 
 end; end; end
