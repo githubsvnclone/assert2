@@ -51,8 +51,13 @@ class RipDoc < Ripper::Filter
 
   def on_embdoc(tok, f)
     return f if @in_nodoc
-    @embdocs << tok
-    #on_kw tok, f, 'embdoc'
+    
+    if tok.strip == '#!nodoc!'
+      @in_nodoc = true
+    else
+      @embdocs << tok
+    end
+    
     return f
   end
   
@@ -62,7 +67,7 @@ class RipDoc < Ripper::Filter
   end
   
   def end_panel(f)
-    f << span(:embdoc)
+#    f << span(:embdoc)
       if banner = @embdocs.shift  #  accordion_toggle_active
         f << '<h1 class="accordion_toggle">'
         f << enline(CGI.escapeHTML(banner))
@@ -86,8 +91,10 @@ class RipDoc < Ripper::Filter
         end
         
         f << '</p>' if @owed_p  # TODO what is @owed_p giving us??
-      f << '</div>'  #  TODO  merge the div and the span!
-    f << '</span><pre>'
+#      f << '</div>'  #  TODO  merge the div and the span!
+#    f << '</span><pre>'
+    f << '<pre>'
+    @pre_owed = true
     @embdocs = []
     #on_kw tok, f, 'embdoc_end'
     return f
@@ -124,6 +131,7 @@ class RipDoc < Ripper::Filter
   end
   
   def spanit(kode, f, tok)
+    @spans_owed ||= 0
     @spans_owed += 1
     f << span(kode) << CGI.escapeHTML(tok)
   end
@@ -135,9 +143,15 @@ class RipDoc < Ripper::Filter
   end
 
   def on_comment(tok, f)
-    nodoc = tok.strip =~ /^\#\!nodoc\!/
-    
-    if nodoc.nil? and !@in_nodoc
+    if tok.strip == '#!end_panel!'  #  TODO  enforce begining of linededness
+      f << '</pre>' if @pre_owed
+      @pre_owed = false
+      f << '</div>'
+    end
+
+    nodoc = tok.strip == '#!nodoc!'
+
+    if !nodoc and !@in_nodoc
       spanit :comment, f, tok.rstrip
       on_nl nil, f
     end

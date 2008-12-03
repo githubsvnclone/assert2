@@ -35,6 +35,7 @@ class RipDocSuite < Test::Unit::TestCase
                   /reinvents assert/
       end
     end
+
     # reveal
   end  #  TODO  why we crash when any other tests generate a ripped doc?
 
@@ -61,6 +62,7 @@ class RipDocSuite < Test::Unit::TestCase
       end
     end
     deny{ @sauce.match('<p><p>') }
+    deny{ @sauce.match('<pre></div>') }
     reveal
   end
 
@@ -85,7 +87,24 @@ class RipDocSuite < Test::Unit::TestCase
     @rip.on_embdoc('yo', @f)
     denigh{ @output =~ /yo/ }
     assert{ @rip.embdocs == ['yo'] }
+    denigh{ @rip.in_nodoc }
   end  #  TODO  a #!nodoc! will skip an =end tag
+
+  def test_nodoc_inside_embdoc
+    @rip.embdocs = []
+    @rip.on_embdoc('yo', @f)
+    @rip.on_embdoc('#!nodoc!', @f)  # TODO  also turn on doc from inside an embdoc!!
+    @rip.on_embdoc('dude', @f)
+    assert{ @rip.embdocs == ['yo'] }
+    assert{ @rip.in_nodoc }
+  end  #  TODO  a #!nodoc! will skip an =end tag
+
+  def test_end_panel_after_embdoc_inserts_end_of_div_tag
+    @rip.embdocs = []
+    @rip.on_comment('#!end_panel!', @f)
+    # puts @output
+    assert{ @output.match('</div>') }
+  end
 
   def assert_embdoc(array)
     @rip.embdocs = array
@@ -176,7 +195,7 @@ class RipDocSuite < Test::Unit::TestCase
   def test_comments_feed_lines
     lines = assert_rip('# comment
                         x = 42')
-    assert{ lines =~ /<\/span>\n/ }
+    assert{ lines =~ /comment<\/span>\n/ }
   end
 
 # TODO  assert{ xpath() { nada } }  should not be a problem
@@ -220,8 +239,9 @@ return # TODO
     end
   end
 
-  def test_embdoc
+  def toast_embdoc
     assert_rip "=begin\nbanner\nWe be\nembdoc\n=end"
+puts @xdoc.to_s
     assert{ xpath(:"span[ #{style(:embdoc)} ]/div/p").text =~ /We be/m }
   end
 

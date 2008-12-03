@@ -29,7 +29,7 @@ as <code>assert_equal()</code> or
 <code>assert_match()</code> (or their syntax-sugary equivalents!).
 The more creative your assertions, the more elaborate their diagnostics.
 =end
-
+#!end_panel!
 =begin
 Installation
   gem install assert2   # for Ruby 1.8, via RubyNode
@@ -37,6 +37,7 @@ Installation
 
 Then <code>require "assert2"</code> (for either package) above your tests.
 =end
+#!end_panel!
 #!nodoc!
 require 'test/unit'
 $:.unshift 'lib'; $:.unshift '../lib'
@@ -59,21 +60,19 @@ Fault Diagnostics
 This test uses a semi-private assertion, <code>assert_flunk()</code>,
 to detect that when <code>assert{ 2.0 }</code> fails, it prints out a diagnostic
 containing the assertion's variables and values:
-#!nodoc!
 =end
   def test_diagnostic_reflections
     x = 42
 
-    assert_flunk "assert{ x == 43 }\n" +
-                 " --> false\n"        +
-                 "      x --> 42\n"    +
-                 "x == 43 --> false." do
+    assert_flunk "      assert{ x == 43 }\n" +
+                 " --> false\n"              +
+                 "      x --> 42\n"          +
+                 "x == 43 --> false" do
       assert{ x == 43 }
     end
   end
-
+#!end_panel!
 #!nodoc!
-
   def test_assert_args
     assert 'the irony /is/ lost on us!', 
               :args => [42] do |x|
@@ -584,7 +583,7 @@ containing the assertion's variables and values:
   def test_morgothrond_thumpwhistle
     thumpwistle = 42
     
-    x = assert_raise Test::Unit::AssertionFailedError do
+    x = assert_raise FlunkError do
       assert{ self.morgothrond(thumpwistle) }
     end
     
@@ -617,7 +616,7 @@ containing the assertion's variables and values:
   end
 
   def test_assert_classic
-    assert_flunk /false. is not true/ do
+    assert_flunk /(false. is not true)|(Failed assertion)/ do
       assert false
     end
   end
