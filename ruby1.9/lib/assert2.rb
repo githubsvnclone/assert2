@@ -2,8 +2,11 @@ require 'ripper'  #   note we only work with Ruby >= 1.9 !
 require 'pp'
   # note there's more requires down there --V
 
+#  TODO  better assert{ match or index already! }
+#  TODO  feel the need for serious ncursage!
+
 module Test; module Unit; module Assertions
-  
+
   class AssertionRipper
     MAX_CAPTURE_SNIP = 50  #  TODO  use this when formatting already?
     attr_reader :assertion_source,
@@ -99,7 +102,7 @@ module Test; module Unit; module Assertions
       end
       
       inspection = got.pretty_inspect
-      
+            
       return format_assertion_result(assertion_source, inspection) + 
                format_captures
     end
