@@ -73,6 +73,11 @@ containing the assertion's variables and values:
   end
 #!end_panel!
 #!nodoc!
+
+#  TODO  permit assert_flunk to ignore leading spaces
+#  TODO  decorate leading spaces in broken lines with attenuated blended color
+#  TODO  replace the "...\n" + up there with '' ticks
+
   def test_assert_args
     assert 'the irony /is/ lost on us!', 
               :args => [42] do |x|
