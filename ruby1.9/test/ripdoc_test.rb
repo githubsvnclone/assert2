@@ -54,7 +54,7 @@ class RipDocSuite < Test::Unit::TestCase
   
   def test_embdocs_form_accordions_with_contents
     assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
-    
+    reveal
     assert do
       xpath :div, :vertical_container do
         xpath(:'h1/following-sibling::div[ @class = "accordion_content" ]') # .text =~ 
@@ -63,7 +63,7 @@ class RipDocSuite < Test::Unit::TestCase
     end
     deny{ @sauce.match('<p><p>') }
     deny{ @sauce.match('<pre></div>') }
-    reveal
+    # reveal
   end
 
     #  TODO  are # markers leaking into the formatted outputs?
@@ -78,7 +78,7 @@ class RipDocSuite < Test::Unit::TestCase
   def test_on_embdoc_beg
     assert{ @rip.embdocs.nil? }
     @rip.on_embdoc_beg('=begin', @f)
-    assert{ @output =~ /^\<\/pre>/ }
+   # TODO assert{ @output =~ /^\<\/pre>/ }
     assert{ @rip.embdocs == [] }
   end
 
@@ -102,8 +102,14 @@ class RipDocSuite < Test::Unit::TestCase
   def test_end_panel_after_embdoc_inserts_end_of_div_tag
     @rip.embdocs = []
     @rip.on_comment('#!end_panel!', @f)
-    # puts @output
     assert{ @output.match('</div>') }
+  end
+
+  def test_comments_dont_always_turn_nodoc_off
+    @rip.embdocs = []
+    @rip.in_nodoc = true
+    @rip.on_comment('# non-commanding comment', @f)
+    assert{ @rip.in_nodoc }
   end
 
   def assert_embdoc(array)

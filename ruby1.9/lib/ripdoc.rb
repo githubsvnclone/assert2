@@ -31,13 +31,17 @@ class RipDoc < Ripper::Filter
 
   def deformat(line, f)
     if line =~ /^\s/   #  CONSIDER why the line-height broke??
-      f << "</p><pre style='line-height: 75%;'>\n" if @owed_p
+      f << "</p>" if @owed_p
+      f << "<pre style='line-height: 75%;'>\n" unless @owed_pre
       @owed_p = false
+      @owed_pre = true
       f << enline(line) << "\n"
       return
     end
     
-    f << '</pre><p>' unless @owed_p  #  TODO  make sure we owe that pre!
+    f << '</pre>' if @owed_pre
+    @owed_pre = false
+    f << '<p>' unless @owed_p
     @owed_p = true
     f << enline(line)
   end
@@ -45,7 +49,9 @@ class RipDoc < Ripper::Filter
   def on_embdoc_beg(tok, f)
     return f if @in_nodoc
     @embdocs = []
-    f << '</pre>'
+    f << '</pre>' if @owed_pre
+    @owed_pre = false
+    return f
     # on_kw tok, f, 'embdoc_beg'
   end
 
@@ -64,6 +70,7 @@ class RipDoc < Ripper::Filter
   def on_embdoc_end(tok, f)
     return f if @in_nodoc
     return end_panel(f)
+    return f
   end
   
   def end_panel(f)
@@ -77,24 +84,24 @@ class RipDoc < Ripper::Filter
       f << '<div class="accordion_content">'
         f << '<p>'
         @owed_p = true
-        previous = false
-        
+        prior = false
+
         @embdocs.each do |doc|
           if doc.strip == ''
             f << "</p>\n<p>" if @owed_p
-            previous = false
+            prior = false
           else
-            f << ' ' if previous
+            f << ' ' if prior
             deformat(CGI.escapeHTML(doc), f)
-            previous = true
+            prior = true
           end
         end
         
         f << '</p>' if @owed_p  # TODO what is @owed_p giving us??
 #      f << '</div>'  #  TODO  merge the div and the span!
 #    f << '</span><pre>'
-    f << '<pre>'
-    @pre_owed = true
+    f << '<pre>' unless @owed_pre
+    @owed_pre = true
     @embdocs = []
     #on_kw tok, f, 'embdoc_end'
     return f
@@ -113,7 +120,7 @@ class RipDoc < Ripper::Filter
     ivar:               "color: #240;",
     int:                "color: #336600; font-weight: bolder;",
     operator:           "font-weight: bolder; font-size: 120%;",
-    kw:            "color: purple;",
+    kw:                 "color: purple;",
     regexp_delimiter:   "background-color: #faf;",
     regexp:             "background-color: #fcf;",
     string:             "background-color: #dfc;",
@@ -144,9 +151,10 @@ class RipDoc < Ripper::Filter
 
   def on_comment(tok, f)
     if tok.strip == '#!end_panel!'  #  TODO  enforce begining of linededness
-      f << '</pre>' if @pre_owed
-      @pre_owed = false
+      f << '</pre>' if @owed_pre
+      @owed_pre = false
       f << '</div>'
+      return f
     end
 
     nodoc = tok.strip == '#!nodoc!'
@@ -156,7 +164,7 @@ class RipDoc < Ripper::Filter
       on_nl nil, f
     end
     
-    @in_nodoc = nodoc # TODO  this will obscure until the next comment - fix
+    @in_nodoc ||= nodoc # TODO  this will obscure until the next comment - fix
     @in_nodoc = nil if tok.strip =~ /^\#\!doc\!/
     return f
   end
@@ -235,7 +243,6 @@ class RipDoc < Ripper::Filter
 
   def on_lbrace(tok, f)
     return f if @in_nodoc
-#p [tok, 'onlbrace']
     spanit '', f, '' # tok  CONSIDER  wonder who is actually emitting the { ??
     f << tok
   end
@@ -270,7 +277,9 @@ class RipDoc < Ripper::Filter
     f << %Q[#{span(:ivar)}#{CGI.escapeHTML(tok)}</span>]
   end
 
-  attr_accessor :spans_owed
+  attr_accessor :in_nodoc,
+                :owed_pre,
+                :spans_owed
 
   def parse(buf, f)
     @spans_owed = 0
@@ -286,6 +295,7 @@ class RipDoc < Ripper::Filter
   def RipDoc.compile(f)
     buf = StringIO.new
     parser = RipDoc.new(f)
+    parser.owed_pre = true
     parser.parse(buf, f)
     result = buf.string
     parser.spans_owed.times{ result += '</span>' }
@@ -297,12 +307,11 @@ class RipDoc < Ripper::Filter
            '</pre></div></body></html>'
   end
 
-  attr_accessor :in_nodoc
-
   def RipDoc.compile_fragment(f)
     buf = StringIO.new
     parser = RipDoc.new(f)
     parser.in_nodoc = false
+    parser.owed_pre = true
     parser.parse(buf, f)
     result = buf.string
     parser.spans_owed.times{ result += '</span>' }
