@@ -77,6 +77,7 @@ containing the assertion's variables and values:
 #  TODO  permit assert_flunk to ignore leading spaces
 #  TODO  decorate leading spaces in broken lines with attenuated blended color
 #  TODO  replace the "...\n" + up there with '' ticks
+#  TODO  the panels ought to stay open until closed
 
   def test_assert_args
     assert 'the irony /is/ lost on us!', 
