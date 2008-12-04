@@ -15,6 +15,9 @@ HomePath = RipDoc::HomePath
 #  TODO  tidy gives a billion warnings. Fix.
 #  TODO  change all JPGs to transparently cool PNGs
 #  TODO  at scroll time keep the target panel in the viewport!
+#  TODO  help stickmanlabs get a macbook pro (or help talk him out of it;)
+#  TODO  think of a use for the horizontal accordion, and for nesting them
+#  TODO  better style for the page-footer
 
 class RipDocSuite < Test::Unit::TestCase
 
