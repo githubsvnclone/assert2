@@ -72,6 +72,8 @@ containing the assertion's variables and values:
     end
   end
 #!end_panel!
+#!nodoc!
+#!doc!
 =begin
 <code>add_diagnostic 'extra spew'</code>
 This test shows how to add extra diagnostic information to an assertion.
@@ -79,15 +81,19 @@ This test shows how to add extra diagnostic information to an assertion.
 Custom test-side methods which know they are inside assert{} or deny{} calls
 can use this to explain what's wrong with some situation.
 =end
- def test_add_diagnostic
+  def test_add_diagnostic
     add_diagnostic 'silly Rabbi!'
       #  TODO  document the diagnostic line above here!
     assert_flunk /silly Rabbi!/ do
       denigh{ true }  #  TODO  document denigh and deny above here!
     end
+  end
+#!end_panel!
+#!nodoc! ever again...  
+  def test_consume_diagnostic
+    add_diagnostic 'silly Rabbi!'
+    assert{ true }
     
-    #  the next 
-
     x = assert_flunk /true/ do
       denigh{ true }
     end
@@ -101,8 +107,6 @@ can use this to explain what's wrong with some situation.
         end 
     deny('always consume diagnostics'){ x =~ /silly Rabbi/ }
   end
-#!end_panel!
-#!nodoc! ever again...
 
 #  TODO  the next one should be Error Diagnostics, catching 1/0
 #  TODO  permit assert_flunk to ignore leading spaces
