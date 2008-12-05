@@ -5,7 +5,16 @@ module Test; module Unit; module Assertions
   def assert_raise_message(types, matcher, message = nil, &block)
     args = [types].flatten + [message]
     exception = _assert_raise(*args, &block)
-    assert(message){ exception.message.match(matcher) }
+    matchee = exception.message
+    
+    if matcher.kind_of? String
+        #  if we cosmetically strip leading spaces from both the matcher and matchee,
+        #  then multi-line assert_flunk messages are easier on the eyes!
+      matchee.gsub!(/^\s+/, '')
+      matcher.gsub!(/^\s+/, '')
+    end
+  
+    assert(message){ matchee.match(matcher) }  #  TODO  better diagnostic, already!
     return exception.message
   end
 
