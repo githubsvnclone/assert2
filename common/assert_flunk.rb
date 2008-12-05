@@ -13,7 +13,7 @@ module Test; module Unit; module Assertions
       matchee.gsub!(/^\s+/, '')
       matcher.gsub!(/^\s+/, '')
     end
-  
+  #  TODO  document this as a reason not to use assert{} !    
     assert(message){ matchee.match(matcher) }  #  TODO  better diagnostic, already!
     return exception.message
   end
