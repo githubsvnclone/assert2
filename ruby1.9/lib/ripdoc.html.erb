@@ -4,89 +4,43 @@
 <head>
   <title><%= @title %></title>
   <meta http-equiv="content-type" content="text/html; charset=us-ascii" />
-  <meta name="keywords" content="accordion, javascript accordion, scriptaculous" />
-  <meta name="description" content=
-  "The ultimate modal window system, LightWindow, allows you to build your own theem, create mixed media galleries including flash, quictkime and images. Through a variety of parameters this system can do it all and recreate any other system out there!" />
-  <meta name="robots" content="index, follow" /><!-- JavaScript -->
-  <!-- <script type="text/javascript" src="combine.php?type=javascript&files=prototype.js,effects.js,accordion.js,code_highlighter.js,javascript.js,html.js"></script> -->
-
-<script type="text/javascript" src="javascript/prototype.js"></script>
-<script type="text/javascript" src="javascript/effects.js"></script>
-<script type="text/javascript" src="javascript/accordion.js"></script>
-<link rel="stylesheet" type="text/css" href="css/default.css" />
+  <script type="text/javascript" src="javascript/prototype.js"></script>
+  <script type="text/javascript" src="javascript/effects.js"></script>
+  <script type="text/javascript" src="javascript/accordion.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/default.css" />
 <script type="text/javascript">
 //<![CDATA[
-                //
-                //  In my case I want to load them onload, this is how you do it!
-                // 
-                Event.observe(window, 'load', loadAccordions, false);
-                //
-                //      Set up all accordions
-                //
-                function loadAccordions() {
-                        /*var topAccordion = new accordion('horizontal_container', {
-                                classNames : {
-                                        toggle : 'horizontal_accordion_toggle',
-                                        toggleActive : 'horizontal_accordion_toggle_active',
-                                        content : 'horizontal_accordion_content'
-                                },
-                                defaultSize : {
-                                        width : 525
-                                },
-                                direction : 'horizontal'
-                        });*/
-                        
-                        var bottomAccordion = new accordion('vertical_container');
-                        
-                        /* var nestedVerticalAccordion = new accordion('vertical_nested_container', {
-                          classNames : {
-                                        toggle : 'vertical_accordion_toggle',
-                                        toggleActive : 'vertical_accordion_toggle_active',
-                                        content : 'vertical_accordion_content'
-                                }
-                        }); */
-                        
-                        // Open first one
-                        bottomAccordion.activate($$('#vertical_container .accordion_toggle')[0]);
-                        
-                        // Open second one
-                        /* topAccordion.activate($$('#horizontal_container .horizontal_accordion_toggle')[2]); */
-                }
-                
+  Event.observe(window, 'load', loadAccordions, false);
+  function loadAccordions() {
+    var bottomAccordion = new accordion('vertical_container');
+    bottomAccordion.activate($$('#vertical_container .accordion_toggle')[0]);
+  }
 //]]>
-</script><!-- CSS -->
+</script>
 
 <style type="text/css">
 /*<![CDATA[*/
-                
-                /*
-                        Vertical Accordions
-                */
+                /* Vertical Accordions  */
                 
                 .accordion_toggle {
                         display: block;
                         height: 30px;
                         width: 680px;
-                        background: url(images/accordion_toggle.jpg) no-repeat top right #a9d06a;
+                        background: url(images/accordion_toggle.png) no-repeat top right;
                         padding: 0 10px 0 10px;
-                        line-height: 30px;
                         color: #ffffff;
                         cursor: index;
                         font-weight: normal;
                         text-decoration: none;
                         outline: none;
-                       /* font-size: 12px; */
-                       font-family: 'Lucida Grande', Verdana, Arial;
+                        font-family: 'Lucida Grande', Verdana, Arial;
                         color: #000000;
-                        border-bottom: 1px solid #cde99f;
                         cursor: pointer;
                         margin: 0 0 0 0;
                 }
                 
                 .accordion_toggle_active {
-                        background: url(images/accordion_toggle_active.jpg) no-repeat top right #e0542f;
-                        color: #ffffff;
-                        border-bottom: 1px solid #f68263;
+                        background: url(images/accordion_toggle_active.png) no-repeat top right;
                 }
                 
                 .accordion_content {
@@ -101,49 +55,10 @@
                         }
                         
                         .accordion_content p {
-                                /*line-height: 125%;*/
                                 padding: 5px 10px 15px 10px;
                         }
                         
-                .vertical_accordion_toggle {
-                        display: block;
-                        height: 30px;
-                        width: 600px;
-                        background: url(images/accordion_toggle.jpg) no-repeat top right #a9d06a;
-                        padding: 0 10px 0 10px;
-                        line-height: 30px;
-                        color: #ffffff;
-                        font-weight: normal;
-                        text-decoration: none;
-                        outline: none;
-                       /* font-size: 12px; */
-                        color: #000000;
-                        border-bottom: 1px solid #cde99f;
-                        cursor: pointer;
-                        margin: 0 0 0 0;
-                }
 
-                .vertical_accordion_toggle_active {
-                        background: url(images/accordion_toggle_active.jpg) no-repeat top right #e0542f;
-                        color: #ffffff;
-                        border-bottom: 1px solid #f68263;
-                }
-
-                .vertical_accordion_content {
-                        background-color: #ffffff;
-                        color: #444444;
-                        overflow: hidden;
-                }
-
-                        .vertical_accordion_content h2 {
-                                margin: 15px 0 5px 10px;
-                                color: #0099FF;
-                        }
-
-                        .vertical_accordion_content p {
-                                /*line-height: 125%;*/
-                                padding: 5px 10px 15px 10px;
-                        }
                         
                 /*
                         Horizontal Accordion
@@ -157,7 +72,7 @@
                         display: block;
                         height: 100px;
                         width: 30px;
-                        background: url(images/h_accordion_toggle.jpg) no-repeat top left #a9d06a;
+                        background: url(images/h_accordion_toggle.png) no-repeat top left #a9d06a;
                         color: #ffffff;
                         text-decoration: none;
                         outline: none;
@@ -167,7 +82,7 @@
                 }
                 
                 .horizontal_accordion_toggle_active {
-                        background: url(images/h_accordion_toggle_active.jpg) no-repeat top left #e0542f;
+                        background: url(images/h_accordion_toggle_active.png) no-repeat top left #e0542f;
                         border-right: 1px solid #f68263;
                 }
                 

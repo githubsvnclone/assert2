@@ -21,8 +21,6 @@ class RipDoc < Ripper::Filter
     return xhtml
   end
 
-  attr_accessor :embdocs
-
   def enline(line)
     return line.gsub( '&lt;code&gt;', '<code>').
                 gsub('&lt;/code&gt;', '</code>').
@@ -277,7 +275,8 @@ class RipDoc < Ripper::Filter
     f << %Q[#{span(:ivar)}#{CGI.escapeHTML(tok)}</span>]
   end
 
-  attr_accessor :in_nodoc,
+  attr_accessor :embdocs,
+                :in_nodoc,
                 :owed_pre,
                 :spans_owed
 
@@ -304,8 +303,10 @@ class RipDoc < Ripper::Filter
             '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr"
             ><head>' + 
            '</head><body><div id="content"><pre>' + result + 
-           '</pre></div></body></html>'
-  end
+           "#{'</pre>' if parser.owed_pre }</div></body></html>"
+  end  #  TODO  call compile fragment already!
+
+#  TODO  do we still need the things that remove blank paragraphs and pres?
 
   def RipDoc.compile_fragment(f)
     buf = StringIO.new
@@ -316,7 +317,9 @@ class RipDoc < Ripper::Filter
     result = buf.string
     parser.spans_owed.times{ result += '</span>' }
 
-    return '<div id="content"><pre>' + result + '</pre></div>'
+    return '<div id="content"><pre>' + result +
+               "#{'</pre>' if parser.owed_pre }</div>"
+
   end
 
 end

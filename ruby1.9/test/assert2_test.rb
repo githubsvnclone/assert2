@@ -64,20 +64,53 @@ containing the assertion's variables and values:
   def test_diagnostic_reflections
     x = 42
 
-    assert_flunk "      assert{ x == 43 }\n" +
-                 " --> false\n"              +
-                 "      x --> 42\n"          +
-                 "x == 43 --> false" do
+    assert_flunk '      assert{ x == 43 }
+                   --> false
+                        x --> 42
+                  x == 43 --> false' do
       assert{ x == 43 }
     end
   end
 #!end_panel!
-#!nodoc!
+=begin
+<code>add_diagnostic 'extra spew'</code>
+This test shows how to add extra diagnostic information to an assertion.
 
+Custom test-side methods which know they are inside assert{} or deny{} calls
+can use this to explain what's wrong with some situation.
+=end
+ def test_add_diagnostic
+    add_diagnostic 'silly Rabbi!'
+      #  TODO  document the diagnostic line above here!
+    assert_flunk /silly Rabbi!/ do
+      denigh{ true }  #  TODO  document denigh and deny above here!
+    end
+    
+    #  the next 
+
+    x = assert_flunk /true/ do
+      denigh{ true }
+    end
+     
+    deny('consume diagnostics at fault time'){ x =~ /silly Rabbi/ }
+    add_diagnostic 'silly Rabbi'
+    denigh{ false }
+    
+    x = assert_flunk /true/ do
+          denigh{ true }
+        end 
+    deny('always consume diagnostics'){ x =~ /silly Rabbi/ }
+  end
+#!end_panel!
+#!nodoc! ever again...
+
+#  TODO  the next one should be Error Diagnostics, catching 1/0
 #  TODO  permit assert_flunk to ignore leading spaces
 #  TODO  decorate leading spaces in broken lines with attenuated blended color
-#  TODO  replace the "...\n" + up there with '' ticks
+#  TODO  the background color on multi-line stringoids is incorrect
+#  TODO  do %w() with dark green on the delims, light green on the strings, and white on the gaps
 #  TODO  the panels ought to stay open until closed
+#  TODO  system to embolden a word in the documented panel!
 
   def test_assert_args
     assert 'the irony /is/ lost on us!', 
@@ -214,7 +247,8 @@ containing the assertion's variables and values:
 
   def assert_rip_file(filename)
     rippage = Ripper.sexp(File.read(filename))
-    @effect.block = nil 
+    @effect.block = nil
+    
     rippage.last.each do |statement|
       @effect.sender statement
     end
@@ -360,27 +394,6 @@ containing the assertion's variables and values:
       @effect.detect('foo') =~
         /NameError: undefined local variable or method `foo'/
     end
-  end
-
-  def test_add_diagnostic
-    add_diagnostic 'silly Rabbi'
-    
-    assert_flunk /silly Rabbi/ do
-      denigh{ true }
-    end
-     
-    x = assert_flunk /true/ do
-      denigh{ true }
-    end
-     
-    deny('consume diagnostics at fault time'){ x =~ /silly Rabbi/ }
-    add_diagnostic 'silly Rabbi'
-    denigh{ false }
-    
-    x = assert_flunk /true/ do
-          denigh{ true }
-        end 
-    deny('always consume diagnostics'){ x =~ /silly Rabbi/ }
   end
 
   def test_const_ref
