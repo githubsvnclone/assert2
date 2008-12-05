@@ -56,12 +56,12 @@ class Assert2Suite < Test::Unit::TestCase
 
 #!doc!
 =begin
-Fault Diagnostics
+<code>assert{ </code><em>boolean expression</em><code> }</code> and Fault Diagnostics
 This test uses a semi-private assertion, <code>assert_flunk()</code>,
 to detect that when <code>assert{ 2.0 }</code> fails, it prints out a diagnostic
 containing the assertion's variables and values:
 =end
-  def test_diagnostic_reflections
+  def test_assert_reflects_your_expression_in_its_fault_diagnostic
     x = 42
 
     assert_flunk '      assert{ x == 43 }
@@ -72,20 +72,51 @@ containing the assertion's variables and values:
     end
   end
 #!end_panel!
-#!nodoc!
-#!doc!
 =begin
-<code>add_diagnostic 'extra spew'</code>
+<code>deny{ </code><em>boolean expression</em><code> }</code>
+This shows <code>assert{}</code>'s nemesis, <code>deny{}</code>. Use it when your programs
+are too cheerful and happy, to bring them down:
+=end
+  def test_deny_reflects_your_expression_in_its_fault_diagnostic
+    x = 42
+
+    assert_flunk '      deny{ x == 42 }
+                   --> true
+                        x --> 42
+                  x == 42 --> true' do
+      deny{ x == 42 }
+    end
+    
+    denigh{ x == 43 }  #  an alternative spelling, for smooth columns of code...
+  end
+#!end_panel!
+=begin
+<code>assert('</code><em>extra spew</em><code>'){ </code><em>boolean...</em><code> }</code>
+<code>assert{}</code> and <code>deny{}</code> take an optional first argument&mdash;a
+string. At fault time, this appears in the output diagnostic, above all other spew:
+=end
+  def test_diagnostic_reflections
+    x = 42
+
+    assert_flunk 'medium rare' do
+      assert('medium rare'){ x == 43 }
+    end
+  end
+#!end_panel!
+=begin
+<code>add_diagnostic '</code><em>extra spew</em><code>'</code>
 This test shows how to add extra diagnostic information to an assertion.
 
-Custom test-side methods which know they are inside assert{} or deny{} calls
+Custom test-side methods which know they are inside
+<code>assert{}</code> and <code>deny{}</code> calls
 can use this to explain what's wrong with some situation.
 =end
   def test_add_diagnostic
-    add_diagnostic 'silly Rabbi!'
-      #  TODO  document the diagnostic line above here!
     assert_flunk /silly Rabbi!/ do
-      denigh{ true }  #  TODO  document denigh and deny above here!
+      deny do
+        add_diagnostic 'silly Rabbi!'
+        true
+      end
     end
   end
 #!end_panel!

@@ -42,6 +42,7 @@ class RipDocSuite < Test::Unit::TestCase
     # reveal
   end  #  TODO  why we crash when any other tests generate a ripped doc?
 
+#  TODO  add the bold tag to <code> itself, for when we lose our style sheets...
 #  TODO  pay for Staff Benda Bilili  ALBUM: Très Très Fort (Promo Sampler) !
 
   def _test_a_ripped_doc_contains_no_empty_pre_tags

@@ -234,11 +234,8 @@ a.page-options:focus {
 		color: #09F;
 		font-size: 100%;
 	}
-	
-	p em, 
-	em {
-		color: black;
-	}
+
+code { font-weight: bolder; }
 
 .hidden {
 	display : none;

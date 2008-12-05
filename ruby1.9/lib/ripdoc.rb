@@ -24,6 +24,8 @@ class RipDoc < Ripper::Filter
   def enline(line)
     return line.gsub( '&lt;code&gt;', '<code>').
                 gsub('&lt;/code&gt;', '</code>').
+                gsub( '&lt;em&gt;', '<em>').
+                gsub('&lt;/em&gt;', '</em>').
                 gsub('&amp;mdash;', '&mdash;')
   end
 
