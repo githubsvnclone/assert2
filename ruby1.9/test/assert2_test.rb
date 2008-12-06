@@ -134,6 +134,15 @@ correctly:
     end
   end
 #!end_panel!
+=begin
+Error Handling
+<code>assert{}</code> interprets syntax errors and decorates their diagnostics:
+=end
+  def _test_error_handling
+    assert_flunk /ZeroDivisionError: divided by 0/ do
+      assert{ 1 / 0 }  # some math professors frown upon that!
+    end
+  end
 #!nodoc! ever again!
   def test_consume_diagnostic
     add_diagnostic 'silly Rabbi!'
