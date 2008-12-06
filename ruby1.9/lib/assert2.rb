@@ -715,14 +715,22 @@ module Test; module Unit; module Assertions
   end
 
   def assert_(diagnostic = nil, options = {}, &block)
-    return if got = block.call(*options[:args])
+    begin
+      return if got = block.call(*options[:args])
+    rescue => got
+    end    
+
     flunk reflect(diagnostic, got, caller[1], options, &block)
   ensure
     @__additional_diagnostics = []
   end
 
   def deny(diagnostic = nil, options = {}, &block)
-    return unless got = block.call(*options[:args])
+    begin
+      return unless got = block.call(*options[:args])
+    rescue => got
+    end
+  
     flunk reflect(diagnostic, got, caller[0], options, &block)
   ensure
     @__additional_diagnostics = []

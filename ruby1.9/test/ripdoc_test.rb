@@ -58,7 +58,7 @@ class RipDocSuite < Test::Unit::TestCase
   
   def test_embdocs_form_accordions_with_contents
     assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
-reveal
+#reveal
 return
     assert do
       xpath :div, :vertical_container do

@@ -136,14 +136,18 @@ correctly:
 #!end_panel!
 =begin
 Error Handling
-<code>assert{}</code> interprets syntax errors and decorates their diagnostics:
+<code>assert{}</code> interprets program errors and decorates their diagnostics:
 =end
-  def _test_error_handling
+  def test_error_handling
     assert_flunk /ZeroDivisionError: divided by 0/ do
-      assert{ 1 / 0 }  # some math professors frown upon that!
+      assert{ 1 / 0 }  # would you believe some math professors frown upon that?!
     end
   end
 #!nodoc! ever again!
+
+#  TODO  demo test that explicates why we cannot allow the "money line" 
+#            to appear inside 
+
   def test_consume_diagnostic
     add_diagnostic 'silly Rabbi!'
     assert{ true }
