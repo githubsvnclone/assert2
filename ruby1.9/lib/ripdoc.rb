@@ -7,6 +7,7 @@ require 'erb'
 require 'optparse'
 require 'pathname'
 
+# TODO  do we still need the pre hack for the line height?
 
 class RipDoc < Ripper::Filter
   HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path
@@ -49,7 +50,7 @@ class RipDoc < Ripper::Filter
   def on_embdoc_beg(tok, f)
     return f if @in_nodoc
     @embdocs = []
-    f << '</pre>' if @owed_pre
+    f << "</pre>\n" if @owed_pre
     @owed_pre = false
     return f
     # on_kw tok, f, 'embdoc_beg'

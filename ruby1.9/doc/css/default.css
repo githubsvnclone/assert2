@@ -18,7 +18,7 @@ body {
 
 TODO  put the test button in the corner
 */
-	font-size: 12px;
+/*	font-size: 12px; */
 	height: 100%;
 /*	background-image:url(sky_blue.jpg);
 	background-repeat:repeat-x;*/
@@ -244,11 +244,7 @@ code { font-weight: bolder; }
 
 pre {
 	color: #004;
-  	font-size: 11px;
-  	padding: 10px;
   	background: white;
-  	/*line-height: default ; 75%; */  /* uh... why?? */
-	
 	margin: 10px 0 10px 0;
 }
 

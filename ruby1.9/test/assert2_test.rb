@@ -32,10 +32,11 @@ The more creative your assertions, the more elaborate their diagnostics.
 #!end_panel!
 =begin
 Installation
-  gem install assert2   # for Ruby 1.8, via RubyNode
+
+   gem install assert2   # for Ruby 1.8, via RubyNode
   gem install assert21  # for Ruby 1.9, via Ripper (comes with Ruby)
 
-Then <code>require "assert2"</code> (for either package) above your tests.
+Then place <code>require 'assert2'</code> (for either package) above your tests.
 =end
 #!end_panel!
 #!nodoc!
@@ -56,7 +57,7 @@ class Assert2Suite < Test::Unit::TestCase
 
 #!doc!
 =begin
-<code>assert{ </code><em>boolean expression</em><code> }</code> and Fault Diagnostics
+<code>assert{ <em>boolean expression</em> }</code> and Fault Diagnostics
 This test uses a semi-private assertion, <code>assert_flunk()</code>,
 to detect that when <code>assert{ 2.0 }</code> fails, it prints out a diagnostic
 containing the assertion's variables and values:
@@ -73,7 +74,7 @@ containing the assertion's variables and values:
   end
 #!end_panel!
 =begin
-<code>deny{ </code><em>boolean expression</em><code> }</code>
+<code>deny{ <em>boolean expression</em> }</code>
 This shows <code>assert{}</code>'s nemesis, <code>deny{}</code>. Use it when your programs
 are too cheerful and happy, to bring them down:
 =end
@@ -91,11 +92,11 @@ are too cheerful and happy, to bring them down:
   end
 #!end_panel!
 =begin
-<code>assert('</code><em>extra spew</em><code>'){ </code><em>boolean...</em><code> }</code>
+<code>assert('<em>extra spew</em>'){ <em>boolean...</em> }</code>
 <code>assert{}</code> and <code>deny{}</code> take an optional first argument&mdash;a
 string. At fault time, this appears in the output diagnostic, above all other spew:
 =end
-  def test_diagnostic_reflections
+  def test_diagnostic_string
     x = 42
 
     assert_flunk 'medium rare' do
@@ -104,11 +105,11 @@ string. At fault time, this appears in the output diagnostic, above all other sp
   end
 #!end_panel!
 =begin
-<code>add_diagnostic '</code><em>extra spew</em><code>'</code>
+<code>add_diagnostic '<em>extra spew</em>'</code>
 This test shows how to add extra diagnostic information to an assertion.
 
 Custom test-side methods which know they are inside
-<code>assert{}</code> and <code>deny{}</code> calls
+<code>assert{}</code> and <code>deny{}</code> blocks
 can use this to explain what's wrong with some situation.
 =end
   def test_add_diagnostic
@@ -117,6 +118,19 @@ can use this to explain what's wrong with some situation.
         add_diagnostic 'silly Rabbi!'
         true
       end
+    end
+  end
+#!end_panel!
+=begin
+Classic <code>assert( <em>boolean</em> )</code>
+<code>assert{}</code> will pass thru to the original <code>assert()</code>
+from <code>Test::Unit::TestCase</code>. When you drop <code>require 'assert2'</code>
+into your tests, all your legacy <code>assert()</code> calls will still perform
+correctly:
+=end
+  def test_assert_classic
+    assert_flunk /(false. is not true)|(Failed assertion)/ do
+      assert false
     end
   end
 #!end_panel!

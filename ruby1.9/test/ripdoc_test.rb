@@ -53,7 +53,7 @@ class RipDocSuite < Test::Unit::TestCase
   #  end
   end  #  TODO how to constrain the context and then deny inside it?
   
-  #  TODO  what are &#13; doing in there?
+  #  TODO  something is snarfing the first space in a pre in a embdoc
   #  TODO  snarf all #! commentry
   
   def test_embdocs_form_accordions_with_contents
