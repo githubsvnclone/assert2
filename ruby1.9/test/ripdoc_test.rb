@@ -14,6 +14,10 @@ HomePath = RipDoc::HomePath
 #  CONSIDER  think of a use for the horizontal accordion, and for nesting them
 #  TODO  better style for the page-footer
 #  TODO  Ruby 1.9 should link out
+#  TODO evaluate mashed strings
+#   TODO intersticial string mashers still don't color correctly
+#   TODO make function names bigger
+#  TODO  respect linefeeds in parsed source when reflecting
 
 class RipDocSuite < Test::Unit::TestCase
 
@@ -54,7 +58,7 @@ class RipDocSuite < Test::Unit::TestCase
   
   def test_embdocs_form_accordions_with_contents
     assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
-# reveal
+#   reveal
 return
     assert do
       xpath :div, :vertical_container do
@@ -66,8 +70,6 @@ return
     deny{ @sauce.match('<pre></div>') }
     # reveal
   end
-
-    #  TODO  are # markers leaking into the formatted outputs?
 
   def test_embdoc_two_indented_lines_have_no_p_between_them
     assert_embdoc ['yo', ' first indented', ' also indented', 'dude']
@@ -89,16 +91,16 @@ return
     denigh{ @output =~ /yo/ }
     assert{ @rip.embdocs == ['yo'] }
     denigh{ @rip.in_nodoc }
-  end  #  TODO  a #!nodoc! will skip an =end tag
+  end
 
   def test_nodoc_inside_embdoc
     @rip.embdocs = []
     @rip.on_embdoc('yo', @f)
-    @rip.on_embdoc('#!nodoc!', @f)  # TODO  also turn on doc from inside an embdoc!!
+    @rip.on_embdoc('#!nodoc!', @f)
     @rip.on_embdoc('dude', @f)
     assert{ @rip.embdocs == ['yo'] }
     assert{ @rip.in_nodoc }
-  end  #  TODO  a #!nodoc! will skip an =end tag
+  end
 
   def test_end_panel_after_embdoc_inserts_end_of_div_tag
     @rip.embdocs = []
@@ -183,7 +185,7 @@ return
                        "# miss me\n" +
                        "#!doc!\n" +
                        "x = 42\n"
-                     )  #  TODO  interact correctly with =begin tags
+                     )
     assert_xhtml line
     denigh{ xpath :span, :'.' => '#!nodoc!' }
     denigh{ xpath :span, :'.' => 'y'  }
@@ -266,11 +268,6 @@ puts @xdoc.to_s
       end
     end
   end
-
-#  TODO evaluate mashed strings
-#   TODO intersticial string mashers still don't color correctly
-#   TODO make function names bigger
-#  TODO  respect linefeeds in parsed source when reflecting
 
   def reveal(xhtml = @sauce || @output)
     filename = HomePath + 'doc/yo.html'

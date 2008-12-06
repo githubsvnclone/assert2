@@ -33,8 +33,8 @@ The more creative your assertions, the more elaborate their diagnostics.
 =begin
 Installation
 
-   gem install assert2   # for Ruby 1.8, via RubyNode
-  gem install assert21  # for Ruby 1.9, via Ripper (comes with Ruby)
+   gem install assert2   <em># for Ruby 1.8, via RubyNode</em>
+  gem install assert21  <em># for Ruby 1.9, via Ripper (comes with Ruby)</em>
 
 Then place <code>require 'assert2'</code> (for either package) above your tests.
 =end
