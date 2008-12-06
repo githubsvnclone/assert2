@@ -65,11 +65,11 @@ containing the assertion's variables and values:
   def test_assert_reflects_your_expression_in_its_fault_diagnostic
     x = 42
 
-    assert_flunk '      assert{ x == 43 }
+    assert_flunk '      assert{ x == 43 }  #  even comments reflect!
                    --> false
                         x --> 42
                   x == 43 --> false' do
-      assert{ x == 43 }
+      assert{ x == 43 }  #  even comments reflect!
     end
   end
 #!end_panel!
