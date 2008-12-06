@@ -6,16 +6,12 @@ require 'assert_xhtml'
 
 HomePath = RipDoc::HomePath
 
-#  TODO  assert{} should catch and decorate errors
 #  TODO  deny{ xpath } decorates?
 #  TODO  make the add_diagnostic take a lambda
 #  TODO  censor TODOs from the pretty rip!
-#  TODO  give the accordion div the finger emphasis?
-#  TODO  tidy gives a billion warnings. Fix.
-#  TODO  change all JPGs to transparently cool PNGs
 #  TODO  at scroll time keep the target panel in the viewport!
 #  TODO  help stickmanlabs get a macbook pro (or help talk him out of it;)
-#  TODO  think of a use for the horizontal accordion, and for nesting them
+#  CONSIDER  think of a use for the horizontal accordion, and for nesting them
 #  TODO  better style for the page-footer
 #  TODO  Ruby 1.9 should link out
 
@@ -58,7 +54,7 @@ class RipDocSuite < Test::Unit::TestCase
   
   def test_embdocs_form_accordions_with_contents
     assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
-reveal
+# reveal
 return
     assert do
       xpath :div, :vertical_container do
@@ -272,8 +268,6 @@ puts @xdoc.to_s
   end
 
 #  TODO evaluate mashed strings
-#  TODO  pick weird color for regices
-#  TODO  when an assertion block throws an E, decorate it with the diagnostic text
 #   TODO intersticial string mashers still don't color correctly
 #   TODO make function names bigger
 #  TODO  respect linefeeds in parsed source when reflecting
