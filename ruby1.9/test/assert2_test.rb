@@ -134,7 +134,7 @@ correctly:
     end
   end
 #!end_panel!
-#!nodoc! ever again...  
+#!nodoc! ever again!
   def test_consume_diagnostic
     add_diagnostic 'silly Rabbi!'
     assert{ true }
@@ -156,7 +156,6 @@ correctly:
 #  TODO  demonstrate writing tolerance() as an assertion motivator - emphasize DSL
 #  TODO  add_diagnostic must run inside the assertion. That makes tolerance() useful _outside_ it!
 #  TODO  the next one should be Error Diagnostics, catching 1/0
-#  TODO  permit assert_flunk to ignore leading spaces
 #  TODO  decorate leading spaces in broken lines with attenuated blended color
 #  TODO  the background color on multi-line stringoids is incorrect
 #  TODO  do %w() with dark green on the delims, light green on the strings, and white on the gaps

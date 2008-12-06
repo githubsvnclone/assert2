@@ -59,7 +59,7 @@ class RipDoc < Ripper::Filter
   def on_embdoc(tok, f)
     return f if @in_nodoc
     
-    if tok.strip == '#!nodoc!'
+    if tok.strip =~ /^\#\!nodoc\!/
       @in_nodoc = true
     else
       @embdocs << tok
@@ -151,14 +151,14 @@ class RipDoc < Ripper::Filter
   end
 
   def on_comment(tok, f)
-    if tok.strip == '#!end_panel!'  #  TODO  enforce begining of linededness
+    if tok.strip =~ /^\#\!end_panel\!/  #  TODO  enforce begining of linededness
       f << '</pre>' if @owed_pre
       @owed_pre = false
       f << '</div>'
       return f
     end
 
-    nodoc = tok.strip == '#!nodoc!'
+    nodoc = tok.strip =~ /^\#\!nodoc\!/
 
     if !nodoc and !@in_nodoc
       spanit :comment, f, tok.rstrip
