@@ -64,12 +64,13 @@ containing the assertion's variables and values:
 =end
   def test_assert_reflects_your_expression_in_its_fault_diagnostic
     x = 42
-
     assert_flunk '      assert{ x == 43 }  #  even comments reflect!
                    --> false
                         x --> 42
                   x == 43 --> false' do
+
       assert{ x == 43 }  #  even comments reflect!
+
     end
   end
 #!end_panel!
@@ -80,12 +81,13 @@ are too cheerful and happy, to bring them down:
 =end
   def test_deny_reflects_your_expression_in_its_fault_diagnostic
     x = 42
-
     assert_flunk '      deny{ x == 42 }
                    --> true
                         x --> 42
                   x == 42 --> true' do
+
       deny{ x == 42 }
+
     end
     
     denigh{ x == 43 }  #  an alternative spelling, for smooth columns of code...
@@ -98,9 +100,10 @@ string. At fault time, this appears in the output diagnostic, above all other sp
 =end
   def test_diagnostic_string
     x = 42
-
     assert_flunk 'medium rare' do
+      
       assert('medium rare'){ x == 43 }
+      
     end
   end
 #!end_panel!
@@ -113,12 +116,16 @@ Custom test-side methods which know they are inside
 can use this to explain what's wrong with some situation.
 =end
   def test_add_diagnostic
+    
     assert_flunk /silly Rabbi!/ do
+      
       deny do
         add_diagnostic 'silly Rabbi!'
         true
       end
+      
     end
+    
   end
 #!end_panel!
 =begin
@@ -129,9 +136,13 @@ into your tests, all your legacy <code>assert()</code> calls will still perform
 correctly:
 =end
   def test_assert_classic
+    
     assert_flunk /(false. is not true)|(Failed assertion)/ do
+      
       assert false
+      
     end
+    
   end
 #!end_panel!
 =begin
@@ -140,7 +151,9 @@ Error Handling
 =end
   def test_error_handling
     assert_flunk /ZeroDivisionError: divided by 0/ do
+      
       assert{ 1 / 0 }  # would you believe some math professors frown upon that?!
+      
     end
   end
 #!nodoc! ever again!

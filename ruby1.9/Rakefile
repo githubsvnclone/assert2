@@ -24,3 +24,7 @@ end
 task :zip => :default do
   system 'zip -f assert21.zip '
 end
+
+task :todo do
+  sh 'find .. -name \*rb | xargs grep TODO'
+end
