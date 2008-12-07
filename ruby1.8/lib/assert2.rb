@@ -22,11 +22,11 @@ module Test; module Unit; module Assertions
 	result = block.call
       rescue => e
         diagnostic = [diagnostic, e.inspect, *e.backtrace].compact.join("\n\t")
-        flunk _flunk_2_0("\nassert#{ twizzler }{ ", diagnostic, block, result)
+        flunk diagnose("\nassert#{ twizzler }{ ", diagnostic, block, result)
       end
       
       return if result
-      flunk _flunk_2_0("assert#{ twizzler }{ ", diagnostic, block, result)
+      flunk diagnose("assert#{ twizzler }{ ", diagnostic, block, result)
   end
 
   #  This assertion replaces:
@@ -47,11 +47,11 @@ module Test; module Unit; module Assertions
       result = block.call
     rescue => e
       diagnostic = [diagnostic, e.inspect, *e.backtrace].compact.join("\n\t")
-      flunk _flunk_2_0("\ndeny{ ", diagnostic, block, result)
+      flunk diagnose("\ndeny{ ", diagnostic, block, result)
     end
     
     return unless result
-    flunk _flunk_2_0('deny{ ', diagnostic, block, result)
+    flunk diagnose('deny{ ', diagnostic, block, result)
   end  #  "You're a looney!"  -- King Arthur
 
   # Assert that a block raises a given Exception type matching 
@@ -167,7 +167,7 @@ module Test; module Unit; module Assertions
       return [diagnostic, reflection].compact.join("\n")
     end
 
-    def _flunk_2_0(polarity, diagnostic, block, result)
+    def diagnose(polarity, diagnostic, block, result)
       rf = ::RubyNodeReflector::RubyReflector.new(block)
       effect = " - should #{ 'not ' if polarity =~ /deny/ }pass\n"
 
