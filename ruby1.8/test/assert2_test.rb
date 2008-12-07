@@ -1,6 +1,6 @@
 require 'test/unit'
 require File.dirname(__FILE__) + '/../lib/assert2'
-require File.dirname(__FILE__) + '/../lib/assert_flunk'
+require File.dirname(__FILE__) + '/../lib/common/assert_flunk'
 
 
 class Assert_2_0_Test < Test::Unit::TestCase #:nodoc:
