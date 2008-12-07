@@ -699,16 +699,20 @@ module Test; module Unit; module Assertions
 
   end
   
+  def __reflect_assertion(called, options, block, got)
+    effect = AssertionRipper.new(called)
+    effect.args = *options[:args]
+    return [effect.reflect_assertion(block, got)]
+  end
+  
   #!doc!
   def reflect(diagnostic = nil, got = nil, called = caller[0],
                 options = {},
                 &block)
     options = { :args => [], :diagnose => lambda{''} }.merge(options)
-    effect = AssertionRipper.new(called)
-    effect.args = *options[:args]
      #  only capture the block_vars if there be args?
     add_diagnostic diagnostic
-    report = @__additional_diagnostics.uniq + [effect.reflect_assertion(block, got)]
+    report = @__additional_diagnostics.uniq + __reflect_assertion(called, options, block, got)
     more_diagnostics = options.fetch(:diagnose, lambda{''}).call.to_s
     report << more_diagnostics if more_diagnostics.length > 0
     return report.compact.join("\n")
