@@ -11,42 +11,6 @@ module Test; module Unit; module Assertions
   include ::RubyNodeReflector
   include Coulor #:nodoc:
 
-  #  This assertion calls a block, and faults if this returns
-  #  +false+ or +nil+. The fault diagnostic will reflect the
-  #  intermediate value of every variable and expression in the
-  #  block.
-  #
-  #  The first argument can be a diagnostic string:
-  #
-  #    assert("foo failed"){ foo() }
-  #
-  #  The fault diagnostic will print that line.
-  # 
-  #  The next time you think to write any of these assertions...
-  #  
-  #  - +assert+
-  #  - +assert_equal+
-  #  - +assert_instance_of+
-  #  - +assert_kind_of+
-  #  - +assert_operator+
-  #  - +assert_match+
-  #  - +assert_not_nil+
-  #  
-  #  use <code>assert{ 2.0 }</code> instead.
-  #
-  #  If no block is provided, the assertion calls +assert_classic+,
-  #  which simulates RubyUnit's standard <code>assert()</code>.
-  #  
-  #  Note: This only works for Ruby 1.8.6 so far...
-  #
-  def assert(*args, &block)
-    if block
-      assert_ args.first, '', &block
-    else
-      assert_classic *args
-    end
-  end
-
   #  The new <code>assert()</code> calls this to interpret
   #  blocks of assertive statements.
   #
