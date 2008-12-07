@@ -24,8 +24,7 @@ module Test; module Unit; module Assertions
 #        diagnostic = [diagnostic, e.inspect, *e.backtrace].compact.join("\n\t")
         flunk diagnose("\nassert#{ twizzler }{ ", diagnostic, block, result)
       end
-      
-      return if result
+
       flunk diagnose("assert#{ twizzler }{ ", diagnostic, block, result)
   end
 
