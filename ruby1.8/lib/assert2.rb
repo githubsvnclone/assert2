@@ -19,9 +19,9 @@ module Test; module Unit; module Assertions
       result = nil
       
       begin
-	result = block.call
-      rescue => e
-        diagnostic = [diagnostic, e.inspect, *e.backtrace].compact.join("\n\t")
+        result = block.call
+      rescue => result
+#        diagnostic = [diagnostic, e.inspect, *e.backtrace].compact.join("\n\t")
         flunk diagnose("\nassert#{ twizzler }{ ", diagnostic, block, result)
       end
       
