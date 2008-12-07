@@ -722,7 +722,7 @@ module Test; module Unit; module Assertions
 
   def assert_(diagnostic = nil, options = {}, &block)
     begin
-      return if got = block.call(*options[:args])
+      got = block.call(*options[:args]) and return got
     rescue => got
     end    
 
@@ -734,7 +734,7 @@ module Test; module Unit; module Assertions
   def deny(diagnostic = nil, options = {}, &block)
       #  "None shall pass!" --the Black Knight
     begin
-      return unless got = block.call(*options[:args])
+      got = block.call(*options[:args]) or return
     rescue => got
     end
   
