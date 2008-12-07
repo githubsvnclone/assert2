@@ -1,7 +1,7 @@
 require 'test/unit'
 $:.unshift 'lib'; $:.unshift '../lib'
 require 'assert2'
-require 'assert_flunk'
+require 'common/assert_flunk'
 require 'assert_xhtml'
 
 class AssertXhtmlSuite < Test::Unit::TestCase
