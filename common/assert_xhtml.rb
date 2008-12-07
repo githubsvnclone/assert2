@@ -5,18 +5,18 @@ require 'xml'
 module Test; module Unit; module Assertions
   
   def assert_xhtml(xhtml)
-    xp = XML::HTMLParser.new()  #  TODO  if this bombs invoke the XML parser 
+    return _assert_xml(xhtml, XML::HTMLParser) #  TODO  if this bombs invoke the XML parser 
                                 #         but explain stuff might not work
-    xp.string = xhtml
-    XML.default_pedantic_parser = true
-    @xdoc = xp.parse.root
-    return @sauce = xhtml
   end 
 
-  def assert_xml(xml)
-    xp = XML::Parser.new()
+  def _assert_xml(xml, parser = XML::Parser)
+    xp = parser.new()
     xp.string = xml
-    XML.default_pedantic_parser = true
+    if XML.respond_to? :'default_pedantic_parser='
+      XML.default_pedantic_parser = true
+    else
+      XML::Parser.default_pedantic_parser = true
+    end  #  CONSIDER  uh, figure out the best libxml-ruby??
     @xdoc = xp.parse.root
     return @sauce = xml
   end 
