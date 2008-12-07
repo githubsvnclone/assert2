@@ -40,7 +40,6 @@ module Test; module Unit; module Assertions
   #  
   def deny(diagnostic = nil, &block)  
       #  "None shall pass!" --the Black Knight
-      # puts reflect(&block) # activate this line and test to see all your denials!
     result = nil
     
     begin
