@@ -40,17 +40,15 @@ module Test; module Unit; module Assertions
   #  
   def deny(diagnostic = nil, &block)  
       #  "None shall pass!" --the Black Knight
-    result = nil
     
     begin
-      result = block.call
-    rescue => e
-      diagnostic = [diagnostic, e.inspect, *e.backtrace].compact.join("\n\t")
-      flunk diagnose("\ndeny{ ", diagnostic, block, result)
+      return unless got = block.call
+    rescue => got
+#      diagnostic = [diagnostic, e.inspect, *e.backtrace].compact.join("\n\t")
+#      flunk diagnose("\ndeny{ ", diagnostic, block, result)
     end
-    
-    return unless result
-    flunk diagnose('deny{ ', diagnostic, block, result)
+
+    flunk diagnose('deny{ ', diagnostic, block, got)
   end  #  "You're a looney!"  -- King Arthur
 
   # Assert that a block raises a given Exception type matching 
