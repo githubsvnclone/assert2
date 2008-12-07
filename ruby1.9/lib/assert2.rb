@@ -741,7 +741,7 @@ module Test; module Unit; module Assertions
     flunk diagnose(diagnostic, got, caller[0], options, &block)
   ensure
     @__additional_diagnostics = []
-  end
+  end  #  "You're a looney!"  -- King Arthur
   
 end; end; end
 
