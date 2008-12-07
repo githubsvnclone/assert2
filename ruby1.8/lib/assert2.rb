@@ -16,7 +16,7 @@ module Test; module Unit; module Assertions
   #
   def assert_(diagnostic = nil, options = {}, &block)
       begin
-        got = block.call and return got
+      got = block.call(*options[:args]) and return got
       rescue => got
       end
 
@@ -38,7 +38,7 @@ module Test; module Unit; module Assertions
       #  "None shall pass!" --the Black Knight
     
     begin
-      got = block.call or return
+      got = block.call(*options[:args]) or return
     rescue => got
     end
 
