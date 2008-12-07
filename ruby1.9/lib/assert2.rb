@@ -38,6 +38,8 @@ module Test; module Unit; module Assertions
       return exp.last
     end
 
+#  TODO  ripdoc and RDoc should peacibly coexist
+
     class Nada; end
 
     attr_accessor :captured_block_vars,
