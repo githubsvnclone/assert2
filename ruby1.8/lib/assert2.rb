@@ -15,17 +15,16 @@ module Test; module Unit; module Assertions
   #  blocks of assertive statements.
   #
   def assert_(diagnostic = nil, twizzler = '_', &block)
-      # puts reflect(&block) # activate this line and test to see all your successes!
       got = nil
       
       begin
         return got if got = block.call
       rescue => got
-#        diagnostic = [diagnostic, e.inspect, *e.backtrace].compact.join("\n\t")
-#        flunk diagnose("\nassert#{ twizzler }{ ", diagnostic, block, got)
       end
 
       flunk diagnose("assert#{ twizzler }{ ", diagnostic, block, got)
+  ensure
+    @__additional_diagnostics = []
   end
 
   #  This assertion replaces:
@@ -43,11 +42,11 @@ module Test; module Unit; module Assertions
     begin
       return unless got = block.call
     rescue => got
-#      diagnostic = [diagnostic, e.inspect, *e.backtrace].compact.join("\n\t")
-#      flunk diagnose("\ndeny{ ", diagnostic, block, result)
     end
 
     flunk diagnose('deny{ ', diagnostic, block, got)
+  ensure
+    @__additional_diagnostics = []
   end  #  "You're a looney!"  -- King Arthur
 
   # Assert that a block raises a given Exception type matching 
