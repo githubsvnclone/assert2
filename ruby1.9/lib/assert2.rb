@@ -708,7 +708,7 @@ module Test; module Unit; module Assertions
   end
   
   #!doc!
-  def reflect(diagnostic = nil, got = nil, called = caller[0],
+  def diagnose(diagnostic = nil, got = nil, called = caller[0],
                 options = {}, block)
     options = { :args => [], :diagnose => lambda{''} }.merge(options)
      #  only capture the block_vars if there be args?
@@ -725,7 +725,7 @@ module Test; module Unit; module Assertions
     rescue => got
     end    
 
-    flunk reflect(diagnostic, got, caller[1], options, block)
+    flunk diagnose(diagnostic, got, caller[1], options, block)
   ensure
     @__additional_diagnostics = []
   end
@@ -746,7 +746,7 @@ module Test; module Unit; module Assertions
     rescue => got
     end
   
-    flunk reflect(diagnostic, got, caller[0], options, block)
+    flunk diagnose(diagnostic, got, caller[0], options, block)
   ensure
     @__additional_diagnostics = []
   end  #  "You're a looney!"  -- King Arthur
