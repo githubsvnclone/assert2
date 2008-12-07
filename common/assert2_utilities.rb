@@ -61,10 +61,6 @@ module Test; module Unit; module Assertions
   #
   #  If no block is provided, the assertion calls +assert_classic+,
   #  which simulates RubyUnit's standard <code>assert()</code>.
-  #  
-  #  Note: This only works for Ruby 1.9, because it uses the Ripper library,
-  #  maintained by Ruby's core team.
-  #
     if block
       assert_ *args, &block
     else
