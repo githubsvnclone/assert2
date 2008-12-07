@@ -14,17 +14,17 @@ class AssertXhtmlSuite < Test::Unit::TestCase
   end
   
   def test_xpath_converts_symbols_to_ids
-    assert_xml '<a id="b"/>'
+    _assert_xml '<a id="b"/>'
     assert{ xpath(:a, :b) == @xdoc.find_first('/a[ @id = "b" ]') }
   end
 
   def test_xpath_converts_hashes_into_predicates
-    assert_xml '<a class="b"/>'
+    _assert_xml '<a class="b"/>'
     assert{ xpath(:a, :class => :b) == @xdoc.find_first('/a[ @class = "b" ]') }
   end
 
   def test_xpath_converts_silly_notation_to_text_matches
-    assert_xml '<a>b</a>'
+    _assert_xml '<a>b</a>'
     assert{ xpath(:a, :'.' => :b) == @xdoc.find_first('/a[ . = "b" ]') }
   end
 
@@ -52,7 +52,7 @@ class AssertXhtmlSuite < Test::Unit::TestCase
   end #  TODO  reflect the generated path in the fault diagnostic
 
   def test_xpath_takes_both_a_symbolic_id_and_options
-    assert_xml '<div id="zone" foo="bar">yo</div>'
+    _assert_xml '<div id="zone" foo="bar">yo</div>'
     assert{ xpath(:div, :zone, {}).text == 'yo' }
     assert{ xpath(:div, :zone, :foo => :bar).text == 'yo' }
   end #  TODO  reflect the generated path in the fault diagnostic
