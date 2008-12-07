@@ -14,7 +14,7 @@ module Test; module Unit; module Assertions
   #  The new <code>assert()</code> calls this to interpret
   #  blocks of assertive statements.
   #
-  def assert_(diagnostic = nil, twizzler = '_', &block)
+  def assert_(diagnostic = nil, twizzler = '_', options = {}, &block)
       begin
         got = block.call and return got
       rescue => got
@@ -34,7 +34,7 @@ module Test; module Unit; module Assertions
   #  It faults, and prints its block's contents and values,
   #  if its block returns non-+false+ and non-+nil+.
   #  
-  def deny(diagnostic = nil, &block)  
+  def deny(diagnostic = nil, options = {}, &block)  
       #  "None shall pass!" --the Black Knight
     
     begin
