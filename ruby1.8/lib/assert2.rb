@@ -36,7 +36,6 @@ module Test; module Unit; module Assertions
   #  
   def deny(diagnostic = nil, options = {}, &block)  
       #  "None shall pass!" --the Black Knight
-    
     begin
       got = block.call(*options[:args]) or return
     rescue => got
