@@ -16,16 +16,16 @@ module Test; module Unit; module Assertions
   #
   def assert_(diagnostic = nil, twizzler = '_', &block)
       # puts reflect(&block) # activate this line and test to see all your successes!
-      result = nil
+      got = nil
       
       begin
-        return result if result = block.call
-      rescue => result
+        return got if got = block.call
+      rescue => got
 #        diagnostic = [diagnostic, e.inspect, *e.backtrace].compact.join("\n\t")
-        flunk diagnose("\nassert#{ twizzler }{ ", diagnostic, block, result)
+        flunk diagnose("\nassert#{ twizzler }{ ", diagnostic, block, got)
       end
 
-      flunk diagnose("assert#{ twizzler }{ ", diagnostic, block, result)
+      flunk diagnose("assert#{ twizzler }{ ", diagnostic, block, got)
   end
 
   #  This assertion replaces:
