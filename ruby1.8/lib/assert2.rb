@@ -14,13 +14,13 @@ module Test; module Unit; module Assertions
   #  The new <code>assert()</code> calls this to interpret
   #  blocks of assertive statements.
   #
-  def assert_(diagnostic = nil, twizzler = '_', options = {}, &block)
+  def assert_(diagnostic = nil, options = {}, &block)
       begin
         got = block.call and return got
       rescue => got
       end
 
-      flunk diagnose("assert#{ twizzler }{ ", diagnostic, block, got)
+      flunk diagnose("assert{ ", diagnostic, block, got)
   ensure
     @__additional_diagnostics = []
   end
