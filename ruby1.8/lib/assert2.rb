@@ -22,7 +22,7 @@ module Test; module Unit; module Assertions
         return got if got = block.call
       rescue => got
 #        diagnostic = [diagnostic, e.inspect, *e.backtrace].compact.join("\n\t")
-        flunk diagnose("\nassert#{ twizzler }{ ", diagnostic, block, got)
+#        flunk diagnose("\nassert#{ twizzler }{ ", diagnostic, block, got)
       end
 
       flunk diagnose("assert#{ twizzler }{ ", diagnostic, block, got)
