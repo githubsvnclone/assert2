@@ -731,6 +731,15 @@ module Test; module Unit; module Assertions
     @__additional_diagnostics = []
   end
 
+  #  This assertion replaces:
+  #  
+  #  - +assert_nil+
+  #  - +assert_no_match+
+  #  - +assert_not_equal+
+  #
+  #  It faults, and prints its block's contents and values,
+  #  if its block returns non-+false+ and non-+nil+.
+  #  
   def deny(diagnostic = nil, options = {}, &block)
       #  "None shall pass!" --the Black Knight
     begin
