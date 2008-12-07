@@ -8,7 +8,7 @@ module Test; module Unit; module Assertions
     xp = XML::HTMLParser.new()  #  TODO  if this bombs invoke the XML parser 
                                 #         but explain stuff might not work
     xp.string = xhtml
-    XML::Parser.default_pedantic_parser = true
+    XML.default_pedantic_parser = true
     @xdoc = xp.parse.root
     return @sauce = xhtml
   end 
@@ -16,7 +16,7 @@ module Test; module Unit; module Assertions
   def assert_xml(xml)
     xp = XML::Parser.new()
     xp.string = xml
-    XML::Parser.default_pedantic_parser = true
+    XML.default_pedantic_parser = true
     @xdoc = xp.parse.root
     return @sauce = xml
   end 
