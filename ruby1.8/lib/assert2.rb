@@ -15,10 +15,8 @@ module Test; module Unit; module Assertions
   #  blocks of assertive statements.
   #
   def assert_(diagnostic = nil, twizzler = '_', &block)
-      got = nil
-      
       begin
-        return got if got = block.call
+        got = block.call and return got
       rescue => got
       end
 
@@ -40,7 +38,7 @@ module Test; module Unit; module Assertions
       #  "None shall pass!" --the Black Knight
     
     begin
-      return unless got = block.call
+      got = block.call or return
     rescue => got
     end
 
