@@ -720,14 +720,14 @@ module Test; module Unit; module Assertions
   end
 
   def assert_(diagnostic = nil, options = {}, &block)
+    @__additional_diagnostics = []
+    
     begin
       got = block.call(*options[:args]) and return got
     rescue => got
     end    
 
     flunk diagnose(diagnostic, got, caller[1], options, block)
-  ensure
-    @__additional_diagnostics = []
   end
 
   #  This assertion replaces:
@@ -741,14 +741,15 @@ module Test; module Unit; module Assertions
   #  
   def deny(diagnostic = nil, options = {}, &block)
       #  "None shall pass!" --the Black Knight
+    
+    @__additional_diagnostics = []
+    
     begin
       got = block.call(*options[:args]) or return
     rescue => got
     end
   
     flunk diagnose(diagnostic, got, caller[0], options, block)
-  ensure
-    @__additional_diagnostics = []
   end  #  "You're a looney!"  -- King Arthur
   
 end; end; end
