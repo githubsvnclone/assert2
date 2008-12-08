@@ -238,6 +238,7 @@ class RipDoc < Ripper::Filter
 
   def on_nl(tok, f)
     return f if @in_nodoc
+    
     finish_any_spans(f)  # TODO  this can't be needed...
     f << "\n"
   end
