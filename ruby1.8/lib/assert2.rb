@@ -15,14 +15,13 @@ module Test; module Unit; module Assertions
   #  blocks of assertive statements.
   #
   def assert_(diagnostic = nil, options = {}, &block)
-      begin
-      got = block.call(*options[:args]) and return got
-      rescue => got
-      end
-
-      flunk diagnose("assert{ ", diagnostic, block, got)
-  ensure
     @__additional_diagnostics = []
+    begin
+      got = block.call(*options[:args]) and return got
+    rescue => got
+    end
+
+    flunk diagnose("assert{ ", diagnostic, block, got)
   end
 
   #  This assertion replaces:
@@ -36,14 +35,15 @@ module Test; module Unit; module Assertions
   #  
   def deny(diagnostic = nil, options = {}, &block)  
       #  "None shall pass!" --the Black Knight
+    
+    @__additional_diagnostics = []
+    
     begin
       got = block.call(*options[:args]) or return
     rescue => got
     end
 
     flunk diagnose('deny{ ', diagnostic, block, got)
-  ensure
-    @__additional_diagnostics = []
   end  #  "You're a looney!"  -- King Arthur
 
   # Assert that a block raises a given Exception type matching 
