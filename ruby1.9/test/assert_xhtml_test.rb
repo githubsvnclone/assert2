@@ -45,7 +45,7 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     spew = assert_flunk /xpath context/ do
       deny{ xpath '/html/body' }
     end
-    puts spew
+    assert{ spew =~ /xpath: "\/html\/body"/ }
   end
 
   def test_to_predicate_expects_options
