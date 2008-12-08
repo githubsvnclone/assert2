@@ -39,6 +39,15 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     end
   end
 
+  def test_deny_xpath_decorates
+    assert_xhtml '<html><body/></html>'
+
+    spew = assert_flunk /xpath context/ do
+      deny{ xpath '/html/body' }
+    end
+    puts spew
+  end
+
   def test_to_predicate_expects_options
     args = AssertXPathArguments.new
     assert{ args.to_predicate(:zone, {}) == "[ @id = 'zone' ]" }
