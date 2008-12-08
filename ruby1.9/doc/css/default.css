@@ -105,6 +105,7 @@ h1 {
 		margin: 20px  0 0 0;	
 		text-align: left;
 		font-size: 10px;
+		color:#AADDFF;
 	}
 
 	.page-body ul, .page-body ol { 
@@ -123,7 +124,6 @@ h1 {
 
 	.page-footer p {
 		margin: 0;
-		color: white;
 		background-color: #4371e2;
 	}
 
@@ -220,7 +220,7 @@ a.page-options:focus {
 }		
 
 .page-footer a, a:link, a:visited {
-color:#AADDFF;
+		color: white;
 }
 
 code { font-weight: bolder; }
