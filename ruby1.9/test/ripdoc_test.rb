@@ -6,7 +6,6 @@ require 'assert_xhtml'
 
 HomePath = RipDoc::HomePath
 
-#  TODO  deny{ xpath } decorates?
 #  TODO  make the add_diagnostic take a lambda
 #  TODO  censor TODOs from the pretty rip!
 #  TODO  at scroll time keep the target panel in the viewport!
@@ -227,7 +226,7 @@ return
   
   def test_string_patterns
     assert_rip('foo "bar"')
-    deny{ xpath :'span[ @class = "string" ]' }
+    denigh{ xpath :'span[ @class = "string" ]' }
 return # TODO
     assert do # and 
       xpath :"span[ #{style(:string)} and . = 'bar'  ]" do
