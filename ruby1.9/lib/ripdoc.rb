@@ -55,11 +55,15 @@ class RipDoc < Ripper::Filter
     return f
     # on_kw tok, f, 'embdoc_beg'
   end
+  
+  def is_no_doc?(tok)
+    tok.strip =~ /^\#\!nodoc\!/ or tok.strip =~ /^\#\!no_doc\!/
+  end
 
   def on_embdoc(tok, f)
     return f if @in_nodoc
     
-    if tok.strip =~ /^\#\!nodoc\!/ or tok.strip =~ /^\#\!no_doc\!/
+    if is_no_doc? tok
       @in_nodoc = true
     else
       @embdocs << tok
@@ -158,7 +162,7 @@ class RipDoc < Ripper::Filter
       return f
     end
 
-    nodoc = tok.strip =~ /^\#\!nodoc\!/
+    nodoc = is_no_doc?(tok)
 
     if !nodoc and !@in_nodoc
       spanit :comment, f, tok.rstrip
