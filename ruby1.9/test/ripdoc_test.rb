@@ -7,11 +7,9 @@ require 'assert_xhtml'
 HomePath = RipDoc::HomePath
 
 #  TODO  make the add_diagnostic take a lambda
-#  TODO  censor TODOs from the pretty rip!
 #  TODO  at scroll time keep the target panel in the viewport!
 #  TODO  help stickmanlabs get a macbook pro (or help talk him out of it;)
 #  CONSIDER  think of a use for the horizontal accordion, and for nesting them
-#  TODO  better style for the page-footer
 #  TODO  Ruby 1.9 should link out
 #  TODO evaluate mashed strings
 #   TODO intersticial string mashers still don't color correctly
@@ -205,8 +203,6 @@ return
                         x = 42')
     assert{ lines =~ /comment<\/span>\n/ }
   end
-
-# TODO  assert{ xpath() { nada } }  should not be a problem
 
 #  TODO  add :verbose => option to xpath
 

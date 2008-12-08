@@ -45,6 +45,7 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     spew = assert_flunk /xpath context/ do
       deny{ xpath '/html/body' }
     end
+
     assert{ spew =~ /xpath: "\/html\/body"/ }
   end
 
@@ -60,7 +61,7 @@ class AssertXhtmlSuite < Test::Unit::TestCase
       predicate.match("@foo = 'bar'") and
       predicate.match(/ \]$/)
     }
-  end #  TODO  reflect the generated path in the fault diagnostic
+  end
 
   def test_xpath_takes_both_a_symbolic_id_and_options
     _assert_xml '<div id="zone" foo="bar">yo</div>'
