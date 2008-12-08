@@ -69,8 +69,6 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     assert{ xpath(:div, :zone, :foo => :bar).text == 'yo' }
   end
 
-#  TODO  scratch the add_diagnostics if we can rescue flunks, decorate them, and re-raise them
-
   def test_failing_xpaths_indent_their_returnage
     return if RUBY_VERSION < '1.9' # TODO  fix!
     assert_xhtml '<html><body/></html>'
