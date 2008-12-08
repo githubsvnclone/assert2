@@ -59,7 +59,7 @@ class RipDoc < Ripper::Filter
   def on_embdoc(tok, f)
     return f if @in_nodoc
     
-    if tok.strip =~ /^\#\!nodoc\!/
+    if tok.strip =~ /^\#\!nodoc\!/ or tok.strip =~ /^\#\!no_doc\!/
       @in_nodoc = true
     else
       @embdocs << tok

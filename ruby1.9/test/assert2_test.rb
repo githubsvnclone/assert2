@@ -129,6 +129,27 @@ can use this to explain what's wrong with some situation.
   end
 #!end_panel!
 =begin
+<code>add_diagnostic{ '<em>block</em>' }</code>
+Sometimes the diagnostic is more expensive than the actual assertion.
+To keep all your assertions fast, wrap your diagnostics
+in blocks. They only call when their assertions fail fail:
+=end
+  def test_add_diagnostic_lambda
+    ark = ''
+    
+    assert_flunk /^remarkable/ do
+      
+      assert do
+        add_diagnostic{ 'rem' + ark }
+        ark = 'arkable'
+        false
+      end
+      
+    end
+    
+  end
+#!end_panel!
+=begin
 Classic <code>assert( <em>boolean</em> )</code>
 <code>assert{}</code> will pass thru to the original <code>assert()</code>
 from <code>Test::Unit::TestCase</code>. When you drop <code>require 'assert2'</code>
@@ -156,7 +177,10 @@ Error Handling
       
     end
   end
+#!end_panel!
 #!nodoc! ever again!
+
+#  TODO  also do no_doc
 
 #  TODO  demo test that explicates why we cannot allow the "money line" 
 #            to appear inside 
@@ -164,15 +188,15 @@ Error Handling
   def test_consume_diagnostic
     add_diagnostic 'silly Rabbi!'
     assert{ true }
-    
+
     x = assert_flunk /true/ do
       denigh{ true }
     end
-     
+
     deny('consume diagnostics at fault time'){ x =~ /silly Rabbi/ }
     add_diagnostic 'silly Rabbi'
     denigh{ false }
-    
+
     x = assert_flunk /true/ do
           denigh{ true }
         end 

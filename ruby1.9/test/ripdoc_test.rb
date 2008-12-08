@@ -6,7 +6,6 @@ require 'assert_xhtml'
 
 HomePath = RipDoc::HomePath
 
-#  TODO  make the add_diagnostic take a lambda
 #  TODO  at scroll time keep the target panel in the viewport!
 #  TODO  help stickmanlabs get a macbook pro (or help talk him out of it;)
 #  CONSIDER  think of a use for the horizontal accordion, and for nesting them
@@ -51,6 +50,7 @@ class RipDocSuite < Test::Unit::TestCase
   
   #  TODO  something is snarfing the first space in a pre in a embdoc
   #  TODO  snarf all #! commentry
+  #  TODO  better keyword color
   
   def test_embdocs_form_accordions_with_contents
     assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
@@ -93,6 +93,15 @@ return
     @rip.embdocs = []
     @rip.on_embdoc('yo', @f)
     @rip.on_embdoc('#!nodoc!', @f)
+    @rip.on_embdoc('dude', @f)
+    assert{ @rip.embdocs == ['yo'] }
+    assert{ @rip.in_nodoc }
+  end
+
+  def test_no_doc_inside_embdoc
+    @rip.embdocs = []
+    @rip.on_embdoc('yo', @f)
+    @rip.on_embdoc('#!no_doc!', @f)
     @rip.on_embdoc('dude', @f)
     assert{ @rip.embdocs == ['yo'] }
     assert{ @rip.in_nodoc }

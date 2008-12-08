@@ -705,13 +705,14 @@ module Test; module Unit; module Assertions
     effect.args = *options[:args]
     return [effect.reflect_assertion(block, got)]
   end
-  
+    
   #!doc!
   def diagnose(diagnostic = nil, got = nil, called = caller[0],
                 options = {}, block)
     options = { :args => [], :diagnose => lambda{''} }.merge(options)
      #  only capture the block_vars if there be args?
-    add_diagnostic diagnostic
+    add_diagnostic diagnostic  #  TODO  make this first, not last
+    __evaluate_diagnostics
     report = @__additional_diagnostics.uniq + __reflect_assertion(called, options, block, got)
     more_diagnostics = options.fetch(:diagnose, lambda{''}).call.to_s
     report << more_diagnostics if more_diagnostics.length > 0
