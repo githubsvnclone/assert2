@@ -45,9 +45,11 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     predicate = args.to_predicate(:zone, :foo => :bar)
 
     assert{
+      predicate.index('[ ') == 0 and
       predicate.match("@id = 'zone'") and
       predicate.match(" and ")        and
-      predicate.match("@foo = 'bar'")
+      predicate.match("@foo = 'bar'") and
+      predicate.match(/ \]$/)
     }
   end #  TODO  reflect the generated path in the fault diagnostic
 
