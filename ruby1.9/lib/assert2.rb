@@ -2,7 +2,6 @@ require 'ripper'  #   note we only work with Ruby >= 1.9 !
 require 'pp'
   # note there's more requires down there --V
 
-#  TODO  better assert{ match or index already! }
 #  TODO  feel the need for serious ncursage!
 
 module Test; module Unit; module Assertions
