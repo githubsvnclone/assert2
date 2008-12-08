@@ -55,7 +55,7 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     _assert_xml '<div id="zone" foo="bar">yo</div>'
     assert{ xpath(:div, :zone, {}).text == 'yo' }
     assert{ xpath(:div, :zone, :foo => :bar).text == 'yo' }
-  end #  TODO  reflect the generated path in the fault diagnostic
+  end
 
 #  TODO  scratch the add_diagnostics if we can rescue flunks, decorate them, and re-raise them
 
