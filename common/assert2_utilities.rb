@@ -24,15 +24,25 @@ module Test; module Unit; module Assertions
     end
   end
 
-  def add_diagnostic(whatever)
+  def add_diagnostic(whatever = nil, &block)
     @__additional_diagnostics ||= []
     
     if whatever == :clear
       @__additional_diagnostics = []
-    else
-      @__additional_diagnostics << whatever if whatever
+      whatever = nil
     end
+    
+    @__additional_diagnostics << whatever if whatever
+    @__additional_diagnostics << block if block
   end
+
+  def __evaluate_diagnostics
+    @__additional_diagnostics.each_with_index do |d, x|
+      @__additional_diagnostics[x] = d.call if d.respond_to? :call
+    end
+  end  #  TODO  pass the same args as blocks take
+      #  TODO  recover from errors?
+      #  TODO  add a stack trace when assert{} or deny{} rescue
 
   def assert(*args, &block)
   #  This assertion calls a block, and faults if it returns

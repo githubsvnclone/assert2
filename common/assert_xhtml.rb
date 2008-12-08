@@ -55,9 +55,11 @@ module Test; module Unit; module Assertions
       end
     end
 
-    add_diagnostic :clear
-    add_diagnostic "xpath context:\n" + @xdoc.to_s
-    add_diagnostic "xpath: #{ path.inspect }\n"
+    add_diagnostic :clear do
+      "xpath context:\n" + @xdoc.to_s +
+      "xpath: #{ path.inspect }\n"
+    end
+    
     assert_ nil, :args => [@xdoc = node], &block if node and block
     return node
     # TODO raid http://thebogles.com/blog/an-hpricot-style-interface-to-libxml/
