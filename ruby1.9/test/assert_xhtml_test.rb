@@ -64,7 +64,7 @@ class AssertXhtmlSuite < Test::Unit::TestCase
   end
 
   def test_xpath_takes_both_a_symbolic_id_and_options
-    _assert_xml '<div id="zone" foo="bar">yo</div>'
+   _assert_xml '<div id="zone" foo="bar">yo</div>'
     assert{ xpath(:div, :zone, {}).text == 'yo' }
     assert{ xpath(:div, :zone, :foo => :bar).text == 'yo' }
   end
@@ -87,14 +87,6 @@ class AssertXhtmlSuite < Test::Unit::TestCase
   end
   
 end
-
-
-
-
-
-
-
-
 
 
 

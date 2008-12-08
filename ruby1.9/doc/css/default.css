@@ -1,4 +1,4 @@
-	
+
 *, html, body {
 	margin: 0 0 0 0;
 	padding: 0 0 0 0;
@@ -222,8 +222,6 @@ a.page-options:focus {
 .page-footer a, a:link, a:visited {
 		color: white;
 }
-
-code { font-weight: bolder; }
 
 .hidden {
 	display : none;

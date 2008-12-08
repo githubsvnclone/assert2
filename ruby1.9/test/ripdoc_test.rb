@@ -39,7 +39,6 @@ class RipDocSuite < Test::Unit::TestCase
     # reveal
   end  #  TODO  why we crash when any other tests generate a ripped doc?
 
-#  TODO  add the bold tag to <code> itself, for when we lose our style sheets...
 #  TODO  pay for Staff Benda Bilili  ALBUM: Très Très Fort (Promo Sampler) !
 
   def _test_a_ripped_doc_contains_no_empty_pre_tags
@@ -120,7 +119,7 @@ return
 
   def test_re_html_ize_embdoc_lines
     assert{ @rip.enline('foo') == 'foo' }
-    assert{ @rip.enline('f&lt;code&gt;o&lt;/code&gt;o') == 'f<code>o</code>o' }
+    assert{ @rip.enline('f&lt;code&gt;o&lt;/code&gt;o') =~ /^f<code style.*>o<\/code>o/ }
   end
 
   def test_on_embdoc_end

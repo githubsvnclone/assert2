@@ -23,7 +23,7 @@ class RipDoc < Ripper::Filter
   end
 
   def enline(line)
-    return line.gsub( '&lt;code&gt;', '<code>').
+    return line.gsub( '&lt;code&gt;', '<code style="font-weight: bolder;">').
                 gsub('&lt;/code&gt;', '</code>').
                 gsub( '&lt;em&gt;', '<em>').
                 gsub('&lt;/em&gt;', '</em>').
