@@ -86,7 +86,7 @@ return
     @rip.on_embdoc('yo', @f)
     denigh{ @output =~ /yo/ }
     assert{ @rip.embdocs == ['yo'] }
-    denigh{ @rip.in_nodoc }
+    denigh{ @rip.in_no_doc }
   end
 
   def test_nodoc_inside_embdoc
@@ -95,7 +95,7 @@ return
     @rip.on_embdoc('#!nodoc!', @f)
     @rip.on_embdoc('dude', @f)
     assert{ @rip.embdocs == ['yo'] }
-    assert{ @rip.in_nodoc }
+    assert{ @rip.in_no_doc }
   end
 
   def test_no_doc_inside_embdoc
@@ -104,7 +104,7 @@ return
     @rip.on_embdoc('#!no_doc!', @f)
     @rip.on_embdoc('dude', @f)
     assert{ @rip.embdocs == ['yo'] }
-    assert{ @rip.in_nodoc }
+    assert{ @rip.in_no_doc }
   end
 
   def test_end_panel_after_embdoc_inserts_end_of_div_tag
@@ -115,9 +115,9 @@ return
 
   def test_comments_dont_always_turn_nodoc_off
     @rip.embdocs = []
-    @rip.in_nodoc = true
+    @rip.in_no_doc = true
     @rip.on_comment('# non-commanding comment', @f)
-    assert{ @rip.in_nodoc }
+    assert{ @rip.in_no_doc }
   end
 
   def assert_embdoc(array)
@@ -212,7 +212,7 @@ return
     assert{ lines =~ /comment<\/span>\n/ }
   end
 
-#  TODO  add :verbose => option to xpath
+#  TODO  add :verbose => option to assert{}
 
   def test_put_every_thing_into_a_pre_block
     lines = assert_rip('x = 42')

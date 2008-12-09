@@ -48,7 +48,7 @@ class RipDoc < Ripper::Filter
   end
   
   def on_embdoc_beg(tok, f)
-    return f if @in_nodoc
+    return f if @in_no_doc
     @embdocs = []
     f << "</pre>\n" if @owed_pre
     @owed_pre = false
@@ -61,10 +61,10 @@ class RipDoc < Ripper::Filter
   end
 
   def on_embdoc(tok, f)
-    return f if @in_nodoc
+    return f if @in_no_doc
     
     if is_no_doc? tok
-      @in_nodoc = true
+      @in_no_doc = true
     else
       @embdocs << tok
     end
@@ -73,7 +73,7 @@ class RipDoc < Ripper::Filter
   end
   
   def on_embdoc_end(tok, f)
-    return f if @in_nodoc
+    return f if @in_no_doc
     return end_panel(f)
     return f
   end
@@ -149,7 +149,7 @@ class RipDoc < Ripper::Filter
   end
 
   def on_kw(tok, f, klass = 'kw')
-    return f if @in_nodoc
+    return f if @in_no_doc
     f << span(klass) << CGI.escapeHTML(tok)
     f << '</span>'
   end
@@ -164,13 +164,13 @@ class RipDoc < Ripper::Filter
 
     nodoc = is_no_doc?(tok)
 
-    if !nodoc and !@in_nodoc
+    if !nodoc and !@in_no_doc
       spanit :comment, f, tok.rstrip
       on_nl nil, f
     end
     
-    @in_nodoc ||= nodoc # TODO  this will obscure until the next comment - fix
-    @in_nodoc = nil if tok.strip =~ /^\#\!doc\!/
+    @in_no_doc ||= nodoc # TODO  this will obscure until the next comment - fix
+    @in_no_doc = nil if tok.strip =~ /^\#\!doc\!/
     return f
   end
 
@@ -178,7 +178,7 @@ class RipDoc < Ripper::Filter
 #  TODO colorize :"" and :"#{}" correctly
 
   def on_default(event, tok, f)
-    return f if @in_nodoc
+    return f if @in_no_doc
     if @symbol_begun
       @symbol_begun = false
       f << %Q[#{span(:symbol)}#{CGI.escapeHTML(tok)}</span>]
@@ -200,35 +200,35 @@ class RipDoc < Ripper::Filter
   end
 
   def on_tstring_beg(tok, f)
-    return f if @in_nodoc
+    return f if @in_no_doc
     @spans_owed += 1
     f << span(:string)
     f << %Q[#{span(:string_delimiter)}#{CGI.escapeHTML(tok)}</span>]
   end
 
   def on_tstring_end(tok, f)
-    return f if @in_nodoc
+    return f if @in_no_doc
     f << %Q[#{span(:string_delimiter)}#{CGI.escapeHTML(tok)}</span>]
     finish_one_span(f)
     return f
   end
 
   def on_regexp_beg(tok, f)
-    return f if @in_nodoc
+    return f if @in_no_doc
     @spans_owed += 1
     f << span(:regexp)
     f << %Q[#{span(:regexp_delimiter)}#{CGI.escapeHTML(tok)}</span>]
   end
 
   def on_regexp_end(tok, f)
-    return f if @in_nodoc
+    return f if @in_no_doc
     f << %Q[#{span(:regexp_delimiter)}#{CGI.escapeHTML(tok)}</span>]
     finish_one_span(f)
     return f
   end
 
   def on_embexpr_beg(tok, f)
-    return f if @in_nodoc
+    return f if @in_no_doc
     spanit :embexpr, f, tok
     return f
   end  #  TODO  don't interrupt a span or nothing with a nodoc!
@@ -236,32 +236,32 @@ class RipDoc < Ripper::Filter
   #  TODO single-line mode for nodoc
   
   def on_ignored_nl(tok, f)
-    return f if @in_nodoc
+    return f if @in_no_doc
     on_nl nil, f
   end
 
   def on_nl(tok, f)
-    return f if @in_nodoc
+    return f if @in_no_doc
     
     finish_any_spans(f)  # TODO  this can't be needed...
     f << "\n"
   end
 
   def on_lbrace(tok, f)
-    return f if @in_nodoc
+    return f if @in_no_doc
     spanit '', f, '' # tok  CONSIDER  wonder who is actually emitting the { ??
     f << tok
   end
   
   def on_rbrace(tok, f)
-    return f if @in_nodoc
+    return f if @in_no_doc
     f << tok
     finish_one_span(f)  #  TODO  these things might wrap lines!
     return f
   end
 
   def on_symbeg(tok, f)
-    return f if @in_nodoc
+    return f if @in_no_doc
     on_default(:on_symbeg, tok, f)
     @symbol_begun = true
     return f
@@ -274,17 +274,17 @@ class RipDoc < Ripper::Filter
 #  TODO  syntax hilite the inner language of regices? how about XPathics?
 
   def on_tstring_content(tok, f)
-    return f if @in_nodoc
+    return f if @in_no_doc
     f << CGI.escapeHTML(tok)
   end
 
   def on_ivar(tok, f)
-    return f if @in_nodoc
+    return f if @in_no_doc
     f << %Q[#{span(:ivar)}#{CGI.escapeHTML(tok)}</span>]
   end
 
   attr_accessor :embdocs,
-                :in_nodoc,
+                :in_no_doc,
                 :owed_pre,
                 :spans_owed
 
@@ -300,26 +300,18 @@ class RipDoc < Ripper::Filter
               "\n"
 
   def RipDoc.compile(f)
-    buf = StringIO.new
-    parser = RipDoc.new(f)
-    parser.owed_pre = true
-    parser.parse(buf, f)
-    result = buf.string
-    parser.spans_owed.times{ result += '</span>' }
-
     return DOCTYPE +
             '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr"
             ><head>' + 
-           '</head><body><div id="content"><pre>' + result + 
-           "#{'</pre>' if parser.owed_pre }</div></body></html>"
-  end  #  TODO  call compile fragment already!
+           '</head><body>' + compile_fragment(f) + '</body></html>'
+  end
 
 #  TODO  do we still need the things that remove blank paragraphs and pres?
 
   def RipDoc.compile_fragment(f)
     buf = StringIO.new
     parser = RipDoc.new(f)
-    parser.in_nodoc = false
+    parser.in_no_doc = false
     parser.owed_pre = true
     parser.parse(buf, f)
     result = buf.string

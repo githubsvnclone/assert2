@@ -76,7 +76,8 @@ containing the assertion's variables and values:
 #!end_panel!
 =begin
 <code>deny{ <em>boolean expression</em> }</code>
-This shows <code>assert{}</code>'s nemesis, <code>deny{}</code>. Use it when your programs
+This shows <code>assert{}</code>'s arch-nemesis, 
+<code>deny{}</code>. Use it when your programs
 are too cheerful and happy, to bring them down:
 =end
   def test_deny_reflects_your_expression_in_its_fault_diagnostic
@@ -136,7 +137,6 @@ in blocks. They only call when their assertions fail fail:
 =end
   def test_add_diagnostic_lambda
     ark = ''
-    
     assert_flunk /^remarkable/ do
       
       assert do
@@ -146,7 +146,6 @@ in blocks. They only call when their assertions fail fail:
       end
       
     end
-    
   end
 #!end_panel!
 =begin
@@ -157,13 +156,11 @@ into your tests, all your legacy <code>assert()</code> calls will still perform
 correctly:
 =end
   def test_assert_classic
-    
     assert_flunk /(false. is not true)|(Failed assertion)/ do
       
       assert false
       
     end
-    
   end
 #!end_panel!
 =begin
@@ -272,6 +269,14 @@ Error Handling
       end
     end
   end
+  
+  def test_trapped_faults_decorate_with_stack_traces
+    assert_flunk __FILE__ do
+      assert{ 1 / 0 }
+    end
+  end
+  
+  #  TODO  improve "matcher" and "matchee" names in assert_raise_error
   
   def test_pass_args_to_detector
     @effect.captured_block_vars = 'x, y'

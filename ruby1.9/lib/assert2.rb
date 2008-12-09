@@ -711,7 +711,7 @@ module Test; module Unit; module Assertions
                 options = {}, block)
     options = { :args => [], :diagnose => lambda{''} }.merge(options)
      #  only capture the block_vars if there be args?
-    add_diagnostic diagnostic  #  TODO  make this first, not last
+    @__additional_diagnostics.unshift diagnostic
     __evaluate_diagnostics
     report = @__additional_diagnostics.uniq + __reflect_assertion(called, options, block, got)
     more_diagnostics = options.fetch(:diagnose, lambda{''}).call.to_s
@@ -725,9 +725,16 @@ module Test; module Unit; module Assertions
     begin
       got = block.call(*options[:args]) and return got
     rescue => got
+      add_exception got
     end    
 
     flunk diagnose(diagnostic, got, caller[1], options, block)
+  end
+
+  def add_exception(ex)
+    ex.backtrace[0..10].each do |line|
+      add_diagnostic '  ' + line
+    end
   end
 
   #  This assertion replaces:
@@ -747,6 +754,7 @@ module Test; module Unit; module Assertions
     begin
       got = block.call(*options[:args]) or return
     rescue => got
+      add_exception got
     end
   
     flunk diagnose(diagnostic, got, caller[0], options, block)
