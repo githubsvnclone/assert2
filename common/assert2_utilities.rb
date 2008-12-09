@@ -32,8 +32,7 @@ module Test; module Unit; module Assertions
       whatever = nil
     end
     
-    @__additional_diagnostics << whatever if whatever
-    @__additional_diagnostics << block if block
+    @__additional_diagnostics += [whatever, block]  # note .compact will take care of them if they don't exist
   end
 
   def __evaluate_diagnostics
@@ -41,8 +40,7 @@ module Test; module Unit; module Assertions
       @__additional_diagnostics[x] = d.call if d.respond_to? :call
     end
   end  #  TODO  pass the same args as blocks take
-      #  TODO  recover from errors?
-      #  TODO  add a stack trace when assert{} or deny{} rescue
+      #  TODO  add a lite stack trace when assert{} or deny{} rescue
 
   def assert(*args, &block)
   #  This assertion calls a block, and faults if it returns
