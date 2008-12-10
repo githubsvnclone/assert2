@@ -2,19 +2,20 @@ require 'test/unit'
 
 module Test; module Unit; module Assertions
 
-  def assert_raise_message(types, matcher, message = nil, &block)
+  def assert_raise_message(types, expected_message, message = nil, &block)
     args = [types].flatten + [message]
     exception = _assert_raise(*args, &block)
-    matchee = exception.message
+    exception_message = exception.message
     
-    if matcher.kind_of? String
-        #  if we cosmetically strip leading spaces from both the matcher and matchee,
-        #  then multi-line assert_flunk messages are easier on the eyes!
-      matchee.gsub!(/^\s+/, '')
-      matcher.gsub!(/^\s+/, '')
+    if expected_message.kind_of? String
+      exception_message.gsub!(/^\s+/, '')  #  if we cosmetically strip leading spaces from both the matcher and matchee,
+      expected_message.gsub!(/^\s+/, '')  #  then multi-line assert_flunk messages are easier on the eyes!
     end
-  #  TODO  document this as a reason not to use assert{} !    
-    assert(message){ matchee.match(matcher) }  #  TODO  better diagnostic, already!
+    
+    assert message do
+      exception_message.match(expected_message)
+    end
+    
     return exception.message
   end
 
