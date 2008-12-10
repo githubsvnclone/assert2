@@ -102,13 +102,10 @@ class RipDoc < Ripper::Filter
           end
         end
         
-        f << '</p>' if @owed_p  # TODO what is @owed_p giving us??
-#      f << '</div>'  #  TODO  merge the div and the span!
-#    f << '</span><pre>'
+        f << '</p>' if @owed_p
     f << '<pre>' unless @owed_pre
     @owed_pre = true
     @embdocs = []
-    #on_kw tok, f, 'embdoc_end'
     return f
   end
 
@@ -131,8 +128,11 @@ class RipDoc < Ripper::Filter
     string:             "background-color: #dfc;",
     string_delimiter:   "background-color: #cfa;",
     symbol:             "color: #066;",
-    tstring_content: 'background-image: url(images/tstring.png); background-position: right;'
+    tstring_content: 'background: url(images/tstring.png) right;',
+    tstring_internal: 'background: url(images/tstring.png) right;'
   }
+
+#  TODO  need a tregexp_content to distinguish them!
 
   def span(kode)
     if STYLES[kode.to_sym]
@@ -156,7 +156,7 @@ class RipDoc < Ripper::Filter
   end
 
   def on_comment(tok, f)
-    if tok.strip =~ /^\#\!end_panel\!/  #  TODO  enforce begining of linededness
+    if tok.strip =~ /^\#\!end_panel\!/
       f << '</pre>' if @owed_pre
       @owed_pre = false
       f << '</div>'
@@ -209,9 +209,8 @@ class RipDoc < Ripper::Filter
     f << %Q[#{span(:string_delimiter)}#{CGI.escapeHTML(tok)}</span>]
   end
 
-  def on_tstring_content(tok, f)
-#p ['con', tok]
-    return on_kw(tok, f, 'tstring_content')
+  def on_tstring_content(tok, f, style = 'tstring_content')
+    return on_kw(tok, f, style)
   end
 
 #  TODO  fix end-of-delim bug in // and %w() and %{} etc
@@ -220,11 +219,12 @@ class RipDoc < Ripper::Filter
     return f if @in_no_doc
     
     if tok.length > 1
-      on_tstring_content tok[0..-2], f
-      tok = tok[-1]
+      margin, content, tok = tok.scan(/^(\s*)(.*)(.)$/).first
+      f << margin if margin
+      on_tstring_content content, f, 'tstring_internal' if content
     end
     
-    f << %Q[#{span(:string_delimiter)}#{CGI.escapeHTML(tok)}</span>]
+    f << %Q[#{span(:string_delimiter)}#{CGI.escapeHTML(tok.to_s)}</span>]
     finish_one_span(f)
     return f
   end  #  TODO  report to ripper author the bug where on_tstring_end contains the whole string

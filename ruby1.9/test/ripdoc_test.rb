@@ -211,10 +211,10 @@ return
                        "    o\n" +
                        " lution'\n"
                       ) 
-return                      
+return
     assert{ xpath :span, :'.' =>    'rev'  }
-    assert{ xpath :span, :'.' => '    o'   }
-    assert{ xpath :span, :'.' => ' lution' }
+    assert{ xpath :span, :'.' =>     'o'   }
+    assert{ xpath :span, :'.' =>  'lution' }
   end
 
   def test_on_tstring_end
@@ -229,6 +229,19 @@ return
 
   end
 
+  def test_on_tstring_end_dangles
+    f = ''
+    @rip.spans_owed = 0
+    @rip.on_tstring_end("  bug'", f)
+   _assert_xml "<x>#{f}</x>"
+   
+    assert do
+      xpath("/x"        ).text == "  " and
+      xpath("/x/span[1]").text == "bug" and
+      xpath("/x/span[2]").text == "'"
+    end
+  end
+
   def test_on_tstring_end_bug
     f = ''
     @rip.spans_owed = 0
@@ -239,7 +252,6 @@ return
       xpath("/x/span[1]").text == "bug" and
       xpath("/x/span[2]").text == "'"
     end
-
   end
 
   def test_comments_feed_lines

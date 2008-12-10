@@ -3,7 +3,7 @@
 
 <code>assert{ 2.0 }</code> is the industry's most aggressive TDD 
 system&mdash;for Ruby, or any other language. Each time it fails, it analyzes the 
-reason and presents a complete report. This makes the cause very
+reason and presents a complete, formatted report. This makes the cause very
 easy to rapidly identify and fix. <code>assert{ 2.0 }</code> is like a 
 debugger's "inspect variable" system, and it makes your TDD cycle more
 effective.
