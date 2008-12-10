@@ -211,8 +211,10 @@ return
                        "    o\n" +
                        " lution'\n"
                       ) 
-#puts @xdoc.to_s TODO
-#    assert{ xpath :span, :'.' => 'x'  }
+return                      
+    assert{ xpath :span, :'.' =>    'rev'  }
+    assert{ xpath :span, :'.' => '    o'   }
+    assert{ xpath :span, :'.' => ' lution' }
   end
 
   def test_on_tstring_end

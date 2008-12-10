@@ -131,6 +131,8 @@ class RipDoc < Ripper::Filter
     string:             "background-color: #dfc;",
     string_delimiter:   "background-color: #cfa;",
     symbol:             "color: #066;",
+    tstring_content: 'background-image: url(images/tstring.png)'
+
   }
 
   def span(kode)
@@ -210,7 +212,7 @@ class RipDoc < Ripper::Filter
 
   def on_tstring_content(tok, f)
 #p ['con', tok]
-    return on_kw(tok, f, klass = 'tstring_content')
+    return on_kw(tok, f, 'tstring_content')
   end
 
 #  TODO  fix end-of-delim bug in // and %w() and %{} etc
@@ -333,7 +335,6 @@ if $0 == __FILE__
 end
 
 #~ :on_ident
-#~ :on_tstring_content
 #~ :on_const
 #~ :on_semicolon
 #~ :on_op
@@ -349,7 +350,7 @@ end
 #~ :on_qwords_beg
 #~ :on_words_sep
 
-def main
+def main  #  TODO  retire this!
   encoding = 'us-ascii'
   css = nil
   print_line_number = false
