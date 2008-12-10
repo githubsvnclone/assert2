@@ -222,8 +222,8 @@ return
    _assert_xml f
    
     assert do
-#      xpath("span[ contains(@style, 'background-color') ]").text == "'"
-      xpath("/span").text == "'"
+      xpath("/span[ contains(@style, 'background-color') ]").text == "'"
+      #xpath("/span").text == "'"
     end
 
   end
