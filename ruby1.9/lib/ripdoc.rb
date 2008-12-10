@@ -131,8 +131,7 @@ class RipDoc < Ripper::Filter
     string:             "background-color: #dfc;",
     string_delimiter:   "background-color: #cfa;",
     symbol:             "color: #066;",
-    tstring_content: 'background-image: url(images/tstring.png)'
-
+    tstring_content: 'background-image: url(images/tstring.png); background-position: right;'
   }
 
   def span(kode)
