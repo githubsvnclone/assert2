@@ -56,7 +56,7 @@ class RipDocSuite < Test::Unit::TestCase
   
   def test_embdocs_form_accordions_with_contents
     assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
-#   reveal
+   reveal
 return
     assert do
       xpath :div, :vertical_container do
@@ -231,10 +231,11 @@ return
     f = ''
     @rip.spans_owed = 0
     @rip.on_tstring_end("bug'", f)
-   _assert_xml f
+   _assert_xml "<x>#{f}</x>"
    
     assert do
-      xpath("/span[ contains(@style, 'background-color') ]").text == "bug'"
+      xpath("/x/span[1]").text == "bug" and
+      xpath("/x/span[2]").text == "'"
     end
 
   end

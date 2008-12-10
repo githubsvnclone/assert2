@@ -210,13 +210,19 @@ class RipDoc < Ripper::Filter
 
   def on_tstring_content(tok, f)
 #p ['con', tok]
-    return f if @in_no_doc
-    f << CGI.escapeHTML(tok)
+    return on_kw(tok, f, klass = 'tstring_content')
   end
 
+#  TODO  fix end-of-delim bug in // and %w() and %{} etc
+
   def on_tstring_end(tok, f)
-#p ['end', tok]
     return f if @in_no_doc
+    
+    if tok.length > 1
+      on_tstring_content tok[0..-2], f
+      tok = tok[-1]
+    end
+    
     f << %Q[#{span(:string_delimiter)}#{CGI.escapeHTML(tok)}</span>]
     finish_one_span(f)
     return f
