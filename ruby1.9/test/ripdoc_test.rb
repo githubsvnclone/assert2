@@ -215,7 +215,7 @@ return
 #    assert{ xpath :span, :'.' => 'x'  }
   end
 
-  def test_on_tstring_end_bug
+  def test_on_tstring_end
     f = ''
     @rip.spans_owed = 0
     @rip.on_tstring_end("'", f)
@@ -223,7 +223,18 @@ return
    
     assert do
       xpath("/span[ contains(@style, 'background-color') ]").text == "'"
-      #xpath("/span").text == "'"
+    end
+
+  end
+
+  def test_on_tstring_end_bug
+    f = ''
+    @rip.spans_owed = 0
+    @rip.on_tstring_end("bug'", f)
+   _assert_xml f
+   
+    assert do
+      xpath("/span[ contains(@style, 'background-color') ]").text == "bug'"
     end
 
   end
