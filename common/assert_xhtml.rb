@@ -49,15 +49,16 @@ module Test; module Unit; module Assertions
   def xpath(path, id = nil, options = {}, &block)
     former_xdoc = @xdoc
     path = AssertXPathArguments.new.to_xpath(path, id, options)
+    
     if node = @xdoc.find_first(path)
       def node.text
         find_first('text()').to_s
       end
     end
 
-    add_diagnostic :clear do
-      "xpath context:\n" + @xdoc.to_s +
-      "xpath: #{ path.inspect }\n"
+    add_diagnostic :clear do  #  TODO  the narrowest expression wins. Fix by pushing and popping diagnostic sets!
+         "xpath context:\n" + @xdoc.to_s +
+      "\nxpath: #{ path.inspect }\n"
     end
     
     assert_ nil, :args => [@xdoc = node], &block if node and block
