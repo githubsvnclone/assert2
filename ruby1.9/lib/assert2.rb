@@ -38,6 +38,7 @@ module Test; module Unit; module Assertions
     end
 
 #  TODO  ripdoc and RDoc should peacibly coexist
+#  TODO  express linefeeds in string results correctly
 
     class Nada; end
 

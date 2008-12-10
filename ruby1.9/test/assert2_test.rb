@@ -177,8 +177,6 @@ Error Handling
 #!end_panel!
 #!no_doc! ever again!
 
-#  TODO  also do no_doc
-
 #  TODO  demo test that explicates why we cannot allow the "money line" 
 #            to appear inside 
 
@@ -230,6 +228,8 @@ Error Handling
       end
     end
   end
+
+# TODO  document rubynode does not work for 1.8.7
 
   def test_assert_diagnose
     x = 42

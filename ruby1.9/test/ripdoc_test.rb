@@ -14,6 +14,8 @@ HomePath = RipDoc::HomePath
 #   TODO intersticial string mashers still don't color correctly
 #   TODO make function names bigger
 #  TODO  respect linefeeds in parsed source when reflecting
+#  TODO  get everything working in Ruby 1.8.6, excuse 1.8.7, and get all but xpath working in 1.9.1
+#  TODO  ahem. Abstract the f---ing xml library, and get working in 1.9.1 anyway!!
 
 class RipDocSuite < Test::Unit::TestCase
 
@@ -54,7 +56,7 @@ class RipDocSuite < Test::Unit::TestCase
   
   def test_embdocs_form_accordions_with_contents
     assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
-   reveal
+#   reveal
 return
     assert do
       xpath :div, :vertical_container do
@@ -176,7 +178,6 @@ return
                        "#!nodoc!\n" +
                        "y = 43\n"
                       ) 
-    assert_xhtml line
     assert{ xpath :span, :'.' => 'x'  }
     assert{ xpath :span, :'.' => '42' }
     denigh{ xpath :span, :'.' => '#!nodoc!' }
@@ -191,7 +192,6 @@ return
                        "#!doc!\n" +
                        "x = 42\n"
                      )
-    assert_xhtml line
     denigh{ xpath :span, :'.' => '#!nodoc!' }
     denigh{ xpath :span, :'.' => 'y'  }
     denigh{ xpath :span, :'.' => '43' }
@@ -204,6 +204,28 @@ return
     assert_rip 'hash = { :x => 42, 43 => 44 }'
     denigh{ xpath :'span[ contains( ., "{{" ) ]' }
     assert{ xpath :'span[ contains( ., "{"  ) ]' }
+  end
+
+  def test_rip_split_lines
+    line = assert_rip( "p 'rev\n" +
+                       "    o\n" +
+                       " lution'\n"
+                      ) 
+#puts @xdoc.to_s TODO
+#    assert{ xpath :span, :'.' => 'x'  }
+  end
+
+  def test_on_tstring_end_bug
+    f = ''
+    @rip.spans_owed = 0
+    @rip.on_tstring_end("'", f)
+   _assert_xml f
+   
+    assert do
+#      xpath("span[ contains(@style, 'background-color') ]").text == "'"
+      xpath("/span").text == "'"
+    end
+
   end
 
   def test_comments_feed_lines

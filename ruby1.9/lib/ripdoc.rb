@@ -166,6 +166,7 @@ class RipDoc < Ripper::Filter
 
     if !nodoc and !@in_no_doc
       spanit :comment, f, tok.rstrip
+      finish_one_span(f)
       on_nl nil, f
     end
     
@@ -200,18 +201,26 @@ class RipDoc < Ripper::Filter
   end
 
   def on_tstring_beg(tok, f)
+#p ['beg', tok]
     return f if @in_no_doc
     @spans_owed += 1
     f << span(:string)
     f << %Q[#{span(:string_delimiter)}#{CGI.escapeHTML(tok)}</span>]
   end
 
+  def on_tstring_content(tok, f)
+#p ['con', tok]
+    return f if @in_no_doc
+    f << CGI.escapeHTML(tok)
+  end
+
   def on_tstring_end(tok, f)
+#p ['end', tok]
     return f if @in_no_doc
     f << %Q[#{span(:string_delimiter)}#{CGI.escapeHTML(tok)}</span>]
     finish_one_span(f)
     return f
-  end
+  end  #  TODO  report to ripper author the bug where on_tstring_end contains the whole string
 
   def on_regexp_beg(tok, f)
     return f if @in_no_doc
@@ -242,8 +251,6 @@ class RipDoc < Ripper::Filter
 
   def on_nl(tok, f)
     return f if @in_no_doc
-    
-    finish_any_spans(f)  # TODO  this can't be needed...
     f << "\n"
   end
 
@@ -267,16 +274,7 @@ class RipDoc < Ripper::Filter
     return f
   end
 
-  def finish_any_spans(f)
-    @spans_owed.times{ finish_one_span(f) } 
-  end
-
 #  TODO  syntax hilite the inner language of regices? how about XPathics?
-
-  def on_tstring_content(tok, f)
-    return f if @in_no_doc
-    f << CGI.escapeHTML(tok)
-  end
 
   def on_ivar(tok, f)
     return f if @in_no_doc
@@ -292,7 +290,6 @@ class RipDoc < Ripper::Filter
     @spans_owed = 0
     @symbol_begun = false
     super(buf)
-    #finish_any_spans(f)
   end
 
   DOCTYPE = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
