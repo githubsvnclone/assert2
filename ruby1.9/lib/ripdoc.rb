@@ -125,7 +125,7 @@ class RipDoc < Ripper::Filter
     kw:                 "color: purple;",
     regexp_delimiter:   "background-color: #faf;",
     regexp:             "background-color: #fcf;",
-    string:             "background-color: #dfc;",
+    string:             "background-color: white;", #dfc
     string_delimiter:   "background-color: #cfa;",
     symbol:             "color: #066;",
     tstring_content: 'background: url(images/tstring.png) right;',
@@ -171,7 +171,7 @@ class RipDoc < Ripper::Filter
       on_nl nil, f
     end
     
-    @in_no_doc ||= nodoc # TODO  this will obscure until the next comment - fix
+    @in_no_doc ||= nodoc
     @in_no_doc = nil if tok.strip =~ /^\#\!doc\!/
     return f
   end
@@ -181,16 +181,16 @@ class RipDoc < Ripper::Filter
 
   def on_default(event, tok, f)
     return f if @in_no_doc
+
     if @symbol_begun
       @symbol_begun = false
       f << %Q[#{span(:symbol)}#{CGI.escapeHTML(tok)}</span>]
     elsif tok =~ /^[[:punct:]]+$/
       f << %Q[#{span(:operator)}#{CGI.escapeHTML(tok)}</span>]
     else
-       #p tok, event
       on_kw tok, f, event.to_s.sub(/^on_/, '')
     end
-    
+
     return f
   end
 
@@ -202,7 +202,6 @@ class RipDoc < Ripper::Filter
   end
 
   def on_tstring_beg(tok, f)
-#p ['beg', tok]
     return f if @in_no_doc
     @spans_owed += 1
     f << span(:string)
@@ -210,7 +209,16 @@ class RipDoc < Ripper::Filter
   end
 
   def on_tstring_content(tok, f, style = 'tstring_content')
-    return on_kw(tok, f, style)
+    tok.split(/\n/).each_with_index do |sub_tok, index|
+      if index == 0
+        on_kw(sub_tok, f, style)
+      else
+        space, sub_tok = sub_tok.scan(/(\s*)(.*)/).first
+        f << space
+        on_kw(sub_tok, f, style)
+      end
+    end
+    return f
   end
 
 #  TODO  fix end-of-delim bug in // and %w() and %{} etc
@@ -282,6 +290,7 @@ class RipDoc < Ripper::Filter
   end
 
 #  TODO  syntax hilite the inner language of regices? how about XPathics?
+#   escapes in strings??
 
   def on_ivar(tok, f)
     return f if @in_no_doc

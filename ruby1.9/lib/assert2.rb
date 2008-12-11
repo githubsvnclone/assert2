@@ -2,7 +2,10 @@ require 'ripper'  #   note we only work with Ruby >= 1.9 !
 require 'pp'
   # note there's more requires down there --V
 
-#  TODO  feel the need for serious ncursage!
+#  TODO  feel the need for serious ncursage, like ZenTest autotest does it
+#  TODO  add :verbose => option to assert{}
+#  TODO  ripdoc and RDoc should peacibly coexist
+#  TODO  express linefeeds in string results correctly
 
 module Test; module Unit; module Assertions
 
@@ -36,9 +39,6 @@ module Test; module Unit; module Assertions
       
       return exp.last
     end
-
-#  TODO  ripdoc and RDoc should peacibly coexist
-#  TODO  express linefeeds in string results correctly
 
     class Nada; end
 

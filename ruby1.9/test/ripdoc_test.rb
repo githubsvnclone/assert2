@@ -211,7 +211,6 @@ return
                        "    o\n" +
                        " lution'\n"
                       ) 
-return
     assert{ xpath :span, :'.' =>    'rev'  }
     assert{ xpath :span, :'.' =>     'o'   }
     assert{ xpath :span, :'.' =>  'lution' }
@@ -259,8 +258,6 @@ return
                         x = 42')
     assert{ lines =~ /comment<\/span>\n/ }
   end
-
-#  TODO  add :verbose => option to assert{}
 
   def test_put_every_thing_into_a_pre_block
     lines = assert_rip('x = 42')

@@ -177,8 +177,14 @@ Error Handling
 #!end_panel!
 #!no_doc! ever again!
 
+#  TODO  demonstrate writing tolerance() as an assertion motivator - emphasize DSL
+#  TODO  do %w() with dark green on the delims, light green on the strings, and white on the gaps
+#  TODO  the panels ought to stay open until closed
+#  TODO  system to embolden a word in the documented panel!
 #  TODO  demo test that explicates why we cannot allow the "money line" 
-#            to appear inside 
+#            to appear inside assert{}
+# TODO  document rubynode does not work for 1.8.7
+
 
   def test_consume_diagnostic
     add_diagnostic 'silly Rabbi!'
@@ -197,14 +203,6 @@ Error Handling
         end 
     deny('always consume diagnostics'){ x =~ /silly Rabbi/ }
   end
-
-#  TODO  demonstrate writing tolerance() as an assertion motivator - emphasize DSL
-#  TODO  add_diagnostic must run inside the assertion. That makes tolerance() useful _outside_ it!
-#  TODO  decorate leading spaces in broken lines with attenuated blended color
-#  TODO  the background color on multi-line stringoids is incorrect
-#  TODO  do %w() with dark green on the delims, light green on the strings, and white on the gaps
-#  TODO  the panels ought to stay open until closed
-#  TODO  system to embolden a word in the documented panel!
 
   def test_assert_args
     assert 'the irony /is/ lost on us!', 
@@ -228,8 +226,6 @@ Error Handling
       end
     end
   end
-
-# TODO  document rubynode does not work for 1.8.7
 
   def test_assert_diagnose
     x = 42
@@ -275,8 +271,6 @@ Error Handling
       assert{ 1 / 0 }
     end
   end
-  
-  #  TODO  improve "matcher" and "matchee" names in assert_raise_error
   
   def test_pass_args_to_detector
     @effect.captured_block_vars = 'x, y'
