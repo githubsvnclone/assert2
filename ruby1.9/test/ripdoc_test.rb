@@ -276,11 +276,10 @@ return  #  TODO  nested xpath failures should obey their inner context...
   def test_string_patterns
     assert_rip('foo "bar"')
     denigh{ xpath :'span[ @class = "string" ]' }
-return # TODO
-    assert do # and 
-      xpath :"span[ #{style(:string)} and . = 'bar'  ]" do
-        xpath "span[ #{style(:string_delimiter)} and . = '\"' ]"
-      end
+
+    assert do
+      xpath :"span[ #{style(:string)} and contains(., 'bar') ]" and
+      xpath :"span[ #{style(:string_delimiter)} and . = '\"' ]"
     end
   end
 
