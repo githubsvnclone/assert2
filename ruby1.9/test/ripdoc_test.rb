@@ -57,11 +57,11 @@ class RipDocSuite < Test::Unit::TestCase
   def test_embdocs_form_accordions_with_contents
     assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
    reveal
-return
+return  #  TODO  nested xpath failures should obey their inner context...
     assert do
       xpath :div, :vertical_container do
-        xpath(:'h1/following-sibling::div[ @class = "accordion_content" ]') # .text =~ 
-    #              /complete report/
+        xpath(:'h1/following-sibling::div[ @class = "accordion_content" ]/p').text =~ 
+                  /complete report/
       end
     end
     deny{ @sauce.match('<p><p>') }
