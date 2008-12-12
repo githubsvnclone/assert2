@@ -79,7 +79,7 @@ return
   def test_on_embdoc_beg
     assert{ @rip.embdocs.nil? }
     @rip.on_embdoc_beg('=begin', @f)
-   # TODO assert{ @output =~ /^\<\/pre>/ }
+    assert{ @output == '' }
     assert{ @rip.embdocs == [] }
   end
 
