@@ -32,25 +32,46 @@ Use this method to push well-formed XHTML into the assertion system. Subsequent
 <code>xpath()</code> calls will interrogate this XHTML, using XPath notation:
 =end
   def test_assert_xhtml
+    
     assert_xhtml '<html><body><div id="forty_two">yo</div></body></html>'
+    
     assert{ xpath('//div[ @id = "forty_two" ]').text == 'yo' }
   end
 #!end_panel!
 =begin
-<code>xpath( <em>path</em> )</code>
+<code>xpath( '<em>path</em>' )</code>
 
 =end
   def test_assert_xpath
     assert_xhtml '<html><body><div id="forty_two">yo</div></body></html>'
+    
     assert{ xpath('descendant-or-self::div[ @id = "forty_two" ]').text == 'yo' }
+    assert{ xpath('//div[ @id = "forty_two" ]').text == 'yo' }
     assert{ xpath(:'div[ @id = "forty_two" ]').text == 'yo' }
     assert{ xpath(:div, :forty_two).text == 'yo' }
   end
+#!end_panel!
+=begin
+<code>xpath( <em>DSL</em> )</code>
+You can write simple XPath queries using Ruby's familiar hash notation. Query
+a node's string contents with <code>:'.'</code>:
+=end
+  def test_xpath_dsl
+    assert_xhtml 'yo <a href="http://antwrp.gsfc.nasa.gov/apod/">apod</a> dude'
+    
+    assert do
+      xpath :a, 
+            :href => 'http://antwrp.gsfc.nasa.gov/apod/',
+            :'.' => 'apod'
+    end
+  end  #  TODO  take off the : use .? ?
 #!no_doc!
   def test_xpath_converts_symbols_to_ids
     _assert_xml '<a id="b"/>'
     assert{ xpath(:a, :b) == @xdoc.find_first('/a[ @id = "b" ]') }
   end
+
+#  TODO  deal with horizontal overflow in panels!
 
   def test_xpath_converts_hashes_into_predicates
     _assert_xml '<a class="b"/>'
