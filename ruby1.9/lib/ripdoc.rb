@@ -358,34 +358,6 @@ end
 #~ :on_qwords_beg
 #~ :on_words_sep
 
-def main  #  TODO  retire this!
-  encoding = 'us-ascii'
-  css = nil
-  print_line_number = false
-  parser = OptionParser.new
-  parser.banner = "Usage: #{File.basename($0)} [-l] [<file>...]"
-  parser.on('--encoding=NAME', 'Character encoding [us-ascii].') {|name|
-    encoding = name
-  }
-  parser.on('--css=URL', 'Set a link to CSS.') {|url|
-    css = url
-  }
-  parser.on('-l', '--line-number', 'Show line number.') {
-    print_line_number = true
-  }
-  parser.on('--help', 'Prints this message and quit.') {
-    puts parser.help
-    exit 0
-  }
-  begin
-    parser.parse!
-  rescue OptionParser::ParseError => err
-    $stderr.puts err
-    $stderr.puts parser.help
-    exit 1
-  end
-  puts Ripdoc(ARGF, encoding, css, print_line_number)
-end
 
 class ERB
   attr_accessor :lineno
@@ -396,10 +368,10 @@ class ERB
   end
 end
 
-def Ripdoc(f, encoding, css, print_line_number)
-  erb = ERB.new(TEMPLATE, nil, '>')
-  erb.filename = __FILE__
-  erb.lineno = TEMPLATE_LINE
-  erb.result(binding())
-end
+#~ def Ripdoc(f, encoding, css, print_line_number)
+  #~ erb = ERB.new(TEMPLATE, nil, '>')
+  #~ erb.filename = __FILE__
+  #~ erb.lineno = TEMPLATE_LINE
+  #~ erb.result(binding())
+#~ end
 
