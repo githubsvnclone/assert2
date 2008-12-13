@@ -1,5 +1,9 @@
 
-task :test_assert2 do
+task :test_assertion_ripper do
+  sh 'ruby1.9 test/assertion_ripper_suite.rb'
+end
+
+task :test_assert2 => :test_assertion_ripper do
   sh 'ruby1.9 test/assert2_test.rb'
 end
 
