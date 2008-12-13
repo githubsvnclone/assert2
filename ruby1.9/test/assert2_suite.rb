@@ -185,5 +185,91 @@ Error Handling
 #            to appear inside assert{}
 # TODO  document rubynode does not work for 1.8.7
 
+  def test_consume_diagnostic
+    add_diagnostic 'silly Rabbi!'
+    assert{ true }
+
+    x = assert_flunk /true/ do
+      denigh{ true }
+    end
+
+    deny('consume diagnostics at fault time'){ x =~ /silly Rabbi/ }
+    add_diagnostic 'silly Rabbi'
+    denigh{ false }
+
+    x = assert_flunk /true/ do
+          denigh{ true }
+        end 
+    deny('always consume diagnostics'){ x =~ /silly Rabbi/ }
+  end
+
+  def test_assert_args
+    assert 'the irony /is/ lost on us!', 
+              :args => [42] do |x|
+      assert{ x == 42 }
+    end
+  end
+  
+  def test_assert_args_flunk
+    assert_flunk /x.*--> 42/ do
+      assert nil, :args => [42] do |x|
+        x == 43
+      end
+    end
+  end
+  
+  def test_deny_args_flunk
+    assert_flunk /x.*--> 42/ do
+      deny nil, :args => [42] do |x|
+        x == 42
+      end
+    end
+  end
+
+  def test_assert_diagnose
+    x = 42
+
+    assert nil, :diagnose => 
+        lambda{ flunk 'this should never call' } do
+      x == 42
+    end
+  end
+  
+  def test_assert_diagose_flunk
+    expected = 42
+    x = 43
+    
+    assert_flunk /you ain.t #{expected}/ do
+      assert nil, :diagnose => lambda{ "you ain't #{expected}" } do
+        x == expected
+      end
+    end
+  end
+  
+  def test_deny_diagnose
+    x = 42
+    deny nil, :diagnose => 
+        lambda{ flunk 'this should never call' } do
+      x == 43
+    end
+  end
+  
+  def test_deny_diagose_flunk
+    expected = 42
+    x = 42
+    
+    assert_flunk /you ain.t #{expected}/ do
+      deny nil, :diagnose => lambda{ "you ain't #{expected}" } do
+        x == expected
+      end
+    end
+  end
+  
+  def test_trapped_faults_decorate_with_stack_traces
+    assert_flunk __FILE__ do
+      assert{ 1 / 0 }
+    end
+  end
+  
 end
 
