@@ -131,9 +131,9 @@ return  #  TODO  nested xpath failures should obey their inner context...
     assert_xhtml "<html><body>#{ @output }</body></html>"
   end
 
-  def _test_embdocs_link_out # TODO
-    assert_embdoc('yo <a href="http://antwrp.gsfc.nasa.gov/apod/astropix.html">apod</a> dude')
-    assert{ xpath :a, :href => 'http://antwrp.gsfc.nasa.gov/apod/astropix.html' }
+  def test_embdocs_link_out
+    assert_embdoc(['yo <a href="http://antwrp.gsfc.nasa.gov/apod/">apod</a> dude'])
+    assert{ xpath :a, :href => 'http://antwrp.gsfc.nasa.gov/apod/' }
   end
 
   def test_re_html_ize_embdoc_lines

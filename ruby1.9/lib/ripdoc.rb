@@ -22,8 +22,14 @@ class Ripdoc < Ripper::Filter
     return xhtml
   end
 
+  def dequote(attributes)
+    return attributes.gsub('&quot;', '"')
+  end  #  TODO  complex '"? if we can't it might be a good thing...
+
   def enline(line)
-    return line.gsub( '&lt;code&gt;', '<code style="font-weight: bolder;">').
+    return line.gsub( /&lt;a(.*?)&gt;/){ "<a #{dequote($1)}>" }.
+                gsub('&lt;/a&gt;', '</a>').
+                gsub( '&lt;code&gt;', '<code style="font-weight: bolder;">').
                 gsub('&lt;/code&gt;', '</code>').
                 gsub( '&lt;em&gt;', '<em>').
                 gsub('&lt;/em&gt;', '</em>').
