@@ -8,6 +8,7 @@ require 'optparse'
 require 'pathname'
 
 # TODO  do we still need the pre hack for the line height?
+# TODO  don't generate the <a name> from the banner - declare it on the =begin tag
 
 class Ripdoc < Ripper::Filter
   HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path
@@ -33,6 +34,10 @@ class Ripdoc < Ripper::Filter
                 gsub('&lt;/code&gt;', '</code>').
                 gsub( '&lt;em&gt;', '<em>').
                 gsub('&lt;/em&gt;', '</em>').
+                gsub( '&lt;li&gt;', '<li>').
+                gsub('&lt;/li&gt;', '</li>').
+                gsub( '&lt;ul&gt;', '<ul>').
+                gsub('&lt;/ul&gt;', '</ul>').
                 gsub('&amp;mdash;', '&mdash;')
   end
 

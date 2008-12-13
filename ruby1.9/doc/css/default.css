@@ -13,6 +13,7 @@ body {
 /*	TODO  put the test button in the corner */
 	height: 100%;
 	font-family:Times,serif;
+	list-style-type: disc; /* TODO why are these dots putting up a fight??? */
 }
 
 h1 {
@@ -134,14 +135,6 @@ h1 {
 		color: #ffffff;
 		margin: 5px 0 15px 0;
 	}
-	
-
-a,
-a:link,
-a:visited {
-	color: #09f;
-}
-
 
 h2 {
 	text-align: left;
@@ -156,7 +149,6 @@ h2 {
 		font-size: 70%;
 		color: #FF9;
 	}
-	
 
 .notice {
 	border: 3px solid #ffffbe;
@@ -166,15 +158,8 @@ h2 {
 	margin: 0 0 20px 0;
 }
 	
-	.notice p, 
-	.notice p a, 
-	li a {
-		color: #ffffff;
-		text-decoration: none;
-	}
-
 .navigation { 
-	list-style: none; 
+	/*list-style: none; */
 	margin: 10px 0 30px 0; 
 	width: 200px;
 }
@@ -219,7 +204,15 @@ a.page-options:focus {
 	background: #09F;
 }		
 
-.page-footer a, a:link, a:visited {
+.page-footer a {
+		color: white;
+}
+
+.page-footer a:link {
+		color: white;
+}
+
+.page-footer a:visited {
 		color: white;
 }
 
