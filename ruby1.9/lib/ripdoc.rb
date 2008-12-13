@@ -84,10 +84,16 @@ class Ripdoc < Ripper::Filter
     return f
   end
   
+  def name_toggle(banner)
+    banner = banner.scan(/[[:alnum:]]/).join
+    return "<a name='#{banner}'/>"
+  end
+  
   def end_panel(f)
 #    f << span(:embdoc)
       if banner = @embdocs.shift  #  accordion_toggle_active
         f << '<h1 class="accordion_toggle">'
+        f << name_toggle(banner)
         f << enline(CGI.escapeHTML(banner))
         f << '</h1>'
       end
