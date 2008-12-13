@@ -26,7 +26,7 @@ class RipDocSuite < Test::Unit::TestCase
   end
 
   def _test_generate_accordion_with_test_file
-    assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
+    assert_xhtml RipDoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
     assert{ xpath('/html/head/title').text == 'assert{ 2.1 }' }
     assert{ xpath(:span, style: 'display: none;').text.index('=begin') }
    
@@ -43,7 +43,7 @@ class RipDocSuite < Test::Unit::TestCase
 #  TODO  pay for Staff Benda Bilili  ALBUM: Très Très Fort (Promo Sampler) !
 
   def _test_a_ripped_doc_contains_no_empty_pre_tags
-    assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
+    assert_xhtml RipDoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
     
 #    xpath :div, :content do
 #      deny{ xpath(:'pre').text == "\n" }
@@ -55,7 +55,7 @@ class RipDocSuite < Test::Unit::TestCase
   #  TODO  better keyword color
   
   def test_embdocs_form_accordions_with_contents
-    assert_xhtml RipDoc.generate(HomePath + 'test/assert2_test.rb', 'assert{ 2.1 }')
+    assert_xhtml RipDoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
    reveal
 return  #  TODO  nested xpath failures should obey their inner context...
     assert do

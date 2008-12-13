@@ -4,15 +4,15 @@ task :test_assertion_ripper do
 end
 
 task :test_assert2 => :test_assertion_ripper do
-  sh 'ruby1.9 test/assert2_test.rb'
+  sh 'ruby1.9 test/assert2_suite.rb'
 end
 
 task :test_ripdoc => :test_assert2 do
-  sh 'ruby1.9 test/ripdoc_test.rb'
+  sh 'ruby1.9 test/ripdoc_suite.rb'
 end
 
 task :test_assert_xhtml => :test_ripdoc do
-  sh 'ruby1.9 test/assert_xhtml_test.rb'
+  sh 'ruby1.9 test/assert_xhtml_suite.rb'
 end
 
 task :test => :test_assert_xhtml

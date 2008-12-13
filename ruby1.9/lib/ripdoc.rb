@@ -338,7 +338,7 @@ class RipDoc < Ripper::Filter
 end
 
 if $0 == __FILE__
-  system 'ruby ../test/ripdoc_test.rb'
+  system 'ruby ../test/ripdoc_suite.rb'
 #  main
 end
 

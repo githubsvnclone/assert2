@@ -74,8 +74,8 @@ end; end; end
 
 require File.dirname(__FILE__) + '/common/assert2_utilities'
 
-require '../test/assert2_test.rb' if $0 == __FILE__ and File.exist?('../test/assert2_test.rb')
-#require 'ripdoc_test.rb' if $0 == __FILE__ and File.exist?('ripdoc_test.rb')
+require '../test/assert2_suite.rb' if $0 == __FILE__ and File.exist?('../test/assert2_suite.rb')
+#require 'ripdoc_suite.rb' if $0 == __FILE__ and File.exist?('ripdoc_suite.rb')
 
 class File
   def self.write(filename, contents)
