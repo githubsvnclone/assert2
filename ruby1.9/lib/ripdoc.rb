@@ -358,7 +358,6 @@ end
 #~ :on_qwords_beg
 #~ :on_words_sep
 
-
 class ERB
   attr_accessor :lineno
 
@@ -368,10 +367,4 @@ class ERB
   end
 end
 
-#~ def Ripdoc(f, encoding, css, print_line_number)
-  #~ erb = ERB.new(TEMPLATE, nil, '>')
-  #~ erb.filename = __FILE__
-  #~ erb.lineno = TEMPLATE_LINE
-  #~ erb.result(binding())
-#~ end
 
