@@ -1,8 +1,8 @@
 =begin
 <code>xpath{}</code> tests XML and XHTML
 
-<code>xpath{}</code> works closely with <code>assert{ 2.0 }</code> 
-provide elaborate, detailed, formatted reports when your XHTML code has
+<code>xpath{}</code> works closely with <code>assert{ 2.0 & 2.1 }</code> 
+to provide elaborate, detailed, formatted reports when your XHTML code has
 gone astray.
 =end
 #!end_panel!
@@ -15,8 +15,7 @@ require 'common/assert_flunk'
 require 'assert_xhtml'
 require 'pathname'
 
-  HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path
-
+  HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path #  TODO  unify
 
 class AssertXhtmlSuite < Test::Unit::TestCase
 
