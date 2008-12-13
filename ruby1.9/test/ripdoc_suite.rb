@@ -4,7 +4,7 @@ require 'assert2'
 require 'ripdoc'
 require 'assert_xhtml'
 
-HomePath = RipDoc::HomePath
+HomePath = Ripdoc::HomePath
 
 #  TODO  at scroll time keep the target panel in the viewport!
 #  TODO  help stickmanlabs get a macbook pro (or help talk him out of it;)
@@ -17,16 +17,16 @@ HomePath = RipDoc::HomePath
 #  TODO  get everything working in Ruby 1.8.6, excuse 1.8.7, and get all but xpath working in 1.9.1
 #  TODO  ahem. Abstract the f---ing xml library, and get working in 1.9.1 anyway!!
 
-class RipDocSuite < Test::Unit::TestCase
+class RipdocSuite < Test::Unit::TestCase
 
   def setup
-    @rip = RipDoc.new('')
+    @rip = Ripdoc.new('')
     @output = ''
     @f = StringIO.new(@output)
   end
 
   def _test_generate_accordion_with_test_file
-    assert_xhtml RipDoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
+    assert_xhtml Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
     assert{ xpath('/html/head/title').text == 'assert{ 2.1 }' }
     assert{ xpath(:span, style: 'display: none;').text.index('=begin') }
    
@@ -43,7 +43,7 @@ class RipDocSuite < Test::Unit::TestCase
 #  TODO  pay for Staff Benda Bilili  ALBUM: Très Très Fort (Promo Sampler) !
 
   def _test_a_ripped_doc_contains_no_empty_pre_tags
-    assert_xhtml RipDoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
+    assert_xhtml Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
     
 #    xpath :div, :content do
 #      deny{ xpath(:'pre').text == "\n" }
@@ -55,7 +55,7 @@ class RipDocSuite < Test::Unit::TestCase
   #  TODO  better keyword color
   
   def test_embdocs_form_accordions_with_contents
-    assert_xhtml RipDoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
+    assert_xhtml Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
    reveal
 return  #  TODO  nested xpath failures should obey their inner context...
     assert do
@@ -158,11 +158,11 @@ return  #  TODO  nested xpath failures should obey their inner context...
   end
 
   def assert_rip(line)
-    assert_xhtml RipDoc.compile_fragment(line)
+    assert_xhtml Ripdoc.compile_fragment(line)
   end
   
   def assert_rip_page(line)
-    @sauce = RipDoc.compile(line)
+    @sauce = Ripdoc.compile(line)
     line = @sauce
     assert_xhtml line
     return line
@@ -270,7 +270,7 @@ return  #  TODO  nested xpath failures should obey their inner context...
   end
 
   def style(kode)
-    "@style = '#{RipDoc::STYLES[kode]}'"
+    "@style = '#{Ripdoc::STYLES[kode]}'"
   end
   
   def test_string_patterns

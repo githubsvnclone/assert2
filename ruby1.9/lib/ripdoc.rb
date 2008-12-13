@@ -9,7 +9,7 @@ require 'pathname'
 
 # TODO  do we still need the pre hack for the line height?
 
-class RipDoc < Ripper::Filter
+class Ripdoc < Ripper::Filter
   HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path
 
   def self.generate(filename, title)
@@ -312,7 +312,7 @@ class RipDoc < Ripper::Filter
               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' +
               "\n"
 
-  def RipDoc.compile(f)
+  def Ripdoc.compile(f)
     return DOCTYPE +
             '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr"
             ><head>' + 
@@ -321,9 +321,9 @@ class RipDoc < Ripper::Filter
 
 #  TODO  do we still need the things that remove blank paragraphs and pres?
 
-  def RipDoc.compile_fragment(f)
+  def Ripdoc.compile_fragment(f)
     buf = StringIO.new
-    parser = RipDoc.new(f)
+    parser = Ripdoc.new(f)
     parser.in_no_doc = false
     parser.owed_pre = true
     parser.parse(buf, f)
@@ -384,7 +384,7 @@ def main  #  TODO  retire this!
     $stderr.puts parser.help
     exit 1
   end
-  puts RipDoc(ARGF, encoding, css, print_line_number)
+  puts Ripdoc(ARGF, encoding, css, print_line_number)
 end
 
 class ERB
@@ -396,7 +396,7 @@ class ERB
   end
 end
 
-def RipDoc(f, encoding, css, print_line_number)
+def Ripdoc(f, encoding, css, print_line_number)
   erb = ERB.new(TEMPLATE, nil, '>')
   erb.filename = __FILE__
   erb.lineno = TEMPLATE_LINE
