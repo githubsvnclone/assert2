@@ -1,18 +1,53 @@
+=begin
+<code>xpath{}</code> tests XML and XHTML
+
+<code>xpath{}</code> works closely with <code>assert{ 2.0 }</code> 
+provide elaborate, detailed, formatted reports when your XHTML code has
+gone astray.
+=end
+#!end_panel!
+#!no_doc!
 require 'test/unit'
 $:.unshift 'lib'; $:.unshift '../lib'
 require 'assert2'
+require 'ripdoc'
 require 'common/assert_flunk'
 require 'assert_xhtml'
+require 'pathname'
+
+  HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path
+
 
 class AssertXhtmlSuite < Test::Unit::TestCase
 
+  def test_document_self
+      #  TODO  use the title argument mebbe??
+    doc = Ripdoc.generate(HomePath + 'test/assert_xhtml_suite.rb', 'assert{ xpath }')
+    File.write(HomePath + 'doc/assert_xhtml.html', doc)
+    reveal HomePath + 'doc/assert_xhtml.html'
+  end
+#!doc!
+=begin
+<code>assert_xhtml( <em>xhtml</em> )</code>
+Use this method to push well-formed XHTML into the assertion system. Subsequent
+<code>xpath()</code> calls will interrogate this XHTML, using XPath notation:
+=end
   def test_assert_xhtml
+    assert_xhtml '<html><body><div id="forty_two">yo</div></body></html>'
+    assert{ xpath('//div[ @id = "forty_two" ]').text == 'yo' }
+  end
+#!end_panel!
+=begin
+<code>xpath( <em>path</em> )</code>
+
+=end
+  def test_assert_xpath
     assert_xhtml '<html><body><div id="forty_two">yo</div></body></html>'
     assert{ xpath('descendant-or-self::div[ @id = "forty_two" ]').text == 'yo' }
     assert{ xpath(:'div[ @id = "forty_two" ]').text == 'yo' }
     assert{ xpath(:div, :forty_two).text == 'yo' }
   end
-  
+#!no_doc!
   def test_xpath_converts_symbols_to_ids
     _assert_xml '<a id="b"/>'
     assert{ xpath(:a, :b) == @xdoc.find_first('/a[ @id = "b" ]') }
@@ -79,10 +114,11 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     end
   end
 
-  def reveal(xhtml = @sauce || @output)
-    File.write('yo.html', xhtml)
+  def reveal(filename)
+    # File.write('yo.html', xhtml)
 #    system 'konqueror yo.html &'
-    system '"C:/Program Files/Mozilla Firefox/firefox.exe" yo.html &'
+    path = filename.relative_path_from(Pathname.new(Dir.pwd)).to_s.inspect
+    system '"C:/Program Files/Mozilla Firefox/firefox.exe" ' + path + ' &'
   end
   
 end

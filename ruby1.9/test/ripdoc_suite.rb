@@ -16,6 +16,9 @@ HomePath = Ripdoc::HomePath
 #  TODO  respect linefeeds in parsed source when reflecting
 #  TODO  get everything working in Ruby 1.8.6, excuse 1.8.7, and get all but xpath working in 1.9.1
 #  TODO  ahem. Abstract the f---ing xml library, and get working in 1.9.1 anyway!!
+#  TODO  permit internal links in shorthand
+#  TODO  permit external links as raw HTML
+#  TODO  open a tab if its <a name> appears in window.location.href
 
 class RipdocSuite < Test::Unit::TestCase
 
