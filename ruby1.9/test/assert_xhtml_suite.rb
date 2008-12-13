@@ -1,7 +1,7 @@
 =begin
 <code>xpath{}</code> tests XML and XHTML
 
-<code>xpath{}</code> works closely with <code>assert{ 2.0 & 2.1 }</code> 
+<code>xpath{}</code> works closely with <code>assert{ 2.0</code> & <code>2.1 }</code> 
 to provide elaborate, detailed, formatted reports when your XHTML code has
 gone astray.
 =end
