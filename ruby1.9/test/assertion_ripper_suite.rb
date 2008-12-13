@@ -41,22 +41,9 @@ class Assert2Suite < Test::Unit::TestCase
     assert_reflect "daZone('string \"nested\"')", "daZone(\"string \\\"nested\\\"\")"
   end
     
-  def daZone( whatever );  
-    add_diagnostic 'daybreak on the land'
-    return nil
+  def daZone( whatever )
   end
-
-  def test_daZone
-    assert_flunk /daybreak on the land.*nested/m do
-      assert{ daZone("string \"nested\"") }
-    end
-
-    message = assert_flunk /nested/ do
-                assert{ daZone('string "nested"') }
-              end
-    deny{ message =~ /SyntaxError/ }
-  end
-
+  
   def test_format_assertion_result
     value = "if the thunder don't catch ya\nthen the lighting will"
     sample = @effect.format_assertion_result('mission accomplished', value)

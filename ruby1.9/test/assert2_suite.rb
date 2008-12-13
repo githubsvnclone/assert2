@@ -271,5 +271,21 @@ Error Handling
     end
   end
   
+  def daZone( whatever )
+    add_diagnostic 'daybreak on the land'
+    return nil
+  end
+
+  def test_daZone
+    assert_flunk /daybreak on the land.*nested/m do
+      assert{ daZone("string \"nested\"") }
+    end
+
+    message = assert_flunk /nested/ do
+                assert{ daZone('string "nested"') }
+              end
+    deny{ message =~ /SyntaxError/ }
+  end
+
 end
 
