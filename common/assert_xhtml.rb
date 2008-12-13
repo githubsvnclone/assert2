@@ -74,4 +74,4 @@ module Test; module Unit; module Assertions
   
 end; end; end
 
-require '../test/assert_xhtml_test.rb' if $0 == __FILE__ and File.exist?('../test/assert_xhtml_test.rb')
+require '../test/assert_xhtml_suite.rb' if $0 == __FILE__ and File.exist?('../test/assert_xhtml_suite.rb')
