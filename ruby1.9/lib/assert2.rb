@@ -72,7 +72,7 @@ module Test; module Unit; module Assertions
     @__additional_diagnostics = []
     
     begin
-      got = block.call(*options[:args]) or return
+      got = block.call(*options[:args]) or return true
     rescue FlunkError
       raise
     rescue => got

@@ -172,6 +172,26 @@ web pages:
     deny{ diagnostic.match('<a>') }
   end
 
+  def test_deny_xpath
+   _assert_xml '<foo/>'
+    deny{ xpath :bar }
+  end
+        
+  def test_nested_contexts
+    return # TODO
+   _assert_xml '<a><b/></a>'
+   
+    assert do
+      xpath :a do
+        xpath :b do
+          deny{ xpath :a }
+        end
+      end
+    end
+    
+    deny{ diagnostic.match('<a>') }
+  end
+
   def test_deny_nested_diagnostics  #  TODO  put a test like this inside assert2_suite.rb
    _assert_xml '<a><b><c/></b></a>'
    

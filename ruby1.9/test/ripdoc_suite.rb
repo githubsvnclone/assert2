@@ -59,7 +59,7 @@ class RipdocSuite < Test::Unit::TestCase
 return  #  TODO  nested xpath failures should obey their inner context...
     assert do
       xpath :div, :vertical_container do
-        xpath(:'h1/following-sibling::div[ @class = "accordion_content" ]/p').text =~ 
+        xpath(:'div[ @class = "accordion_content" ]').text =~ 
                   /complete report/
       end
     end
