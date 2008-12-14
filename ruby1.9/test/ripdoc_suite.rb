@@ -50,10 +50,11 @@ class RipdocSuite < Test::Unit::TestCase
   #  end
   end  #  TODO how to constrain the context and then deny inside it?
   
-  #  TODO  something is snarfing the first space in a pre in a embdoc
+  #  CONSIDER  something is snarfing the first space in a pre in a embdoc
   
-  def _test_snarf_all_shebang_commentary
+  def test_snarf_all_shebang_commentary
     @rip.on_comment('#!whatever', @f)
+    @rip.on_comment('  #!whatever', @f)
     deny{ @output.match('whatever') }
   end
 
