@@ -14,7 +14,7 @@
   function loadAccordions() {
     var bottomAccordion = new accordion('vertical_container');
 
-    var anchor = window.location.href.match(/#(.+)$/)[1];
+    var anchor = window.location.href.match(/#(.+)$/);
     if (anchor)  anchor = anchor[1];
         if (anchor = $(anchor + '_')) {
           bottomAccordion.activate(anchor.parentNode);
