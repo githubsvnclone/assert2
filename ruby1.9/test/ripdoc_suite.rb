@@ -145,6 +145,11 @@ return  #  TODO  nested xpath failures should obey their inner context...
     assert{ xpath :a, :bingi_drum_, :name => :bingi_drum }
   end
 
+  def test_name_toggle_censors_entities
+   _assert_xml @rip.name_toggle('bingi &amp; drum')
+    assert{ xpath :a, :bingi_drum_, :name => :bingi_drum }
+  end
+
   def assert_embdoc(array)
     @rip.embdocs = array
     @rip.on_embdoc_end('=end', @f)
