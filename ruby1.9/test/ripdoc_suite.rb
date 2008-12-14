@@ -16,8 +16,6 @@ HomePath = Ripdoc::HomePath
 #  TODO  get everything working in Ruby 1.8.6, excuse 1.8.7, and get all but xpath working in 1.9.1
 #  TODO  ahem. Abstract the f---ing xml library, and get working in 1.9.1 anyway!!
 #  TODO  permit internal links in shorthand
-#  TODO  permit external links as raw HTML
-#  TODO  open a tab if its <a name> appears in window.location.href
 
 class RipdocSuite < Test::Unit::TestCase
 
@@ -40,7 +38,7 @@ class RipdocSuite < Test::Unit::TestCase
     end
 
     # reveal
-  end  #  TODO  why we crash when any other tests generate a ripped doc?
+  end  #  CONSIDER  why we crash when any other tests generate a ripped doc?
 
 #  TODO  pay for Staff Benda Bilili  ALBUM: Très Très Fort (Promo Sampler) !
 
@@ -55,7 +53,7 @@ class RipdocSuite < Test::Unit::TestCase
   #  TODO  something is snarfing the first space in a pre in a embdoc
   #  TODO  snarf all #! commentry
   #  TODO  better keyword color
-  
+
   def test_embdocs_form_accordions_with_contents
     assert_xhtml Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
     reveal
