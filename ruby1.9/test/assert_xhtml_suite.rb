@@ -158,12 +158,15 @@ web pages:
 
   def test_nested_diagnostics
    _assert_xml '<a><b><c/></b></a>'
-    assert do
-      xpath :a do
-        xpath :b
+    assert_flunk 'xpath: "descendant-or-self::si"' do
+      assert do
+        xpath :a do
+          xpath :b do
+            xpath :si
+          end
+        end
       end
-    end
-    
+    end    
   end
 
   def test_to_predicate_expects_options
