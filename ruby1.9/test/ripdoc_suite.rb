@@ -192,9 +192,9 @@ return  #  TODO  nested xpath failures should obey their inner context...
 
   def test_embdoc_with_indented_samples
     assert_embdoc ['banner', 'yo', ' indented', 'dude']
-    assert('TODO take out that little space'){ xpath :'p[ . = "yo " ]' }
+    assert('note we need that little space there!'){ xpath :p, ?. => 'yo ' }
     denigh{ xpath(:'p[ contains(., "indented") ]') }
-    assert{ xpath :'p[ . = "dude" ]' }
+    assert{ xpath :p, :'.' => 'dude' }
   end
 
   def assert_rip(line)
