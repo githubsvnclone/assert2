@@ -312,6 +312,7 @@ return  #  TODO  nested xpath failures should obey their inner context...
 
   def test_put_every_thing_into_a_pre_block
     lines = assert_rip('x = 42')
+    
     assert do
       xpath :div, :content do
         #puts(@xdoc.to_s) and
@@ -325,13 +326,12 @@ return  #  TODO  nested xpath failures should obey their inner context...
   end
   
   def test_string_patterns
-    return # TODO
     assert_rip('foo "bar"')
     denigh{ xpath :'span[ @class = "string" ]' }
 
     assert do
       xpath :"span[ #{style(:string)} and contains(., 'bar') ]" and
-      xpath :"span[ #{style(:string_delimiter)} and . = '\"' ]"
+      xpath(:"span[ #{style(:string_delimiter)} ]").text == '"'
     end
   end
 
