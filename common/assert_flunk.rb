@@ -5,7 +5,7 @@ module Test; module Unit; module Assertions
   def assert_raise_message(types, expected_message, message = nil, &block)
     args = [types].flatten + [message]
     exception = _assert_raise(*args, &block)
-    exception_message = exception.message
+    exception_message = exception.message.dup
     
     if expected_message.kind_of? String
       exception_message.gsub!(/^\s+/, '')  #  if we cosmetically strip leading spaces from both the matcher and matchee,
