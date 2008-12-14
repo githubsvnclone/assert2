@@ -69,14 +69,6 @@ return  #  TODO  nested xpath failures should obey their inner context...
     # reveal
   end
 
-  def test_embdoc_two_indented_lines_have_no_p_between_them
-    return # TODO
-    assert_embdoc ['yo', ' first indented', ' also indented', 'dude']
-    denigh{ xpath(:'p[ contains(., "indented") ]') }
-    assert{ xpath(:'pre[ contains(., "first indented") and contains(., "also indented") ]') }
-    denigh{ xpath(:'p[ . = " " ]') }
-  end
-
   def test_on_embdoc_beg
     assert{ @rip.embdocs.nil? }
     @rip.on_embdoc_beg('=begin', @f)
@@ -156,7 +148,6 @@ return  #  TODO  nested xpath failures should obey their inner context...
   end
 
   def test_on_embdoc_end
-    # TODO all users of assert_embdoc go below here
     @rip.embdocs = ['banner', 'yo', 'dude', "\r\n", 'what', 'up?']
     @rip.on_embdoc_end('=end', @f)
     denigh{ @output =~ /=end/ }
@@ -172,13 +163,19 @@ return  #  TODO  nested xpath failures should obey their inner context...
     assert_xhtml "<html><body>#{ @output }</body></html>"
   end
 
+  def test_embdoc_two_indented_lines_have_no_p_between_them
+    assert_embdoc ['yo', ' first indented', ' also indented', 'dude']
+    denigh{ xpath(:'p[ contains(., "indented") ]') }
+    assert{ xpath(:'pre[ contains(., "first indented") and contains(., "also indented") ]') }
+    denigh{ xpath(:'p[ . = " " ]') }
+  end
+
   def test_embdocs_link_out
     assert_embdoc(['yo <a href="http://antwrp.gsfc.nasa.gov/apod/">apod</a> dude'])
     assert{ xpath :a, :href => 'http://antwrp.gsfc.nasa.gov/apod/' }
   end
 
   def test_a_names_in_toggle_bars
-    return # TODO
     assert_embdoc(['yo', 'dude'])
     assert{ xpath :a, :name => :yo }
     denigh{ xpath :a, :name => :dude }
@@ -198,7 +195,6 @@ return  #  TODO  nested xpath failures should obey their inner context...
   end
 
   def test_on_embdoc_end_with_unix_style_linefeeds
-    return # TODO
     assert_embdoc ['banner', 'yo', 'dude', "\n", 'what', 'up?']
     assert{ xpath :'p[ . = "yo dude"  ]' }
     denigh{ xpath :"p[ . = '\n'       ]" }
@@ -206,8 +202,6 @@ return  #  TODO  nested xpath failures should obey their inner context...
   end
 
   def test_embdoc_with_indented_samples
-    return # TODO
-    
     assert_embdoc ['banner', 'yo', ' indented', 'dude']
     assert('note we need that little space there!'){ xpath :p, ?. => 'yo ' }
     denigh{ xpath(:'p[ contains(., "indented") ]') }
