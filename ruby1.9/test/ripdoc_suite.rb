@@ -127,6 +127,11 @@ return  #  TODO  nested xpath failures should obey their inner context...
 
   def test_name_toggle
    _assert_xml @rip.name_toggle('proficy')
+    assert{ xpath :a, :proficy_, :name => 'proficy' }
+  end
+
+  def test_name_toggle_without_tags
+   _assert_xml @rip.name_toggle('proficy')
     assert{ xpath :a }
   end
 
