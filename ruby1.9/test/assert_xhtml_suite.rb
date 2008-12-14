@@ -145,7 +145,6 @@ web pages:
   end
 
   def test_deny_xpath_decorates
-    return if RUBY_VERSION > '1.8.6'  #  TODO fix!
     assert_xhtml '<html><body/></html>'
 
     spew = assert_flunk /xml context/ do
@@ -154,6 +153,8 @@ web pages:
 
     assert{ spew =~ /xpath: "\/html\/body"/ }
   end
+
+#  TODO  put a test runner ta the bottom of assert_xhtml.rb
 
   def test_to_predicate_expects_options
     args = AssertXPathArguments.new
@@ -192,9 +193,6 @@ web pages:
   end
   
 end
-
-
-
 
 
 
