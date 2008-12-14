@@ -52,7 +52,6 @@ class RipdocSuite < Test::Unit::TestCase
   
   #  TODO  something is snarfing the first space in a pre in a embdoc
   #  TODO  snarf all #! commentry
-  #  TODO  better keyword color
 
   def test_embdocs_form_accordions_with_contents
     assert_xhtml Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
