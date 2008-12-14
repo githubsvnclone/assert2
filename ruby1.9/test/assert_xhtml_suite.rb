@@ -24,13 +24,6 @@ require 'pathname'
 
 class AssertXhtmlSuite < Test::Unit::TestCase
 
-  def test_document_self
-      #  TODO  use the title argument mebbe??
-    doc = Ripdoc.generate(HomePath + 'test/assert_xhtml_suite.rb', 'assert{ xpath }')
-    luv = HomePath + 'doc/assert_xhtml.html'
-    File.write(luv, doc)
-    reveal luv, '#codexpathemDSLemcode'
-  end
 #!doc!
 =begin
 <code>assert_xhtml( <em>xhtml</em> )</code>
@@ -72,6 +65,15 @@ a node's string contents with <code>:'.'</code>:
     end
   end  #  TODO  take off the : use .? ?
 #!no_doc!
+
+  def test_document_self
+      #  TODO  use the title argument mebbe??
+    doc = Ripdoc.generate(HomePath + 'test/assert_xhtml_suite.rb', 'assert{ xpath }')
+    luv = HomePath + 'doc/assert_xhtml.html'
+    File.write(luv, doc)
+    reveal luv, '#xpath_DSL'
+  end
+  
   def test_xpath_converts_symbols_to_ids
     _assert_xml '<a id="b"/>'
     assert{ xpath(:a, :b) == @xdoc.find_first('/a[ @id = "b" ]') }

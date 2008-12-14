@@ -95,7 +95,8 @@ class Ripdoc < Ripper::Filter
                     scan(/[ _[:alnum:]]/).
                     map{|x| x == ' ' ? '_' : x }.
                     join.
-                    gsub(/_+/, '_')
+                    gsub(/_+/, '_').
+                    gsub(/_$/, '')
 
     return "<a name='#{banner}' id='#{banner}_'></a>" # CONSIDER this can't use <a ../> because enline() would mangle it...
       #  CONSIDER  the _ is due to a bug in libxml - it squeaks at a name and id that are the same - 

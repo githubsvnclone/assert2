@@ -150,6 +150,11 @@ return  #  TODO  nested xpath failures should obey their inner context...
     assert{ xpath :a, :bingi_drum_, :name => :bingi_drum }
   end
 
+  def test_name_toggle_censors_trailing_spaces
+   _assert_xml @rip.name_toggle('jus seh di word ')
+    assert{ xpath :a, :jus_seh_di_word_, :name => :jus_seh_di_word }
+  end
+
   def assert_embdoc(array)
     @rip.embdocs = array
     @rip.on_embdoc_end('=end', @f)
