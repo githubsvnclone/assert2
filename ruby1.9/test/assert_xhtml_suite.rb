@@ -58,13 +58,31 @@ a node's string contents with <code>?.</code>:
 =end
   def test_xpath_dsl
     assert_xhtml 'yo <a href="http://antwrp.gsfc.nasa.gov/apod/">apod</a> dude'
-    
     assert do
+      
       xpath :a, 
             :href => 'http://antwrp.gsfc.nasa.gov/apod/',
             ?. => 'apod'
+            
     end
   end
+#!end_panel!
+=begin
+<code>xpath().text</code>
+
+<code>xpath()</code> returns a <a href='http://libxml.rubyforge.org/rdoc/classes/LibXML/XML/Node.html'><code>LibXML::XML::Node</code></a> object 
+(or <code>nil</code> if it found none). The object has an additional method, <code>.text</code>,
+which returns the nearest text contents:
+=end
+  def test_xpath_dsl
+   _assert_xml '<Mean><Woman>Blues</Woman></Mean>'
+    assert do
+      
+      xpath('/Mean/Woman').text == 'Blues'
+      
+    end
+  end
+#!end_panel!
 #!no_doc!
 
   def test_document_self
