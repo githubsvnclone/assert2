@@ -326,9 +326,7 @@ return  #  TODO  nested xpath failures should obey their inner context...
   def test_string_mashers
     assert_rip 'x = "b#{ \'ar\' }"'
 
-#  TODO  this really needs the silly args system?
-
-    assert do # and 
+    assert do 
       xpath :"span[ #{style(:string)} and contains(., 'b')  ]" do
         xpath(:"span[ #{style(:embexpr)} ]").text.index('#{') == 0
       end
