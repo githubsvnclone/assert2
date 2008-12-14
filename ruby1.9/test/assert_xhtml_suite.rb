@@ -178,7 +178,6 @@ web pages:
   end
         
   def test_nested_contexts
-    return # TODO
    _assert_xml '<a><b/></a>'
    
     assert do
@@ -188,8 +187,6 @@ web pages:
         end
       end
     end
-    
-    deny{ diagnostic.match('<a>') }
   end
 
   def test_deny_nested_diagnostics  #  TODO  put a test like this inside assert2_suite.rb
