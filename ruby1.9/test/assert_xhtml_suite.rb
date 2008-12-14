@@ -4,10 +4,12 @@
 <code>xpath{}</code> works closely with <code>assert{ 2.0</code> & <code>2.1 }</code> 
 to provide elaborate, detailed, formatted reports when your XHTML code has
 gone astray.
-<ul>
-<li>* <a href='#assert_xhtmlemxhtmlemcode'><code>assert_xhtml()</code></a> absorbs your XHTML</li>
-<li>* <code>_assert_xml()</code> absorbs your XML</li>
-<li>* Then <code>assert{ xpath() }</code> scans it</li>
+
+* <a href='#assert_xhtmlemxhtmlemcode'><code>assert_xhtml()</code></a> absorbs your XHTML
+
+* <code>_assert_xml()</code> absorbs your XML
+
+* Then <code>assert{ xpath() }</code> scans it
 </ul>
 =end
 #!end_panel!
@@ -92,7 +94,7 @@ contains only the inner XML. This prevents excessive spew when testing entire
 web pages:
 =end
   def test_nested_xpath_faults
-    assert_xhtml (HomePath + 'doc/assert_xhtml.html').read  # TODO assert_x.html"
+    assert_xhtml (HomePath + 'doc/assert_xhtml.html').read
     return
     assert do
       
@@ -102,6 +104,8 @@ web pages:
   end
 #!end_panel!
 #!no_doc!
+
+# TODO assert_x.html
 
   def test_document_self
       #  TODO  use the title argument mebbe??
