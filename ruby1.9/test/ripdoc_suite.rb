@@ -140,7 +140,6 @@ return  #  TODO  nested xpath failures should obey their inner context...
   end
 
   def test_name_toggle_censors_trailing_spaces
-    return # TODO
    _assert_xml @rip.name_toggle('jus seh di word ')
     assert{ xpath :a, :jus_seh_di_word_, :name => :jus_seh_di_word }
   end
