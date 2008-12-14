@@ -19,12 +19,6 @@ module Test; module Unit; module Assertions
     return exception.message
   end
 
-  FlunkError = if defined? Test::Unit::AssertionFailedError
-                 Test::Unit::AssertionFailedError
-               else
-                 MiniTest::Assertion
-               end
-
   def assert_flunk(matcher, message = nil, &block)
     assert_raise_message FlunkError, matcher, message, &block
   end
