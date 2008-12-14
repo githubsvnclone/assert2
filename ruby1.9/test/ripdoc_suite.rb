@@ -187,7 +187,7 @@ return  #  TODO  nested xpath failures should obey their inner context...
     assert_embdoc ['banner', 'yo', 'dude', "\n", 'what', 'up?']
     assert{ xpath :'p[ . = "yo dude"  ]' }
     denigh{ xpath :"p[ . = '\n'       ]" }
-    assert{ xpath :p, :'.' => 'what up?' }
+    assert{ xpath :p, ?. => 'what up?' }
   end
 
   def test_embdoc_with_indented_samples
@@ -218,11 +218,11 @@ return  #  TODO  nested xpath failures should obey their inner context...
                        "#!nodoc!\n" +
                        "y = 43\n"
                       ) 
-    assert{ xpath :span, :'.' => 'x'  }
-    assert{ xpath :span, :'.' => '42' }
-    denigh{ xpath :span, :'.' => '#!nodoc!' }
-    denigh{ xpath :span, :'.' => 'y'  }
-    denigh{ xpath :span, :'.' => '43' }
+    assert{ xpath :span, ?. => 'x'  }
+    assert{ xpath :span, ?. => '42' }
+    denigh{ xpath :span, ?. => '#!nodoc!' }
+    denigh{ xpath :span, ?. => 'y'  }
+    denigh{ xpath :span, ?. => '43' }
   end
 
   def test_nodoc_tags_end_at_doc_tags
@@ -232,12 +232,12 @@ return  #  TODO  nested xpath failures should obey their inner context...
                        "#!doc!\n" +
                        "x = 42\n"
                      )
-    denigh{ xpath :span, :'.' => '#!nodoc!' }
-    denigh{ xpath :span, :'.' => 'y'  }
-    denigh{ xpath :span, :'.' => '43' }
-    denigh{ xpath :span, :'.' => '# miss me' }
-    assert{ xpath :span, :'.' => 'x'  }
-    assert{ xpath :span, :'.' => '42' }
+    denigh{ xpath :span, ?. => '#!nodoc!' }
+    denigh{ xpath :span, ?. => 'y'  }
+    denigh{ xpath :span, ?. => '43' }
+    denigh{ xpath :span, ?. => '# miss me' }
+    assert{ xpath :span, ?. => 'x'  }
+    assert{ xpath :span, ?. => '42' }
   end
 
   def test_rip_braces
@@ -251,9 +251,9 @@ return  #  TODO  nested xpath failures should obey their inner context...
                        "    o\n" +
                        " lution'\n"
                       ) 
-    assert{ xpath :span, :'.' =>    'rev'  }
-    assert{ xpath :span, :'.' =>     'o'   }
-    assert{ xpath :span, :'.' =>  'lution' }
+    assert{ xpath :span, ?. =>    'rev'  }
+    assert{ xpath :span, ?. =>     'o'   }
+    assert{ xpath :span, ?. =>  'lution' }
   end
 
   def test_on_tstring_end

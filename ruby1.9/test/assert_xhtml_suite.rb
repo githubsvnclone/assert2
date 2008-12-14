@@ -52,6 +52,7 @@ Use this method to push well-formed XHTML into the assertion system. Subsequent
 #!end_panel!
 =begin
 <code>xpath( <em>DSL</em> )</code>
+
 You can write simple XPath queries using Ruby's familiar hash notation. Query
 a node's string contents with <code>?.</code>:
 =end
