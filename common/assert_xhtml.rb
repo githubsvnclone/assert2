@@ -2,12 +2,12 @@ require 'test/unit'
 #require 'xml'
 require 'rexml/document'
 require 'rexml/entity'
+require 'rexml/formatters/pretty'
 
 module Test; module Unit; module Assertions
   
   def assert_xhtml(xhtml)
-    return _assert_xml(xhtml) # , XML::HTMLParser) #  TODO  if this bombs invoke the XML parser 
-                                #         but explain stuff might not work
+    return _assert_xml(xhtml) # , XML::HTMLParser)
   end 
 
   def _assert_xml(xml) #, parser = XML::Parser)
@@ -22,8 +22,6 @@ module Test; module Unit; module Assertions
     @xdoc = xp.parse.root
     return @sauce = xml
     else
-#p '################################################'      
-#puts REXML::Document.new(xml).public_methods
       #  CONSIDER  figure out how entities are supposed to work!!
       xml = xml.gsub('&mdash;', '--')
       doc = REXML::Document.new(xml)
@@ -69,8 +67,12 @@ module Test; module Unit; module Assertions
     end
 
     add_diagnostic :clear do  #  TODO  the narrowest expression wins. Fix by pushing and popping diagnostic sets!
-         "xml context:\n" + @xdoc.to_s +
-      "\nxpath: #{ path.inspect }\n"
+      bar = REXML::Formatters::Pretty.new
+      out = String.new
+      bar.write(@xdoc, out)
+
+      "xpath: #{ path.inspect }\n" +
+      "xml context:\n" + out
     end
     
     assert_ nil, :args => [@xdoc = node], &block if node and block
