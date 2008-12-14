@@ -156,6 +156,16 @@ web pages:
 
 #  TODO  put a test runner ta the bottom of assert_xhtml.rb
 
+  def test_nested_diagnostics
+   _assert_xml '<a><b><c/></b></a>'
+    assert do
+      xpath :a do
+        xpath :b
+      end
+    end
+    
+  end
+
   def test_to_predicate_expects_options
     args = AssertXPathArguments.new
     assert{ args.to_predicate(:zone, {}) == "[ @id = 'zone' ]" }
