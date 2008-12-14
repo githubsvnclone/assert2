@@ -19,7 +19,7 @@ require 'common/assert_flunk'
 require 'assert_xhtml'
 require 'pathname'
 
-  HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path #  TODO  unify
+  HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path
 
 class AssertXhtmlSuite < Test::Unit::TestCase
 
@@ -124,9 +124,9 @@ web pages:
 
   def test_xpath_converts_hashes_into_predicates
     _assert_xml '<a class="b"/>'
-    return # TODO
-    assert{ xpath(:a, :class => :b) == @xdoc.find_first('/a[ @class = "b" ]') }
-  end
+    expected_node = REXML::XPath.first(@xdoc, '/a[ @class = "b" ]')
+    assert{ xpath(:a, :class => :b) == expected_node }
+  end  #  TODO  use this in documentation
 
   def test_xpath_converts_silly_notation_to_text_matches
     _assert_xml '<a>b</a>'
