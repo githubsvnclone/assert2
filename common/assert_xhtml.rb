@@ -1,14 +1,16 @@
 require 'test/unit'
-require 'xml'
+#require 'xml'
+require 'rexml/document'
 
 module Test; module Unit; module Assertions
   
   def assert_xhtml(xhtml)
-    return _assert_xml(xhtml, XML::HTMLParser) #  TODO  if this bombs invoke the XML parser 
+    return _assert_xml(xhtml) # , XML::HTMLParser) #  TODO  if this bombs invoke the XML parser 
                                 #         but explain stuff might not work
   end 
 
-  def _assert_xml(xml, parser = XML::Parser)
+  def _assert_xml(xml) #, parser = XML::Parser)
+    if false
     xp = parser.new()
     xp.string = xml
     if XML.respond_to? :'default_pedantic_parser='
@@ -18,6 +20,12 @@ module Test; module Unit; module Assertions
     end  #  CONSIDER  uh, figure out the best libxml-ruby??
     @xdoc = xp.parse.root
     return @sauce = xml
+    else
+#p '################################################'      
+#puts REXML::Document.new(xml).public_methods
+      @xdoc = REXML::Document.new(xml).root
+      return @sauce = xml  #  TODO  still need this??
+    end
   end 
 
   class AssertXPathArguments
@@ -48,11 +56,12 @@ module Test; module Unit; module Assertions
   def xpath(path, id = nil, options = {}, &block)
     former_xdoc = @xdoc
     path = AssertXPathArguments.new.to_xpath(path, id, options)
-    
-    if node = @xdoc.find_first(path)
-      def node.text
-        find_first('text()').to_s
-      end
+    # if node = @xdoc.find_first(path)
+    if node = REXML::XPath.first(@xdoc, path)
+#puts node.public_methods.sort
+    #  def node.text
+    #    find_first('text()').to_s
+    #  end
     end
 
     add_diagnostic :clear do  #  TODO  the narrowest expression wins. Fix by pushing and popping diagnostic sets!
