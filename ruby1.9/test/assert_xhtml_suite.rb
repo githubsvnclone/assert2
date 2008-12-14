@@ -112,7 +112,7 @@ web pages:
     doc = Ripdoc.generate(HomePath + 'test/assert_xhtml_suite.rb', 'assert{ xpath }')
     luv = HomePath + 'doc/assert_xhtml.html'
     File.write(luv, doc)
-    reveal luv, '#xpath_DSL'
+#    reveal luv, '#xpath_DSL'
   end
   
   def test_xpath_converts_symbols_to_ids

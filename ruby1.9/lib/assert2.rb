@@ -1,4 +1,5 @@
 require 'assert2/assertion_ripper'  #   note we only work with Ruby >= 1.9 !
+require 'test/unit'
 
   # note there's more requires down there --V
 
@@ -9,6 +10,12 @@ require 'assert2/assertion_ripper'  #   note we only work with Ruby >= 1.9 !
 #  TODO  assertion ripper tests
 
 module Test; module Unit; module Assertions
+
+  FlunkError = if defined? Test::Unit::AssertionFailedError
+                 Test::Unit::AssertionFailedError
+               else
+                 MiniTest::Assertion
+               end
 
   def __reflect_assertion(called, options, block, got)
     effect = AssertionRipper.new(called)
