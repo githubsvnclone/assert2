@@ -51,7 +51,11 @@ class RipdocSuite < Test::Unit::TestCase
   end  #  TODO how to constrain the context and then deny inside it?
   
   #  TODO  something is snarfing the first space in a pre in a embdoc
-  #  TODO  snarf all #! commentry
+  
+  def _test_snarf_all_shebang_commentary
+    @rip.on_comment('#!whatever', @f)
+    deny{ @output.match('whatever') }
+  end
 
   def test_embdocs_form_accordions_with_contents
     assert_xhtml Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
