@@ -10,7 +10,6 @@ gone astray.
 * <code>_assert_xml()</code> absorbs your XML
 
 * Then <code>assert{ xpath() }</code> scans it
-</ul>
 =end
 #!end_panel!
 #!no_doc!
