@@ -1,5 +1,5 @@
 =begin
-<code>assert{ 2.1 }</code> reinvents <code>assert{ 2.0 }</code> for <a href='http://www.ruby-lang.org/en/news/2007/12/25/ruby-1-9-0-released/'>Ruby 1.9</a>.
+<code>assert{ 2.1 }</code> reinvents <code>assert{ 2.0 }</code> for <a href='http://www.ruby-lang.org/en/news/2007/12/25/ruby-1-9-0-released/' onclick='window.location.href = "http://www.ruby-lang.org/en/news/2007/12/25/ruby-1-9-0-released/";'>Ruby 1.9</a>.
 
 <code>assert{ 2.0 }</code> is the industry's most aggressive TDD 
 system&mdash;for Ruby, or any other language. Each time it fails, it analyzes the 

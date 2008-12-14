@@ -9,7 +9,6 @@ HomePath = Ripdoc::HomePath
 #  TODO  at scroll time keep the target panel in the viewport!
 #  TODO  help stickmanlabs get a macbook pro (or help talk him out of it;)
 #  CONSIDER  think of a use for the horizontal accordion, and for nesting them
-#  TODO  Ruby 1.9 should link out
 #  TODO evaluate mashed strings
 #   TODO intersticial string mashers still don't color correctly
 #   TODO make function names bigger
