@@ -156,9 +156,10 @@ web pages:
 
 #  TODO  put a test runner ta the bottom of assert_xhtml.rb
 
-  def test_nested_diagnostics
+  def test_nested_diagnostics  #  TODO  put a test like this inside assert2_suite.rb
    _assert_xml '<a><b><c/></b></a>'
-    assert_flunk 'xpath: "descendant-or-self::si"' do
+   
+    diagnostic = assert_flunk 'xpath: "descendant-or-self::si"' do
       assert do
         xpath :a do
           xpath :b do
@@ -166,7 +167,25 @@ web pages:
           end
         end
       end
-    end    
+    end
+    
+    deny{ diagnostic.match('<a>') }
+  end
+
+  def test_deny_nested_diagnostics  #  TODO  put a test like this inside assert2_suite.rb
+   _assert_xml '<a><b><c/></b></a>'
+   
+    diagnostic = assert_flunk 'xpath: "descendant-or-self::si"' do
+      deny do
+        xpath :a do
+          xpath :b do
+            xpath :si
+          end
+        end
+      end
+    end
+    
+    deny{ diagnostic.match('<a>') }
   end
 
   def test_to_predicate_expects_options

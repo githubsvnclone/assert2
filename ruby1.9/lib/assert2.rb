@@ -34,9 +34,12 @@ module Test; module Unit; module Assertions
     
     begin
       got = block.call(*options[:args]) and return got
+    rescue FlunkError
+      raise  #  asserts inside assertions that fail do not decorate the outer assertion
+                 # TODO  review that for stuff like assert_equal
     rescue => got
       add_exception got
-    end    
+    end
 
     flunk diagnose(diagnostic, got, caller[1], options, block)
   end
@@ -63,6 +66,8 @@ module Test; module Unit; module Assertions
     
     begin
       got = block.call(*options[:args]) or return
+    rescue FlunkError
+      raise
     rescue => got
       add_exception got
     end
