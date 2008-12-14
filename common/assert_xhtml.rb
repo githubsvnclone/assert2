@@ -1,6 +1,7 @@
 require 'test/unit'
 #require 'xml'
 require 'rexml/document'
+require 'rexml/entity'
 
 module Test; module Unit; module Assertions
   
@@ -23,7 +24,10 @@ module Test; module Unit; module Assertions
     else
 #p '################################################'      
 #puts REXML::Document.new(xml).public_methods
-      @xdoc = REXML::Document.new(xml).root
+      #  CONSIDER  figure out how entities are supposed to work!!
+      xml = xml.gsub('&mdash;', '--')
+      doc = REXML::Document.new(xml)
+      @xdoc = doc.root
       return @sauce = xml  #  TODO  still need this??
     end
   end 
