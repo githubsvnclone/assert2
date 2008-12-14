@@ -54,7 +54,6 @@ class RipdocSuite < Test::Unit::TestCase
   #  TODO  snarf all #! commentry
 
   def test_embdocs_form_accordions_with_contents
-    # return # TODO
     assert_xhtml Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
     reveal
 return  #  TODO  nested xpath failures should obey their inner context...
