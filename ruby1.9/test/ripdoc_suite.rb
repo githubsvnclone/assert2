@@ -130,12 +130,11 @@ return  #  TODO  nested xpath failures should obey their inner context...
   end
 
   def test_name_toggle_censors_tags
-   _assert_xml @rip.name_toggle('bingi <em>drum<em>')
+   _assert_xml @rip.name_toggle('bingi <em>drum</em>')
     assert{ xpath :a, :bingi_drum_, :name => :bingi_drum }
   end
 
   def test_name_toggle_censors_entities
-    return # TODO
    _assert_xml @rip.name_toggle('bingi &amp; drum')
     assert{ xpath :a, :bingi_drum_, :name => :bingi_drum }
   end
