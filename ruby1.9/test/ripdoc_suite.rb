@@ -126,7 +126,8 @@ return  #  TODO  nested xpath failures should obey their inner context...
   end
 
   def test_name_toggle
-    p @rip.name_toggle('thanatanos')
+   _assert_xml @rip.name_toggle('proficy')
+    assert{ xpath :a }
   end
 
   def assert_embdoc(array)
