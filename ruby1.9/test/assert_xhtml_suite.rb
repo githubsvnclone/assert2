@@ -74,7 +74,7 @@ a node's string contents with <code>?.</code>:
 (or <code>nil</code> if it found none). The object has an additional method, <code>.text</code>,
 which returns the nearest text contents:
 =end
-  def test_xpath_dsl
+  def test_xpath_text
    _assert_xml '<Mean><Woman>Blues</Woman></Mean>'
     assert do
       
