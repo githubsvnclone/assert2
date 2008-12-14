@@ -1,6 +1,5 @@
 require 'test/unit'
 require 'xml'
-# TODO  require 'pp'?
 
 module Test; module Unit; module Assertions
   
@@ -57,7 +56,7 @@ module Test; module Unit; module Assertions
     end
 
     add_diagnostic :clear do  #  TODO  the narrowest expression wins. Fix by pushing and popping diagnostic sets!
-         "xpath context:\n" + @xdoc.to_s +
+         "xml context:\n" + @xdoc.to_s +
       "\nxpath: #{ path.inspect }\n"
     end
     
