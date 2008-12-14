@@ -27,8 +27,9 @@ class AssertXhtmlSuite < Test::Unit::TestCase
   def test_document_self
       #  TODO  use the title argument mebbe??
     doc = Ripdoc.generate(HomePath + 'test/assert_xhtml_suite.rb', 'assert{ xpath }')
-    File.write(HomePath + 'doc/assert_xhtml.html', doc)
-    reveal HomePath + 'doc/assert_xhtml.html'
+    luv = HomePath + 'doc/assert_xhtml.html'
+    File.write(luv, doc)
+    reveal luv, '#codexpathemDSLemcode'
   end
 #!doc!
 =begin
@@ -139,11 +140,11 @@ a node's string contents with <code>:'.'</code>:
     end
   end
 
-  def reveal(filename)
+  def reveal(filename, anchor)
     # File.write('yo.html', xhtml)
 #    system 'konqueror yo.html &'
     path = filename.relative_path_from(Pathname.new(Dir.pwd)).to_s.inspect
-    system '"C:/Program Files/Mozilla Firefox/firefox.exe" ' + path + ' &'
+    system '"C:/Program Files/Mozilla Firefox/firefox.exe" ' + path + anchor + ' &'
   end
   
 end

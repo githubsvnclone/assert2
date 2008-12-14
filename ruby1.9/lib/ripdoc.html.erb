@@ -13,7 +13,14 @@
   Event.observe(window, 'load', loadAccordions, false);
   function loadAccordions() {
     var bottomAccordion = new accordion('vertical_container');
-    bottomAccordion.activate($$('#vertical_container .accordion_toggle')[0]);
+
+    var anchor = window.location.href.match(/#(.+)$/)[1];
+        if (anchor) {
+          bottomAccordion.activate($(anchor).parentNode);
+             }
+        else {
+          bottomAccordion.activate($$('#vertical_container .accordion_toggle')[0]);
+        }
   }
 //]]>
 </script>
@@ -141,9 +148,9 @@
         //
         var verticalAccordions = $$('.accordion_toggle');
         verticalAccordions.each(function(accordion) {
-                $(accordion.next(0)).setStyle({
-                  height: '0px'
-                });
+          $(accordion.next(0)).setStyle({
+            height: '0px'
+          });
         });
 //]]>
 </script>

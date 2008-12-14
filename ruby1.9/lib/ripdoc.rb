@@ -91,7 +91,7 @@ class Ripdoc < Ripper::Filter
   
   def name_toggle(banner)
     banner = banner.scan(/[[:alnum:]]/).join
-    return "<a name='#{banner}'></a>" # CONSIDER this can't use <a ../> because enline() would mangle it...
+    return "<a name='#{banner}' id='#{banner}'></a>" # CONSIDER this can't use <a ../> because enline() would mangle it...
   end
   
   def end_panel(f)
