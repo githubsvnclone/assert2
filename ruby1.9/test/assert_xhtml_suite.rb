@@ -5,11 +5,9 @@
 to provide elaborate, detailed, formatted reports when your XHTML code has
 gone astray.
 
-* <a href='#assert_xhtmlemxhtmlemcode'><code>assert_xhtml()</code></a> absorbs your XHTML
-
-* <code>_assert_xml()</code> absorbs your XML
-
-* Then <code>assert{ xpath() }</code> scans it
+* <a href='#assert_xhtmlemxhtmlemcode'><code>assert_xhtml()</code></a> absorbs your XHTML<br/>
+* <code>_assert_xml()</code> absorbs your XML<br/>
+* Then <code>assert{ xpath() }</code> scans it<br/>
 =end
 #!end_panel!
 #!no_doc!
@@ -92,14 +90,16 @@ When an inner <code>xpath{}</code> fails, the diagnostic's "xml context"
 contains only the inner XML. This prevents excessive spew when testing entire
 web pages:
 =end
-  def test_nested_xpath_faults
+  def _test_nested_xpath_faults
     assert_xhtml (HomePath + 'doc/assert_xhtml.html').read
-    return
-    assert do
-      
-      xpath('/Mean/Woman').text == 'Blues'
-      
-    end
+    
+   # assert do
+      p xpath(:'span[ . = "test_nested_xpath_faults" ]/../..')
+
+    #end
+    
+#    deny  excessive spew
+    
   end
 #!end_panel!
 #!no_doc!
