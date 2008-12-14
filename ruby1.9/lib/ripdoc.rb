@@ -136,6 +136,7 @@ class Ripdoc < Ripper::Filter
   end
 
   STYLES = {
+    CHAR:               'color: brown; font-weight: bolder;',
     const:              "color: #FF4F00; font-weight: bolder;",
     backref:            "color: #f4f; font-weight: bolder;",
     comment:            "font-style: italic; color: gray;",
@@ -199,6 +200,12 @@ class Ripdoc < Ripper::Filter
     
     @in_no_doc ||= nodoc
     @in_no_doc = nil if tok.strip =~ /^\#\!doc\!/
+    return f
+  end
+
+  def on_CHAR(tok, f)
+    return f if @in_no_doc
+    on_kw tok, f, 'CHAR'
     return f
   end
 

@@ -53,7 +53,7 @@ Use this method to push well-formed XHTML into the assertion system. Subsequent
 =begin
 <code>xpath( <em>DSL</em> )</code>
 You can write simple XPath queries using Ruby's familiar hash notation. Query
-a node's string contents with <code>:'.'</code>:
+a node's string contents with <code>?.</code>:
 =end
   def test_xpath_dsl
     assert_xhtml 'yo <a href="http://antwrp.gsfc.nasa.gov/apod/">apod</a> dude'
@@ -61,9 +61,9 @@ a node's string contents with <code>:'.'</code>:
     assert do
       xpath :a, 
             :href => 'http://antwrp.gsfc.nasa.gov/apod/',
-            :'.' => 'apod'
+            ?. => 'apod'
     end
-  end  #  TODO  take off the : use .? ?
+  end
 #!no_doc!
 
   def test_document_self
