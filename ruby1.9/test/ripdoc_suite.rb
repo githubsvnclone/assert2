@@ -130,9 +130,19 @@ return  #  TODO  nested xpath failures should obey their inner context...
     assert{ xpath :a, :proficy_, :name => 'proficy' }
   end
 
-  def test_name_toggle_without_tags
-   _assert_xml @rip.name_toggle('proficy')
-    assert{ xpath :a }
+  def test_name_toggle_with_spaces
+   _assert_xml @rip.name_toggle('bingi drum')
+    assert{ xpath :a, :bingi_drum_, :name => :bingi_drum }
+  end
+
+  def test_name_toggle_with_underbars
+   _assert_xml @rip.name_toggle('bingi drum')
+    assert{ xpath :a, :bingi_drum_, :name => :bingi_drum }
+  end
+
+  def _test_name_toggle_without_tags
+   _assert_xml @rip.name_toggle('bingi <em>drum<em>')
+    assert{ xpath :a, :bingi_drum_, :name => :bingi_drum }
   end
 
   def assert_embdoc(array)

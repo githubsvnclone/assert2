@@ -90,8 +90,7 @@ class Ripdoc < Ripper::Filter
   end
   
   def name_toggle(banner)
-#p banner
-    banner = banner.scan(/[[:alnum:]]/).join
+    banner = banner.scan(/[ _[:alnum:]]/).map{|x| x == ' ' ? '_' : x }.join
     return "<a name='#{banner}' id='#{banner}_'></a>" # CONSIDER this can't use <a ../> because enline() would mangle it...
       #  CONSIDER  the _ is due to a bug in libxml - it squeaks at a name and id that are the same - 
        #                                     despite that's a common idiom!
