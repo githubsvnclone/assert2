@@ -70,12 +70,30 @@ a node's string contents with <code>?.</code>:
 =begin
 <code>xpath().text</code>
 
-<code>xpath()</code> returns a <a href='http://libxml.rubyforge.org/rdoc/classes/LibXML/XML/Node.html'><code>LibXML::XML::Node</code></a> object 
+<code>xpath()</code> returns a 
+<a href='http://libxml.rubyforge.org/rdoc/classes/LibXML/XML/Node.html'><code>LibXML::XML::Node</code></a> object 
 (or <code>nil</code> if it found none). The object has an additional method, <code>.text</code>,
 which returns the nearest text contents:
 =end
   def test_xpath_text
    _assert_xml '<Mean><Woman>Blues</Woman></Mean>'
+    assert do
+      
+      xpath('/Mean/Woman').text == 'Blues'
+      
+    end
+  end
+#!end_panel!
+=begin
+Nested <code>xpath{}</code> Faults
+
+When an inner <code>xpath{}</code> fails, the diagnostic's "xml context" 
+contains only the inner XML. This prevents excessive spew when testing entire
+web pages:
+=end
+  def test_nested_xpath_faults
+    assert_xhtml (HomePath + 'doc/assert_xhtml.html').read  # TODO assert_x.html"
+    return
     assert do
       
       xpath('/Mean/Woman').text == 'Blues'
@@ -125,7 +143,7 @@ which returns the nearest text contents:
     return if RUBY_VERSION > '1.8.6'  #  TODO fix!
     assert_xhtml '<html><body/></html>'
 
-    spew = assert_flunk /xpath context/ do
+    spew = assert_flunk /xml context/ do
       deny{ xpath '/html/body' }
     end
 
@@ -156,7 +174,7 @@ which returns the nearest text contents:
     return if RUBY_VERSION < '1.9' # TODO  fix!
     assert_xhtml '<html><body/></html>'
     
-    assert_flunk "xpath context:\n<html>\n  <body/>\n</html>" do
+    assert_flunk "xml context:\n<html>\n  <body/>\n</html>" do
       assert{ xpath('yack') }
     end
   end
