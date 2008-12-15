@@ -121,6 +121,11 @@ class Ripdoc < Ripper::Filter
           if doc.strip == ''
             f << "</p>\n<p>" if @owed_p
             prior = false
+          elsif doc.strip =~ /^\#\!link\!(.*)/ #!link!froot!loop
+            target, contents = $1.split('!')  #  TODO  permit a ! in the contents
+            f << "<a href='\##{target}' onclick='raise(\"#{target}\")'>"
+            f << CGI.escapeHTML(contents)
+            f << '</a>'
           else
             f << ' ' if prior
             deformat(CGI.escapeHTML(doc), f)
