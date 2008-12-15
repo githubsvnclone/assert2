@@ -17,10 +17,10 @@ module Test; module Unit; module Assertions
     end
   else
     def assert_classic(boolean, message=nil)
-      _wrap_assertion do
+      #_wrap_assertion do
         assert_block("assert<classic> should not be called with a block.") { !block_given? }
         assert_block(build_message(message, "<?> is not true.", boolean)) { boolean }
-      end
+      #end
     end
   end
 
