@@ -40,15 +40,13 @@ class RipdocSuite < Test::Unit::TestCase
     # reveal
   end  #  CONSIDER  why we crash when any other tests generate a ripped doc?
 
-#  TODO  pay for Staff Benda Bilili  ALBUM: Très Très Fort (Promo Sampler) !
-
-  def _test_a_ripped_doc_contains_no_empty_pre_tags
+  def test_a_ripped_doc_contains_no_empty_pre_tags
     assert_xhtml Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
     
-#    xpath :div, :content do
-#      deny{ xpath(:'pre').text == "\n" }
-  #  end
-  end  #  TODO how to constrain the context and then deny inside it?
+    xpath :div, :content do
+      deny{ @xdoc.to_s =~ /<pre>\s*<\/pre>/m }
+    end
+  end
   
   #  CONSIDER  something is snarfing the first space in a pre in a embdoc
   

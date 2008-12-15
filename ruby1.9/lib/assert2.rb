@@ -5,6 +5,7 @@ require 'test/unit'
 
 #  TODO  feel the need for serious ncursage
 #  TODO  add :verbose => option to assert{}
+#  TODO  pay for Staff Benda Bilili  ALBUM: Très Très Fort (Promo Sampler) !
 #  TODO  ripdoc and RDoc should peacibly coexist
 #  TODO  express linefeeds in string results correctly
 #  TODO  assertion ripper tests
