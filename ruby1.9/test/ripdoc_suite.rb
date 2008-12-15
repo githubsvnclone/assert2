@@ -163,6 +163,11 @@ class RipdocSuite < Test::Unit::TestCase
     assert_xhtml "<html><body>#{ @output }</body></html>"
   end
 
+  def test_internal_links_in_shorthand
+    assert_embdoc ['yo', '', 'dude']
+    assert{ xpath :'*', ?. => :dude }
+  end
+
   def test_embdoc_two_indented_lines_have_no_p_between_them
     assert_embdoc ['yo', ' first indented', ' also indented', 'dude']
     denigh{ xpath(:'p[ contains(., "indented") ]') }
