@@ -8,8 +8,16 @@ gone astray.
 * 
 #!link!assert_xhtml_xhtml!<code>assert_xhtml()</code>
 absorbs your XHTML<br/>
-* <code>_assert_xml()</code> absorbs your XML<br/>
-* Then <code>assert{ xpath() }</code> scans it<br/>
+* TODO <code>_assert_xml()</code> absorbs your XML<br/>
+* 
+#!link!xpath_path! - then <code>assert{ xpath() }</code> scans it<br/>
+* 
+#!link!xpath_DSL! - you can program <code>xpath()</code> using XPath notation, or convenient Ruby option-hashes
+* 
+#!link!xpathtext! TODO  productize links to explain they don't take nothing
+* 
+#!link!Nested_xpath_Faults! TODO
+
 =end
 #!end_panel!
 #!no_doc!
