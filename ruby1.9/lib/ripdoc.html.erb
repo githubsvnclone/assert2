@@ -10,9 +10,20 @@
   <link rel="stylesheet" type="text/css" href="css/default.css" />
 <script type="text/javascript">
 //<![CDATA[
+
+  var bottomAccordion = 42;
+
+  function raise(id)
+  {
+    var anchor = $(id + '_');
+    if (anchor) {
+      bottomAccordion.activate(anchor.parentNode);
+    }
+  }
+
   Event.observe(window, 'load', loadAccordions, false);
   function loadAccordions() {
-    var bottomAccordion = new accordion('vertical_container');
+    bottomAccordion = new accordion('vertical_container');
 
     var anchor = window.location.href.match(/#(.+)$/);
     if (anchor)  anchor = anchor[1];

@@ -28,9 +28,10 @@ class Ripdoc < Ripper::Filter
   end  #  TODO  complex '"? if we can't it might be a good thing...
 
   def enline(line)
+    #  TODO  move the CGIescaper in here
     return line.gsub( /&lt;a(.*?)&gt;/){ "<a #{dequote($1)}>" }.
                 gsub('&lt;/a&gt;', '</a>').
-                gsub('&lt;br\s*/&gt;', '<br/>').
+                gsub(/&lt;br\s*\/&gt;/, '<br/>').
                 gsub( '&lt;code&gt;', '<code style="font-weight: bolder;">').
                 gsub('&lt;/code&gt;', '</code>').
                 gsub( '&lt;em&gt;', '<em>').
@@ -124,7 +125,7 @@ class Ripdoc < Ripper::Filter
           elsif doc.strip =~ /^\#\!link\!(.*)/ #!link!froot!loop
             target, contents = $1.split('!')  #  TODO  permit a ! in the contents
             f << "<a href='\##{target}' onclick='raise(\"#{target}\")'>"
-            f << CGI.escapeHTML(contents)
+            f << enline(CGI.escapeHTML(contents))
             f << '</a>'
           else
             f << ' ' if prior

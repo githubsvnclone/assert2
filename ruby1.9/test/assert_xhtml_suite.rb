@@ -5,7 +5,9 @@
 to provide elaborate, detailed, formatted reports when your XHTML code has
 gone astray.
 
-* <a href='#assert_xhtmlemxhtmlemcode'><code>assert_xhtml()</code></a> absorbs your XHTML<br/>
+* 
+#!link!assert_xhtml_xhtml!<code>assert_xhtml()</code>
+absorbs your XHTML<br/>
 * <code>_assert_xml()</code> absorbs your XML<br/>
 * Then <code>assert{ xpath() }</code> scans it<br/>
 =end
@@ -112,7 +114,7 @@ web pages:
     doc = Ripdoc.generate(HomePath + 'test/assert_xhtml_suite.rb', 'assert{ xpath }')
     luv = HomePath + 'doc/assert_xhtml.html'
     File.write(luv, doc)
-#    reveal luv, '#xpath_DSL'
+    reveal luv, '#xpath_DSL'
   end
   
   def test_xpath_converts_symbols_to_ids

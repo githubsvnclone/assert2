@@ -164,14 +164,20 @@ class RipdocSuite < Test::Unit::TestCase
   end
 
   def test_internal_links_in_shorthand
-    assert_embdoc ['yo', '#!link!froot!loop', 'dude']
+    assert_embdoc ['yo', '#!link!froot!lo<em>op</em>', 'dude']
+
     assert do
       xpath :a, :href => '#froot', 
-             :onclick => 'raise("froot")'
-             #  TODO write raise()
-# TODO  when this fails we get in parser trubble                   ?. => :loop
+      # TODO       :onclick => 'raise("froot")',
+             :'.' => :loop do  #  TODO  document . covers nested text
+        xpath :em, :'.' => :op               
+      end
     end
-  end  #  TODO  enline the stuff after the last bang
+
+# TODO  when the ?. fails we get in parser trubble
+# TODO  nest ' and " correctly
+
+  end  #  TODO  test that we enline the stuff after the last bang
 
 #  TODO  br stopped working!
 
