@@ -9,10 +9,11 @@ gone astray.
 #!link!assert_xhtml_xhtml!<code>assert_xhtml()</code>
 absorbs your XHTML<br/>
 * TODO <code>_assert_xml()</code> absorbs your XML<br/>
-* 
-#!link!xpath_path! - then <code>assert{ xpath() }</code> scans it<br/>
-* 
-#!link!xpath_DSL! - you can program <code>xpath()</code> using XPath notation, or convenient Ruby option-hashes
+* ...then 
+#!link!xpath_path!<code>assert{ xpath() }</code>
+scans it for details.<br/>
+* you can program <code>xpath()</code> using XPath notation, or convenient 
+#!link!xpath_DSL!Ruby option-hashes<br/>
 * 
 #!link!xpathtext! TODO  productize links to explain they don't take nothing
 * 
