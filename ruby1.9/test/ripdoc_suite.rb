@@ -9,13 +9,10 @@ HomePath = Ripdoc::HomePath
 #  TODO  at scroll time keep the target panel in the viewport!
 #  TODO  help stickmanlabs get a macbook pro (or help talk him out of it;)
 #  CONSIDER  think of a use for the horizontal accordion, and for nesting them
-#  TODO evaluate mashed strings
 #   TODO intersticial string mashers still don't color correctly
 #   TODO make function names bigger
-#  TODO  respect linefeeds in parsed source when reflecting
 #  TODO  get everything working in Ruby 1.8.6, excuse 1.8.7, and get all but xpath working in 1.9.1
 #  TODO  ahem. Abstract the f---ing xml library, and get working in 1.9.1 anyway!!
-#  TODO  permit internal links in shorthand
 
 class RipdocSuite < Test::Unit::TestCase
 
@@ -169,17 +166,11 @@ class RipdocSuite < Test::Unit::TestCase
     assert do
       xpath :a, :href => '#froot', 
       # TODO       :onclick => 'raise("froot")',
-             :'.' => :loop do  #  TODO  document . covers nested text
-        xpath :em, :'.' => :op               
+             :'.' => :loop do
+        xpath :em, :'.' => :op
       end
     end
-
-# TODO  when the ?. fails we get in parser trubble
-# TODO  nest ' and " correctly
-
-  end  #  TODO  test that we enline the stuff after the last bang
-
-#  TODO  br stopped working!
+  end
 
   def test_embdoc_two_indented_lines_have_no_p_between_them
     assert_embdoc ['yo', ' first indented', ' also indented', 'dude']

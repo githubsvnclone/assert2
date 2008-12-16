@@ -1,6 +1,8 @@
 require 'ripper'  #   note we only work with Ruby >= 1.9 !
 require 'pp'
 
+#  TODO  move as much as possible under assert2/, including common
+
 module Test; module Unit; module Assertions
 
   class AssertionRipper
@@ -173,7 +175,7 @@ module Test; module Unit; module Assertions
       sink rdelim
     end
 
-    %w( tstring_content ).each do |thang|
+    %w( tstring_content ).each do |thang|  #  TODO  shrimplify
       define_method '_@' + thang do |arg, at|
         wrap @strung ? '' : '"' do
           arg.gsub!(/(^|[^\\])"/, '\1\"')
@@ -182,7 +184,7 @@ module Test; module Unit; module Assertions
       end
     end
 
-    %w( backref const ivar kw ident gvar int 
+    %w( backref CHAR const ivar kw ident gvar int 
         op period regexp_end ).each do |thang|
       define_method '_@' + thang do |arg, at|
         sink arg.to_s

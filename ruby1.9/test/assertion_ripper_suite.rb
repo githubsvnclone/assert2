@@ -2,6 +2,9 @@ $:.unshift 'lib'; $:.unshift '../lib'
 require 'assert2'
 require 'common/assert_flunk'
 
+#  TODO  respect linefeeds in parsed source when reflecting
+#  TODO evaluate mashed strings
+
 class AssertionRipperSuite < Test::Unit::TestCase
 
   def setup
@@ -206,6 +209,7 @@ class AssertionRipperSuite < Test::Unit::TestCase
     assert_reflect "def naughty\nsuper(42)\nyield\nend"
     assert_reflect "def naughty\nsuper\nyield(42)\nend"
     assert_reflect 'hash = { :x => 42, 43 => 44 }'
+    assert_reflect 'x = ?z'
   end
   
   def test_trailing_nonsense_in_goal_posts

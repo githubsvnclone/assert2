@@ -102,7 +102,7 @@ contains only the inner XML. This prevents excessive spew when testing entire
 web pages:
 =end
   def _test_nested_xpath_faults
-    assert_xhtml (HomePath + 'doc/assert_xhtml.html').read
+    assert_xhtml (HomePath + 'doc/assert_x.html').read
     
    # assert do
       p xpath(:'span[ . = "test_nested_xpath_faults" ]/../..')
@@ -113,15 +113,33 @@ web pages:
     
   end
 #!end_panel!
+=begin
+Nested <code>xpath( ?. )</code> Matches Recursive Text
+
+When an XML node contains nodes with text, 
+the XPath predicate <code>[ . = "..." ]</code> matches
+all their text, concatenated together. <code>xpath()</code>'s 
+DSL converts <code>?.</code> into that notation:
+=end
+  def test_nested_xpath_text
+   _assert_xml '<boats><a>frig</a><b>ates</b></boats>'
+    assert do
+      xpath :boats, ?. => 'frigates'
+    end
+  end
+#!end_panel!
 #!no_doc!
 
+        # TODO  inner_text should use ?.
+        #  TODO  which back-ends support . = '' matching recursive stuff?
 # TODO assert_x.html
 #  TODO  replace libxml with rexml in the documentation
+# TODO  nest ' and " correctly
 
   def test_document_self
       #  TODO  use the title argument mebbe??
     doc = Ripdoc.generate(HomePath + 'test/assert_xhtml_suite.rb', 'assert{ xpath }')
-    luv = HomePath + 'doc/assert_xhtml.html'
+    luv = HomePath + 'doc/assert_x.html'
     File.write(luv, doc)
     reveal luv, '#xpath_DSL'
   end
