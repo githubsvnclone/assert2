@@ -114,7 +114,7 @@ web pages:
   end
 #!end_panel!
 =begin
-Nested <code>xpath( ?. )</code> Matches Recursive Text
+<code>xpath( ?. )</code> Matches Recursive Text
 
 When an XML node contains nodes with text, 
 the XPath predicate <code>[ . = "..." ]</code> matches
