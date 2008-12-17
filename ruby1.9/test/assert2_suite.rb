@@ -165,6 +165,7 @@ correctly:
 #!end_panel!
 =begin
 Error Handling
+
 <code>assert{}</code> interprets program errors and decorates their diagnostics:
 =end
   def test_error_handling
@@ -175,6 +176,21 @@ Error Handling
     end
   end
 #!end_panel!
+=begin
+What about Ruby 1.8.7?
+
+<code>assert{ 2.0 }</code> uses RubyNode, which works with 1.8.6 and lower.
+<code>assert{ 2.1 }</code> uses Ripper, which is built into Ruby 1.9.
+Ruby 1.8.7 includes some backports from 1.9 that break the internal API that
+RubyNode used. This means the <code>assert{ 2.0 }</code> project cannot support
+a Ruby 1.8 greater than 1.8.6!
+
+Those of you using a platform that automatically installed Ruby 1.8.7 can
+use Keith Lancaster's blog entry, 
+<a href='http://www.keith-lancaster.com/blog/?p=24'>"Installing RubyNode when using MacPorts"</a>, 
+to recover some 1.8.6 stability!
+=end
+#!end_panel!
 #!no_doc! ever again!
 
 #  TODO  demonstrate writing tolerance() as an assertion motivator - emphasize DSL
@@ -183,7 +199,6 @@ Error Handling
 #  TODO  system to embolden a word in the documented panel!
 #  TODO  demo test that explicates why we cannot allow the "money line" 
 #            to appear inside assert{}
-# TODO  document rubynode does not work for 1.8.7
 
   def test_consume_diagnostic
     add_diagnostic 'silly Rabbi!'

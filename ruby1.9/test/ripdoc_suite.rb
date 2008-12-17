@@ -65,7 +65,7 @@ class RipdocSuite < Test::Unit::TestCase
     
     deny{ @sauce.match('<p><p>') }
     deny{ @sauce.match('<pre></div>') }
-    # reveal
+    reveal
   end
 
   def test_on_embdoc_beg
