@@ -15,7 +15,7 @@ scans it for details.<br/>
 * you can program <code>xpath()</code> using XPath notation, or convenient 
 #!link!xpath_DSL!Ruby option-hashes<br/>
 * 
-#!link!xpathtext! TODO  productize links to explain they don't take nothing
+#!link!xpathtext!
 * 
 #!link!Nested_xpath_Faults! TODO
 
