@@ -124,6 +124,8 @@ class Ripdoc < Ripper::Filter
             prior = false
           elsif doc.strip =~ /^\#\!link\!(.*)/ #!link!froot!loop
             target, contents = $1.split('!')  #  TODO  permit a ! in the contents
+            puts '#!link!anchor!text tags work best with text after the last bang!' unless contents
+            contents ||= ''
             f << "<a href='\##{target}' onclick='raise(\"#{target}\")'>"
             f << enline(CGI.escapeHTML(contents))
             f << '</a>'

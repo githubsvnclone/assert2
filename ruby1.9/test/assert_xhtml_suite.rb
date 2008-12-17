@@ -152,7 +152,7 @@ DSL converts <code>?.</code> into that notation:
 #  TODO  deal with horizontal overflow in panels!
 
   def test_xpath_converts_hashes_into_predicates
-    _assert_xml '<a class="b"/>'
+   _assert_xml '<a class="b"/>'
     expected_node = REXML::XPath.first(@xdoc, '/a[ @class = "b" ]')
     assert{ xpath(:a, :class => :b) == expected_node }
   end  #  TODO  use this in documentation
