@@ -19,7 +19,7 @@ scans it for details.<br/>
 #!link!xpath_DSL!Ruby option-hashes<br/>
 * 
 #!link!xpathtext!<code>xpath().text</code>
-returns a copy of an XML node's (shallow) text contents</br>
+returns a copy of an XML node's (shallow) text contents<br/>
 * 
 #!link!Nested_xpath_Faults!assert{} and xpath()
 work together to diagnose XHTML efficiently<br/>
