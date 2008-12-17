@@ -18,9 +18,11 @@ scans it for details.<br/>
 * you can program <code>xpath()</code> using XPath notation, or convenient 
 #!link!xpath_DSL!Ruby option-hashes<br/>
 * 
-#!link!xpathtext!
+#!link!xpathtext!<code>xpath().text</code>
+returns a copy of an XML node's (shallow) text contents</br>
 * 
-#!link!Nested_xpath_Faults! TODO
+#!link!Nested_xpath_Faults!assert{} and xpath()
+work together to diagnose XHTML efficiently<br/>
 
 =end
 #!end_panel!
