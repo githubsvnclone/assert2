@@ -8,6 +8,9 @@ gone astray.
 * 
 #!link!assert_xhtml_xhtml!<code>assert_xhtml()</code>
 absorbs your XHTML<br/>
+* 
+#!link!_assert_xml!<code>_assert_xml()</code>
+absorbs your XML fragments<br/>
 * TODO <code>_assert_xml()</code> absorbs your XML<br/>
 * ...then 
 #!link!xpath_path!<code>assert{ xpath() }</code>
@@ -77,6 +80,21 @@ a node's string contents with <code>?.</code>:
     end
   end
 #!end_panel!
+=begin
+<code>_assert_xml()</code>
+
+Some versions of <code>assert_xhtml</code> fuss when
+passed an XHTML fragment, or XML with some other schema. Use 
+<code>_assert_xml()</code> to bypass those conveniences:
+=end
+  def test__assert_xml
+    
+   _assert_xml '<Mean><Woman>Blues</Woman></Mean>'
+   
+    assert{ xpath('/Mean/Woman').text == 'Blues' }
+  end
+#!end_panel!
+=begin
 =begin
 <code>xpath().text</code>
 
