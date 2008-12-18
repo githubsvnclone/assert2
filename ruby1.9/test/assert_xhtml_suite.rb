@@ -153,7 +153,7 @@ DSL converts <code>?.</code> into that notation:
         # TODO  inner_text should use ?.
         #  TODO  which back-ends support . = '' matching recursive stuff?
 #  TODO  replace libxml with rexml in the documentation
-# TODO  nest ' and " correctly
+# TODO  nest ' and " correctly - via node=REXML::XPath.first doc, '//lexeme[phrase/text()=$name]', {}, {"name"=>"n't"}
 
   def test_document_self
       #  TODO  use the title argument mebbe??
