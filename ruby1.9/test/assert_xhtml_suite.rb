@@ -152,7 +152,6 @@ DSL converts <code>?.</code> into that notation:
 
         # TODO  inner_text should use ?.
         #  TODO  which back-ends support . = '' matching recursive stuff?
-# TODO assert_x.html
 #  TODO  replace libxml with rexml in the documentation
 # TODO  nest ' and " correctly
 
