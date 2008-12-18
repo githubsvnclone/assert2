@@ -237,7 +237,7 @@ DSL converts <code>?.</code> into that notation:
     end
   end
 
-  def test_deny_nested_diagnostics  #  TODO  put a test like this inside assert2_suite.rb
+  def test_deny_nested_diagnostics
    _assert_xml '<a><b><c/></b></a>'
    
     diagnostic = assert_flunk 'xpath: "descendant-or-self::si"' do
