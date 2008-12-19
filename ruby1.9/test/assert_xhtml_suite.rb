@@ -284,10 +284,13 @@ DSL converts <code>?.</code> into that notation:
     end
   end
    
-  def test_to_path
+  def test_to_xpath
     apa = AssertXPathArguments.new
     xpath = apa.to_xpath(:a, {:href=>"http://www.sinfest.net/", "."=>"SinFest"}, {})
-    assert{ xpath == "descendant-or-self::a[ @href = 'http://www.sinfest.net/' and . = 'SinFest' ]" }
+    
+    assert{ xpath == [
+      "descendant-or-self::a[ @href = 'http://www.sinfest.net/' and . = 'SinFest' ]",
+        nil, {}] }
   end
 
   def reveal(filename, anchor)
