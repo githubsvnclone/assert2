@@ -42,8 +42,7 @@ module Test; module Unit; module Assertions
       @__additional_diagnostics[x] = d.call if d.respond_to? :call
     end
   end  #  TODO  pass the same args as blocks take
-      #  TODO  add a lite stack trace when assert{} or deny{} rescue
-
+      
   def assert(*args, &block)
   #  This assertion calls a block, and faults if it returns
   #  +false+ or +nil+. The fault diagnostic will reflect the
