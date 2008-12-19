@@ -38,8 +38,12 @@ module Test; module Unit; module Assertions
       xml_identifier = /^[a-z][_a-z0-9]+$/i  #  CONSIDER is that an XML identifier match?
       subs = {}
       
-      pred = hash.map{|k, v| 
+      pred = hash.map{|k, v|
+                sk = k.to_s
+                sk = '_text' if sk == '.'
+                subs[sk.to_s] = v
                 "#{ '@' if k.to_s =~ xml_identifier }#{k} = '#{v}'" 
+                
               }.join(' and ')
               
       return pred, subs
