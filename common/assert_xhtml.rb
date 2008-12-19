@@ -22,13 +22,11 @@ module Test; module Unit; module Assertions
       end  #  CONSIDER  uh, figure out the best libxml-ruby??
       
       @xdoc = xp.parse.root
-      return @sauce = xml
     else
       #  CONSIDER  figure out how entities are supposed to work!!
       xml = xml.gsub('&mdash;', '--')
       doc = REXML::Document.new(xml)
       @xdoc = doc.root
-      return @sauce = xml  #  TODO  still need this??
     end
   end 
 
