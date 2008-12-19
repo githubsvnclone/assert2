@@ -32,39 +32,39 @@ module Test; module Unit; module Assertions
     end
   end 
 
-  class AssertXPathArguments  #  TODO  another refactor party!
+  class AssertXPathArguments
     
     def initialize()
       @subs = {}
+      @xpath = ''
     end
     
     attr_reader :subs
+    attr_reader :xpath
     
     def to_conditions(hash)
-      xml_identifier = /^[a-z][_a-z0-9]+$/i  #  CONSIDER is that an XML identifier match?
+      xml_attribute_name = /^[a-z][_a-z0-9]+$/i  #  CONSIDER is that an XML attribute name match?
       
-      pred = hash.map{|k, v|
-                sk = k.to_s
-                sk = '_text' if sk == '.'
-                @subs[sk] = v.to_s
-                "#{ '@' if k.to_s =~ xml_identifier }#{k} = $#{sk}" 
-              }.join(' and ')
-              
-      return pred
+      @xpath << hash.map{|k, v|
+                  sk = k.to_s
+                  sk = '_text' if sk == '.'
+                  @subs[sk] = v.to_s
+                  "#{ '@' if k.to_s =~ xml_attribute_name }#{k} = $#{sk}" 
+                }.join(' and ')
     end
     
     def to_predicate(hash, options)
       hash = { :id => hash } if hash.kind_of? Symbol
       hash.merge! options
-      path = to_conditions(hash)
-      return "[ #{ path } ]"
+      @xpath << '[ '
+      to_conditions(hash)
+      @xpath << ' ]'
     end
 
     def to_xpath(path, id, options)
-      path = "descendant-or-self::#{path}" if path.kind_of? Symbol
-        #  TODO  cover id, hash
-      path << to_predicate(id, options) if id
-      return path
+      @xpath = path
+      @xpath = "descendant-or-self::#{ @xpath }" if @xpath.kind_of? Symbol
+      to_predicate(id, options) if id
     end
 
   end
@@ -77,17 +77,16 @@ module Test; module Unit; module Assertions
   def xpath(path, id = nil, options = {}, &block)
     former_xdoc = @xdoc
     apa = AssertXPathArguments.new
-    xpath = apa.to_xpath(path, id, options)
-    # p xpath, apa.subs
-    node = REXML::XPath.first(@xdoc, xpath, nil, apa.subs)
+    apa.to_xpath(path, id, options)
+    node = REXML::XPath.first(@xdoc, apa.xpath, nil, apa.subs)
     
     add_diagnostic :clear do
       bar = REXML::Formatters::Pretty.new
       out = String.new
       bar.write(@xdoc, out)
-#  TODO  spew the replacers if they b relevant
-      "xpath: #{ xpath.inspect }\n" +
-      "xml context:\n" + out
+      diagnostic = "xpath: #{ apa.xpath.inspect }\n"
+      diagnostic << "arguments: #{ apa.subs.pretty_inspect }\n" if apa.subs.any?
+      diagnostic + "xml context:\n" + out
     end
     
     assert_ nil, :args => [@xdoc = node], &block if node and block
