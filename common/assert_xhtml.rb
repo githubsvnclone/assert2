@@ -34,6 +34,10 @@ module Test; module Unit; module Assertions
 
   class AssertXPathArguments  #  TODO  another refactor party!
     
+    def initialize()
+      @subs = {}
+    end
+    
     def to_conditions(hash)
       xml_identifier = /^[a-z][_a-z0-9]+$/i  #  CONSIDER is that an XML identifier match?
       subs = {}
@@ -41,9 +45,8 @@ module Test; module Unit; module Assertions
       pred = hash.map{|k, v|
                 sk = k.to_s
                 sk = '_text' if sk == '.'
-                subs[sk.to_s] = v
-                "#{ '@' if k.to_s =~ xml_identifier }#{k} = '#{v}'" 
-                
+                subs[sk] = v.to_s
+                "#{ '@' if k.to_s =~ xml_identifier }#{k} = $#{sk}" 
               }.join(' and ')
               
       return pred, subs
