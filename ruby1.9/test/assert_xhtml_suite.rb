@@ -28,14 +28,16 @@ work together to diagnose XHTML efficiently<br/>
 #!end_panel!
 #!no_doc!
 require 'test/unit'
-$:.unshift 'lib'; $:.unshift '../lib'
+require 'pathname'
+
+HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path
+
+$:.unshift HomePath + 'lib'
 require 'assert2'
 require 'ripdoc'
 require 'common/assert_flunk'
 require 'assert_xhtml'
-require 'pathname'
 
-  HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path
 
 class AssertXhtmlSuite < Test::Unit::TestCase
 
@@ -172,12 +174,6 @@ DSL converts <code>?.</code> into that notation:
 
 #  TODO  deal with horizontal overflow in panels!
 
-  def test_xpath_converts_hashes_into_predicates
-   _assert_xml '<a class="b"/>'
-    expected_node = REXML::XPath.first(@xdoc, '/a[ @class = "b" ]')
-    assert{ xpath(:a, :class => :b) == expected_node }
-  end  #  TODO  use this in documentation
-
   def test_xpath_converts_silly_notation_to_text_matches
     _assert_xml '<a>b</a>'
     assert{ xpath(:a, :'.' => :b) == xpath('/a[ . = "b" ]') }
@@ -257,8 +253,8 @@ DSL converts <code>?.</code> into that notation:
 
   def test_to_predicate_expects_options
     args = AssertXPathArguments.new
-    assert{ args.to_predicate(:zone, {}) == "[ @id = 'zone' ]" }
-    predicate = args.to_predicate(:zone, :foo => :bar)
+    assert{ args.to_predicate(:zone, {}).first == "[ @id = 'zone' ]" }
+    predicate = args.to_predicate(:zone, :foo => :bar).first
 
     assert{
       predicate.index('[ ') == 0 and
@@ -278,19 +274,26 @@ DSL converts <code>?.</code> into that notation:
   def test_failing_xpaths_indent_their_returnage
     return if RUBY_VERSION < '1.9' # TODO  fix!
     assert_xhtml '<html><body/></html>'
-    return # TODO
+    return # TODO hey! this one is done!
     assert_flunk "xml context:\n<html>\n  <body/>\n</html>" do
       assert{ xpath('yack') }
     end
   end
    
+  def test_xpath_converts_hashes_into_predicates
+   _assert_xml '<a class="b"/>'
+    expected_node = REXML::XPath.first(@xdoc, '/a[ @class = "b" ]')
+    assert{ xpath(:a, :class => :b) == expected_node }
+  end  #  TODO  use this in documentation
+
   def test_to_xpath
     apa = AssertXPathArguments.new
     xpath = apa.to_xpath(:a, {:href=>"http://www.sinfest.net/", "."=>"SinFest"}, {})
     
     assert{ xpath == [
       "descendant-or-self::a[ @href = 'http://www.sinfest.net/' and . = 'SinFest' ]",
-        nil, {}] }
+        nil, { # 'href' => 'http://www.sinfest.net/', '_text' => 'SinFest'
+              }] }
   end
 
   def reveal(filename, anchor)
