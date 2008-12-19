@@ -155,13 +155,14 @@ DSL converts <code>?.</code> into that notation:
         #  TODO  which back-ends support . =~ '' matching regices?
 #  TODO  replace libxml with rexml in the documentation
 # TODO  nest ' and " correctly - via node=REXML::XPath.first doc, '//lexeme[phrase/text()=$name]', {}, {"name"=>"n't"}
+#  TODO  split off the tests that hit assert2_utilities.rb...
 
   def test_document_self
       #  TODO  use the title argument mebbe??
     doc = Ripdoc.generate(HomePath + 'test/assert_xhtml_suite.rb', 'assert{ xpath }')
     luv = HomePath + 'doc/assert_x.html'
     File.write(luv, doc)
-    reveal luv, '#xpath_DSL'
+    # reveal luv, '#xpath_DSL'
   end
   
   def test_xpath_converts_symbols_to_ids
