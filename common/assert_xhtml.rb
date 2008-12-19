@@ -50,28 +50,28 @@ module Test; module Unit; module Assertions
         #  TODO  cover id, hash
              #  TODO  escape ' and " correctly - if possible!
       path << to_predicate(id, options) if id
-      return path
+      return [path, nil, {}]
     end
 
   end
 
   def xpath(path, id = nil, options = {}, &block)
     former_xdoc = @xdoc
-    path = AssertXPathArguments.new.to_xpath(path, id, options)
+    xpathage = AssertXPathArguments.new.to_xpath(path, id, options)
     # if node = @xdoc.find_first(path)
-    if node = REXML::XPath.first(@xdoc, path)
+    if node = REXML::XPath.first(@xdoc, *xpathage)
 #puts node.public_methods.sort
     #  def node.text
     #    find_first('text()').to_s
     #  end
     end
 
-    add_diagnostic :clear do  #  TODO  the narrowest expression wins. Fix by pushing and popping diagnostic sets!
+    add_diagnostic :clear do
       bar = REXML::Formatters::Pretty.new
       out = String.new
       bar.write(@xdoc, out)
-
-      "xpath: #{ path.inspect }\n" +
+#  TODO  spew the replacers if they b relevant
+      "xpath: #{ xpathage.first.inspect }\n" +
       "xml context:\n" + out
     end
     
@@ -88,4 +88,4 @@ module Test; module Unit; module Assertions
   
 end; end; end
 
-require '../test/assert_xhtml_suite.rb' if $0 == __FILE__ and File.exist?('../test/assert_xhtml_suite.rb')
+require '../../test/assert_xhtml_suite.rb' if $0 == __FILE__ and File.exist?('../../test/assert_xhtml_suite.rb')
