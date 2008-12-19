@@ -1,5 +1,7 @@
 require 'test/unit'
 
+#  TODO  move common into assert2
+
 module Test; module Unit; module Assertions
 
   # This is a copy of the classic assert, so your pre-existing

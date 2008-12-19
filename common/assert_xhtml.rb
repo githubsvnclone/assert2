@@ -12,15 +12,15 @@ module Test; module Unit; module Assertions
 
   def _assert_xml(xml) #, parser = XML::Parser)
     if false
-    xp = parser.new()
-    xp.string = xml
-    if XML.respond_to? :'default_pedantic_parser='
-      XML.default_pedantic_parser = true
-    else
-      XML::Parser.default_pedantic_parser = true
-    end  #  CONSIDER  uh, figure out the best libxml-ruby??
-    @xdoc = xp.parse.root
-    return @sauce = xml
+      xp = parser.new()
+      xp.string = xml
+      if XML.respond_to? :'default_pedantic_parser='
+        XML.default_pedantic_parser = true
+      else
+        XML::Parser.default_pedantic_parser = true
+      end  #  CONSIDER  uh, figure out the best libxml-ruby??
+      @xdoc = xp.parse.root
+      return @sauce = xml
     else
       #  CONSIDER  figure out how entities are supposed to work!!
       xml = xml.gsub('&mdash;', '--')
