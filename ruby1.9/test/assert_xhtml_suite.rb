@@ -293,7 +293,7 @@ DSL converts <code>?.</code> into that notation:
 
   def test_to_xpath
     apa = AssertXPathArguments.new
-    xpath = apa.to_xpath(:a, {:href=>"http://www.sinfest.net/", "."=>"SinFest"}, {})
+    xpath = apa.to_xpath(:a, { :href=> 'http://www.sinfest.net/', ?. => 'SinFest' }, {})
 
     assert{ xpath == [
       "descendant-or-self::a[ @href = $href and . = $_text ]",
