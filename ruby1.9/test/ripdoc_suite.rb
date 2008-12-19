@@ -164,7 +164,8 @@ class RipdocSuite < Test::Unit::TestCase
     assert_embdoc ['yo', '#!link!froot!lo<em>op</em>', 'dude']
 
     assert do
-      xpath :a, :onclick => 'raise("froot")'
+      xpath :a, :href => '#froot',
+             :onclick => 'raise("froot")'
     end
     
     assert do
