@@ -38,6 +38,8 @@ module Test; module Unit; module Assertions
       @subs = {}
     end
     
+    attr_reader :subs
+    
     def to_conditions(hash)
       xml_identifier = /^[a-z][_a-z0-9]+$/i  #  CONSIDER is that an XML identifier match?
       subs = {}
@@ -46,6 +48,7 @@ module Test; module Unit; module Assertions
                 sk = k.to_s
                 sk = '_text' if sk == '.'
                 subs[sk] = v.to_s
+                @subs[sk] = v.to_s
                 "#{ '@' if k.to_s =~ xml_identifier }#{k} = $#{sk}" 
               }.join(' and ')
               
@@ -71,15 +74,17 @@ module Test; module Unit; module Assertions
 
   end
 
-  def xpath(path, id = nil, options = {}, &block)
-    former_xdoc = @xdoc
-    xpathage = AssertXPathArguments.new.to_xpath(path, id, options)
-    # if node = @xdoc.find_first(path)
-    if node = REXML::XPath.first(@xdoc, *xpathage)
-#puts node.public_methods.sort
+    # if node = @xdoc.find_first(path) ## for libxml
     #  def node.text
     #    find_first('text()').to_s
     #  end
+
+  def xpath(path, id = nil, options = {}, &block)
+    former_xdoc = @xdoc
+    apa = AssertXPathArguments.new
+    xpathage = apa.to_xpath(path, id, options)
+    #  TODO simplify xpathage
+    if node = REXML::XPath.first(@xdoc, xpathage.first, nil, apa.subs)
     end
 
     add_diagnostic :clear do
