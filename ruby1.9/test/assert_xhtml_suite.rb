@@ -260,10 +260,10 @@ DSL converts <code>?.</code> into that notation:
 
 
   def test_to_predicate_expects_options
-    args = AssertXPathArguments.new
-    assert{ args.to_predicate(:zone, {}).first == "[ @id = $id ]" }
-    predicate, subs = args.to_predicate(:zone, :foo => :bar)
-    assert{ subs == { "id" => 'zone', "foo" => 'bar' } }
+    apa = AssertXPathArguments.new
+    assert{ apa.to_predicate(:zone, {}).first == "[ @id = $id ]" }
+    predicate = apa.to_predicate(:zone, :foo => :bar).first # TODO take out the first
+    assert{ apa.subs == { "id" => 'zone', "foo" => 'bar' } }
     
     assert do    
       predicate.index('[ ') == 0 and
@@ -295,9 +295,8 @@ DSL converts <code>?.</code> into that notation:
     apa = AssertXPathArguments.new
     xpath = apa.to_xpath(:a, { :href=> 'http://www.sinfest.net/', ?. => 'SinFest' }, {})
 
-    assert{ xpath == [
-      "descendant-or-self::a[ @href = $href and . = $_text ]",
-        nil, { 'href' => 'http://www.sinfest.net/', '_text' => 'SinFest' } ] }
+    assert{ xpath == "descendant-or-self::a[ @href = $href and . = $_text ]" }
+    assert{ apa.subs == { 'href' => 'http://www.sinfest.net/', '_text' => 'SinFest' } }
   end
 
   def reveal(filename, anchor)
