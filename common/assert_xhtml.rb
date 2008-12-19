@@ -14,11 +14,13 @@ module Test; module Unit; module Assertions
     if false
       xp = parser.new()
       xp.string = xml
+      
       if XML.respond_to? :'default_pedantic_parser='
         XML.default_pedantic_parser = true
       else
         XML::Parser.default_pedantic_parser = true
       end  #  CONSIDER  uh, figure out the best libxml-ruby??
+      
       @xdoc = xp.parse.root
       return @sauce = xml
     else
@@ -30,27 +32,34 @@ module Test; module Unit; module Assertions
     end
   end 
 
-  class AssertXPathArguments
+  class AssertXPathArguments  #  TODO  another refactor party!
     
     def to_conditions(hash)
       xml_identifier = /^[a-z][_a-z0-9]+$/i  #  CONSIDER is that an XML identifier match?
-      return hash.map{|k, v| 
+      subs = {}
+      
+      pred = hash.map{|k, v| 
                 "#{ '@' if k.to_s =~ xml_identifier }#{k} = '#{v}'" 
               }.join(' and ')
+              
+      return pred, subs
     end
     
     def to_predicate(hash, options)
       hash = { :id => hash } if hash.kind_of? Symbol
       hash.merge! options
-      return "[ #{ to_conditions(hash) } ]"
+      path, subs = to_conditions(hash)
+      return "[ #{ path } ]", subs
     end
 
     def to_xpath(path, id, options)
       path = "descendant-or-self::#{path}" if path.kind_of? Symbol
         #  TODO  cover id, hash
              #  TODO  escape ' and " correctly - if possible!
-      path << to_predicate(id, options) if id
-      return [path, nil, {}]
+      subs = {}
+      pred, subs = to_predicate(id, options) if id
+      path << pred if id
+      return [path, nil, subs]
     end
 
   end
