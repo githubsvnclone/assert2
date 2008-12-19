@@ -283,6 +283,12 @@ DSL converts <code>?.</code> into that notation:
       assert{ xpath('yack') }
     end
   end
+   
+  def test_to_path
+    apa = AssertXPathArguments.new
+    xpath = apa.to_xpath(:a, {:href=>"http://www.sinfest.net/", "."=>"SinFest"}, {})
+    assert{ xpath == "descendant-or-self::a[ @href = 'http://www.sinfest.net/' and . = 'SinFest' ]" }
+  end
 
   def reveal(filename, anchor)
     # File.write('yo.html', xhtml)
