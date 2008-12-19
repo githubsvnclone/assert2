@@ -260,8 +260,10 @@ DSL converts <code>?.</code> into that notation:
 
   def test_to_predicate_expects_options
     apa = AssertXPathArguments.new
-    assert{ apa.to_predicate(:zone, {}) == "[ @id = $id ]" }
-    predicate = apa.to_predicate(:zone, :foo => :bar)
+    apa.to_predicate(:zone, {})
+    assert{ apa.xpath == "[ @id = $id ]" }
+    apa.to_predicate(:zone, :foo => :bar)
+    predicate = apa.xpath
     assert{ apa.subs == { "id" => 'zone', "foo" => 'bar' } }
     
     assert do    
@@ -292,9 +294,9 @@ DSL converts <code>?.</code> into that notation:
 
   def test_to_xpath
     apa = AssertXPathArguments.new
-    xpath = apa.to_xpath(:a, { :href=> 'http://www.sinfest.net/', ?. => 'SinFest' }, {})
+    apa.to_xpath(:a, { :href=> 'http://www.sinfest.net/', ?. => 'SinFest' }, {})
 
-    assert{ xpath == "descendant-or-self::a[ @href = $href and . = $_text ]" }
+    assert{ apa.xpath == "descendant-or-self::a[ @href = $href and . = $_text ]" }
     assert{ apa.subs == { 'href' => 'http://www.sinfest.net/', '_text' => 'SinFest' } }
   end
 
