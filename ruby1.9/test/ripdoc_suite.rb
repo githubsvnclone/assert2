@@ -164,8 +164,12 @@ class RipdocSuite < Test::Unit::TestCase
     assert_embdoc ['yo', '#!link!froot!lo<em>op</em>', 'dude']
 
     assert do
+      xpath :a, :onclick => 'raise("froot")'
+    end
+    
+    assert do
       xpath :a, :href => '#froot', 
-      # TODO       :onclick => 'raise("froot")',
+       # TODO      :onclick => 'raise("froot")', should not emit NoMethodError: undefined method `inject' for true:TrueClass>".
              :'.' => :loop do
         xpath :em, :'.' => :op
       end
