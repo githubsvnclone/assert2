@@ -261,8 +261,8 @@ DSL converts <code>?.</code> into that notation:
 
   def test_to_predicate_expects_options
     apa = AssertXPathArguments.new
-    assert{ apa.to_predicate(:zone, {}).first == "[ @id = $id ]" }
-    predicate = apa.to_predicate(:zone, :foo => :bar).first # TODO take out the first
+    assert{ apa.to_predicate(:zone, {}) == "[ @id = $id ]" }
+    predicate = apa.to_predicate(:zone, :foo => :bar)
     assert{ apa.subs == { "id" => 'zone', "foo" => 'bar' } }
     
     assert do    
