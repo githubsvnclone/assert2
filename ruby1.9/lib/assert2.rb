@@ -69,7 +69,6 @@ module Test; module Unit; module Assertions
   #  
   def deny(diagnostic = nil, options = {}, &block)
       #  "None shall pass!" --the Black Knight
-    
     @__additional_diagnostics = []
     
     begin
