@@ -200,8 +200,15 @@ DSL converts <code>?.</code> into that notation:
     assert{ spew =~ /xpath: "\/html\/body"/ }
   end
 
-#  TODO  put a test runner ta the bottom of assert_xhtml.rb
-
+  def test_failing_xpaths_indent_their_returnage
+    return if RUBY_VERSION < '1.9' # TODO  fix!
+    assert_xhtml '<html><body/></html>'
+    
+    assert_flunk "xml context:\n<html>\n  <body/>\n</html>" do
+      assert{ xpath('yack') }
+    end
+  end
+   
   def test_nested_diagnostics  #  TODO  put a test like this inside assert2_suite.rb
    _assert_xml '<a><b><c/></b></a>'
    
@@ -271,15 +278,6 @@ DSL converts <code>?.</code> into that notation:
     assert{ xpath(:div, :zone, :foo => :bar).text == 'yo' }
   end
 
-  def test_failing_xpaths_indent_their_returnage
-    return if RUBY_VERSION < '1.9' # TODO  fix!
-    assert_xhtml '<html><body/></html>'
-    
-    assert_flunk "xml context:\n<html>\n  <body/>\n</html>" do
-      assert{ xpath('yack') }
-    end
-  end
-   
   def test_xpath_converts_hashes_into_predicates
    _assert_xml '<a class="b"/>'
     expected_node = REXML::XPath.first(@xdoc, '/a[ @class = "b" ]')
@@ -292,7 +290,7 @@ DSL converts <code>?.</code> into that notation:
     
     assert{ xpath == [
       "descendant-or-self::a[ @href = 'http://www.sinfest.net/' and . = 'SinFest' ]",
-        nil, { # 'href' => 'http://www.sinfest.net/', '_text' => 'SinFest'
+        nil, { 'href' => 'http://www.sinfest.net/', '_text' => 'SinFest'
               }] }
   end
 
