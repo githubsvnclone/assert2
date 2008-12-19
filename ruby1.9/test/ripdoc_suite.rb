@@ -54,7 +54,8 @@ class RipdocSuite < Test::Unit::TestCase
   end
 
   def test_embdocs_form_accordions_with_contents
-    assert_xhtml Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
+    xhtml = Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
+    assert_xhtml xhtml
     
     assert do
       xpath :div, :vertical_container do
@@ -63,9 +64,9 @@ class RipdocSuite < Test::Unit::TestCase
       end
     end
     
-    deny{ @sauce.match('<p><p>') }
-    deny{ @sauce.match('<pre></div>') }
-    reveal
+    deny{ xhtml.match('<p><p>') }
+    deny{ xhtml.match('<pre></div>') }
+    reveal xhtml
   end
 
   def test_on_embdoc_beg
@@ -223,7 +224,9 @@ class RipdocSuite < Test::Unit::TestCase
   end
 
   def assert_rip(line)
-    assert_xhtml Ripdoc.compile_fragment(line)
+    xhtml = Ripdoc.compile_fragment(line)
+    assert_xhtml xhtml
+    return xhtml
   end
   
   def assert_rip_page(line)
