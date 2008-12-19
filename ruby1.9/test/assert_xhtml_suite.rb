@@ -274,7 +274,7 @@ DSL converts <code>?.</code> into that notation:
   def test_failing_xpaths_indent_their_returnage
     return if RUBY_VERSION < '1.9' # TODO  fix!
     assert_xhtml '<html><body/></html>'
-    return # TODO hey! this one is done!
+    
     assert_flunk "xml context:\n<html>\n  <body/>\n</html>" do
       assert{ xpath('yack') }
     end
