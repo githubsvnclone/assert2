@@ -152,6 +152,7 @@ DSL converts <code>?.</code> into that notation:
 
         # TODO  inner_text should use ?.
         #  TODO  which back-ends support . = '' matching recursive stuff?
+        #  TODO  which back-ends support . =~ '' matching regices?
 #  TODO  replace libxml with rexml in the documentation
 # TODO  nest ' and " correctly - via node=REXML::XPath.first doc, '//lexeme[phrase/text()=$name]', {}, {"name"=>"n't"}
 
