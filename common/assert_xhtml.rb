@@ -69,7 +69,7 @@ module Test; module Unit; module Assertions
       subs = {}
       pred, subs = to_predicate(id, options) if id
       path << pred if id
-      return [path, nil, subs]
+      return path
     end
 
   end
@@ -82,9 +82,8 @@ module Test; module Unit; module Assertions
   def xpath(path, id = nil, options = {}, &block)
     former_xdoc = @xdoc
     apa = AssertXPathArguments.new
-    xpathage = apa.to_xpath(path, id, options)
-    #  TODO simplify xpathage
-    if node = REXML::XPath.first(@xdoc, xpathage.first, nil, apa.subs)
+    xpath = apa.to_xpath(path, id, options)
+    if node = REXML::XPath.first(@xdoc, xpath, nil, apa.subs)
     end
 
     add_diagnostic :clear do
@@ -92,7 +91,7 @@ module Test; module Unit; module Assertions
       out = String.new
       bar.write(@xdoc, out)
 #  TODO  spew the replacers if they b relevant
-      "xpath: #{ xpathage.first.inspect }\n" +
+      "xpath: #{ xpath.inspect }\n" +
       "xml context:\n" + out
     end
     
