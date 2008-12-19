@@ -78,9 +78,9 @@ module Test; module Unit; module Assertions
     former_xdoc = @xdoc
     apa = AssertXPathArguments.new
     xpath = apa.to_xpath(path, id, options)
-    if node = REXML::XPath.first(@xdoc, xpath, nil, apa.subs)
-    end
-
+    # p xpath, apa.subs
+    node = REXML::XPath.first(@xdoc, xpath, nil, apa.subs)
+    
     add_diagnostic :clear do
       bar = REXML::Formatters::Pretty.new
       out = String.new
