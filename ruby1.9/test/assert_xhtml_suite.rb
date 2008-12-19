@@ -258,18 +258,20 @@ DSL converts <code>?.</code> into that notation:
     deny{ diagnostic.match('<a>') }
   end
 
+
   def test_to_predicate_expects_options
     args = AssertXPathArguments.new
-    assert{ args.to_predicate(:zone, {}).first == "[ @id = 'zone' ]" }
-    predicate = args.to_predicate(:zone, :foo => :bar).first
-
-    assert{
+    assert{ args.to_predicate(:zone, {}).first == "[ @id = $id ]" }
+    predicate, subs = args.to_predicate(:zone, :foo => :bar)
+    assert{ subs == { "id" => 'zone', "foo" => 'bar' } }
+    
+    assert do    
       predicate.index('[ ') == 0 and
-      predicate.match("@id = 'zone'") and
+      predicate.match(/@id = \$id/) and
       predicate.match(" and ")        and
-      predicate.match("@foo = 'bar'") and
+      predicate.match(/@foo = \$foo/) and
       predicate.match(/ \]$/)
-    }
+    end  #  TODO  this should stop repeating the predicate part in the reflection
   end
 
   def test_xpath_takes_both_a_symbolic_id_and_options
@@ -284,14 +286,18 @@ DSL converts <code>?.</code> into that notation:
     assert{ xpath(:a, :class => :b) == expected_node }
   end  #  TODO  use this in documentation
 
+  def test_xpath_substitutions
+   _assert_xml '<div id="zone" foo="bar">yo</div>'
+    assert{ REXML::XPath.first(@xdoc, '/div[ @id = $id ]', nil, { 'id' => 'zone' }) }
+  end
+
   def test_to_xpath
     apa = AssertXPathArguments.new
     xpath = apa.to_xpath(:a, {:href=>"http://www.sinfest.net/", "."=>"SinFest"}, {})
-    
+
     assert{ xpath == [
-      "descendant-or-self::a[ @href = 'http://www.sinfest.net/' and . = 'SinFest' ]",
-        nil, { 'href' => 'http://www.sinfest.net/', '_text' => 'SinFest'
-              }] }
+      "descendant-or-self::a[ @href = $href and . = $_text ]",
+        nil, { 'href' => 'http://www.sinfest.net/', '_text' => 'SinFest' } ] }
   end
 
   def reveal(filename, anchor)
