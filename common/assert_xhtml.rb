@@ -42,33 +42,28 @@ module Test; module Unit; module Assertions
     
     def to_conditions(hash)
       xml_identifier = /^[a-z][_a-z0-9]+$/i  #  CONSIDER is that an XML identifier match?
-      subs = {}
       
       pred = hash.map{|k, v|
                 sk = k.to_s
                 sk = '_text' if sk == '.'
-                subs[sk] = v.to_s
                 @subs[sk] = v.to_s
                 "#{ '@' if k.to_s =~ xml_identifier }#{k} = $#{sk}" 
               }.join(' and ')
               
-      return pred, subs
+      return pred
     end
     
     def to_predicate(hash, options)
       hash = { :id => hash } if hash.kind_of? Symbol
       hash.merge! options
-      path, subs = to_conditions(hash)
-      return "[ #{ path } ]", subs
+      path = to_conditions(hash)
+      return "[ #{ path } ]"
     end
 
     def to_xpath(path, id, options)
       path = "descendant-or-self::#{path}" if path.kind_of? Symbol
         #  TODO  cover id, hash
-             #  TODO  escape ' and " correctly - if possible!
-      subs = {}
-      pred, subs = to_predicate(id, options) if id
-      path << pred if id
+      path << to_predicate(id, options) if id
       return path
     end
 
