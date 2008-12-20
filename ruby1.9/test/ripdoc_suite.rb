@@ -7,7 +7,6 @@ require 'assert_xhtml'
 HomePath = Ripdoc::HomePath
 
 #  TODO  at scroll time keep the target panel in the viewport!
-#  FIXME  help stickmanlabs get a macbook pro (or help talk him out of it;)
 #  CONSIDER  think of a use for the horizontal accordion, and for nesting them
 #   TODO intersticial string mashers still don't color correctly
 #   TODO make function names bigger
