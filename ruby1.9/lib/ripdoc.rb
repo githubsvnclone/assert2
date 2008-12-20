@@ -7,8 +7,7 @@ require 'erb'
 require 'optparse'
 require 'pathname'
 
-# TODO  do we still need the pre hack for the line height?
-# TODO  don't generate the <a name> from the banner - declare it on the =begin tag
+# TODO  reflect the banner anchor at generation time, to figure out what to hotlink to
 
 class Ripdoc < Ripper::Filter
   HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path
