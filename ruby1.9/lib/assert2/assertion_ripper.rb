@@ -1,12 +1,12 @@
 require 'ripper'  #   note we only work with Ruby >= 1.9 !
 require 'pp'
 
-#  TODO  move as much as possible under assert2/, including common
+#  FIXME  move as much as possible under assert2/, including common
 
 module Test; module Unit; module Assertions
 
   class AssertionRipper
-    MAX_CAPTURE_SNIP = 50  #  TODO  use this when formatting already?
+    MAX_CAPTURE_SNIP = 50  #  FIXME  use this when formatting already?
     attr_reader :assertion_source,
                 :captures,
                 :reflect

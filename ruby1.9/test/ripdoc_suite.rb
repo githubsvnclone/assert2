@@ -7,11 +7,11 @@ require 'assert_xhtml'
 HomePath = Ripdoc::HomePath
 
 #  TODO  at scroll time keep the target panel in the viewport!
-#  TODO  help stickmanlabs get a macbook pro (or help talk him out of it;)
+#  FIXME  help stickmanlabs get a macbook pro (or help talk him out of it;)
 #  CONSIDER  think of a use for the horizontal accordion, and for nesting them
 #   TODO intersticial string mashers still don't color correctly
 #   TODO make function names bigger
-#  TODO  get everything working in Ruby 1.8.6, excuse 1.8.7, and get all but xpath working in 1.9.1
+#  FIXME  get everything working in Ruby 1.8.6, excuse 1.8.7, and get all but xpath working in 1.9.1
 #  TODO  ahem. Abstract the f---ing xml library, and get working in 1.9.1 anyway!!
 
 class RipdocSuite < Test::Unit::TestCase
