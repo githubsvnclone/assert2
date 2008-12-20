@@ -2,8 +2,8 @@ $:.unshift 'lib'; $:.unshift '../lib'
 require 'assert2'
 require 'common/assert_flunk'
 
-#  TODO  respect linefeeds in parsed source when reflecting
-#  TODO evaluate mashed strings
+#  FIXME  respect linefeeds in parsed source when reflecting
+#  FIXME evaluate mashed strings
 
 class AssertionRipperSuite < Test::Unit::TestCase
 

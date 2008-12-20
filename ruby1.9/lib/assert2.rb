@@ -6,9 +6,7 @@ require 'test/unit'
 #  TODO  feel the need for serious ncursage
 #  TODO  add :verbose => option to assert{}
 #  TODO  pay for Staff Benda Bilili  ALBUM: Très Très Fort (Promo Sampler) !
-#  TODO  ripdoc and RDoc should peacibly coexist
-#  TODO  express linefeeds in string results correctly
-#  TODO  assertion ripper tests
+#  FIXME  express linefeeds in string results correctly
 
 module Test; module Unit; module Assertions
 
@@ -44,7 +42,7 @@ module Test; module Unit; module Assertions
       got = block.call(*options[:args]) and return got
     rescue FlunkError
       raise  #  asserts inside assertions that fail do not decorate the outer assertion
-                 # TODO  review that for stuff like assert_equal
+                 # FIXME  review that for stuff like assert_equal
     rescue => got
       add_exception got
     end

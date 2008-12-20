@@ -27,7 +27,7 @@ class Ripdoc < Ripper::Filter
   end  #  TODO  complex '"? if we can't it might be a good thing...
 
   def enline(line)
-    #  TODO  move the CGIescaper in here
+    #  FIXME  move the CGIescaper in here
     return line.gsub( /&lt;a(.*?)&gt;/){ "<a #{dequote($1)}>" }.
                 gsub('&lt;/a&gt;', '</a>').
                 gsub(/&lt;br\s*\/&gt;/, '<br/>').
@@ -358,8 +358,6 @@ class Ripdoc < Ripper::Filter
             ><head>' + 
            '</head><body>' + compile_fragment(f) + '</body></html>'
   end
-
-#  TODO  do we still need the things that remove blank paragraphs and pres?
 
   def Ripdoc.compile_fragment(f)
     buf = StringIO.new
