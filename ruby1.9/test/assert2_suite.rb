@@ -13,7 +13,7 @@ fails. The first line reflects the source of the entire assertion:
 
      assert{ z =~ /=begon/ } # complete with comments
   --> nil
-             z --> "<span style=\"display: none;\">=begin</span>"
+             z --> "<span>=begin</span>"
  z =~ /=begon/ --> nil.
 
 The second line, <code>--> nil</code>, is the return value of the asserted expression.
@@ -91,7 +91,7 @@ are too cheerful and happy, to bring them down:
 
     end
     
-    denigh{ x == 43 }  #  an alternative spelling, for smooth columns of code...
+    denigh{ x == 43 }  #  an alternate spelling, for smooth columns of code...
   end
 #!end_panel!
 =begin

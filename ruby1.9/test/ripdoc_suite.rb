@@ -65,7 +65,7 @@ class RipdocSuite < Test::Unit::TestCase
     
     deny{ xhtml.match('<p><p>') }
     deny{ xhtml.match('<pre></div>') }
-    reveal xhtml
+    reveal xhtml, 'assert2.html'
   end
 
   def test_on_embdoc_beg
@@ -382,11 +382,11 @@ puts @xdoc.to_s
     end
   end
 
-  def reveal(xhtml = @sauce || @output)
-    filename = HomePath + 'doc/yo.html'
-    File.write(filename, xhtml)  
-    filename = filename.relative_path_from(Pathname.pwd)
-    system "\"C:/Program Files/Mozilla Firefox/firefox.exe\" #{filename} &"
+  def reveal(xhtml = @sauce || @output, filename)  #  TODO  take out the default arguments
+    path = HomePath + 'doc' + filename
+    File.write(path, xhtml)  
+    path = path.relative_path_from(Pathname.pwd)
+    system "\"C:/Program Files/Mozilla Firefox/firefox.exe\" #{path} &"
   end
   
 end

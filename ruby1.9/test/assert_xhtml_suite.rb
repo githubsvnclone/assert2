@@ -49,23 +49,30 @@ Use this method to push well-formed XHTML into the assertion system. Subsequent
 =end
   def test_assert_xhtml
     
-    assert_xhtml '<html><body><div id="forty_two">yo</div></body></html>'
+    assert_xhtml '<html><body><div id="forty_two">42</div></body></html>'
     
-    assert{ xpath('//div[ @id = "forty_two" ]').text == 'yo' }
+    assert{ xpath('//div[ @id = "forty_two" ]').text == '42' }
   end
 #!end_panel!
 =begin
 <code>xpath( '<em>path</em>' )</code>
 
+The function's first argument can be raw XPath in a string, or a symbol. All the 
+following queries reach out to the same node. The first symbol gets decorated
+with the <code>'descendant-or-self::'</code> XPath axis, and a second symbol
+converts into a predicate, like <code>'[ @id = "forty_two" ]'</code>.
+
+Prefer the last notation, to cut thru a large XHTML web page down to the 
+<code><div></code> containing the contents that you need to test:
 =end
   def test_assert_xpath
-    assert_xhtml '<html><body><div id="forty_two">yo</div></body></html>'
+    assert_xhtml '<html><body><div id="forty_two">42</div></body></html>'
     
-    assert{ xpath('descendant-or-self::div[ @id = "forty_two" ]').text == 'yo' }
-    assert{ xpath('//div[ @id = "forty_two" ]').text == 'yo' }
-    assert{ xpath(:'div[ @id = "forty_two" ]').text == 'yo' }
-    assert{ xpath(:div, :forty_two).text == 'yo' }
-  end
+    assert{ xpath('descendant-or-self::div[ @id = "forty_two" ]').text == '42' }
+    assert{ xpath('//div[ @id = "forty_two" ]').text == '42' }
+    assert{ xpath(:'div[ @id = "forty_two" ]').text == '42' }
+    assert{ xpath(:div, :forty_two).text == '42' }
+  end  #  FIXME  is that forty_two escaped?
 #!end_panel!
 =begin
 <code>xpath( <em>DSL</em> )</code>
@@ -74,12 +81,12 @@ You can write simple XPath queries using Ruby's familiar hash notation. Query
 a node's string contents with <code>?.</code>:
 =end
   def test_xpath_dsl
-    assert_xhtml 'yo <a href="http://antwrp.gsfc.nasa.gov/apod/">apod</a> dude'
+    assert_xhtml 'hit <a href="http://antwrp.gsfc.nasa.gov/apod/">apod</a> daily!'
     assert do
       
       xpath :a, 
             :href => 'http://antwrp.gsfc.nasa.gov/apod/',
-            ?. => 'apod'
+            ?. => 'apod'  #  the ?. resolves to XPath: 'a[ . = "apod" ]'
             
     end
   end
@@ -99,8 +106,9 @@ passed an XHTML fragment, or XML with some other schema. Use
   end
 #!end_panel!
 =begin
-=begin
 <code>xpath().text</code>
+
+FIXME get the node type right!
 
 <code>xpath()</code> returns a 
 <a href='http://libxml.rubyforge.org/rdoc/classes/LibXML/XML/Node.html'><code>LibXML::XML::Node</code></a> object 
@@ -123,13 +131,14 @@ When an inner <code>xpath{}</code> fails, the diagnostic's "xml context"
 contains only the inner XML. This prevents excessive spew when testing entire
 web pages:
 =end
-  def _test_nested_xpath_faults
+  def _test_nested_xpath_faults  #  FIXME  this does whatever it should do, and document nested XPath above here
     assert_xhtml (HomePath + 'doc/assert_x.html').read
     
-   # assert do
-      p xpath(:'span[ . = "test_nested_xpath_faults" ]/../..')
-
-    #end
+    assert do
+      xpath :a, :name => :Nested_xpath_Faults do  #  finds the panel you are reading!
+        xpath(:'span[ . = "test_nested_xpath_faults" ]/../..')
+      end
+    end
     
 #    deny  excessive spew
     
@@ -150,6 +159,27 @@ DSL converts <code>?.</code> into that notation:
     end
   end
 #!end_panel!
+=begin
+<code>xpath().text</code> is not the same as <code>xpath( ?. )</code> notation
+
+<code>xpath()</code> returns the first node, in document order, which
+matches its XPath arguments. So <code>?.</code> will
+force <code>xpath()</code> to keep searching for a hit.
+=end
+  def test_xpath_text_is_not_the_same_as_question_dot_notation
+   _assert_xml '<Mean>
+                  <Woman>Blues</Woman>
+                  <Woman>Dub</Woman>
+                </Mean>'
+    assert do
+      
+      xpath(:Woman).text == 'Blues' and  #  FIXME  document this and in the assert2 page
+      xpath(:Woman, ?. => :Dub).text == 'Dub'
+            # use a symbol ^ for a string here, as a convenience
+            
+    end
+  end
+#!end_panel!
 #!no_doc!
 
         # TODO  inner_text should use ?.
@@ -157,17 +187,20 @@ DSL converts <code>?.</code> into that notation:
         #  TODO  which back-ends support . =~ '' matching regices?
 #  TODO  replace libxml with rexml in the documentation
 #  TODO  split off the tests that hit assert2_utilities.rb...
+#  FIXME  document the symbol-symbol-hash trick
 
   def test_document_self
-      #  TODO  use the title argument mebbe??
     doc = Ripdoc.generate(HomePath + 'test/assert_xhtml_suite.rb', 'assert{ xpath }')
+    assert_xhtml doc
+    assert{ xpath '/html/head/title', ?. => 'assert{ xpath }' }
+    assert{ xpath :'div/h1/code/big', ?. => 'assert{ xpath }' }
     luv = HomePath + 'doc/assert_x.html'
     File.write(luv, doc)
-    # reveal luv, '#xpath_DSL'
+    reveal luv, '#xpath_DSL'
   end
   
   def test_xpath_converts_symbols_to_ids
-    _assert_xml '<a id="b"/>'
+   _assert_xml '<a id="b"/>'
     assert{ xpath(:a, :b) == xpath('/a[ @id = "b" ]') }
   end
 
