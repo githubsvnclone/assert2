@@ -1,6 +1,6 @@
 $:.unshift 'lib'; $:.unshift '../lib'
 require 'assert2'
-require 'common/assert_flunk'
+require 'assert2/common/assert_flunk'
 
 #  FIXME  respect linefeeds in parsed source when reflecting
 #  FIXME evaluate mashed strings

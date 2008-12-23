@@ -43,7 +43,7 @@ Then place <code>require 'assert2'</code> (for either package) above your tests.
 require 'test/unit'
 $:.unshift 'lib'; $:.unshift '../lib'
 require 'assert2'
-require 'common/assert_flunk'
+require 'assert2/common/assert_flunk'
 
 class Assert2Suite < Test::Unit::TestCase
 

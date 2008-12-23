@@ -35,7 +35,7 @@ HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path
 $:.unshift HomePath + 'lib'
 require 'assert2'
 require 'ripdoc'
-require 'common/assert_flunk'
+require 'assert2/common/assert_flunk'
 require 'assert_xhtml'
 
 
@@ -125,22 +125,56 @@ which returns the nearest text contents:
   end
 #!end_panel!
 =begin
+Nested <code>xpath{}</code>
+
+<code>xpath{}</code> takes a block, and passes this to 
+<code>assert{}</code>. Any further <code>xpath()</code> calls, inside this
+block, evaluate within the XML context set by the outer block.
+
+This is useful because if you have a huge web page (such as the one you are reading)
+you need assertions that operate only on one small region - the place where you need
+a given feature to appear. You can typically give all your <code><div></code> regions 
+useful <code>id</code>s, then use <code>xpath :div, :my_id</code> to restrict further
+<code>xpath{}</code> calls:
+=end
+  def test_nested_xpaths
+    assert_xhtml (HomePath + 'doc/assert_x.html').read
+    
+    assert 'this tests the panel you are now reading' do
+
+      xpath :a, :name => :Nested_xpath_Faults do  #  finds the panel's anchor
+        xpath '../following-sibling::div[1]' do   #  find that <a> tag's immediate sibling
+          xpath :'pre/span', ?. => 'test_nested_xpath_faults' do |span|
+            span.text =~ /nested/  #  the block passes the target node thru the |goalposts|
+          end
+        end
+      end
+
+    end  #  FIXME  don't need the outermost assert if you use a block? doc!
+    
+  end
+#!end_panel!
+=begin
 Nested <code>xpath{}</code> Faults
 
 When an inner <code>xpath{}</code> fails, the diagnostic's "xml context" 
 contains only the inner XML. This prevents excessive spew when testing entire
 web pages:
 =end
-  def _test_nested_xpath_faults  #  FIXME  this does whatever it should do, and document nested XPath above here
+  def test_nested_xpath_faults
     assert_xhtml (HomePath + 'doc/assert_x.html').read
     
-    assert do
-      xpath :a, :name => :Nested_xpath_Faults do  #  finds the panel you are reading!
-        xpath(:'span[ . = "test_nested_xpath_faults" ]/../..')
+    diagnostic = assert_flunk /BAD CONTENTS/ do
+      assert do
+        xpath :a, :name => :Nested_xpath_Faults do
+          xpath '../following-sibling::div[1]' do  
+            xpath :'pre/span[ . = "BAD CONTENTS" ]'  #  fails because the text is not found
+          end
+        end
       end
     end
-    
-#    deny  excessive spew
+puts diagnostic    
+# FIXME uh...    deny{ diagnostic =~ /excessive spew/ } # not seen because the outer xpath{} succeeded
     
   end
 #!end_panel!
@@ -175,7 +209,7 @@ force <code>xpath()</code> to keep searching for a hit.
       
       xpath(:Woman).text == 'Blues' and  #  FIXME  document this and in the assert2 page
       xpath(:Woman, ?. => :Dub).text == 'Dub'
-            # use a symbol ^ for a string here, as a convenience
+             # use a symbol ^ to match a string here, as a convenience
             
     end
   end
@@ -188,6 +222,8 @@ force <code>xpath()</code> to keep searching for a hit.
 #  TODO  replace libxml with rexml in the documentation
 #  TODO  split off the tests that hit assert2_utilities.rb...
 #  FIXME  document the symbol-symbol-hash trick
+# TODO  the explicit diagnostic message of the top-level assertion should 
+#  appear in any nested assertion failures
 
   def test_document_self
     doc = Ripdoc.generate(HomePath + 'test/assert_xhtml_suite.rb', 'assert{ xpath }')
@@ -196,7 +232,7 @@ force <code>xpath()</code> to keep searching for a hit.
     assert{ xpath :'div/h1/code/big', ?. => 'assert{ xpath }' }
     luv = HomePath + 'doc/assert_x.html'
     File.write(luv, doc)
-    reveal luv, '#xpath_DSL'
+    reveal luv, '#Nested_xpath_Faults'
   end
   
   def test_xpath_converts_symbols_to_ids

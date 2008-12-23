@@ -82,7 +82,8 @@ module Test; module Unit; module Assertions
   
 end; end; end
 
-require File.dirname(__FILE__) + '/common/assert2_utilities'
+# TODO require File.dirname(__FILE__) + 'assert2/common/assert2_utilities'
+require 'assert2/common/assert2_utilities'
 
 require '../test/assert2_suite.rb' if $0 == __FILE__ and File.exist?('../test/assert2_suite.rb')
 #require 'ripdoc_suite.rb' if $0 == __FILE__ and File.exist?('ripdoc_suite.rb')
