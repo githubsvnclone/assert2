@@ -25,7 +25,7 @@ task :default => :test
 
 task :int => :default do
   sh 'svn commit --message development'
-  sh 'svn commit --message development lib/common'
+  sh 'svn commit --message development lib/assert2/common'
   sh 'svn update ..'
 end
 
