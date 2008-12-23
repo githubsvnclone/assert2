@@ -173,7 +173,7 @@ web pages:
         end
       end
     end
-puts diagnostic    
+# puts diagnostic    
 # FIXME uh...    deny{ diagnostic =~ /excessive spew/ } # not seen because the outer xpath{} succeeded
     
   end
