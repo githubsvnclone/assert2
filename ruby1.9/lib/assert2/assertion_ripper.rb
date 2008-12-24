@@ -11,7 +11,6 @@ module Test; module Unit; module Assertions
     
     attr_reader :assertion_source,
                 :captures,
-                :line_number,
                 :reflect
     attr_accessor :ripped
     attr_writer :block
@@ -24,7 +23,7 @@ module Test; module Unit; module Assertions
 
       @reflect = ''
       @captures = []
-      @line_number = 0
+      @line_number = nil
     end
 
     def rip(lines)
@@ -96,7 +95,7 @@ module Test; module Unit; module Assertions
     #  CONSIDER  extract_block must not skip block-vars - intercept
     #  them here not down there
 
-    def reflect_assertion(block, got)
+    def reflect_assertion(block, got)  #  FIXME  move this down
       self.block = block
       
       extract_block.each do |statement|
@@ -170,8 +169,20 @@ module Test; module Unit; module Assertions
     end
 
     def sender(args)
+      if args.inspect =~ /, \[(\d+), \d+\]\]$/
+        lineno = $1.to_i
+        @line_number ||= lineno
+        
+        if @line_number < lineno
+          @reflect << "\n  " 
+          @line_number = lineno
+        end
+      end
+      
       send :"_#{args[0]}", *args[1..-1] if args
-    end
+    end  
+    
+    #  TODO  google for or claim 'motion potion'
 
     def wrap(ldelim, rdelim = ldelim)
       sink ldelim
