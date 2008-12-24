@@ -55,6 +55,20 @@ Use this method to push well-formed XHTML into the assertion system. Subsequent
   end
 #!end_panel!
 =begin
+<code>_assert_xml()</code>
+
+Some versions of <code>assert_xhtml()</code> fuss when
+passed an XHTML fragment, or XML under some other schema. Use 
+<code>_assert_xml()</code> to bypass those conveniences:
+=end
+  def test__assert_xml
+    
+   _assert_xml '<Mean><Woman>Blues</Woman></Mean>'
+   
+    assert{ xpath('/Mean/Woman').text == 'Blues' }
+  end
+#!end_panel!
+=begin
 <code>xpath( '<em>path</em>' )</code>
 
 The function's first argument can be raw XPath in a string, or a symbol. All the 
@@ -72,7 +86,7 @@ Prefer the last notation, to cut thru a large XHTML web page down to the
     assert{ xpath('//div[ @id = "forty_two" ]').text == '42' }
     assert{ xpath(:'div[ @id = "forty_two" ]').text == '42' }
     assert{ xpath(:div, :forty_two).text == '42' }
-  end  #  FIXME  is that forty_two escaped?
+  end
 #!end_panel!
 =begin
 <code>xpath( <em>DSL</em> )</code>
@@ -89,20 +103,6 @@ a node's string contents with <code>?.</code>:
             ?. => 'apod'  #  the ?. resolves to XPath: 'a[ . = "apod" ]'
             
     end
-  end
-#!end_panel!
-=begin
-<code>_assert_xml()</code>
-
-Some versions of <code>assert_xhtml</code> fuss when
-passed an XHTML fragment, or XML with some other schema. Use 
-<code>_assert_xml()</code> to bypass those conveniences:
-=end
-  def test__assert_xml
-    
-   _assert_xml '<Mean><Woman>Blues</Woman></Mean>'
-   
-    assert{ xpath('/Mean/Woman').text == 'Blues' }
   end
 #!end_panel!
 =begin
@@ -150,32 +150,49 @@ useful <code>id</code>s, then use <code>xpath :div, :my_id</code> to restrict fu
         end
       end
 
-    end  #  FIXME  don't need the outermost assert if you use a block? doc!
+    end
     
+  end
+#!end_panel!
+=begin
+<code>xpath{ <em>block</em> }</code> Calls <code>assert{ <em>block</em> }</code>
+
+When <code>xpath{}</code> calls with a block, it optionally passes its 
+detected <code>|</code>node<code>|</code> into
+the block. If the
+block returns <code>nil</code> or <code>false</code>, it will <code>flunk()</code>
+the block, using <code>assert{}</code>'s inner mechanisms:
+=end
+  def test_nested_xpath_faults
+   _assert_xml '<tag>contents<tag>'
+    assert_flunk 'text --> "contents"' do
+      
+      xpath 'tag' do |tag|
+        tag.text == 'wrong contents!'
+      end
+      
+    end
   end
 #!end_panel!
 =begin
 Nested <code>xpath{}</code> Faults
 
-When an inner <code>xpath{}</code> fails, the diagnostic's "xml context" 
-contains only the inner XML. This prevents excessive spew when testing entire
+When an inner <code>xpath{}</code> fails, the diagnostic's "<code>xml context:</code>" 
+field contains only the inner XML. This prevents excessive spew when testing entire
 web pages:
 =end
   def test_nested_xpath_faults
     assert_xhtml (HomePath + 'doc/assert_x.html').read
-    
     diagnostic = assert_flunk /BAD CONTENTS/ do
-      assert do
-        xpath :a, :name => :Nested_xpath_Faults do
-          xpath '../following-sibling::div[1]' do  
-            xpath :'pre/span[ . = "BAD CONTENTS" ]'  #  fails because the text is not found
-          end
+      xpath :a, :name => :Nested_xpath_Faults do
+        
+        xpath '../following-sibling::div[1]/pre' do  
+          xpath :'span[ . = "BAD CONTENTS" ]'  #  fails 'cause the text ain't found
         end
+        
       end
     end
-# puts diagnostic    
-# FIXME uh...    deny{ diagnostic =~ /excessive spew/ } # not seen because the outer xpath{} succeeded
-    
+    deny{ diagnostic =~ /excessive spew/ } # not seen because the outer xpath{} succeeded!
   end
 #!end_panel!
 =begin
@@ -223,7 +240,9 @@ force <code>xpath()</code> to keep searching for a hit.
 #  TODO  split off the tests that hit assert2_utilities.rb...
 #  FIXME  document the symbol-symbol-hash trick
 # TODO  the explicit diagnostic message of the top-level assertion should 
+#  TODO optional alias assert_xpath, and dorkument it
 #  appear in any nested assertion failures
+#  FIXME  comments in proportional font, and marked up
 
   def test_document_self
     doc = Ripdoc.generate(HomePath + 'test/assert_xhtml_suite.rb', 'assert{ xpath }')
@@ -378,6 +397,6 @@ force <code>xpath()</code> to keep searching for a hit.
   
 end
 
-
+#  TODO  document we do strings correctly now
 
 
