@@ -6,9 +6,12 @@ require 'pp'
 module Test; module Unit; module Assertions
 
   class AssertionRipper
+    
     MAX_CAPTURE_SNIP = 50  #  FIXME  use this when formatting already?
+    
     attr_reader :assertion_source,
                 :captures,
+                :line_number,
                 :reflect
     attr_accessor :ripped
     attr_writer :block
@@ -21,13 +24,14 @@ module Test; module Unit; module Assertions
 
       @reflect = ''
       @captures = []
+      @line_number = 0
     end
 
     def rip(lines)
       lines = [lines].flatten
       x = 0
 
-      until exp = Ripper.sexp(@assertion_source = lines[0..x].join)
+      until exp = Ripper.sexp(@assertion_source = lines[0..x].join("\n"))
         (x += 1) >= lines.length and
           raise 'your assertion failed, but your source is ' +
                 'incorrectly formatted and resists reflection!' + lines.inspect

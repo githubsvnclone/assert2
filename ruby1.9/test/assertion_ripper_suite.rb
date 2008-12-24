@@ -1,4 +1,4 @@
-$:.unshift 'lib'; $:.unshift '../lib'
+$:.unshift 'lib'; $:.unshift '../lib' #  FIXME  need this?
 require 'assert2'
 require 'assert2/common/assert_flunk'
 
@@ -13,6 +13,15 @@ class AssertionRipperSuite < Test::Unit::TestCase
     hash = { :x => 42, 43 => 44 }
     x = 42
     @effect.block = lambda{x}
+  end
+
+  def test_detect_linefeeds
+    assert{ @effect.line_number == 0 }
+    rippage = @effect.rip(['x ==', '  42']) # \n tween!
+    pp rippage
+    return rippage
+    @effect.sender rippage.first
+    assert{ @effect.reflect == "x == \n  42" }
   end
 
   def test_pass_args_to_detector
@@ -420,12 +429,12 @@ class AssertionRipperSuite < Test::Unit::TestCase
   end
 
   def test_rip_broken_lines
-    assert{ @effect.rip(["x ==\n", '42']) == 
+    assert{ @effect.rip(['x ==', '42']) == 
                 @effect.rip("x ==\n42") }
   end
 
   def test_rip_assertion_source
-    @effect.rip(["x ==\n", '42'])
+    @effect.rip(['x ==', '42'])
     assert{ @effect.assertion_source == "x ==\n42" }
   end
   
