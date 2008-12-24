@@ -103,7 +103,6 @@ module Test; module Unit; module Assertions
       end
       
       inspection = got.pretty_inspect
-            
       return format_assertion_result(assertion_source, inspection) + 
                format_captures
     end
@@ -142,8 +141,16 @@ module Test; module Unit; module Assertions
       return source.lstrip
     end
 
+    def measure_capture(kap)
+#puts kap if kap =~ /\n/
+      kap.length
+    end
+
     def format_captures
-      width = @captures.inject(0){|x, (k, v)|  x < k.length ? k.length : x  }
+      width = @captures.inject(0){|x, (k, v)|  
+        e = measure_capture(k)
+        x < e ? e : x  
+        }
       return @captures.map{|snip, capture| 
                   format_capture width, snip, capture 
                 }.join("\n")

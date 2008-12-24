@@ -21,6 +21,19 @@ class AssertionRipperSuite < Test::Unit::TestCase
     assert{ @effect.reflect == "x == \n  42" }
   end
 
+  def test_reflect_linefeeds
+    return if RUBY_VERSION > '1.9.0'
+    x = 42
+    reflects = assert_flunk /assert/ do
+      assert{ x == 
+                       43 }
+    end
+return
+puts reflects
+    assert{ reflects.match('x == 
+                       43') }
+  end
+
   def test_pass_args_to_detector
     @effect.captured_block_vars = 'x, y'
     @effect.args = [40, 2]
