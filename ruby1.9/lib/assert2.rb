@@ -1,9 +1,11 @@
+#  this is the Ruby 1.9+ version that uses Ripper!
+
 require 'assert2/ruby_reflector'  #   note we only work with Ruby >= 1.9 !
 require 'test/unit'
 
   # note there's more requires down there --V
 
-#  TODO  feel the need for serious ncursage
+#  TODO  install Coulor
 #  TODO  add :verbose => option to assert{}
 #  TODO  pay for Staff Benda Bilili  ALBUM: Très Très Fort (Promo Sampler) !
 #  FIXME  express linefeeds in string results correctly

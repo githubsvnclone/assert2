@@ -4,7 +4,7 @@ require 'assert2'
 require 'assert2/common/assert_flunk'
 
 
-class Assert_2_0_Test < Test::Unit::TestCase #:nodoc:
+class Assert2Suite < Test::Unit::TestCase #:nodoc:
 
   def setup;  colorize(true);  end
 

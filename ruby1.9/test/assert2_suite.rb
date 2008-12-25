@@ -45,7 +45,7 @@ $:.unshift 'lib'; $:.unshift '../lib'
 require 'assert2'
 require 'assert2/common/assert_flunk'
 
-class Assert2Suite < Test::Unit::TestCase
+class Assert21Suite < Test::Unit::TestCase
 
   def setup
     @effect = Test::Unit::Assertions::RubyReflector.new()
