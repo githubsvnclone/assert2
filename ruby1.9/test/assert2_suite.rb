@@ -305,16 +305,6 @@ to recover some 1.8.6 stability!
     deny{ message =~ /SyntaxError/ }
   end
 
-  def test_multi_line_assertion    
-    return if RUBY_VERSION == '1.9.1'  # TODO
-    assert_flunk /false.*nil/m do
-      assert do
-        false
-        42; nil
-      end
-    end
-  end
-  
   def test_extra_assertion_diagnostics_with_ripper
     tattle = "doc says what's the condition?"
     

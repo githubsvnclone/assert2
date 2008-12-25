@@ -47,6 +47,16 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     end
   end
 
+  def test_multi_line_assertion    
+    return if RUBY_VERSION == '1.9.1'  # TODO
+    assert_flunk /false.*nil/m do
+      assert do
+        false
+        42; nil
+      end
+    end
+  end
+  
   def test_assertion_diagnostics
     tattle = "doc says what's the condition?"
     
