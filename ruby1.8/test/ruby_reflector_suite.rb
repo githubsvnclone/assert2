@@ -6,7 +6,7 @@ require 'pathname'
 
 
 class RubyReflectorTest < Test::Unit::TestCase
-  include RubyNodeReflector
+  include RubyNodeReflector  #  TODO  retire this module
   #include Assert_2_0
 
   def setup;  colorize(true);  end
@@ -96,7 +96,9 @@ class RubyReflectorTest < Test::Unit::TestCase
       assert{ reflect_string(statement) == statement }
       print '.'
     end
-  end
+  end  #  TODO  both reflectors should pass this common stuff
+  
+  #  TODO  the 1.9 reflector should pass Ruby's native parsing tests
 
   def test_reflect_K_Sasada_s_rubynodes  # and props to her or him!
     rubynodes = Pathname.new(__FILE__).dirname + 'rubynodes/src/*.rb'
