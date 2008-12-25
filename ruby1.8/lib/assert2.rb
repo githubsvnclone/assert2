@@ -21,7 +21,7 @@ module Test; module Unit; module Assertions
     rescue => got
     end
 
-    flunk diagnose("assert{ ", diagnostic, got, block)
+    flunk diagnose("assert{ ", diagnostic, caller[1], got, block)
   end
 
   #  This assertion replaces:
@@ -45,7 +45,7 @@ module Test; module Unit; module Assertions
     rescue => got
     end
 
-    flunk diagnose('deny{ ', diagnostic, got, block)
+    flunk diagnose('deny{ ', diagnostic, caller[0], got, block)
   end  #  "You're a looney!"  -- King Arthur
 
   # Assert that a block raises a given Exception type matching 
@@ -161,7 +161,7 @@ module Test; module Unit; module Assertions
       return [diagnostic, reflection].compact.join("\n")
     end
 
-    def diagnose(polarity, diagnostic, result, block)
+    def diagnose(polarity, diagnostic, caller, result, block)
       rf = RubyReflector.new
       rf.block = block
       effect = " - should #{ 'not ' if polarity =~ /deny/ }pass\n"
