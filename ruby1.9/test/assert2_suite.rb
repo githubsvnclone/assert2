@@ -48,7 +48,7 @@ require 'assert2/common/assert_flunk'
 class Assert2Suite < Test::Unit::TestCase
 
   def setup
-    @effect = Test::Unit::Assertions::AssertionRipper.new()
+    @effect = Test::Unit::Assertions::RubyReflector.new()
     array = [1, 3]
     hash = { :x => 42, 43 => 44 }
     x = 42

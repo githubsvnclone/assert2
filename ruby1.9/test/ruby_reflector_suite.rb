@@ -5,10 +5,10 @@ require 'assert2/common/assert_flunk'
 #  FIXME  respect linefeeds in parsed source when reflecting
 #  FIXME evaluate mashed strings
 
-class AssertionRipperSuite < Test::Unit::TestCase
+class RubyReflectorSuite < Test::Unit::TestCase
 
   def setup
-    @effect = Test::Unit::Assertions::AssertionRipper.new()
+    @effect = Test::Unit::Assertions::RubyReflector.new()
     array = [1, 3]
     hash = { :x => 42, 43 => 44 }
     x = 42
@@ -253,7 +253,7 @@ puts reflects
 
   def test_const_ref
     return if RUBY_VERSION == '1.9.1'  # TODO
-    rippage = [:const_ref, [:@const, "AssertionRipperSuite", [5, 6]]]
+    rippage = [:const_ref, [:@const, "RubyReflectorSuite", [5, 6]]]
     @effect.sender rippage
     assert_capture self.class.name, self.class
     rippage = [:const_path_ref,

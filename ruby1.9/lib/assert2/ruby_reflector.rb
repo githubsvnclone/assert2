@@ -5,7 +5,7 @@ require 'pp'
 
 module Test; module Unit; module Assertions
 
-  class AssertionRipper
+  class RubyReflector
     
     MAX_CAPTURE_SNIP = 50  #  FIXME  use this when formatting already?
     
@@ -85,7 +85,7 @@ module Test; module Unit; module Assertions
       #        and brace_block.second includes assert
       brace_block = brace_block.last
       if block_var = brace_block[1]
-        ripper = AssertionRipper.new
+        ripper = RubyReflector.new
         ripper.sender block_var
         @captured_block_vars = ripper.reflect.sub(/^\|/, '').sub(/\| $/, '')
       end
@@ -720,7 +720,7 @@ module Test; module Unit; module Assertions
   end
   
   def __reflect_assertion(called, options, block, got)
-    effect = AssertionRipper.new(called)
+    effect = RubyReflector.new(called)
     effect.args = *options[:args]
     return [effect.reflect_assertion(block, got)]
   end
