@@ -6,8 +6,6 @@ require 'pathname'
 
 
 class RubyReflectorTest < Test::Unit::TestCase
-  include RubyNodeReflector  #  TODO  retire this module
-  #include Assert_2_0
 
   def setup;  colorize(true);  end
 

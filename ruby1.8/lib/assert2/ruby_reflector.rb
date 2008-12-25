@@ -3,7 +3,7 @@ require 'rubynode'
 require 'pp'
 
 
-module RubyNodeReflector
+module Test; module Unit; module Assertions
   
   # ERGO
   #		:bmethod      => [:cval],
@@ -824,7 +824,7 @@ p node
        
   end
 
-end
+end; end; end
 
 class Array
   def in_groups_of(number, fill_with = nil, &block)
@@ -833,4 +833,4 @@ class Array
     collection << fill_with until collection.size.modulo(number).zero?
     collection.each_slice(number, &block)
     end
-end
+end  #  FIXME  test if this is already here...

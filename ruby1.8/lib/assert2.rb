@@ -8,7 +8,6 @@ require 'assert2/ruby_reflector'
 
 module Test; module Unit; module Assertions
 
-  include ::RubyNodeReflector
   include Coulor #:nodoc:
 
   #  The new <code>assert()</code> calls this to interpret
@@ -160,7 +159,7 @@ module Test; module Unit; module Assertions
     end
 
     def diagnose(polarity, diagnostic, block, result)
-      rf = ::RubyNodeReflector::RubyReflector.new(block)
+      rf = RubyReflector.new(block)
       effect = " - should #{ 'not ' if polarity =~ /deny/ }pass\n"
 
       report = magenta(polarity) + bold(rf.result) + magenta(" }") + 
@@ -174,7 +173,3 @@ end ; end ; end  #  "Eagle-eyes it!"
 
 require 'assert2/common/assert2_utilities'
 
-class Test::Unit::TestCase #:nodoc:
-  include ::RubyNodeReflector::Coulor #:nodoc:
-  include ::RubyNodeReflector #:nodoc:
-end  #  ERGO remove these?
