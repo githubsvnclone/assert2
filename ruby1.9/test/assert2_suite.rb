@@ -330,7 +330,7 @@ to recover some 1.8.6 stability!
     denigh{ x.message =~ /self.morgothrond\s+--> / }
   end
 
-  def test_assertion_diagnostics
+  def test_extra_assertion_diagnostics_with_ripper
     tattle = "doc says what's the condition?"
     
     assert_flunk /the condition.*tattle/m do
@@ -338,10 +338,6 @@ to recover some 1.8.6 stability!
       assert(tattle){ x == 42 }
     end
 
-    assert_flunk /on a mission/m do
-      x = 42
-      deny("I'm a man that's on a mission"){ x == 42 }
-    end
   end
 
 end

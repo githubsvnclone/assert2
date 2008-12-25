@@ -47,6 +47,18 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     end
   end
 
+  def test_assertion_diagnostics
+    tattle = "doc says what's the condition?"
+    
+    assert_flunk /the condition/ do
+      x = 43
+      assert(tattle){ x == 42 }
+    end
 
+    assert_flunk /on a mission/m do
+      x = 42
+      deny("I'm a man that's on a mission"){ x == 42 }
+    end
+  end
 end
 
