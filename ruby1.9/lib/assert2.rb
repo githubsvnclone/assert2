@@ -1,4 +1,4 @@
-require 'assert2/assertion_ripper'  #   note we only work with Ruby >= 1.9 !
+require 'assert2/ruby_reflector'  #   note we only work with Ruby >= 1.9 !
 require 'test/unit'
 
   # note there's more requires down there --V
