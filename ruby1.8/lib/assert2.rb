@@ -15,6 +15,9 @@ module Test; module Unit; module Assertions
     @__additional_diagnostics = []
     begin
       got = block.call(*options[:args]) and return got
+    rescue FlunkError
+      raise  #  asserts inside assertions that fail do not decorate the outer assertion
+                 # FIXME  review that for stuff like assert_equal
     rescue => got
     end
 
@@ -37,6 +40,8 @@ module Test; module Unit; module Assertions
     
     begin
       got = block.call(*options[:args]) or return
+    rescue FlunkError
+      raise
     rescue => got
     end
 
