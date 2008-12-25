@@ -31,15 +31,16 @@ require 'test/unit'
 require 'pathname'
 
 HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path
-  
-begin #  if ruby1.8's test has set us up for assert{ 2.0 }
-  require 'assert2'
-rescue LoadError
+Ruby186 = (HomePath + '../ruby1.8').expand_path
+
+if RUBY_VERSION < '1.9.0'
+  $:.unshift Ruby186 + 'lib'  #  reach out to ruby1.8's assert{ 2.0 }
+else
   $:.unshift HomePath + 'lib'  #  reach out to ruby1.9's assert{ 2.1 }
-  require 'assert2'
   require 'ripdoc'
 end
 
+require 'assert2'
 require 'assert2/common/assert_flunk'
 require 'assert_xhtml'
 
