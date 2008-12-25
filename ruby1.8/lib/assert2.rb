@@ -159,7 +159,8 @@ module Test; module Unit; module Assertions
     end
 
     def diagnose(polarity, diagnostic, block, result)
-      rf = RubyReflector.new(block)
+      rf = RubyReflector.new
+      rf.block = block
       effect = " - should #{ 'not ' if polarity =~ /deny/ }pass\n"
 
       report = magenta(polarity) + bold(rf.result) + magenta(" }") + 
