@@ -8,8 +8,6 @@ require 'assert2/ruby_reflector'
 
 module Test; module Unit; module Assertions
 
-  include Coulor #:nodoc:
-
   #  The new <code>assert()</code> calls this to interpret
   #  blocks of assertive statements.
   #
