@@ -60,5 +60,21 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
       deny("I'm a man that's on a mission"){ x == 42 }
     end
   end
+  
+  def morgothrond(thumpwhistle)
+    return false  #  what did you think such a function would do?? (-:
+  end
+  
+  def test_morgothrond_thumpwhistle
+    thumpwistle = 42
+    
+    x = assert_raise FlunkError do
+      assert{ self.morgothrond(thumpwistle) }
+    end
+    
+    assert{ x.message =~ /thumpwistle\s+--> 42/ }
+    denigh{ x.message =~ /self.morgothrond\s+--> / }
+  end
+
 end
 

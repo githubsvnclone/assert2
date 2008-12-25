@@ -315,21 +315,6 @@ to recover some 1.8.6 stability!
     end
   end
   
-  def morgothrond(thumpwhistle)
-    return false  #  what did you think such a function would do?? (-:
-  end
-  
-  def test_morgothrond_thumpwhistle
-    thumpwistle = 42
-    
-    x = assert_raise FlunkError do
-      assert{ self.morgothrond(thumpwistle) }
-    end
-    
-    assert{ x.message =~ /thumpwistle\s+--> 42/ }
-    denigh{ x.message =~ /self.morgothrond\s+--> / }
-  end
-
   def test_extra_assertion_diagnostics_with_ripper
     tattle = "doc says what's the condition?"
     
