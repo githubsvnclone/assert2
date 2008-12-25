@@ -330,26 +330,6 @@ to recover some 1.8.6 stability!
     denigh{ x.message =~ /self.morgothrond\s+--> / }
   end
 
-  def test_assert
-    assert_flunk /x == 42.*false.*x \s*--> 43/m do
-      x = 43
-      assert{ x == 42 }
-    end
-  end
-
-  def test_deny_everything
-    assert_flunk /x.*true.*\s+--> 42/m do
-      x = 42
-      deny{ x == 42 }
-    end
-  end
-
-  def test_assert_classic
-    assert_flunk /(false. is not true)|(Failed assertion)/ do
-      assert false
-    end
-  end
-
   def test_assertion_diagnostics
     tattle = "doc says what's the condition?"
     

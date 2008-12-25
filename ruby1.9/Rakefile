@@ -6,6 +6,7 @@ end
 
 task :test_assert2 => :test_assertion_ripper do
   sh 'ruby1.9.0 test/assert2_suite.rb'
+  sh 'ruby1.9.0 test/assert2_utilities_suite.rb'
   # TODO sh 'ruby1.9.1 test/assert2_suite.rb'
 end
 
