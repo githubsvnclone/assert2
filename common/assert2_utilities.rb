@@ -87,5 +87,32 @@ module Test; module Unit; module Assertions
   alias denigh deny  #  to line assert{ ... } and 
                      #          denigh{ ... } statements up neatly!
 
+  module Coulor  #:nodoc:
+    def colorize(we_color)
+      @@we_color = we_color
+    end
+    unless defined? BOLD
+      BOLD  = "\e[1m" 
+      CLEAR = "\e[0m" 
+    end       # ERGO  modularize these; anneal with Win32
+    def colour(text, colour_code)
+      return colour_code + text + CLEAR  if colorize?
+      return text
+    end
+    def colorize?  #  ERGO  how other libraries set these options transparent??
+      we_color = (@@we_color rescue true )  #  ERGO  parens needed?
+      return (we_color == :always or we_color && $stdout.tty?)
+    end
+    def bold(text)
+      return BOLD + text + CLEAR  if colorize?
+      return text
+    end
+    def green(text); colour(text, "\e[32m"); end
+    def red(text); colour(text, "\e[31m"); end
+    def magenta(text); colour(text, "\e[35m"); end
+    def blue(text); colour(text, "\e[34m"); end
+    def orange(text); colour(text, "\e[3Bm"); end
+    end
+    
 end ; end ; end
 
