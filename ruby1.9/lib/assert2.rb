@@ -10,12 +10,6 @@ require 'test/unit'
 
 module Test; module Unit; module Assertions
 
-  FlunkError = if defined? Test::Unit::AssertionFailedError
-                 Test::Unit::AssertionFailedError
-               else
-                 MiniTest::Assertion
-               end
-
   def __reflect_assertion(called, options, block, got)
     effect = AssertionRipper.new(called)
     effect.args = *options[:args]

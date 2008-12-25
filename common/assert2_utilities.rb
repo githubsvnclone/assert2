@@ -4,6 +4,12 @@ require 'test/unit'
 
 module Test; module Unit; module Assertions
 
+  FlunkError = if defined? Test::Unit::AssertionFailedError
+                 Test::Unit::AssertionFailedError
+               else
+                 MiniTest::Assertion
+               end
+
   # This is a copy of the classic assert, so your pre-existing
   # +assert+ calls will not change their behavior
   #

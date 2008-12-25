@@ -1,5 +1,5 @@
 require 'test/unit'
-require File.dirname(__FILE__) + '/ruby_reflector'
+require 'assert2/ruby_reflector'
  # note more requires lurk down there --V
 
 #  FIXME  evaluate parts[3]
@@ -172,7 +172,7 @@ module Test; module Unit; module Assertions
   
 end ; end ; end  #  "Eagle-eyes it!"
 
-require File.dirname(__FILE__) + '/common/assert2_utilities'
+require 'assert2/common/assert2_utilities'
 
 class Test::Unit::TestCase #:nodoc:
   include ::RubyNodeReflector::Coulor #:nodoc:
