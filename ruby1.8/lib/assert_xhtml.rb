@@ -1,1 +1,1 @@
-require File.dirname(__FILE__) + '/common/assert_xhtml.rb'
+require 'assert2/common/assert_xhtml.rb'
