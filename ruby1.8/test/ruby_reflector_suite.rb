@@ -256,7 +256,8 @@ class RubyReflectorTest < Test::Unit::TestCase
   def test_format_intermediate_evaluations
     colorize(false)
     x = 42
-    rf = RubyReflector.new(lambda{ (x + 21) == lambda{|z| z}.call(41) })
+    rf = RubyReflector.new
+    rf.block = lambda{ (x + 21) == lambda{|z| z}.call(41) }
     report = rf.format_evaluations.split("\n")
     assert{ report[0] =~ /    x\s+--> 42/ }
     assert{ report[1] =~ /    \( x \+ 21 \)\s+--> 63/ }

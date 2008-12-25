@@ -100,15 +100,20 @@ module RubyNodeReflector
     include Coulor
     attr_reader :evaluations,
                 :result
-    attr_writer :reflect_values
+    attr_writer :block,
+                :reflect_values
  
-    def initialize(block, reflect_values = true)  #  note that a block, from your context, is not optional
+    def initialize(yo_block = nil, reflect_values = true)  #  note that a block, from your context, is not optional
       @reflect_values = reflect_values
       @evaluations    = []
       @result         = ''
-      @block          = block
       @line           = 0
-      reflect_nodes(@block.body_node)
+      self.block      = yo_block
+    end
+    
+    def block=(yo_block)
+      @block = yo_block and
+        reflect_nodes(@block.body_node)
     end
     
     def reflect_nodes(body_node)
