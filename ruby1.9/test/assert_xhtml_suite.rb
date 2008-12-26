@@ -100,16 +100,16 @@ Prefer the last notation, to cut thru a large XHTML web page down to the
 You can write simple XPath queries using Ruby's familiar hash notation. Query
 a node's string contents with <code>?.</code>:
 =end
-def test_xpath_dsl
-  assert_xhtml 'hit <a href="http://antwrp.gsfc.nasa.gov/apod/">apod</a> daily!'
-  assert do
+  def test_xpath_dsl
+    assert_xhtml 'hit <a href="http://antwrp.gsfc.nasa.gov/apod/">apod</a> daily!'
+    assert do
 
-    xpath :a, 
-          :href => 'http://antwrp.gsfc.nasa.gov/apod/',
-          ?. => 'apod'  #  the ?. resolves to XPath: 'a[ . = "apod" ]'
+      xpath :a, 
+            :href => 'http://antwrp.gsfc.nasa.gov/apod/',
+            ?. => 'apod'  #  the ?. resolves to XPath: 'a[ . = "apod" ]'
 
+    end
   end
-end
 #!end_panel!
 =begin
 <code>xpath().text</code>
@@ -130,7 +130,6 @@ which returns the nearest text contents:
     end
   end
 #!end_panel!
-if true # RUBY_VERSION >= '1.9.0'  #  FIXME  should work in 1.8!
 =begin
 Nested <code>xpath{}</code>
 
@@ -146,7 +145,7 @@ useful <code>id</code>s, then use <code>xpath :div, :my_id</code> to restrict fu
 =end
   def test_nested_xpaths
     assert_xhtml (HomePath + 'doc/assert_x.html').read
-    
+
     assert 'this tests the panel you are now reading' do
 
       xpath :a, :name => :Nested_xpath_Faults do  #  finds the panel's anchor
@@ -158,10 +157,10 @@ useful <code>id</code>s, then use <code>xpath :div, :my_id</code> to restrict fu
       end
 
     end
-    
+
   end
 #!end_panel!
-end
+
 =begin
 <code>xpath{ <em>block</em> }</code> Calls <code>assert{ <em>block</em> }</code>
 
@@ -203,7 +202,6 @@ web pages:
     deny{ diagnostic =~ /excessive spew/ } # not seen because the outer xpath{} succeeded!
   end
 #!end_panel!
-if RUBY_VERSION >= '1.9.0'  #  FIXME  should work in 1.8!
 =begin
 <code>xpath( ?. )</code> Matches Recursive Text
 
@@ -219,7 +217,6 @@ DSL converts <code>?.</code> into that notation:
     end
   end
 #!end_panel!
-end
 #  FIXME  count assertions correctly, per Matt
 #  FIXME  colorize on command, per Brian
 if RUBY_VERSION >= '1.9.0'  #  FIXME  should work in 1.8!
