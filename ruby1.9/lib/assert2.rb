@@ -12,6 +12,10 @@ require 'test/unit'
 
 module Test; module Unit; module Assertions
 
+  def colorize(whatever)
+    # TODO stop ignoring this and start colorizing v2.1!
+  end
+
   def __reflect_assertion(called, options, block, got)
     effect = RubyReflector.new(called)
     effect.args = *options[:args]

@@ -47,6 +47,10 @@ require 'assert_xhtml'
 
 class AssertXhtmlSuite < Test::Unit::TestCase
 
+  def setup
+    colorize(false) if respond_to? :colorize  #  FIXME  delete this and the other one
+  end
+
 #!doc!
 =begin
 <code>assert_xhtml( <em>xhtml</em> )</code>
