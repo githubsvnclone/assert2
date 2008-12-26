@@ -27,7 +27,7 @@ class Ripdoc < Ripper::Filter
   end  #  TODO  complex '"? if we can't it might be a good thing...
 
   def enline(line)
-    #  FIXME  move the CGIescaper in here
+    line = CGI.escapeHTML(line)
     return line.gsub( /&lt;a(.*?)&gt;/){ "<a #{dequote($1)}>" }.
                 gsub('&lt;/a&gt;', '</a>').
                 gsub(/&lt;br\s*\/&gt;/, '<br/>').
@@ -108,7 +108,7 @@ class Ripdoc < Ripper::Filter
       if banner = @embdocs.shift  #  accordion_toggle_active
         f << '<h1 class="accordion_toggle">'
         f << name_toggle(banner)
-        f << enline(CGI.escapeHTML(banner))
+        f << enline(banner)
         f << '</h1>'
       end
       
@@ -126,11 +126,11 @@ class Ripdoc < Ripper::Filter
             puts '#!link!anchor!text tags work best with text after the last bang!' unless contents
             contents ||= ''
             f << "<a href='\##{target}' onclick='raise(\"#{target}\")'>"
-            f << enline(CGI.escapeHTML(contents))
+            f << enline(contents)
             f << '</a>'
           else
             f << ' ' if prior
-            deformat(CGI.escapeHTML(doc), f)
+            deformat(doc, f)
             prior = true
           end
         end

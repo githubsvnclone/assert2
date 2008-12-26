@@ -196,7 +196,7 @@ class RipdocSuite < Test::Unit::TestCase
 
   def test_re_html_ize_embdoc_lines
     assert{ @rip.enline('foo') == 'foo' }
-    assert{ @rip.enline('f&lt;code&gt;o&lt;/code&gt;o') =~ /^f<code style.*>o<\/code>o/ }
+    assert{ @rip.enline('f<code>o</code>o') =~ /^f<code style.*>o<\/code>o/ }
   end
 
   def test_on_embdoc_end_breaks_paragraphs
