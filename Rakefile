@@ -1,16 +1,14 @@
 require 'fileutils'
 
 task :default do
-  got = false 
-  
   FileUtils.cd 'ruby1.8' do
     p '########################################## 1.8'
-    got ||= sh('rake')
+    return false unless sh('rake')
   end
   
   FileUtils.cd 'ruby1.9' do
     p '########################################## 1.9'
-    got ||= sh('rake')
+    return false unless sh('rake')
   end
 end
 
