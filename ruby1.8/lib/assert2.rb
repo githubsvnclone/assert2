@@ -166,8 +166,8 @@ module Test; module Unit; module Assertions
       rf.block = block
       effect = " - should #{ 'not ' if polarity =~ /deny/ }pass\n"
 
-      report = magenta(polarity) + bold(rf.result) + magenta(" }") + 
-                red(arrow_result(result) + effect) + 
+      report = rf.magenta(polarity) + rf.bold(rf.result) + rf.magenta(" }") + 
+                rf.red(arrow_result(result) + effect) + 
                 rf.format_evaluations
               
       return build_message_(diagnostic, report)

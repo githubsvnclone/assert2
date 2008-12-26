@@ -5,7 +5,7 @@ require 'assert2/common/assert_flunk'
 
 
 class Assert2Suite < Test::Unit::TestCase #:nodoc:
-
+  
   def setup;  colorize(true);  end
 
   def test_assert_2_0

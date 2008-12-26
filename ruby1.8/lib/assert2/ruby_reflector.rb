@@ -70,7 +70,6 @@ module Test; module Unit; module Assertions
   end
 
   class RubyReflector  #  turn hamburger back into live cattle
-    include Coulor
     attr_reader :evaluations,
                 :result
     attr_writer :block,
