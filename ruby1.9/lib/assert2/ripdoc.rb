@@ -375,11 +375,6 @@ class Ripdoc < Ripper::Filter
 
 end
 
-if $0 == __FILE__
-  system 'ruby ../test/ripdoc_suite.rb'
-#  main
-end
-
 #~ :on_ident
 #~ :on_const
 #~ :on_semicolon
@@ -405,4 +400,4 @@ class ERB
   end
 end
 
-
+system 'rubyw1.9.0 ../../test/ripdoc_suite.rb' if $0 == __FILE__
