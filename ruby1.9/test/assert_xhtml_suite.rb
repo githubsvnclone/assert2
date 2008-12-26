@@ -130,7 +130,7 @@ which returns the nearest text contents:
     end
   end
 #!end_panel!
-if RUBY_VERSION >= '1.9.0'  #  FIXME  should work in 1.8!
+if true # RUBY_VERSION >= '1.9.0'  #  FIXME  should work in 1.8!
 =begin
 Nested <code>xpath{}</code>
 
