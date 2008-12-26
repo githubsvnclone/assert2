@@ -1,5 +1,5 @@
 require 'test/unit'
-#$:.unshift 'lib'; $:.unshift '../lib'
+$:.unshift '../lib'
 require 'assert2'
 require 'assert2/ripdoc'
 require 'assert_xhtml'
