@@ -798,8 +798,8 @@ p node
 
 end; end; end
 
-class Array
-  unless defined? :in_groups_of
+unless [].respond_to? :in_groups_of
+  class Array
     def in_groups_of(number, fill_with = nil, &block)
       require 'enumerator'
       collection = dup

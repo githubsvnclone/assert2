@@ -2,11 +2,11 @@ require 'fileutils'
 
 task :int do
   FileUtils.cd 'ruby1.8' do
-    system 'rake'
+    sh 'rake'
   end
   
   FileUtils.cd 'ruby1.9' do
-    system 'rake'
+    sh 'rake'
   end
   
   sh 'svn commit --message development'

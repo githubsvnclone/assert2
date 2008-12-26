@@ -96,6 +96,7 @@ class RubyReflectorTest < Test::Unit::TestCase
     end
   end  #  TODO  both reflectors should pass this common stuff
   
+  #  TODO  where is "Offending line:" coming from??
   #  TODO  the 1.9 reflector should pass Ruby's native parsing tests
 
   def test_reflect_K_Sasada_s_rubynodes  # and props to her or him!
