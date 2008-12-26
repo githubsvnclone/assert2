@@ -40,6 +40,7 @@ else
   require 'ripdoc'
 end
 
+require 'assert2/ripdoc' if RUBY_VERSION >= '1.9.0'
 require 'assert2'
 require 'assert2/common/assert_flunk'
 require 'assert_xhtml'
