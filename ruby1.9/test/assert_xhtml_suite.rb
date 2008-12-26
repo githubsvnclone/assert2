@@ -351,6 +351,7 @@ end
   end
 
   def test_deny_nested_diagnostics
+    return if RUBY_VERSION < '1.9.0'
    _assert_xml '<a><b><c/></b></a>'
    
     diagnostic = assert_flunk 'xpath: "descendant-or-self::si"' do
@@ -365,7 +366,6 @@ end
     
     deny{ diagnostic.match('<a>') }
   end
-
 
   def test_to_predicate_expects_options
     apa = AssertXPathArguments.new
@@ -402,12 +402,13 @@ end
   end
 
   def test_to_xpath
-    return unless RUBY_VERSION >= '1.9.0'  #  FIXME  should work in 1.8!
-
-    apa = AssertXPathArguments.new
+    apa = AssertXPathArguments.new  #  FIXME use in 2.0 too
     apa.to_xpath(:a, { :href=> 'http://www.sinfest.net/', ?. => 'SinFest' }, {})
 
-    assert{ apa.xpath == "descendant-or-self::a[ @href = $href and . = $_text ]" }
+    assert do
+      apa.xpath == "descendant-or-self::a[ @href = $href and . = $_text ]" or
+      apa.xpath == "descendant-or-self::a[ . = $_text and @href = $href ]"
+    end
     assert{ apa.subs == { 'href' => 'http://www.sinfest.net/', '_text' => 'SinFest' } }
   end
 
