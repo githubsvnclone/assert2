@@ -1,6 +1,6 @@
 require 'test/unit'
 require File.dirname(__FILE__) + '/../../common_test_helper'
-# require 'assert2/ripdoc'
+require 'assert2/ripdoc'
 require 'assert_xhtml'
 
 HomePath = Ripdoc::HomePath
