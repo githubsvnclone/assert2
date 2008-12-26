@@ -112,7 +112,13 @@ module Test; module Unit; module Assertions
     def magenta(text); colour(text, "\e[35m"); end
     def blue(text); colour(text, "\e[34m"); end
     def orange(text); colour(text, "\e[3Bm"); end
-    end
-    
+  end
+  
+  RubyReflector.send :include, Coulor
+  
+  def colorize(to_color)
+    RubyReflector.new.colorize(to_color)
+  end
+  
 end ; end ; end
 

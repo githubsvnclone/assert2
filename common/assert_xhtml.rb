@@ -45,7 +45,8 @@ module Test; module Unit; module Assertions
       
       @xpath << hash.map{|k, v|
                   sk = k.to_s
-                  sk = '_text' if sk == '.'
+                  sk = '_text' if sk == '.' or k == 46
+                  k = '.' if k == 46 and RUBY_VERSION < '1.9.0'
                   @subs[sk] = v.to_s
                   "#{ '@' if k.to_s =~ xml_attribute_name }#{k} = $#{sk}" 
                 }.join(' and ')
