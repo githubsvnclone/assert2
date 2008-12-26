@@ -103,13 +103,14 @@ a node's string contents with <code>?.</code>:
 def test_xpath_dsl
   assert_xhtml 'hit <a href="http://antwrp.gsfc.nasa.gov/apod/">apod</a> daily!'
   assert do
-    
+
     xpath :a, 
           :href => 'http://antwrp.gsfc.nasa.gov/apod/',
           ?. => 'apod'  #  the ?. resolves to XPath: 'a[ . = "apod" ]'
-          
+
   end
 end
+#!end_panel!
 =begin
 <code>xpath().text</code>
 
