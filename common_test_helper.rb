@@ -8,7 +8,11 @@ if RUBY_VERSION < '1.9.0'
   $:.unshift Ruby186 + 'lib'  #  reach out to ruby1.8's assert{ 2.0 }
 else
   $:.unshift Ruby190 + 'lib'  #  reach out to ruby1.9's assert{ 2.1 }
-  require 'ripdoc'
+  begin
+    require 'assert2/ripdoc'
+  rescue LoadError
+    #  Don't care...
+  end
 end
 
 require 'assert2'

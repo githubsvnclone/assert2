@@ -1,7 +1,6 @@
 require 'ripper'  #   note we only work with Ruby >= 1.9 !
 require 'pp'
 
-#  FIXME  move as much as possible under assert2/, including common
 
 module Test; module Unit; module Assertions
 
