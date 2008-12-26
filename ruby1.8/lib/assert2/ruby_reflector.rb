@@ -799,10 +799,12 @@ p node
 end; end; end
 
 class Array
-  def in_groups_of(number, fill_with = nil, &block)
-    require 'enumerator'
-    collection = dup
-    collection << fill_with until collection.size.modulo(number).zero?
-    collection.each_slice(number, &block)
+  unless defined? :in_groups_of
+    def in_groups_of(number, fill_with = nil, &block)
+      require 'enumerator'
+      collection = dup
+      collection << fill_with until collection.size.modulo(number).zero?
+      collection.each_slice(number, &block)
     end
-end  #  FIXME  test if this is already here...
+  end
+end

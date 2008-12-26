@@ -1,4 +1,5 @@
 require 'test/unit'
+require '../../common_test_helper'
 require 'pathname'
 
 HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path
