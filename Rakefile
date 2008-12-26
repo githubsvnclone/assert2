@@ -1,12 +1,14 @@
 require 'fileutils'
 
 task :default do
+  got = false 
+  
   FileUtils.cd 'ruby1.8' do
-    sh 'rake'
+    got ||= sh('rake')
   end
   
   FileUtils.cd 'ruby1.9' do
-    sh 'rake'
+    got ||= sh('rake')
   end
 end
 
