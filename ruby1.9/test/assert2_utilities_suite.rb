@@ -48,6 +48,15 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     end
   end
 
+  def test_flunking_assert_equal_inside_assert_decorates
+    complaint = assert_flunk /expected but was/ do
+                  assert 'fat chance - we ain\'t Perl!' do
+                    assert_equal '42', 42
+                  end
+                end
+    deny{ complaint =~ /fat chance/ }
+  end
+
   def test_multi_line_assertion    
     return if RUBY_VERSION == '1.9.1'  # TODO
     assert_flunk /false.*nil/m do
