@@ -100,15 +100,14 @@ Prefer the last notation, to cut thru a large XHTML web page down to the
 You can write simple XPath queries using Ruby's familiar hash notation. Query
 a node's string contents with <code>?.</code>:
 =end
-  def test_xpath_dsl
-    assert_xhtml 'hit <a href="http://antwrp.gsfc.nasa.gov/apod/">apod</a> daily!'
-    assert do
-      
-      xpath :a, 
-            :href => 'http://antwrp.gsfc.nasa.gov/apod/',
-            ?. => 'apod'  #  the ?. resolves to XPath: 'a[ . = "apod" ]'
-            
-    end
+def test_xpath_dsl
+  assert_xhtml 'hit <a href="http://antwrp.gsfc.nasa.gov/apod/">apod</a> daily!'
+  assert do
+    
+    xpath :a, 
+          :href => 'http://antwrp.gsfc.nasa.gov/apod/',
+          ?. => 'apod'  #  the ?. resolves to XPath: 'a[ . = "apod" ]'
+          
   end
 end
 =begin
