@@ -3,6 +3,7 @@ require 'pathname'
 TopPath = Pathname.new(__FILE__).dirname
 Ruby186 = (TopPath + 'ruby1.8').expand_path
 Ruby190 = (TopPath + 'ruby1.9').expand_path
+DocPath = Ruby190 + 'doc'  #  TODO  use in more places
 
 if RUBY_VERSION < '1.9.0'
   HomePath = Ruby186  #  reach out to ruby1.8's assert{ 2.0 }

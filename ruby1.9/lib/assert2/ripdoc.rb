@@ -10,12 +10,12 @@ require 'pathname'
 # TODO  reflect the banner anchor at generation time, to figure out what to hotlink to
 
 class Ripdoc < Ripper::Filter
-  HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path
+  HomePath = (Pathname.new(__FILE__).dirname + '../..').expand_path
 
   def self.generate(filename, title)
     @sauce = compile_fragment(File.read(filename))
     @title = title
-    erb = ERB.new((HomePath + 'lib/ripdoc.html.erb').read, nil, '>')
+    erb = ERB.new((HomePath + 'lib/assert2/ripdoc.html.erb').read, nil, '>')
     xhtml = erb.result(binding())
     xhtml.gsub! /\<pre>\s*\<\/pre>/m, ''
     xhtml.gsub! /\<p>\s*\<\/p>/m, ''

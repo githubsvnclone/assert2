@@ -28,18 +28,7 @@ work together to diagnose XHTML efficiently<br/>
 #!end_panel!
 #!no_doc!
 require 'test/unit'
-require 'pathname'
-
-HomePath = (Pathname.new(__FILE__).dirname + '..').expand_path
-Ruby186 = (HomePath + '../ruby1.8').expand_path
-
-if RUBY_VERSION < '1.9.0'
-  $:.unshift Ruby186 + 'lib'  #  reach out to ruby1.8's assert{ 2.0 }
-else
-  $:.unshift HomePath + 'lib'  #  reach out to ruby1.9's assert{ 2.1 }
-  require 'ripdoc'
-end
-
+require File.dirname(__FILE__) + '/../../common_test_helper'
 require 'assert2/ripdoc' if RUBY_VERSION >= '1.9.0'
 require 'assert2'
 require 'assert2/common/assert_flunk'
@@ -149,7 +138,7 @@ useful <code>id</code>s, then use <code>xpath :div, :my_id</code> to restrict fu
 <code>xpath{}</code> calls:
 =end
   def test_nested_xpaths
-    assert_xhtml (HomePath + 'doc/assert_x.html').read
+    assert_xhtml (DocPath + 'assert_x.html').read
 
     assert 'this tests the panel you are now reading' do
 
@@ -194,7 +183,7 @@ field contains only the inner XML. This prevents excessive spew when testing ent
 web pages:
 =end
   def test_nested_xpath_faults
-    assert_xhtml (HomePath + 'doc/assert_x.html').read
+    assert_xhtml (DocPath + 'assert_x.html').read
     diagnostic = assert_flunk /BAD CONTENTS/ do
       xpath :a, :name => :Nested_xpath_Faults do
         
