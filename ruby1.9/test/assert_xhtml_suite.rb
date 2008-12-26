@@ -339,7 +339,6 @@ end
   end
 
   def test_nested_contexts
-#    return unless RUBY_VERSION >= '1.9.0'  #  FIXME  should work in 1.8!
    _assert_xml '<a><b/></a>'
    
     assert do
@@ -352,8 +351,6 @@ end
   end
 
   def test_deny_nested_diagnostics
-    return unless RUBY_VERSION >= '1.9.0'  #  FIXME  should work in 1.8!
-
    _assert_xml '<a><b><c/></b></a>'
    
     diagnostic = assert_flunk 'xpath: "descendant-or-self::si"' do
