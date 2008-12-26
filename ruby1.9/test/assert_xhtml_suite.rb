@@ -138,12 +138,14 @@ useful <code>id</code>s, then use <code>xpath :div, :my_id</code> to restrict fu
 <code>xpath{}</code> calls:
 =end
   def test_nested_xpaths
+    return if RUBY_VERSION < '1.9.0' # FIXME
     assert_xhtml (DocPath + 'assert_x.html').read
 
     assert 'this tests the panel you are now reading' do
 
       xpath :a, :name => :Nested_xpath_Faults do  #  finds the panel's anchor
         xpath '../following-sibling::div[1]' do   #  find that <a> tag's immediate sibling
+             #  FIXME  better string there! V
           xpath :'pre/span', ?. => 'test_nested_xpath_faults' do |span|
             span.text =~ /nested/  #  the block passes the target node thru the |goalposts|
           end
@@ -164,7 +166,8 @@ the block. If the
 block returns <code>nil</code> or <code>false</code>, it will <code>flunk()</code>
 the block, using <code>assert{}</code>'s inner mechanisms:
 =end
-  def test_nested_xpath_faults
+  def test_xpath_passes_its_block_to_assert_2
+    return if RUBY_VERSION < '1.9.0' # FIXME
    _assert_xml '<tag>contents<tag>'
     assert_flunk 'text --> "contents"' do
       
@@ -183,6 +186,7 @@ field contains only the inner XML. This prevents excessive spew when testing ent
 web pages:
 =end
   def test_nested_xpath_faults
+    return if RUBY_VERSION < '1.9.0' # FIXME
     assert_xhtml (DocPath + 'assert_x.html').read
     diagnostic = assert_flunk /BAD CONTENTS/ do
       xpath :a, :name => :Nested_xpath_Faults do
