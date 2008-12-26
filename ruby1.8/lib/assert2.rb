@@ -4,7 +4,7 @@ require 'test/unit'
 require 'assert2/ruby_reflector'
  # note more requires lurk down there --V
 
-#  FIXME  evaluate parts[3]
+#  TODO  evaluate parts[3]
 #  ERGO  if the block is a block, decorate with do-end
 #  ERGO  decorate assert_latest's block at fault time
 
@@ -19,7 +19,6 @@ module Test; module Unit; module Assertions
       got = block.call(*options[:args]) and return got
     rescue FlunkError
       raise  #  asserts inside assertions that fail do not decorate the outer assertion
-                 # FIXME  review that for stuff like assert_equal
     rescue => got
     end
 
