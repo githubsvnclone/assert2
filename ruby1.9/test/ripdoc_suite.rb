@@ -1,7 +1,7 @@
 require 'test/unit'
-$:.unshift 'lib'; $:.unshift '../lib'
+#$:.unshift 'lib'; $:.unshift '../lib'
 require 'assert2'
-require 'ripdoc'
+require 'assert2/ripdoc'
 require 'assert_xhtml'
 
 HomePath = Ripdoc::HomePath
