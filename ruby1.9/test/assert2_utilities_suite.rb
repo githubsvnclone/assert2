@@ -48,7 +48,7 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     end
   end
 
-  def test_flunking_assert_equal_inside_assert_decorates
+  def test_assert_decorates_no_flunks
     complaint = assert_flunk /expected but was/ do
                   assert 'fat chance - we ain\'t Perl!' do
                     assert_equal '42', 42
