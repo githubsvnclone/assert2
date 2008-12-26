@@ -48,7 +48,7 @@ require 'assert_xhtml'
 class AssertXhtmlSuite < Test::Unit::TestCase
 
   def setup
-    colorize(false)  #  FIXME  delete this and the other one
+    colorize(false)
   end
 
 #!doc!
