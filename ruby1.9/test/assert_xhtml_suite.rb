@@ -94,7 +94,6 @@ Prefer the last notation, to cut thru a large XHTML web page down to the
     assert{ xpath(:div, :forty_two).text == '42' }
   end
 #!end_panel!
-if RUBY_VERSION >= '1.9.0'  #  FIXME  should work in 1.8!
 =begin
 <code>xpath( <em>DSL</em> )</code>
 
@@ -111,7 +110,6 @@ a node's string contents with <code>?.</code>:
             
     end
   end
-#!end_panel!
 end
 =begin
 <code>xpath().text</code>
