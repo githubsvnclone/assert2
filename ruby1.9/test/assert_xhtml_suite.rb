@@ -337,9 +337,9 @@ end
    _assert_xml '<foo/>'
     deny{ xpath :bar }
   end
-        
+
   def test_nested_contexts
-    return unless RUBY_VERSION >= '1.9.0'  #  FIXME  should work in 1.8!
+#    return unless RUBY_VERSION >= '1.9.0'  #  FIXME  should work in 1.8!
    _assert_xml '<a><b/></a>'
    
     assert do

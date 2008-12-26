@@ -1,4 +1,4 @@
-#  this is the Ruby 1.9+ version that uses Ripper!
+#  this is assert{ 2.1 }, the Ruby 1.9+ rewrite of assert{ 2.0 }, using Ripper
 
 require 'assert2/ruby_reflector'  #   note we only work with Ruby >= 1.9 !
 require 'test/unit'
