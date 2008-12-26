@@ -1,7 +1,7 @@
 
 task :test_assertion_ripper do
   sh 'ruby1.9.0 test/ruby_reflector_suite.rb'
-  sh 'ruby1.9.1 test/ruby_reflector_suite.rb'
+ # sh 'ruby1.9.1 test/ruby_reflector_suite.rb'
 end
 
 task :test_assert2 => :test_assertion_ripper do
