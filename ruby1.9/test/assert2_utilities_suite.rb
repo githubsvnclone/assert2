@@ -24,7 +24,7 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     #~ hash = { :x => 42, 43 => 44 }
     #~ x = 42
     #~ @effect.block = lambda{x}
-    colorize(false) if defined? colorize
+    colorize(false)
   end
 
   def test_assert
