@@ -1,7 +1,6 @@
 require 'test/unit'
 $:.unshift File.dirname(__FILE__) + '/../lib'
 require 'assert2'
-#require File.dirname(__FILE__) + '/../lib/ruby_reflector'
 require 'pathname'
 
 

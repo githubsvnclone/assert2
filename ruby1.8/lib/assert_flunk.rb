@@ -1,1 +1,1 @@
-require File.dirname(__FILE__) + '/common/assert_flunk'
+require File.dirname(__FILE__) + '/assert2/common/assert_flunk'
