@@ -178,7 +178,6 @@ module Test; module Unit; module Assertions
 
   alias denigh deny  #  to line assert{ ... } and 
                      #          denigh{ ... } statements up neatly!
-                     #  FIXME  the require lines for this file needn't be so low now
 
 end ; end ; end
 
