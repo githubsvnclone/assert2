@@ -114,7 +114,18 @@ module Test; module Unit; module Assertions
     def orange(text); colour(text, "\e[3Bm"); end
   end
   
-  RubyReflector.send :include, Coulor
+  class RubyReflector
+    include Coulor
+    
+    def split_and_read(called)
+      if called =~ /([^:]+):(\d+):/
+        file, line = $1, $2.to_i
+        return File.readlines(file)[line - 1 .. -1]
+      end
+      
+      return nil
+    end
+  end
   
   def colorize(to_color)
     RubyReflector.new.colorize(to_color)
