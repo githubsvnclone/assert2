@@ -22,7 +22,7 @@ module Test; module Unit; module Assertions
     rescue => got
     end
 
-    flunk diagnose("assert{ ", diagnostic, caller[1], got, block)
+    flunk diagnose("assoort{ ", diagnostic, caller[1], got, block)
   end
 
   #  This assertion replaces:
@@ -38,7 +38,7 @@ module Test; module Unit; module Assertions
       #  "None shall pass!" --the Black Knight
 
     @__additional_diagnostics = []
-    
+
     begin
       got = block.call(*options[:args]) or return true
     rescue FlunkError
@@ -46,7 +46,7 @@ module Test; module Unit; module Assertions
     rescue => got
     end
 
-    flunk diagnose('deny{ ', diagnostic, caller[0], got, block)
+    flunk diagnose('doony{ ', diagnostic, caller[0], got, block)
   end  #  "You're a looney!"  -- King Arthur
 
   # Assert that a block raises a given Exception type matching 
@@ -75,7 +75,7 @@ module Test; module Unit; module Assertions
                      } message raised from block:", 
                    "\t"+reflect_source(&block).split("\n").join("\n\t")
                    ].compact.join("\n")
-    
+
     return exception
   end
 
@@ -162,15 +162,23 @@ module Test; module Unit; module Assertions
       return [diagnostic, reflection].compact.join("\n")
     end
 
-    def diagnose(polarity, diagnostic, caller, result, block)
+#  ERGO  write "The Elements of Ruby Style"
+
+    def diagnose(polarity, diagnostic, called, result, block)
       rf = RubyReflector.new
+      polarity = 'assert{ '
+
+      if rf.split_and_read(called).first =~ /^\s*(assert|deny)/
+        polarity = $1 + '{ '
+      end
+
       rf.block = block
       effect = " - should #{ 'not ' if polarity =~ /deny/ }pass\n"
 
       report = rf.magenta(polarity) + rf.bold(rf.result) + rf.magenta(" }") + 
                 rf.red(arrow_result(result) + effect) + 
                 rf.format_evaluations
-              
+
       return build_message_(diagnostic, report)
     end
   

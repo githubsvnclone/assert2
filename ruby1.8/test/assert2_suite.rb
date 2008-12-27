@@ -54,9 +54,13 @@ class Assert2Suite < Test::Unit::TestCase #:nodoc:
     assert_flunk /43.*expect.*43/m do  assert_not_equal x, 43       end
     assert_flunk /x > 43/          do  assert_{ x > 430 }           end
     assert_flunk /nope/            do  assert('nope'){ x > 430 }    end
-    assert_flunk /x == 43.*should not.*x.*43/m do  deny{ x == 43 }  end
+
+    assert_flunk /x == 43.*should not.*x.*43/m do
+      deny{ x == 43 }
+    end
+
     assert_flunk /x.* > 43/ do  assert x > 430, 'x should be > 43'  end
-  end
+  end  #  FIXME  document you can't stack assertions in a row like that!
 
   def test_assert_classic
     x = 41
