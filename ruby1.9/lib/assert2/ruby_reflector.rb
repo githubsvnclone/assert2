@@ -22,15 +22,6 @@ module Test; module Unit; module Assertions
       @line_number = nil
     end
 
-    def split_and_read(called)
-      if called =~ /([^:]+):(\d+):/
-        file, line = $1, $2.to_i
-        return File.readlines(file)[line - 1 .. -1]
-      end
-      
-      return nil
-    end
-
     def rip(lines)
       lines = [lines].flatten
       x = 0
