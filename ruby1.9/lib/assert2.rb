@@ -7,7 +7,7 @@ require 'test/unit'
 
 #  TODO  install Coulor
 #  TODO  add :verbose => option to assert{}
-#  TODO  pay for Staff Benda Bilili  ALBUM: Très Très Fort (Promo Sampler) !
+#  TODO  pay for Staff Benda Bilili  ALBUM: Trï¿½s Trï¿½s Fort (Promo Sampler) !
 #  FIXME  express linefeeds in string results correctly
 
 module Test; module Unit; module Assertions
@@ -35,51 +35,6 @@ module Test; module Unit; module Assertions
     return report.compact.join("\n")
   end
 
-  def assert_(diagnostic = nil, options = {}, &block)
-    @__additional_diagnostics = []
-    
-    begin
-      got = block.call(*options[:args]) and return got
-    rescue FlunkError
-      raise  #  asserts inside assertions that fail do not decorate the outer assertion
-                 # FIXME  review that for stuff like assert_equal
-    rescue => got
-      add_exception got
-    end
-
-    flunk diagnose(diagnostic, got, caller[1], options, block)
-  end
-
-  def add_exception(ex)
-    ex.backtrace[0..10].each do |line|
-      add_diagnostic '  ' + line
-    end
-  end
-
-  #  This assertion replaces:
-  #  
-  #  - +assert_nil+
-  #  - +assert_no_match+
-  #  - +assert_not_equal+
-  #
-  #  It faults, and prints its block's contents and values,
-  #  if its block returns non-+false+ and non-+nil+.
-  #  
-  def deny(diagnostic = nil, options = {}, &block)
-      #  "None shall pass!" --the Black Knight
-    @__additional_diagnostics = []
-    
-    begin
-      got = block.call(*options[:args]) or return true
-    rescue FlunkError
-      raise
-    rescue => got
-      add_exception got
-    end
-  
-    flunk diagnose(diagnostic, got, caller[0], options, block)
-  end  #  "You're a looney!"  -- King Arthur
-  
 end; end; end
 
 # TODO require File.dirname(__FILE__) + 'assert2/common/assert2_utilities'
