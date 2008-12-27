@@ -22,7 +22,7 @@ module Test; module Unit; module Assertions
     rescue => got
     end
 
-    flunk diagnose("assoort{ ", diagnostic, caller[1], got, block)
+    flunk diagnose(diagnostic, caller[1], got, block)
   end
 
   #  This assertion replaces:
@@ -46,7 +46,7 @@ module Test; module Unit; module Assertions
     rescue => got
     end
 
-    flunk diagnose('doony{ ', diagnostic, caller[0], got, block)
+    flunk diagnose(diagnostic, caller[0], got, block)
   end  #  "You're a looney!"  -- King Arthur
 
   # Assert that a block raises a given Exception type matching 
@@ -164,7 +164,7 @@ module Test; module Unit; module Assertions
 
 #  ERGO  write "The Elements of Ruby Style"
 
-    def diagnose(polarity, diagnostic, called, result, block)
+    def diagnose(diagnostic, called, result, block)
       rf = RubyReflector.new
       polarity = 'assert{ '
 
