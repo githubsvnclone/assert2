@@ -124,21 +124,7 @@ class Assert2Suite < Test::Unit::TestCase #:nodoc:
     return { 'first' => 'wrong topic' }
   end
 
-# FIXME
-#> * you shouldn't use "+" for string concatenation, it is much faster to
-#> use "<<" instead
-#
-#Noted!
-#
-#> * rescue with else does not work:
-#>
-#>>> puts(reflect_source { begin 1; rescue Foo;2;else;3;end })
-#> begin
-#> 13rescue Foo
-#> 2
-#> end
-
-#> * flip2 and flip3 are for rubys flip-flop operator
+# TODO  * flip2 and flip3 are for rubys flip-flop operator
 #> (http://redhanded.hobix.com/inspect/hopscotchingArraysWithFlipFlops.html)
 
   #  use these to manually test the diagnostic failures
