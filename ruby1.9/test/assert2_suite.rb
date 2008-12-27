@@ -177,6 +177,23 @@ Error Handling
   end
 #!end_panel!
 =begin
+Warning: Put Assertions on Separate Lines
+
+<code>assert{}</code> works by exploiting marginal features in Ruby's internal parser.
+To reflect source, assertions must find clean beginnings and endings to statements.
+
+Do not, for example, put two assertions in one line, because the first one will 
+confuse the second one:
+=end
+  def test_put_assertions_on_separate_lines
+    assert_flunk /not like this/ do
+      
+      assert('not like this'){ deny{ true } }
+      
+    end
+  end
+#!end_panel!
+=begin
 What about Ruby 1.8.7?
 
 <code>assert{ 2.0 }</code> uses RubyNode, which works with 1.8.6 and lower.
