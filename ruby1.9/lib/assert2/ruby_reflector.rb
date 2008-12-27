@@ -5,9 +5,7 @@ require 'pp'
 module Test; module Unit; module Assertions
 
   class RubyReflector
-    
-    MAX_CAPTURE_SNIP = 50  #  FIXME  use this when formatting already?
-    
+
     attr_reader :assertion_source,
                 :captures,
                 :reflect
