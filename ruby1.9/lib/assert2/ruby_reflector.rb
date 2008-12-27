@@ -15,14 +15,20 @@ module Test; module Unit; module Assertions
     attr_writer :block
 
     def initialize(called = '')
-      if called =~ /([^:]+):(\d+):/
-        file, line = $1, $2.to_i
-        @ripped = rip(File.readlines(file)[line - 1 .. -1])
-      end
-
+      source = split_and_read(called)
+      @ripped = rip(source) if source
       @reflect = ''
       @captures = []
       @line_number = nil
+    end
+
+    def split_and_read(called)
+      if called =~ /([^:]+):(\d+):/
+        file, line = $1, $2.to_i
+        return File.readlines(file)[line - 1 .. -1]
+      end
+      
+      return nil
     end
 
     def rip(lines)
