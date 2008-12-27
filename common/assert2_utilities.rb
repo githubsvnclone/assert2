@@ -1,6 +1,6 @@
 require 'test/unit'
+require 'assert2/ruby_reflector'
 
-#  TODO  move common into assert2
 
 module Test; module Unit; module Assertions
 
