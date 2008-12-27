@@ -89,7 +89,7 @@ module Test; module Unit; module Assertions
     #  CONSIDER  extract_block must not skip block-vars - intercept
     #  them here not down there
 
-    def reflect_assertion(block, got)  #  FIXME  move this down
+    def reflect_assertion(block, got)
       self.block = block
       
       extract_block.each do |statement|
