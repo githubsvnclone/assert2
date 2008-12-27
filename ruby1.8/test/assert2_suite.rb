@@ -60,7 +60,7 @@ class Assert2Suite < Test::Unit::TestCase #:nodoc:
     end
 
     assert_flunk /x.* > 43/ do  assert x > 430, 'x should be > 43'  end
-  end  #  FIXME  document you can't stack assertions in a row like that!
+  end
 
   def test_assert_classic
     x = 41
