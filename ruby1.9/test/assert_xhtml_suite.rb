@@ -143,10 +143,9 @@ useful <code>id</code>s, then use <code>xpath :div, :my_id</code> to restrict fu
 
     assert 'this tests the panel you are now reading' do
 
-      xpath :a, :name => :Nested_xpath_Faults do  #  finds the panel's anchor
+      xpath :a, :name => :Nested_xpath do  #  finds the panel's anchor
         xpath '../following-sibling::div[1]' do   #  find that <a> tag's immediate sibling
-             #  FIXME  better string there! V
-          xpath :'pre/span', ?. => 'test_nested_xpath_faults' do |span|
+          xpath :'pre/span', ?. => 'test_nested_xpaths' do |span|
             span.text =~ /nested/  #  the block passes the target node thru the |goalposts|
           end
         end
@@ -168,10 +167,10 @@ the block, using <code>assert{}</code>'s inner mechanisms:
 =end
   def test_xpath_passes_its_block_to_assert_2
     return if RUBY_VERSION < '1.9.0' # FIXME
-   _assert_xml '<tag>contents<tag>'
+   _assert_xml '<tag>contents</tag>'
     assert_flunk 'text --> "contents"' do
       
-      xpath 'tag' do |tag|
+      xpath '/tag' do |tag|
         tag.text == 'wrong contents!'
       end
       
