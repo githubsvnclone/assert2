@@ -1,12 +1,11 @@
 # this is assert{ 2.0 }, for Ruby <= 1.8.6
 
-require 'test/unit'
-require 'assert2/ruby_reflector'
- # note more requires lurk down there --V
+require 'assert2/common/assert2_utilities'
 
 #  TODO  evaluate parts[3]
 #  ERGO  if the block is a block, decorate with do-end
 #  ERGO  decorate assert_latest's block at fault time
+
 
 module Test; module Unit; module Assertions
 
@@ -145,5 +144,4 @@ module Test; module Unit; module Assertions
   
 end ; end ; end  #  "Eagle-eyes it!"
 
-require 'assert2/common/assert2_utilities'
 

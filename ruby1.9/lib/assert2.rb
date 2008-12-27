@@ -1,9 +1,8 @@
 #  this is assert{ 2.1 }, the Ruby 1.9+ rewrite of assert{ 2.0 }, using Ripper
+#   note we only work with Ruby >= 1.9 !
+#  FIXME  put in a 1.8.6 and 1.8.7 detector
 
-require 'assert2/ruby_reflector'  #   note we only work with Ruby >= 1.9 !
-require 'test/unit'
-
-  # note there's more requires down there --V
+require 'assert2/common/assert2_utilities'
 
 #  TODO  install Coulor
 #  TODO  add :verbose => option to assert{}
@@ -36,9 +35,6 @@ module Test; module Unit; module Assertions
   end
 
 end; end; end
-
-# TODO require File.dirname(__FILE__) + 'assert2/common/assert2_utilities'
-require 'assert2/common/assert2_utilities'
 
 require '../test/assert2_suite.rb' if $0 == __FILE__ and File.exist?('../test/assert2_suite.rb')
 #require 'ripdoc_suite.rb' if $0 == __FILE__ and File.exist?('ripdoc_suite.rb')
