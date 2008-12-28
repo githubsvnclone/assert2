@@ -269,10 +269,10 @@ class RubyReflectorTest < Test::Unit::TestCase
     assert{ rf.captured_block_vars.nil? }
     rf.absorb_block_args ['assert do', 'end']
     assert{ rf.captured_block_vars.nil? }
-    return
-    rf.absorb_block_args 'assert do |yo|'
+    rf.absorb_block_args ['assert do |yo|']
     assert{ rf.captured_block_vars == 'yo' }
-
+    rf.absorb_block_args ['assert do', '|yo|']
+    assert{ rf.captured_block_vars == 'yo' }
   end
 
   def test_format_intermediate_evaluations
