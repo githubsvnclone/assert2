@@ -24,10 +24,10 @@ module Test; module Unit; module Assertions
     effect.args = *options[:args]
     return [effect.reflect_assertion(block, got)]
   end
-    
+
   #!doc!
   def diagnose(diagnostic = nil, got = nil, called = caller[0],
-                options = {}, block = nil)
+                options = {}, block = nil)                    #  FIXME  make this directly callable
     options = { :args => [], :diagnose => lambda{''} }.merge(options)
      #  only capture the block_vars if there be args?
     @__additional_diagnostics.unshift diagnostic

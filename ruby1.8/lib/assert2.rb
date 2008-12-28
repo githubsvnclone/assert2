@@ -123,14 +123,15 @@ module Test; module Unit; module Assertions
   end
 
   private
-    def build_message_(diagnostic, reflection)
+    def __build_message(reflection)
       diagnostic = nil if diagnostic.to_s.strip == ''
-      return [diagnostic, reflection].compact.join("\n")
+      return (@__additional_diagnostics + [reflection]).compact.join("\n")
     end
 
 #  ERGO  write "The Elements of Ruby Style"
 
     def diagnose(diagnostic, result, called, options, block)
+      @__additional_diagnostics.unshift diagnostic
       rf = RubyReflector.new
       polarity = 'assert{ '
 
@@ -145,7 +146,7 @@ module Test; module Unit; module Assertions
                 rf.red(arrow_result(result) + effect) + 
                 rf.format_evaluations
 
-      return build_message_(diagnostic, report)
+      return __build_message(report)
     end
   
 end ; end ; end  #  "Eagle-eyes it!"
