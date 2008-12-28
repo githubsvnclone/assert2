@@ -214,9 +214,6 @@ DSL converts <code>?.</code> into that notation:
     end
   end
 #!end_panel!
-#  FIXME  count assertions correctly, per Matt
-#  FIXME  colorize on command, per Brian
-if RUBY_VERSION >= '1.9.0'  #  FIXME  should work in 1.8!
 =begin
 <code>xpath().text</code> is not the same as <code>xpath( ?. )</code> notation
 
@@ -224,23 +221,25 @@ if RUBY_VERSION >= '1.9.0'  #  FIXME  should work in 1.8!
 matches its XPath arguments. So <code>?.</code> will
 force <code>xpath()</code> to keep searching for a hit.
 =end
-  def test_xpath_text_is_not_the_same_as_question_dot_notation
-   _assert_xml '<Mean>
-                  <Woman>Blues</Woman>
-                  <Woman>Dub</Woman>
-                </Mean>'
-    assert do
-      
-      xpath(:Woman).text == 'Blues' and  #  FIXME  document this and in the assert2 page
-      xpath(:Woman, ?. => :Dub).text == 'Dub'
-             # use a symbol ^ to match a string here, as a convenience
-            
-    end
+def test_xpath_text_is_not_the_same_as_question_dot_notation
+  _assert_xml '<Mean>
+                <Woman>Blues</Woman>
+                <Woman>Dub</Woman>
+              </Mean>'
+  assert do
+
+    xpath(:Woman).text == 'Blues' and  #  FIXME  document this and in the assert2 page
+    xpath(:Woman, ?. => :Dub).text == 'Dub'
+            # use a symbol ^ to match a string here, as a convenience
+
   end
-#!end_panel!
 end
+#!end_panel!
+
 #!no_doc!
 
+#  FIXME  count assertions correctly, per Matt
+#  FIXME  colorize on command, per Brian
         # TODO  inner_text should use ?.
         #  TODO  which back-ends support . = '' matching recursive stuff?
         #  TODO  which back-ends support . =~ '' matching regices?
