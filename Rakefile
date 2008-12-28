@@ -16,3 +16,11 @@ task :int => :default do
   sh 'svn commit --message development'
   sh 'svn update --quiet'
 end
+
+task :todo do
+  sh 'find .. -name \*rb | xargs grep TODO'
+end
+
+task :fixme do
+  sh 'find .. -name \*rb | xargs grep FIXME'
+end
