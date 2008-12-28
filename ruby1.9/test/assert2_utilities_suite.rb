@@ -153,7 +153,6 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
 #  FIXME  comments in proportional font
 
   def test_assert_args_flunk
-  return # FIXME
     assert_flunk /x.*--> 42/ do
       assert nil, :args => [42] do |x|
         x == 43
@@ -162,7 +161,6 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
   end
 
   def test_deny_args_flunk
-  return # FIXME
     assert_flunk /x.*--> 42/ do
       deny nil, :args => [42] do |x|
         x == 42
