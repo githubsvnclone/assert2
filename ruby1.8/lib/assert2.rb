@@ -123,6 +123,7 @@ module Test; module Unit; module Assertions
   end
 
   private
+  
     def __build_message(reflection)
       __evaluate_diagnostics
       return (@__additional_diagnostics.uniq + [reflection]).compact.join("\n")
