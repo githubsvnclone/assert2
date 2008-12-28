@@ -262,6 +262,16 @@ class RubyReflectorTest < Test::Unit::TestCase
 
 #  ERGO  learn what's Regexp.union do?
 
+  def test_trap_block_args
+    rf = RubyReflector.new
+    a = 41
+    z =  1
+    rf.block = proc{|a,z| a + z }
+    puts
+    pp rf.transformation
+
+  end
+
   def test_format_intermediate_evaluations
     colorize(false)
     x = 42

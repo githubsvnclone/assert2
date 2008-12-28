@@ -71,7 +71,8 @@ module Test; module Unit; module Assertions
 
   class RubyReflector  #  turn hamburger back into live cattle
     attr_reader :evaluations,
-                :result
+                :result,
+                :transformation
     attr_writer :block,
                 :reflect_values
  
