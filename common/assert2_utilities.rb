@@ -10,28 +10,6 @@ module Test; module Unit; module Assertions
                  MiniTest::Assertion
                end
 
-  # This is a copy of the classic assert, so your pre-existing
-  # +assert+ calls will not change their behavior
-  #
-  if self.respond_to? :_assertions
-    def assert_classic(test, msg=nil)
-        msg ||= "Failed assertion, no message given."
-        self._assertions += 1
-        unless test then
-          msg = msg.call if Proc === msg
-          raise MiniTest::Assertion, msg
-        end
-        true
-    end
-  else
-    def assert_classic(boolean, message=nil)
-      #_wrap_assertion do
-        assert_block("assert<classic> should not be called with a block.") { !block_given? }
-        assert_block(build_message(message, "<?> is not true.", boolean)) { boolean }
-      #end
-    end
-  end
-
   def add_diagnostic(whatever = nil, &block)
     @__additional_diagnostics ||= []
     
@@ -49,7 +27,7 @@ module Test; module Unit; module Assertions
     end
   end  #  CONSIDER  pass the same args as blocks take?
 
-  def __build_message(reflection)  #  FIXME  better top-to-bottom order in these files
+  def __build_message(reflection)
     __evaluate_diagnostics
     return (@__additional_diagnostics.uniq + [reflection]).compact.join("\n")
   end
@@ -134,6 +112,28 @@ module Test; module Unit; module Assertions
   
   def colorize(to_color)
     RubyReflector.new.colorize(to_color)
+  end
+
+  # This is a copy of the classic assert, so your pre-existing
+  # +assert+ calls will not change their behavior
+  #
+  if self.respond_to? :_assertions
+    def assert_classic(test, msg=nil)
+        msg ||= "Failed assertion, no message given."
+        self._assertions += 1
+        unless test then
+          msg = msg.call if Proc === msg
+          raise MiniTest::Assertion, msg
+        end
+        true
+    end
+  else
+    def assert_classic(boolean, message=nil)
+      #_wrap_assertion do
+        assert_block("assert<classic> should not be called with a block.") { !block_given? }
+        assert_block(build_message(message, "<?> is not true.", boolean)) { boolean }
+      #end
+    end
   end
 
   #  The new <code>assert()</code> calls this to interpret
