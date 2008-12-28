@@ -47,7 +47,7 @@ module Test; module Unit; module Assertions
     @__additional_diagnostics.each_with_index do |d, x|
       @__additional_diagnostics[x] = d.call if d.respond_to? :call
     end
-  end  #  TODO  pass the same args as blocks take
+  end  #  CONSIDER  pass the same args as blocks take?
 
   def __build_message(reflection)  #  FIXME  better top-to-bottom order in these files
     __evaluate_diagnostics
@@ -117,6 +117,9 @@ module Test; module Unit; module Assertions
   end
   
   class RubyReflector
+    attr_accessor :captured_block_vars,
+                  :args
+
     include Coulor
     
     def split_and_read(called)
