@@ -264,13 +264,14 @@ class RubyReflectorTest < Test::Unit::TestCase
 
   def test_trap_block_args
     rf = RubyReflector.new
-    a = 41
-    z =  1
-    rf.block = lambda{ proc{|a,z| a + z }.call(a,z) }
-    puts
-    
-    pp proc{|a,z| a + z }.body_node.transform(:include_node => true)
-#    pp rf.transformation
+    assert{ rf.captured_block_vars.nil? }
+    rf.absorb_block_args ['assert do']
+    assert{ rf.captured_block_vars.nil? }
+    rf.absorb_block_args ['assert do', 'end']
+    assert{ rf.captured_block_vars.nil? }
+    return
+    rf.absorb_block_args 'assert do |yo|'
+    assert{ rf.captured_block_vars == 'yo' }
 
   end
 
