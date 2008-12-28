@@ -125,7 +125,7 @@ module Test; module Unit; module Assertions
   private
     def __build_message(reflection)
       __evaluate_diagnostics
-      return (@__additional_diagnostics + [reflection]).compact.join("\n")
+      return (@__additional_diagnostics.uniq + [reflection]).compact.join("\n")
     end
 
 #  ERGO  write "The Elements of Ruby Style"
