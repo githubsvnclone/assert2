@@ -166,14 +166,14 @@ block returns <code>nil</code> or <code>false</code>, it will <code>flunk()</cod
 the block, using <code>assert{}</code>'s inner mechanisms:
 =end
   def test_xpath_passes_its_block_to_assert_2
-    return if RUBY_VERSION < '1.9.0' # FIXME
+    #return if RUBY_VERSION < '1.9.0' # FIXME
    _assert_xml '<tag>contents</tag>'
-    assert_flunk 'text --> "contents"' do
-      
+    assert_flunk /text.* --> "contents"/ do
+
       xpath '/tag' do |tag|
         tag.text == 'wrong contents!'
       end
-      
+
     end
   end
 #!end_panel!
