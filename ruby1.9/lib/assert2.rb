@@ -25,18 +25,12 @@ module Test; module Unit; module Assertions
     return [effect.reflect_assertion(block, got)]
   end
 
-    def __build_message(reflection)
-      __evaluate_diagnostics
-      return (@__additional_diagnostics.uniq + [reflection]).compact.join("\n")
-    end
-
   #!doc!
   def diagnose(diagnostic = nil, got = nil, called = caller[0],
                 options = {}, block = nil)                    #  FIXME  make this directly callable
     options = { :args => [] }.merge(options)
      # CONSIDER only capture the block_vars if there be args?
     @__additional_diagnostics.unshift diagnostic
-    __evaluate_diagnostics
     return __build_message(__reflect_assertion(called, options, block, got))
   end
 
