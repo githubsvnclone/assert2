@@ -9,14 +9,15 @@ class RubyReflectorTest < Test::Unit::TestCase
   def setup
     colorize(true)
     @effect = RubyReflector.new
+    x = 42
+    @effect.block = lambda{ x == 42 }
   end
 
   def test_pass_args_to_detector
-  return # FIXME
     @effect.captured_block_vars = 'x, y'
     @effect.args = [40, 2]
-    assert{ @effect.detect('x + y') == 42 }   
-  end
+    assert{ @effect.detect('x + y').include? ['x + y', 42, nil] }
+  end  #  TODO  both .detects should get exactly the same interface...
 
   def test_all_op_codes
     [

@@ -100,8 +100,16 @@ module Test; module Unit; module Assertions
     end
     
     def detect(expression)
+      expr = expression
+      $__args = nil
+      if @args and @captured_block_vars
+        expr = "#{@captured_block_vars} = $__args.kind_of?(Array) && $__args.length == 1 ? $__args.first : $__args\n" + 
+                expr
+        $__args = @args
+      end
+
       begin
-        intermediate = eval(expression, @block.binding)
+        intermediate = eval(expr, @block.binding)
         @evaluations << [expression, intermediate, nil]
       rescue SyntaxError => e
         if e.message.index('syntax error, unexpected \',\'') and expression !~ /\[ /
