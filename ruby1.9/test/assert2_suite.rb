@@ -121,7 +121,7 @@ can use this to explain what's wrong with some situation.
     assert_flunk /silly Rabbi!/ do
       
       deny do
-        add_diagnostic 'silly Rabbi!'
+        add_diagnostic 'silly Rabbi!' and
         true
       end
       
@@ -140,7 +140,7 @@ in blocks. They only call when their assertions fail fail:
     assert_flunk /^remarkable/ do
       
       assert do
-        add_diagnostic{ 'rem' + ark }
+        add_diagnostic{ 'rem' + ark } and
         ark = 'arkable'
         false
       end
@@ -240,7 +240,7 @@ to recover some 1.8.6 stability!
               :args => [42] do |x|
       assert{ x == 42 }
     end
-  end
+  end  #  FIXME  move all tests like these into assert2_utilities_suite.rb
   
   def test_assert_args_flunk
     assert_flunk /x.*--> 42/ do
@@ -258,7 +258,7 @@ to recover some 1.8.6 stability!
     end
   end
 
-  def test_assert_diagnose
+  def test_assert_diagnose  #  FIXME replacing with add_diagnostic
     x = 42
 
     assert nil, :diagnose => 
