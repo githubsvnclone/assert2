@@ -12,6 +12,7 @@ require 'assert2/common/assert2_utilities'
 #  TODO  add :verbose => option to assert{}
 #  TODO  pay for Staff Benda Bilili  ALBUM: Tr�s Tr�s Fort (Promo Sampler) !
 #  FIXME  express linefeeds in string results correctly
+# ERGO Dizny's Pixies movie parody using the Pixie's Xmas special plot, and cybertek pixies
 
 module Test; module Unit; module Assertions
 
