@@ -129,6 +129,7 @@ module Test; module Unit; module Assertions
     def diagnose(diagnostic, result, called, options, block)
       @__additional_diagnostics.unshift diagnostic
       rf = RubyReflector.new
+      rf.args = options.fetch(:args, [])
       polarity = 'assert{ '
 
       if rf.split_and_read(called).first =~ /^\s*(assert|deny)/

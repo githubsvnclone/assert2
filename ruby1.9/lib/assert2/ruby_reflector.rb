@@ -35,7 +35,7 @@ module Test; module Unit; module Assertions
 
     class Nada; end
 
-    attr_accessor :captured_block_vars,
+    attr_accessor :captured_block_vars,  #  FIXME  move to utilties
                   :args
 
     def detect(ident)

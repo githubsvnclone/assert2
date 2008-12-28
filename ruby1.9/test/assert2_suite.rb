@@ -221,29 +221,6 @@ to recover some 1.8.6 stability!
 
   #  FIXME  move all tests like these into assert2_utilities_suite.rb
 
-  def test_assert_args_flunk
-    assert_flunk /x.*--> 42/ do
-      assert nil, :args => [42] do |x|
-        x == 43
-      end
-    end
-  end
-  
-  def test_deny_args_flunk
-    assert_flunk /x.*--> 42/ do
-      deny nil, :args => [42] do |x|
-        x == 42
-      end
-    end
-  end
-
-  def test_trapped_faults_decorate_with_stack_traces
-    return if RUBY_VERSION == '1.9.1'  # TODO
-    assert_flunk __FILE__ do
-      assert{ 1 / 0 }
-    end
-  end
-  
   def daZone( whatever )
     add_diagnostic 'daybreak on the land'
     return nil

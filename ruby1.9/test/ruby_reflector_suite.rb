@@ -28,7 +28,7 @@ class RubyReflectorSuite < Test::Unit::TestCase
       assert{ x == 
                        43 }
     end
-return
+return  #  FIXME
 puts reflects
     assert{ reflects.match('x == 
                        43') }

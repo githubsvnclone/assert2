@@ -152,5 +152,30 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
 
 #  FIXME  comments in proportional font
 
+  def test_assert_args_flunk
+  return # FIXME
+    assert_flunk /x.*--> 42/ do
+      assert nil, :args => [42] do |x|
+        x == 43
+      end
+    end
+  end
+
+  def test_deny_args_flunk
+  return # FIXME
+    assert_flunk /x.*--> 42/ do
+      deny nil, :args => [42] do |x|
+        x == 42
+      end
+    end
+  end
+
+  def test_trapped_faults_decorate_with_stack_traces
+    return if RUBY_VERSION == '1.9.1'  # TODO
+    assert_flunk __FILE__ do
+      assert{ 1 / 0 }
+    end
+  end
+
 end  #  TODO  ultimately, the top of _this_ file should document all of assert{ 2.x }
 

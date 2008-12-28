@@ -6,7 +6,17 @@ require 'pathname'
 
 class RubyReflectorTest < Test::Unit::TestCase
 
-  def setup;  colorize(true);  end
+  def setup
+    colorize(true)
+    @effect = RubyReflector.new
+  end
+
+  def test_pass_args_to_detector
+  return # FIXME
+    @effect.captured_block_vars = 'x, y'
+    @effect.args = [40, 2]
+    assert{ @effect.detect('x + y') == 42 }   
+  end
 
   def test_all_op_codes
     [
@@ -199,9 +209,9 @@ class RubyReflectorTest < Test::Unit::TestCase
       }
   end
 
-  def test_eval_intermediate_paren_lists
+  def test_eval_intermediate_paren_lists  #  TODO  both RubyReflectors should pass tests like these
     rf = RubyReflector.new(proc{})
-    evals = rf.eval_intermediate_guarded('41, 42, 44').first
+    evals = rf.detect('41, 42, 44').first
     assert{ evals.first == '[ 41, 42, 44 ]' }
       #  ERGO  only evaluate an intermediate if it contains a lower evaluation!
   end

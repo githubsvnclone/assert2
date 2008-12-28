@@ -4,7 +4,7 @@ require 'pp'
 
 
 module Test; module Unit; module Assertions
-  
+
   # ERGO
   #		:bmethod      => [:cval],
   #		:cfunc        => [:argc, :cfnc],
@@ -99,13 +99,13 @@ module Test; module Unit; module Assertions
       raise
     end
     
-    def eval_intermediate_guarded(expression)
+    def detect(expression)
       begin
         intermediate = eval(expression, @block.binding)
         @evaluations << [expression, intermediate, nil]
       rescue SyntaxError => e
         if e.message.index('syntax error, unexpected \',\'') and expression !~ /\[ /
-          return eval_intermediate_guarded('[ ' + expression + ' ]')
+          return detect('[ ' + expression + ' ]')
         end  #  faint prayer to infinite recursion diety here! (-;
 
         @evaluations << [expression, nil, e.message]
@@ -115,7 +115,7 @@ module Test; module Unit; module Assertions
     end
 
     def eval_intermediate(expression)
-      eval_intermediate_guarded(expression)  if @reflect_values
+      detect(expression)  if @reflect_values
       return expression
     end
 
@@ -529,13 +529,13 @@ p node
 
       return head_(node)
     end
-        
+
     def _splat(node)
       if (head = node[:head]) and 
           ((we_b_array = head.first == :array) or head.first == :lvar)
         return '*' + nest_if(we_b_array, '[', ']'){ head_(node) }
       end
-      
+
       return '*' + head_(node)
     end  #  ERGO  raise if any other key!
     
@@ -553,7 +553,7 @@ p node
       lit.gsub!('\\\\', '\\')  if regex
       return lit
     end
-    
+
     def _dstr(node, delim = '"')
       regex = delim == '/'
       expression = delim + scrape_literal(node, regex)
@@ -567,7 +567,7 @@ p node
           end
         end
       end
-      
+
       return eval_intermediate(expression + delim)
     end
 
@@ -575,13 +575,13 @@ p node
       raise '_retry called with unexpected arguments' unless node == {} or node.keys == [:node]
       return 'retry'
     end
-    
+
     def recv_zero_self(node, plus = '')
       recv = node[:recv]
       return 'self' + plus  if recv == 0
       return recv_(node, plus)
     end
-    
+
     def _attrasgn(node)
       recv, args = node.values_at(:recv, :args)
 
