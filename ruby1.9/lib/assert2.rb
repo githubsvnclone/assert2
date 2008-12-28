@@ -28,13 +28,11 @@ module Test; module Unit; module Assertions
   #!doc!
   def diagnose(diagnostic = nil, got = nil, called = caller[0],
                 options = {}, block = nil)                    #  FIXME  make this directly callable
-    options = { :args => [], :diagnose => lambda{''} }.merge(options)
-     #  only capture the block_vars if there be args?
+    options = { :args => [] }.merge(options)
+     # CONSIDER only capture the block_vars if there be args?
     @__additional_diagnostics.unshift diagnostic
     __evaluate_diagnostics
     report = @__additional_diagnostics.uniq + __reflect_assertion(called, options, block, got)
-    more_diagnostics = options.fetch(:diagnose, lambda{''}).call.to_s
-    report << more_diagnostics if more_diagnostics.length > 0
     return report.compact.join("\n")
   end
 
