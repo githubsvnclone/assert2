@@ -100,6 +100,7 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
 
   def test_deny_diagnose
     x = 42
+    
     deny do
       add_diagnostic{ flunk 'this should never call' } and
       x == 43
