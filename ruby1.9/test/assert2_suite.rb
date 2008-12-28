@@ -261,8 +261,8 @@ to recover some 1.8.6 stability!
   def test_assert_diagnose  #  FIXME replacing with add_diagnostic
     x = 42
 
-    assert nil, :diagnose => 
-        lambda{ flunk 'this should never call' } do
+    assert do
+      add_diagnostic{ flunk 'this should never call' } and
       x == 42
     end
   end
