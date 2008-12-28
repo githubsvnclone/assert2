@@ -148,7 +148,7 @@ module Test; module Unit; module Assertions
 
       return __build_message(report)
     end
-  
+
 end ; end ; end  #  "Eagle-eyes it!"
 
 
