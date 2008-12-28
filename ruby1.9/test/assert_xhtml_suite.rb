@@ -389,7 +389,7 @@ end
   end
 
   def test_to_xpath
-    apa = AssertXPathArguments.new  #  FIXME use in 2.0 too
+    apa = AssertXPathArguments.new
     apa.to_xpath(:a, { :href=> 'http://www.sinfest.net/', ?. => 'SinFest' }, {})
 
     assert do
