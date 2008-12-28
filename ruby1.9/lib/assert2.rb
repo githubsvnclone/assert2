@@ -1,6 +1,10 @@
 #  this is assert{ 2.1 }, the Ruby 1.9+ rewrite of assert{ 2.0 }, using Ripper
 #   note we only work with Ruby >= 1.9 !
-#  FIXME  put in a 1.8.6 and 1.8.7 detector
+
+if RUBY_VERSION < '1.9.0'
+  puts "\nWarning: This version of assert{ 2.0 } only works\n" +
+       "with Ripper, which requires a Ruby version >= 1.9\n\n"
+end
 
 require 'assert2/common/assert2_utilities'
 
@@ -23,7 +27,7 @@ module Test; module Unit; module Assertions
     
   #!doc!
   def diagnose(diagnostic = nil, got = nil, called = caller[0],
-                options = {}, block)
+                options = {}, block = nil)
     options = { :args => [], :diagnose => lambda{''} }.merge(options)
      #  only capture the block_vars if there be args?
     @__additional_diagnostics.unshift diagnostic
