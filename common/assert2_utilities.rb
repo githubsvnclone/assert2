@@ -49,6 +49,11 @@ module Test; module Unit; module Assertions
     end
   end  #  TODO  pass the same args as blocks take
 
+  def __build_message(reflection)  #  FIXME  better top-to-bottom order in these files
+    __evaluate_diagnostics
+    return (@__additional_diagnostics.uniq + [reflection]).compact.join("\n")
+  end
+
   def assert(*args, &block)
   #  This assertion calls a block, and faults if it returns
   #  +false+ or +nil+. The fault diagnostic will reflect the
