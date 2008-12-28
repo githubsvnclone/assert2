@@ -1,5 +1,11 @@
 # this is assert{ 2.0 }, for Ruby <= 1.8.6
 
+if RUBY_VERSION > '1.8.6'
+  puts "\nWarning: This version of assert{ 2.0 } requires\n" +
+       "RubyNode, which only works on Ruby versions < 1.8.7.\n" +
+       "Upgrade to Ruby1.9, and try 'gem install assert21'\n\n"
+end
+
 require 'assert2/common/assert2_utilities'
 
 #  TODO  evaluate parts[3]
