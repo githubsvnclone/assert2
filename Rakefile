@@ -18,9 +18,9 @@ task :int => :default do
 end
 
 task :todo do
-  sh 'find .. -name \*rb | xargs grep TODO'
+  sh 'find . -name \*rb | xargs grep TODO'
 end
 
 task :fixme do
-  sh 'find .. -name \*rb | xargs grep FIXME'
+  sh 'find . -name \*rb | xargs grep FIXME'
 end
