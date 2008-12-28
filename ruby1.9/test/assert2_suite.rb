@@ -179,6 +179,8 @@ Error Handling
 =begin
 Warning: Put Assertions on Separate Lines
 
+FIXME  clearer example
+
 <code>assert{}</code> works by exploiting marginal features in Ruby's internal parser.
 To reflect source, assertions must find clean beginnings and endings to statements.
 
@@ -274,7 +276,8 @@ to recover some 1.8.6 stability!
     x = 43
     
     assert_flunk /you ain.t #{expected}/ do
-      assert nil, :diagnose => lambda{ "you ain't #{expected}" } do
+      assert do
+        add_diagnostic{ "you ain't #{expected}" }
         x == expected
       end
     end
@@ -282,8 +285,8 @@ to recover some 1.8.6 stability!
   
   def test_deny_diagnose
     x = 42
-    deny nil, :diagnose => 
-        lambda{ flunk 'this should never call' } do
+    deny do
+      add_diagnostic{ flunk 'this should never call' } and
       x == 43
     end
   end
@@ -293,7 +296,8 @@ to recover some 1.8.6 stability!
     x = 42
     
     assert_flunk /you ain.t #{expected}/ do
-      deny nil, :diagnose => lambda{ "you ain't #{expected}" } do
+      deny do
+        add_diagnostic{ "you ain't #{expected}" } and
         x == expected
       end
     end
