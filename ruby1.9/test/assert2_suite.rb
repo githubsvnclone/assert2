@@ -308,7 +308,7 @@ to recover some 1.8.6 stability!
     expected = 42
     x = 43
 
-    assert_flunk /you ain.t #{expected}/ do
+    assert_flunk /^you ain.t #{expected}/ do
       assert do
         add_diagnostic{ "you ain't #{expected}" }
         x == expected
@@ -328,7 +328,7 @@ to recover some 1.8.6 stability!
     expected = 42
     x = 42
 
-    assert_flunk /you ain.t #{expected}/ do
+    assert_flunk /^you ain.t #{expected}/ do
       deny do
         add_diagnostic{ "you ain't #{expected}" } and
         x == expected
