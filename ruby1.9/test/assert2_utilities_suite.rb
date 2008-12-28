@@ -150,8 +150,6 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     deny('always consume diagnostics'){ x =~ /silly Rabbi/ }
   end
 
-#  FIXME  comments in proportional font
-
   def test_assert_args_flunk
     assert_flunk /x.*--> 42/ do
       assert nil, :args => [42] do |x|
