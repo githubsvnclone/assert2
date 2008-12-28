@@ -166,7 +166,6 @@ block returns <code>nil</code> or <code>false</code>, it will <code>flunk()</cod
 the block, using <code>assert{}</code>'s inner mechanisms:
 =end
   def test_xpath_passes_its_block_to_assert_2
-    #return if RUBY_VERSION < '1.9.0' # FIXME
    _assert_xml '<tag>contents</tag>'
     assert_flunk /text.* --> "contents"/ do
 
@@ -287,8 +286,6 @@ end
   end
 
   def test_deny_xpath_decorates
-    return unless RUBY_VERSION >= '1.9.0'  #  FIXME  should work in 1.8!
-
     assert_xhtml '<html><body/></html>'
 
     spew = assert_flunk /xml context/ do
@@ -308,8 +305,6 @@ end
   end
    
   def test_nested_diagnostics  #  TODO  put a test like this inside assert2_suite.rb
-    return unless RUBY_VERSION >= '1.9.0'  #  FIXME  should work in 1.8!
-
    _assert_xml '<a><b><c/></b></a>'
    
     diagnostic = assert_flunk 'xpath: "descendant-or-self::si"' do
