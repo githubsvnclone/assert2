@@ -92,6 +92,7 @@ module Test; module Unit; module Assertions
     def reflect_nodes(body_node)
       return unless body_node
       @transformation = body_node.transform(:include_node => true)
+#pp @transformation
       return @result = _send(@transformation)
     rescue
       puts "\nOffending line: #{ @line }"

@@ -266,9 +266,11 @@ class RubyReflectorTest < Test::Unit::TestCase
     rf = RubyReflector.new
     a = 41
     z =  1
-    rf.block = proc{|a,z| a + z }
+    rf.block = lambda{ proc{|a,z| a + z }.call(a,z) }
     puts
-    pp rf.transformation
+    
+    pp proc{|a,z| a + z }.body_node.transform(:include_node => true)
+#    pp rf.transformation
 
   end
 
