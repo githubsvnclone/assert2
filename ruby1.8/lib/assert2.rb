@@ -131,11 +131,13 @@ module Test; module Unit; module Assertions
       rf = RubyReflector.new
       rf.args = options.fetch(:args, [])
       polarity = 'assert{ '
+      lines = rf.split_and_read(called) 
 
-      if rf.split_and_read(called).first =~ /^\s*(assert|deny)/
+      if lines.first =~ /^\s*(assert|deny)/
         polarity = $1 + '{ '
       end
-
+      
+      rf.absorb_block_args lines 
       rf.block = block
       effect = " - should #{ 'not ' if polarity =~ /deny/ }pass\n"
 
