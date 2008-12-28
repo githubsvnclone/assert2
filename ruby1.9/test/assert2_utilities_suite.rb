@@ -125,5 +125,12 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     end
   end
 
+  def test_assert_args
+    assert 'the irony /is/ lost on us!', 
+              :args => [42] do |x|
+      assert{ x == 42 }
+    end
+  end
+
 end
 

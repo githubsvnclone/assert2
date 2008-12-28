@@ -237,12 +237,7 @@ to recover some 1.8.6 stability!
     deny('always consume diagnostics'){ x =~ /silly Rabbi/ }
   end
 
-  def test_assert_args
-    assert 'the irony /is/ lost on us!', 
-              :args => [42] do |x|
-      assert{ x == 42 }
-    end
-  end  #  FIXME  move all tests like these into assert2_utilities_suite.rb
+  #  FIXME  move all tests like these into assert2_utilities_suite.rb
 
   def test_assert_args_flunk
     assert_flunk /x.*--> 42/ do
