@@ -124,7 +124,7 @@ module Test; module Unit; module Assertions
 
   private
     def build_message_(diagnostic, reflection)
-      diagnostic = nil if diagnostic == ''
+      diagnostic = nil if diagnostic.to_s.strip == ''
       return [diagnostic, reflection].compact.join("\n")
     end
 
