@@ -2,16 +2,10 @@ require 'test/unit'
 require File.dirname(__FILE__) + '/../../test_helper'
 require 'assert2/common/assert_flunk'
 
-#  FIXME  put the magic includer into a helper
 
 class Assert2UtilitiesSuite < Test::Unit::TestCase
 
   def setup
-    #~ @effect = Test::Unit::Assertions::RubyReflector.new()
-    #~ array = [1, 3]
-    #~ hash = { :x => 42, 43 => 44 }
-    #~ x = 42
-    #~ @effect.block = lambda{x}
     colorize(false)
   end
 

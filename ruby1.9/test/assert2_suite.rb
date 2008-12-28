@@ -117,34 +117,34 @@ Custom test-side methods which know they are inside
 can use this to explain what's wrong with some situation.
 =end
   def test_add_diagnostic
-    
+
     assert_flunk /silly Rabbi!/ do
-      
+
       deny do
         add_diagnostic 'silly Rabbi!' and
         true
       end
-      
+
     end
-    
+
   end
 #!end_panel!
 =begin
 <code>add_diagnostic{ '<em>block</em>' }</code>
-Sometimes the diagnostic is more expensive than the actual assertion.
+Sometimes the diagnostic is more expensive than a passing assertion.
 To keep all your assertions fast, wrap your diagnostics
 in blocks. They only call when their assertions fail fail:
 =end
   def test_add_diagnostic_lambda
     ark = ''
     assert_flunk /^remarkable/ do
-      
+
       assert do
         add_diagnostic{ 'rem' + ark } and
         ark = 'arkable'
         false
       end
-      
+
     end
   end
 #!end_panel!
@@ -170,9 +170,9 @@ Error Handling
 =end
   def test_error_handling
     assert_flunk /ZeroDivisionError: divided by 0/ do
-      
+
       assert{ 1 / 0 }  # would you believe some math professors frown upon that?!
-      
+
     end
   end
 #!end_panel!
@@ -189,9 +189,9 @@ confuse the second one:
 =end
   def test_put_assertions_on_separate_lines
     assert_flunk /not like this/ do
-      
+
       assert('not like this'){ deny{ true } }
-      
+
     end
   end
 #!end_panel!
@@ -243,7 +243,7 @@ to recover some 1.8.6 stability!
       assert{ x == 42 }
     end
   end  #  FIXME  move all tests like these into assert2_utilities_suite.rb
-  
+
   def test_assert_args_flunk
     assert_flunk /x.*--> 42/ do
       assert nil, :args => [42] do |x|
@@ -260,49 +260,6 @@ to recover some 1.8.6 stability!
     end
   end
 
-  def test_assert_diagnose  #  FIXME replacing with add_diagnostic
-    x = 42
-
-    assert do
-      add_diagnostic{ flunk 'this should never call' } and
-      x == 42
-    end
-  end
-  
-  #  TODO  the =begin header can be multiple lines, down to a space!
-  
-  def test_assert_diagose_flunk
-    expected = 42
-    x = 43
-    
-    assert_flunk /you ain.t #{expected}/ do
-      assert do
-        add_diagnostic{ "you ain't #{expected}" }
-        x == expected
-      end
-    end
-  end
-  
-  def test_deny_diagnose
-    x = 42
-    deny do
-      add_diagnostic{ flunk 'this should never call' } and
-      x == 43
-    end
-  end
-  
-  def test_deny_diagose_flunk
-    expected = 42
-    x = 42
-    
-    assert_flunk /you ain.t #{expected}/ do
-      deny do
-        add_diagnostic{ "you ain't #{expected}" } and
-        x == expected
-      end
-    end
-  end
-  
   def test_trapped_faults_decorate_with_stack_traces
     return if RUBY_VERSION == '1.9.1'  # TODO
     assert_flunk __FILE__ do
@@ -334,6 +291,49 @@ to recover some 1.8.6 stability!
       assert(tattle){ x == 42 }
     end
 
+  end
+
+  def test_assert_diagnose
+    x = 42
+
+    assert do
+      add_diagnostic{ flunk 'this should never call' } and
+      x == 42
+    end
+  end
+
+  #  TODO  the =begin header can be multiple lines, down to a space!
+
+  def test_assert_diagose_flunk
+    expected = 42
+    x = 43
+
+    assert_flunk /you ain.t #{expected}/ do
+      assert do
+        add_diagnostic{ "you ain't #{expected}" }
+        x == expected
+      end
+    end
+  end
+
+  def test_deny_diagnose
+    x = 42
+    deny do
+      add_diagnostic{ flunk 'this should never call' } and
+      x == 43
+    end
+  end
+
+  def test_deny_diagose_flunk
+    expected = 42
+    x = 42
+
+    assert_flunk /you ain.t #{expected}/ do
+      deny do
+        add_diagnostic{ "you ain't #{expected}" } and
+        x == expected
+      end
+    end
   end
 
 end
