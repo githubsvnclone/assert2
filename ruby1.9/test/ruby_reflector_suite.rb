@@ -3,7 +3,7 @@ require 'assert2'
 require 'assert2/common/assert_flunk'
 
 #  FIXME  respect linefeeds in parsed source when reflecting
-#  FIXME evaluate mashed strings
+#  FIXME  evaluate mashed strings
 
 class RubyReflectorSuite < Test::Unit::TestCase
 
