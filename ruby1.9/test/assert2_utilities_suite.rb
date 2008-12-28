@@ -118,5 +118,12 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     end
   end
 
+  def test_asserts_see_arguments  #  TODO  move to the common test suite
+    x = 42
+    assert :args => [42] do |val|
+      x == 42
+    end
+  end
+
 end
 
