@@ -75,7 +75,7 @@ module Test; module Unit; module Assertions
                 :transformation
     attr_writer :block,
                 :reflect_values
- 
+
     def initialize(yo_block = nil, reflect_values = true)  #  note that a block, from your context, is not optional
       @reflect_values = reflect_values
       @evaluations    = []
@@ -83,12 +83,12 @@ module Test; module Unit; module Assertions
       @line           = 0
       self.block      = yo_block
     end
-    
+
     def block=(yo_block)
       @block = yo_block and
         reflect_nodes(@block.body_node)
     end
-    
+
     def reflect_nodes(body_node)
       return unless body_node
       @transformation = body_node.transform(:include_node => true)
@@ -97,14 +97,14 @@ module Test; module Unit; module Assertions
       puts "\nOffending line: #{ @line }"
       raise
     end
-    
+
     def absorb_block_args(code_fragments)  #  CONSIDER a suckier way of detecting 
       @captured_block_vars = nil      #  the block args is indeed remotely possible...
       if code_fragments.first =~ /\|(.*)\|/ or code_fragments[1].to_s =~ /\|(.*)\|/ 
         @captured_block_vars = $1
       end
     end
-    
+
     def detect(expression)
       expr = expression
       $__args = nil

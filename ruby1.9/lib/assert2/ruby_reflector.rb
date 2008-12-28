@@ -35,9 +35,6 @@ module Test; module Unit; module Assertions
 
     class Nada; end
 
-    attr_accessor :captured_block_vars,  #  FIXME  move to utilties
-                  :args
-
     def detect(ident)
       if @args and @captured_block_vars
         ident = "#{@captured_block_vars} = $__args.kind_of?(Array) && $__args.length == 1 ? $__args.first : $__args\n" + 
