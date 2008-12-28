@@ -219,24 +219,6 @@ to recover some 1.8.6 stability!
 #  TODO  demo test that explicates why we cannot allow the "money line" 
 #            to appear inside assert{}
 
-  def test_consume_diagnostic
-    add_diagnostic 'silly Rabbi!'
-    assert{ true }
-
-    x = assert_flunk /true/ do
-      denigh{ true }
-    end
-
-    deny('consume diagnostics at fault time'){ x =~ /silly Rabbi/ }
-    add_diagnostic 'silly Rabbi'
-    denigh{ false }
-
-    x = assert_flunk /true/ do
-          denigh{ true }
-        end 
-    deny('always consume diagnostics'){ x =~ /silly Rabbi/ }
-  end
-
   #  FIXME  move all tests like these into assert2_utilities_suite.rb
 
   def test_assert_args_flunk

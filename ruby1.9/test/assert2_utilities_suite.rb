@@ -118,7 +118,7 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     end
   end
 
-  def test_asserts_see_arguments  #  TODO  move to the common test suite
+  def test_asserts_see_arguments
     x = 42
     assert :args => [42] do |val|
       x == 42
@@ -126,11 +126,31 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
   end
 
   def test_assert_args
-    assert 'the irony /is/ lost on us!', 
+    assert 'the irony /is/ lost on us!',
               :args => [42] do |x|
       assert{ x == 42 }
     end
   end
 
-end
+  def test_consume_diagnostic
+    add_diagnostic 'silly Rabbi!'
+    assert{ true }
+
+    x = assert_flunk /true/ do
+      denigh{ true }
+    end
+
+    deny('consume diagnostics at fault time'){ x =~ /silly Rabbi/ }
+    add_diagnostic 'silly Rabbi'
+    denigh{ false }
+
+    x = assert_flunk /true/ do
+          denigh{ true }
+        end 
+    deny('always consume diagnostics'){ x =~ /silly Rabbi/ }
+  end
+
+#  FIXME  comments in proportional font
+
+end  #  TODO  ultimately, the top of _this_ file should document all of assert{ 2.x }
 
