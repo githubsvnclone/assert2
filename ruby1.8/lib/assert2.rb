@@ -125,6 +125,7 @@ module Test; module Unit; module Assertions
   private
     def __build_message(reflection)
       diagnostic = nil if diagnostic.to_s.strip == ''
+      __evaluate_diagnostics
       return (@__additional_diagnostics + [reflection]).compact.join("\n")
     end
 

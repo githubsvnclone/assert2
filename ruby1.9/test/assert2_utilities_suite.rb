@@ -77,5 +77,46 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     denigh{ x.message =~ /self.morgothrond\s+--> / }
   end
 
+  def test_assert_diagnose
+    x = 42
+
+    assert do
+      add_diagnostic{ flunk 'this should never call' } and
+      x == 42
+    end
+  end
+
+  def test_assert_diagose_flunk
+    expected = 42
+    x = 43
+
+    assert_flunk /^you ain.t #{expected}/ do
+      assert do
+        add_diagnostic{ "you ain't #{expected}" }
+        x == expected
+      end
+    end
+  end
+
+  def test_deny_diagnose
+    x = 42
+    deny do
+      add_diagnostic{ flunk 'this should never call' } and
+      x == 43
+    end
+  end
+
+  def test_deny_diagose_flunk
+    expected = 42
+    x = 42
+
+    assert_flunk /^you ain.t #{expected}/ do
+      deny do
+        add_diagnostic{ "you ain't #{expected}" } and
+        x == expected
+      end
+    end
+  end
+
 end
 
