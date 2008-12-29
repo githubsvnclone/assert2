@@ -143,7 +143,7 @@ module Test; module Unit; module Assertions
     @__additional_diagnostics = []
     
     begin
-      got = block.call(*options[:args]) and return got
+      got = block.call(*options[:args]) and add_assertion and return got
     rescue FlunkError
       raise  #  asserts inside assertions that fail do not decorate the outer assertion
     rescue => got
@@ -174,7 +174,7 @@ module Test; module Unit; module Assertions
     @__additional_diagnostics = []
     
     begin
-      got = block.call(*options[:args]) or return true
+      got = block.call(*options[:args]) or (add_assertion and return true)
     rescue FlunkError
       raise
     rescue => got
