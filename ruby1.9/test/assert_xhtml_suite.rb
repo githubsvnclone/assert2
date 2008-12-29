@@ -220,19 +220,19 @@ DSL converts <code>?.</code> into that notation:
 matches its XPath arguments. So <code>?.</code> will
 force <code>xpath()</code> to keep searching for a hit.
 =end
-def test_xpath_text_is_not_the_same_as_question_dot_notation
-  _assert_xml '<Mean>
-                <Woman>Blues</Woman>
-                <Woman>Dub</Woman>
-              </Mean>'
-  assert do
+  def test_xpath_text_is_not_the_same_as_question_dot_notation
+    _assert_xml '<Mean>
+                  <Woman>Blues</Woman>
+                  <Woman>Dub</Woman>
+                </Mean>'
+    assert do
 
-    xpath(:Woman).text == 'Blues' and  #  FIXME  document this and in the assert2 page
-    xpath(:Woman, ?. => :Dub).text == 'Dub'
-            # use a symbol ^ to match a string here, as a convenience
+      xpath(:Woman).text == 'Blues' and  #  FIXME  document this and in the assert2 page
+      xpath(:Woman, ?. => :Dub).text == 'Dub'
+              # use a symbol ^ to match a string here, as a convenience
 
+    end
   end
-end
 #!end_panel!
 
 #!no_doc!
