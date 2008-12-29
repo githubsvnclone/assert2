@@ -237,7 +237,7 @@ end
 
 #!no_doc!
 
-#  FIXME  count assertions correctly, per Matt
+#  FIXME  count assertions correctly, per Matt: add_assertion and return if result
 #  FIXME  colorize on command, per Brian
         # TODO  inner_text should use ?.
         #  TODO  which back-ends support . = '' matching recursive stuff?
