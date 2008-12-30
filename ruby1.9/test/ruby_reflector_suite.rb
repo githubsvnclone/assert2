@@ -55,6 +55,8 @@ puts reflects
                               "  43 --> false" ) }
   end
 
+# FIXME use nokogiri as an alternative XPather
+
   def test_pass_args_to_detector
     @effect.captured_block_vars = 'x, y'
     @effect.args = [40, 2]
