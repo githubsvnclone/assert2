@@ -24,12 +24,11 @@ module Test; module Unit; module Assertions
       lines = [lines].flatten
       x = 0
 
-      until exp = Ripper.sexp(@assertion_source = lines[0..x].join("\n"))
+      until exp = Ripper.sexp(@assertion_source = lines[0..x].join)
         (x += 1) >= lines.length and
           raise 'your assertion failed, but your source is ' +
                 'incorrectly formatted and resists reflection!' + lines.inspect
       end
-      
       return exp.last
     end
 

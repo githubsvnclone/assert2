@@ -1,4 +1,4 @@
-$:.unshift 'lib'; $:.unshift '../lib' #  FIXME  need this?
+$:.unshift 'lib'; $:.unshift '../lib' #  FIXME  replace with the common test_helper.rb
 require 'assert2'
 require 'assert2/common/assert_flunk'
 
@@ -16,9 +16,15 @@ class RubyReflectorSuite < Test::Unit::TestCase
   end
 
   def test_detect_linefeeds
-    rippage = @effect.rip(['x ==', '  42']) # \n tween!
+    rippage = @effect.rip(["x ==\n", '  42']) # \n tween!
     @effect.sender rippage.first
-    assert{ @effect.reflect == "x == \n  42" }
+    assert{ @effect.reflect == "x == \n  42" }  #  TODO  where's the space coming from??
+  end
+
+  def test_not_too_many_linefeeds_between_reflected_source
+    @effect.rip(["x ==\n", '  42'])
+    reflects = @effect.assertion_source
+    deny{ reflects.match("\n\n") }
   end
 
   def test_reflect_linefeeds
@@ -29,7 +35,7 @@ class RubyReflectorSuite < Test::Unit::TestCase
                        43 }
     end
 return  #  FIXME
-puts reflects
+    deny{ reflects.match("\n\n") }
     assert{ reflects.match('x == 
                        43') }
   end
@@ -445,13 +451,8 @@ puts reflects
           ]] }
   end
 
-  def test_rip_broken_lines
-    assert{ @effect.rip(['x ==', '42']) == 
-                @effect.rip("x ==\n42") }
-  end
-
   def test_rip_assertion_source
-    @effect.rip(['x ==', '42'])
+    @effect.rip(["x ==\n", '42'])
     assert{ @effect.assertion_source == "x ==\n42" }
   end
   
