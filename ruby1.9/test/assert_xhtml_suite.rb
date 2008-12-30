@@ -105,8 +105,6 @@ a node's string contents with <code>?.</code>:
 =begin
 <code>xpath().text</code>
 
-FIXME get the node type right!
-
 <code>xpath()</code> returns the first matching 
 <a href='http://ruby-doc.org/core/classes/REXML/Node.html'><code>REXML::Node</code></a> object 
 (or <code>nil</code> if it found none). The object has a useful method, <code>.text</code>,
