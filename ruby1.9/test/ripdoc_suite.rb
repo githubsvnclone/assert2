@@ -9,6 +9,7 @@ HomePath = Ripdoc::HomePath
 #   TODO intersticial string mashers still don't color correctly
 #   TODO make function names bigger
 
+
 class RipdocSuite < Test::Unit::TestCase
 
   def setup
