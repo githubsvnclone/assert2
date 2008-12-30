@@ -8,8 +8,6 @@ HomePath = Ripdoc::HomePath
 #  CONSIDER  think of a use for the horizontal accordion, and for nesting them
 #   TODO intersticial string mashers still don't color correctly
 #   TODO make function names bigger
-#  FIXME  get everything working in Ruby 1.8.6, 1.9.0, and 1.9.1, excuse 1.8.7
-#  TODO  ahem. Abstract the f---ing xml library, and get working in 1.9.1 anyway!!
 
 class RipdocSuite < Test::Unit::TestCase
 
