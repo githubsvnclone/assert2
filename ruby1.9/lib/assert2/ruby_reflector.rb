@@ -28,7 +28,7 @@ module Test; module Unit; module Assertions
         (x += 1) >= lines.length and
           raise 'your assertion failed, but your source is ' +
                 'incorrectly formatted and resists reflection!' + lines.inspect
-      end
+      end  #  FIXME  link out to the webpage describing this effect
       return exp.last
     end
 
@@ -132,8 +132,9 @@ module Test; module Unit; module Assertions
     end
 
     def measure_capture(kap)
-#puts kap if kap =~ /\n/
+#      return kap.split("\n").inject(0){|x, v| v.strip.length > x ? v.strip.length : x } if kap.match("\n")
       kap.length
+      # TODO  need the if?
     end
 
     def format_captures
