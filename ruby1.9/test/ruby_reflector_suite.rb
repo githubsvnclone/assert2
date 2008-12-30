@@ -36,7 +36,7 @@ class RubyReflectorSuite < Test::Unit::TestCase
 
     deny{ reflects.match("\n\n") }
     
-    assert 'if this fails check your editor\'s (broken) linefeed settings!' do
+    assert 'if this fails, check your editor\'s (broken) linefeed settings!' do
       reflects =~ /x == \n\s+43/
     end
   end
@@ -49,9 +49,9 @@ class RubyReflectorSuite < Test::Unit::TestCase
                        43 }
     end
 
-    assert{ reflects.match( "x == \n" +
+    assert{ reflects.match( "         x --> 42\n" +  #  FIXME  adjust these columns!
+                            "x == \n" +
                             "  43 --> false" ) }
-
   end
 
   def test_pass_args_to_detector
