@@ -22,7 +22,7 @@ module Test; module Unit; module Assertions
   def __reflect_assertion(called, options, block, got)
     effect = RubyReflector.new(called)
     effect.args = *options[:args]
-    return [effect.reflect_assertion(block, got)]  #  FIXME  why an array?
+    return effect.reflect_assertion(block, got)  #  FIXME  why two of these?
   end
 
   #!doc!

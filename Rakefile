@@ -24,3 +24,8 @@ end
 task :fixme do
   sh 'find . -name \*rb | xargs grep FIXME'
 end
+
+task :fixme_files do
+  sh 'find . -name \*rb | xargs grep FIXME -l'
+end
+
