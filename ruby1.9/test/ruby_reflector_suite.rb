@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + '/../../test_helper'
 #  FIXME  respect linefeeds in parsed source when reflecting
 #  FIXME  evaluate mashed strings
 
+
 class RubyReflectorSuite < Test::Unit::TestCase
 
   def setup
@@ -32,10 +33,11 @@ class RubyReflectorSuite < Test::Unit::TestCase
       assert{ x == 
                        43 }
     end
-return  #  FIXME
     deny{ reflects.match("\n\n") }
-    assert{ reflects.match('x == 
-                       43') }
+    
+    assert 'if this fails check your editor\'s (broken) linefeed settings!' do
+      reflects.match("x == \n                       43")
+    end
   end
 
   def test_pass_args_to_detector
