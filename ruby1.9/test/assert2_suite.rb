@@ -40,10 +40,8 @@ Then place <code>require 'assert2'</code> (for either package) above your tests.
 =end
 #!end_panel!
 #!no_doc!
-require 'test/unit'
-$:.unshift 'lib'; $:.unshift '../lib'
-require 'assert2'
-require 'assert2/common/assert_flunk'
+require File.dirname(__FILE__) + '/../../test_helper'
+
 
 class Assert21Suite < Test::Unit::TestCase
 

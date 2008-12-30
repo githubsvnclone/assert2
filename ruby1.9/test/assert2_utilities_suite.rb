@@ -1,6 +1,4 @@
-require 'test/unit'
 require File.dirname(__FILE__) + '/../../test_helper'
-require 'assert2/common/assert_flunk'
 
 
 class Assert2UtilitiesSuite < Test::Unit::TestCase
