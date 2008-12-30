@@ -114,18 +114,24 @@ module Test; module Unit; module Assertions
     RubyReflector.new.colorize(to_color)
   end
 
+  #  TODO  work with raw MiniTest 
+
   # This is a copy of the classic assert, so your pre-existing
   # +assert+ calls will not change their behavior
   #
-  if self.respond_to? :_assertions
+  if defined? MiniTest::Assertion 
     def assert_classic(test, msg=nil)
-        msg ||= "Failed assertion, no message given."
-        self._assertions += 1
-        unless test then
-          msg = msg.call if Proc === msg
-          raise MiniTest::Assertion, msg
-        end
-        true
+      msg ||= "Failed assertion, no message given."
+      self._assertions += 1
+      unless test then
+        msg = msg.call if Proc === msg
+        raise MiniTest::Assertion, msg
+      end
+      true
+    end
+    
+    def add_assertion
+      self._assertions += 1
     end
   else
     def assert_classic(boolean, message=nil)
