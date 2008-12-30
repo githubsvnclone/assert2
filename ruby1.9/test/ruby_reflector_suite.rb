@@ -36,7 +36,7 @@ class RubyReflectorSuite < Test::Unit::TestCase
     deny{ reflects.match("\n\n") }
     
     assert 'if this fails check your editor\'s (broken) linefeed settings!' do
-      reflects.match("x == \n                       43")
+      reflects =~ /x == \n\s+43/
     end
   end
 
