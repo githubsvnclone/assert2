@@ -100,7 +100,7 @@ module Test; module Unit; module Assertions
 
     def absorb_block_args(code_fragments)  #  CONSIDER a suckier way of detecting 
       @captured_block_vars = nil      #  the block args is indeed remotely possible...
-      if code_fragments.first =~ /\|(.*)\|/ or code_fragments[1].to_s =~ /\|(.*)\|/ 
+      if code_fragments.first =~ /\|(.*)\|/ or code_fragments[1].to_s =~ /\|(.*)\|/
         @captured_block_vars = $1
       end
     end
