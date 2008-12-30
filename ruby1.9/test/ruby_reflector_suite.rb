@@ -1,6 +1,4 @@
-$:.unshift 'lib'; $:.unshift '../lib' #  FIXME  replace with the common test_helper.rb
-require 'assert2'
-require 'assert2/common/assert_flunk'
+require File.dirname(__FILE__) + '/../../test_helper'
 
 #  FIXME  respect linefeeds in parsed source when reflecting
 #  FIXME  evaluate mashed strings

@@ -27,11 +27,8 @@ work together to diagnose XHTML efficiently<br/>
 =end
 #!end_panel!
 #!no_doc!
-require 'test/unit'
 require File.dirname(__FILE__) + '/../../test_helper'
 require 'assert2/ripdoc' if RUBY_VERSION >= '1.9.0'
-require 'assert2'
-require 'assert2/common/assert_flunk'
 require 'assert_xhtml'
 
 

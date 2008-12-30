@@ -1,3 +1,4 @@
+require 'test/unit'
 require 'pathname'
 
 TopPath = Pathname.new(__FILE__).dirname
@@ -13,3 +14,4 @@ end
 
 $:.unshift((HomePath + 'lib').to_s)
 require 'assert2'
+require 'assert2/common/assert_flunk'
