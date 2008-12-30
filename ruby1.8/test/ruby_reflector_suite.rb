@@ -1,7 +1,4 @@
-require 'test/unit'
-$:.unshift File.dirname(__FILE__) + '/../lib'
-require 'assert2'
-require 'pathname'
+require File.dirname(__FILE__) + '/../../test_helper'
 
 
 class RubyReflectorTest < Test::Unit::TestCase
