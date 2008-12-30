@@ -49,7 +49,8 @@ class RubyReflectorSuite < Test::Unit::TestCase
                        43 }
     end
 
-    assert{ reflects.match("x == \n  43 --> false") }
+    assert{ reflects.match( "x == \n" +
+                            "  43 --> false" ) }
 
   end
 
