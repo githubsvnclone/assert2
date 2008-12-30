@@ -1,5 +1,6 @@
 require 'test/unit'
 
+
 module Test; module Unit; module Assertions
 
   def assert_raise_message(types, expected_message, message = nil, &block)
