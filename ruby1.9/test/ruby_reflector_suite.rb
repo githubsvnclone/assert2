@@ -33,11 +33,24 @@ class RubyReflectorSuite < Test::Unit::TestCase
       assert{ x == 
                        43 }
     end
+
     deny{ reflects.match("\n\n") }
     
     assert 'if this fails check your editor\'s (broken) linefeed settings!' do
       reflects =~ /x == \n\s+43/
     end
+  end
+
+  def test_reflect_linefeeds_in_evaluated_captures
+    return if RUBY_VERSION > '1.9.0'
+    x = 42
+    reflects = assert_flunk /assert/ do
+      assert{ x == 
+                       43 }
+    end
+
+    assert{ reflects.match("x == \n  43 --> false") }
+
   end
 
   def test_pass_args_to_detector
