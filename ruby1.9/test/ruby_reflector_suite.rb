@@ -1,6 +1,5 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
-#  FIXME  respect linefeeds in parsed source when reflecting
 #  FIXME  evaluate mashed strings
 
 
@@ -48,7 +47,7 @@ class RubyReflectorSuite < Test::Unit::TestCase
       assert{ x == 
                        43 }
     end
-return # FIXME
+    return # FIXME
 puts reflects
     assert{ reflects.match( "\n   x --> 42\n" +  #  FIXME  adjust these columns!
                               "x == \n" +

@@ -6,11 +6,11 @@ module Test; module Unit; module Assertions
 
   class RubyReflector
 
-    attr_reader :assertion_source,
-                :captures,
-                :reflect
+    attr_reader   :assertion_source,
+                  :captures,
+                  :reflect
     attr_accessor :ripped
-    attr_writer :block
+    attr_writer   :block
 
     def initialize(called = '')
       source = split_and_read(called)
@@ -56,7 +56,7 @@ module Test; module Unit; module Assertions
 
     def capture(&block)
       snip = capture_source(&block)
-      
+
       if @block
         value = detect(snip)
         capture_snip(snip, value) unless (value == Nada rescue false)
