@@ -107,9 +107,9 @@ a node's string contents with <code>?.</code>:
 
 FIXME get the node type right!
 
-<code>xpath()</code> returns a 
-<a href='http://libxml.rubyforge.org/rdoc/classes/LibXML/XML/Node.html'><code>LibXML::XML::Node</code></a> object 
-(or <code>nil</code> if it found none). The object has an additional method, <code>.text</code>,
+<code>xpath()</code> returns the first matching 
+<a href='http://ruby-doc.org/core/classes/REXML/Node.html'><code>REXML::Node</code></a> object 
+(or <code>nil</code> if it found none). The object has a useful method, <code>.text</code>,
 which returns the nearest text contents:
 =end
   def test_xpath_text
