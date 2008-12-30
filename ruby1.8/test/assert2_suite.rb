@@ -12,7 +12,17 @@ class Assert2Suite < Test::Unit::TestCase #:nodoc:
 
   def test_assert_
     x = 42
-    assert_{ x == 42 }
+    assert_{ x == 42 }  #  TODO  retire this silly thing
+  end
+
+  def test_assert_with_linefeeds
+    x = 42
+    diagnostic = assert_flunk /x.*42/ do
+                   assert{ x ==
+                               43 }
+                 end
+    return # FIXME  attend to linefeeds in 1.8 code reflections
+    assert{ diagnostic =~ /x ==\n\s+43/ }
   end
 
   def test_deny_2_0
