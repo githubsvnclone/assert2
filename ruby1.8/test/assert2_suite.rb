@@ -1,7 +1,4 @@
-require 'test/unit'
-$:.unshift File.dirname(__FILE__) + '/../lib'
-require 'assert2'
-require 'assert_flunk'
+require File.dirname(__FILE__) + '/../../test_helper'
 
 
 class Assert2Suite < Test::Unit::TestCase #:nodoc:
