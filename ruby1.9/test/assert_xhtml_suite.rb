@@ -11,7 +11,7 @@ absorbs your XHTML<br/>
 * 
 #!link!_assert_xml!<code>_assert_xml()</code>
 absorbs your XML fragments<br/>
-* TODO <code>_assert_xml()</code> absorbs your XML<br/>
+* FIXME <code>_assert_xml()</code> absorbs your XML<br/>
 * ...then 
 #!link!xpath_path!<code>assert{ xpath() }</code>
 scans it for details.<br/>
