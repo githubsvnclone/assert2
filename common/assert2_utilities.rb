@@ -80,7 +80,8 @@ module Test; module Unit; module Assertions
       return text
     end
     def colorize?  #  ERGO  how other libraries set these options transparent??
-      we_color = (@@we_color rescue true )  #  ERGO  parens needed?
+      we_color = (@@we_color rescue true)  #  ERGO  parens needed?
+      return false if ENV['EMACS'] == 't'
       return (we_color == :always or we_color && $stdout.tty?)
     end
     def bold(text)
