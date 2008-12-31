@@ -239,7 +239,6 @@ force <code>xpath()</code> to keep searching for a hit.
 
 #!no_doc!
 
-#  FIXME  colorize on command, per Brian
         # TODO  inner_text should use ?.
         #  TODO  which back-ends support . = '' matching recursive stuff?
         #  TODO  which back-ends support . =~ '' matching regices?
