@@ -29,6 +29,7 @@ module Test; module Unit; module Assertions
           raise 'your assertion failed, but your source is ' +
                 'incorrectly formatted and resists reflection!' + lines.inspect
       end  #  FIXME  link out to the webpage describing this effect
+
       return exp.last
     end
 
@@ -74,6 +75,7 @@ module Test; module Unit; module Assertions
       #  CONSIDER  assert brace_block.first == method_add_block
       #        and brace_block.second includes assert
       brace_block = brace_block.last
+
       if block_var = brace_block[1]
         ripper = RubyReflector.new
         ripper.sender block_var
@@ -93,6 +95,7 @@ module Test; module Unit; module Assertions
       end
       
       inspection = got.pretty_inspect
+
       return format_assertion_result(assertion_source, inspection) + 
                format_captures
     end
@@ -111,22 +114,24 @@ module Test; module Unit; module Assertions
 
     def format_snip(width, snip)
       snips = snip.split("\n")
+
       if snips.length > 1 and 
          snips.inject(0){|x, v| v.strip.length > x ? v.strip.length : x } <= width  #  TODO  we have seen that inject before
         snips.last.replace("%*s" % [width, snips.last.strip])
         return snips.join("\n")
       end
+
       return "%*s" % [width, snip] if snip.length <= width
       chop = snip.scan(/(\w+[[:punct:]]?)/).flatten
       snip = ''
       length = 0  #  TODO  we probly don't need this stuff!
-      
+
       chop.each do |snippet|
         (snip << "\n"; length = 0) if length + snippet.length > width
         snip << snippet
         length += snippet.length
       end
-      
+
       return snip.split("\n").map{|snippet| format_snip(width, snippet) }.join("\n")
     end
 
@@ -138,7 +143,7 @@ module Test; module Unit; module Assertions
     end
 
     def measure_capture(kap)
-#      return kap.split("\n").inject(0){|x, v| v.strip.length > x ? v.strip.length : x } if kap.match("\n")
+      return kap.split("\n").inject(0){|x, v| v.strip.length > x ? v.strip.length : x } if kap.match("\n")
       kap.length
       # TODO  need the if?
     end

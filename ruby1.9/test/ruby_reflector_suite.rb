@@ -47,9 +47,8 @@ class RubyReflectorSuite < Test::Unit::TestCase
       assert{ x == 
                        43 }
     end
-    return # FIXME after doing format_snip
-puts reflects
-    assert{ reflects.match( "\n   x --> 42\n" +  #  FIXME  adjust these columns!
+
+    assert{ reflects.match( "\n   x --> 42\n" +
                               "x == \n" +
                               "  43 --> false" ) }
   end
