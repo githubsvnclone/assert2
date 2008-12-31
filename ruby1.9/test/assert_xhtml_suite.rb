@@ -31,6 +31,7 @@ require File.dirname(__FILE__) + '/../../test_helper'
 require 'assert2/ripdoc' if RUBY_VERSION >= '1.9.0'
 require 'assert_xhtml'
 
+#  FIXME  correct string length on long comments
 
 class AssertXhtmlSuite < Test::Unit::TestCase
 
