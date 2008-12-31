@@ -175,6 +175,21 @@ Error Handling
   end
 #!end_panel!
 =begin
+Compound Assertions
+
+<code>assert{}</code> correctly interprets and diagnoses complex boolean
+expressions, so you can interrogate related variables in one expression:
+=end
+  def test_error_handling
+    x, y = 42, 43
+    assert_flunk /x --> 42.*y --> 43/m do
+
+      assert{ x == 42 and y == 42 }
+
+    end
+  end
+#!end_panel!
+=begin
 Warning: Put Assertions on Separate Lines
 
 <code>assert{}</code> works by exploiting marginal features in Ruby's internal parser.
