@@ -101,4 +101,34 @@ module Test; module Unit; module Assertions
   
 end; end; end
 
+
+if RUBY_VERSION <= '1.8.6'
+
+module REXML
+  module Formatters
+    class Pretty
+
+      private
+
+  #  see http://www.google.com/codesearch/p?hl=en#Ezb_-tQR858/test_libs/rexml_fix.rb
+  #   for less info about this fix...
+  
+      def wrap(string, width)
+        # Recursivly wrap string at width.
+        return string if string.length <= width
+        place = string.rindex(/\s+/, width) # Position in string with last ' ' before cutoff
+        return string if place.nil?
+        return string[0,place] + "\n" + wrap(string[place+1..-1], width)
+      end
+
+    end
+  end
+end
+
+end
+
+
 require '../../test/assert_xhtml_suite.rb' if $0 == __FILE__ and File.exist?('../../test/assert_xhtml_suite.rb')
+
+
+
