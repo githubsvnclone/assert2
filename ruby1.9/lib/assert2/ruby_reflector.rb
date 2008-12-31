@@ -110,10 +110,16 @@ module Test; module Unit; module Assertions
 #  CONSIDER  fix if an assertion contains more than one command - reflect it all!
 
     def format_snip(width, snip)
+      snips = snip.split("\n")
+      if snips.length > 1 and 
+         snips.inject(0){|x, v| v.strip.length > x ? v.strip.length : x } <= width  #  TODO  we have seen that inject before
+        snips.last.replace("%*s" % [width, snips.last.strip])
+        return snips.join("\n")
+      end
       return "%*s" % [width, snip] if snip.length <= width
       chop = snip.scan(/(\w+[[:punct:]]?)/).flatten
       snip = ''
-      length = 0
+      length = 0  #  TODO  we probly don't need this stuff!
       
       chop.each do |snippet|
         (snip << "\n"; length = 0) if length + snippet.length > width

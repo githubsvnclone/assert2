@@ -47,7 +47,7 @@ class RubyReflectorSuite < Test::Unit::TestCase
       assert{ x == 
                        43 }
     end
-    return # FIXME
+    return # FIXME after doing format_snip
 puts reflects
     assert{ reflects.match( "\n   x --> 42\n" +  #  FIXME  adjust these columns!
                               "x == \n" +
@@ -299,6 +299,16 @@ puts reflects
     assert{ @effect.format_snip(35, long_snip) == 
               "       really.really.really.really.\n" +
               "       reallyreally.long.expression" }
+  end
+
+  def test_format_broken_snip
+    long_snip = "really.really.really.really.reallyreally.\nlong.broken.expression"
+
+    assert do
+      @effect.format_snip(60, long_snip) == 
+        "really.really.really.really.reallyreally.\n" +
+        "                                      long.broken.expression"
+    end
   end
 
   def test_format_value
