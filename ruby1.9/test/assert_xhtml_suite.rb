@@ -141,20 +141,17 @@ useful <code>id</code>s, then use <code>xpath :div, :my_id</code> to restrict fu
 =end
   def test_nested_xpaths
     assert_xhtml (DocPath + 'assert_x.html').read
- #   return if RUBY_VERSION < '1.9.0' # FIXME
-
     assert 'this tests the panel you are now reading' do
 
-      xpath :a, :name => :Nested_xpath # do  #  finds the panel's anchor
-#        xpath '../following-sibling::div[1]' # do   #  find that <a> tag's immediate sibling
-#           xpath :'pre/span', ?. => 'test_nested_xpaths' do |span|
-#             span.text =~ /nested/  #  the block passes the target node thru the |goalposts|
-#           end
-#         end
-#      end
+      xpath :a, :name => :Nested_xpath do  #  finds the panel's anchor
+        xpath '../following-sibling::div[1]' do   #  find that <a> tag's immediate sibling
+          xpath :'pre/span', ?. => 'test_nested_xpaths' do |span|
+            span.text =~ /nested/  #  the block passes the target node thru the |goalposts|
+          end
+        end
+      end
 
     end
-
   end
 #!end_panel!
 
@@ -186,15 +183,14 @@ field contains only the inner XML. This prevents excessive spew when testing ent
 web pages:
 =end
   def test_nested_xpath_faults
-    return if RUBY_VERSION < '1.9.0' # FIXME
     assert_xhtml (DocPath + 'assert_x.html').read
     diagnostic = assert_flunk /BAD CONTENTS/ do
       xpath :a, :name => :Nested_xpath_Faults do
-        
+
         xpath '../following-sibling::div[1]/pre' do  
           xpath :'span[ . = "BAD CONTENTS" ]'  #  fails 'cause the text ain't found
         end
-        
+
       end
     end
     deny{ diagnostic =~ /excessive spew/ } # not seen because the outer xpath{} succeeded!
