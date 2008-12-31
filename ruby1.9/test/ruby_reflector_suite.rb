@@ -128,7 +128,7 @@ class RubyReflectorSuite < Test::Unit::TestCase
     @effect.ripped = @effect.rip(sauce)
     @effect.sender @effect.ripped.first
     reflection = @effect.reflect
-    reflection.gsub!("\n  ", '') # FIXME  take out some of the \n in the source recreator
+    reflection.gsub!("\n  ", '') # TODO  take out some of the \n in the source recreator
                                   # then lose this line
 
     if match.kind_of? Regexp
@@ -139,8 +139,6 @@ class RubyReflectorSuite < Test::Unit::TestCase
   end
 
 #  TODO  correct nested indentation!
-#  FIXME  the captured evaluations should format correctly across 
-#  FIXME    multiple lines!
 
   def test_reflections
     assert_reflect "module Foo\n\nend"
