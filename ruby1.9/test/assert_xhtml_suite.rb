@@ -133,8 +133,8 @@ useful <code>id</code>s, then use <code>xpath :div, :my_id</code> to restrict fu
 <code>xpath{}</code> calls:
 =end
   def test_nested_xpaths
-    return if RUBY_VERSION < '1.9.0' # FIXME
     assert_xhtml (DocPath + 'assert_x.html').read
+    return if RUBY_VERSION < '1.9.0' # FIXME
 
     assert 'this tests the panel you are now reading' do
 
