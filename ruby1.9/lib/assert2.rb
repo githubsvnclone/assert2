@@ -27,7 +27,7 @@ module Test; module Unit; module Assertions
 
   #!doc!
   def diagnose(diagnostic = nil, got = nil, called = caller[0],
-                options = {}, block = nil)                    #  FIXME  make this directly callable
+                options = {}, block = nil)                    #   TODO  make this directly callable
     options = { :args => [] }.merge(options)
      # CONSIDER only capture the block_vars if there be args?
     @__additional_diagnostics.unshift diagnostic
