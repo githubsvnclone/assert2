@@ -53,7 +53,7 @@ class RubyReflectorSuite < Test::Unit::TestCase
                               "  43 --> false" ) }
   end
 
-# FIXME use nokogiri as an alternative XPather
+# TODO use nokogiri as an alternative XPather
 
   def test_pass_args_to_detector
     @effect.captured_block_vars = 'x, y'
