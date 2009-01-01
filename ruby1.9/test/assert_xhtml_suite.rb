@@ -17,7 +17,7 @@ extract XML nodes non-judgementally. It returns a <code>nil</code>
 when it fails.
 
 To learn XPath, read
-!link!http://www.oreillynet.com/onlamp/blog/2007/08/xpath_checker_and_assert_xpath.html!XPath Checker and assert_xpath
+#!link!http://www.oreillynet.com/onlamp/blog/2007/08/xpath_checker_and_assert_xpath.html!XPath Checker and assert_xpath
 , and attach an XPath tool like XPath Checker or XPather to your Firefox
 web browser.
 
