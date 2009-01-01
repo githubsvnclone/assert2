@@ -185,16 +185,24 @@ web pages:
 =end
   def test_nested_xpath_faults
     assert_xhtml (DocPath + 'assert_x.html').read
-    diagnostic = assert_flunk /BAD CONTENTS/ do
+    diagnostic = assert_flunk /BAD.*CONTENTS/ do
       xpath :a, :name => :Nested_xpath_Faults do
 
-        xpath '../following-sibling::div[1]/pre' do  
-          xpath :'span[ . = "BAD CONTENTS" ]'  #  fails 'cause the text ain't found
+         # the .. finds this entire panel, the div[1] finds its content area,
+         # and the pre finds the code sample you are reading
+        xpath '../following-sibling::div[1]/pre' do
+          
+# FIXME put pretty_write or whatever inside indent_xml
+            # this will fail because that text ain't found in a span
+            # (the concat() makes it into two spans!)
+          xpath :'span[ . = concat(\"BAD\", \" CONTENTS\") ]'
         end
 
       end
     end
-    deny{ diagnostic =~ /excessive spew/ } # not seen because the outer xpath{} succeeded!
+      # the diagnostic won't cantain the string "excessive spew", from
+      # the top of the panel, because the second xpath{} call excluded it
+    deny{ diagnostic =~ /excessive spew/ } 
   end
 #!end_panel!
 #!no_doc!
