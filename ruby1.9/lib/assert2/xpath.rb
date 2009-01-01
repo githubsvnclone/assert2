@@ -1,1 +1,1 @@
-require 'assert2/common/assert_xhtml.rb'
+require 'assert2/common/xpath.rb'

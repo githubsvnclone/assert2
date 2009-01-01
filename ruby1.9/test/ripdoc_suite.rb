@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 require 'assert2/ripdoc'
-require 'assert_xhtml'
+require 'assert2/xpath'
 
 HomePath = Ripdoc::HomePath
 

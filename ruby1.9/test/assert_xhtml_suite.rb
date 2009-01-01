@@ -37,7 +37,7 @@ work together to diagnose XHTML efficiently<br/>
 #!no_doc!
 require File.dirname(__FILE__) + '/../../test_helper'
 require 'assert2/ripdoc' if RUBY_VERSION >= '1.9.0'
-require 'assert_xhtml'
+require 'assert2/xpath'
 
 #  FIXME  correct string length on long comments
 
