@@ -27,8 +27,12 @@ module Test; module Unit; module Assertions
       until exp = Ripper.sexp(@assertion_source = lines[0..x].join)
         (x += 1) >= lines.length and
           raise 'your assertion failed, but your source is ' +
-                'incorrectly formatted and resists reflection!' + lines.inspect
-      end  #  FIXME  link out to the webpage describing this effect
+                'incorrectly formatted and resists reflection!' + 
+                "\nSee: http://assert2.rubyforge.org/assert21.html#Warning_Put_Assertions_on_Separate_Lines\n"
+                lines.inspect
+      end
+
+#  FIXME  rename assert2.html to assert21.html
 
       return exp.last
     end
