@@ -5,14 +5,22 @@
 to provide elaborate, detailed, formatted reports when your XHTML code has
 gone astray.
 
-* 
+First, generate your XHTML, then pass it into 
 #!link!assert_xhtml_xhtml!<code>assert_xhtml()</code>
-absorbs your XHTML<br/>
-* 
+. Use
 #!link!_assert_xml!<code>_assert_xml()</code>
-absorbs your XML fragments<br/>
-* FIXME <code>_assert_xml()</code> absorbs your XML<br/>
-* ...then 
+if all you have is a fragment of XHTML, or XML from some other schema.
+
+Use a call like <code>xpath('/html/head/title')</code> 
+alone, without <code>assert{}</code>, to
+extract XML nodes non-judgementally. It returns a <code>nil</code>
+when it fails.
+
+To learn XPath, read
+!link!http://www.oreillynet.com/onlamp/blog/2007/08/xpath_checker_and_assert_xpath.html!XPath Checker and assert_xpath
+, and attach an XPath tool like XPath Checker or XPather to your Firefox
+web browser.
+
 #!link!xpath_path!<code>assert{ xpath() }</code>
 scans it for details.<br/>
 * you can program <code>xpath()</code> using XPath notation, or convenient 
@@ -266,7 +274,7 @@ force <code>xpath()</code> to keep searching for a hit.
       assert{ xpath :'div/h1/code/big', ?. => 'assert{ xpath }' }
       luv = HomePath + 'doc/assert_x.html'
       File.write(luv, doc)
-      reveal luv, '#Nested_xpath_Faults'
+      reveal luv, '' #, '#Nested_xpath_Faults'
     end
   end
   
