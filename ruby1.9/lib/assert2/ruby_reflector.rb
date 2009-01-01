@@ -32,8 +32,6 @@ module Test; module Unit; module Assertions
                 lines.inspect
       end
 
-#  FIXME  rename assert2.html to assert21.html
-
       return exp.last
     end
 

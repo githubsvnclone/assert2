@@ -62,7 +62,7 @@ class RipdocSuite < Test::Unit::TestCase
     
     deny{ xhtml.match('<p><p>') }
     deny{ xhtml.match('<pre></div>') }
-    reveal xhtml, 'assert2.html'
+    reveal xhtml, 'assert21.html'
   end
 
   def test_on_embdoc_beg
