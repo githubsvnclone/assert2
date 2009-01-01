@@ -17,8 +17,8 @@ task :test_ripdoc => :test_assert2 do
 end
 
 task :test_assert_xhtml => :test_ripdoc do
-  sh 'ruby1.9.0 test/assert_xhtml_suite.rb'
-  sh 'ruby1.9.1 test/assert_xhtml_suite.rb'
+  sh 'ruby1.9.0 test/assert2_xpath_suite.rb'
+  sh 'ruby1.9.1 test/assert2_xpath_suite.rb'
 end
 
 task :test => :test_assert_xhtml

@@ -5,6 +5,8 @@
 to provide elaborate, detailed, formatted reports when your XHTML code has
 gone astray.
 
+ # FIXME requiring instructions here
+
 First, generate your XHTML, then pass it into 
 #!link!assert_xhtml_xhtml!<code>assert_xhtml()</code>
 . Use
@@ -129,7 +131,7 @@ which returns the nearest text contents:
   end
 #!end_panel!
 #!no_doc!
-  #  the assert_x.html file passed http://validator.w3.org/check
+  #  the assert2_xpath.html file passed http://validator.w3.org/check
   #  with flying colors, the first time I ran it. However,
   #  something in these tests blows Ruby1.8's REXML's tiny brain,
   #  so these tests gotta be blocked out
@@ -149,7 +151,7 @@ useful <code>id</code>s, then use <code>xpath :div, :my_id</code> to restrict fu
 <code>xpath{}</code> calls:
 =end
   def test_nested_xpaths
-    assert_xhtml (DocPath + 'assert_x.html').read
+    assert_xhtml (DocPath + 'assert2_xpath.html').read
     assert 'this tests the panel you are now reading' do
 
       xpath :a, :name => :Nested_xpath do  #  finds the panel's anchor
@@ -192,7 +194,7 @@ field contains only the inner XML. This prevents excessive spew when testing ent
 web pages:
 =end
   def test_nested_xpath_faults
-    assert_xhtml (DocPath + 'assert_x.html').read
+    assert_xhtml (DocPath + 'assert2_xpath.html').read
     diagnostic = assert_flunk /BAD.*CONTENTS/ do
       xpath :a, :name => :Nested_xpath_Faults do
 
@@ -265,14 +267,15 @@ force <code>xpath()</code> to keep searching for a hit.
 #  TODO optional alias assert_xpath, and dorkument it
 #  appear in any nested assertion failures
 #  FIXME  comments in proportional font, and marked up
+#  FIXME  link from assert2.html to assert2_xpath.html and back
 
   if defined? Ripdoc
     def test_document_self
-      doc = Ripdoc.generate(HomePath + 'test/assert_xhtml_suite.rb', 'assert{ xpath }')
+      doc = Ripdoc.generate(HomePath + 'test/assert2_xpath_suite.rb', 'assert{ xpath }')
       assert_xhtml doc
       assert{ xpath '/html/head/title', ?. => 'assert{ xpath }' }
       assert{ xpath :'div/h1/code/big', ?. => 'assert{ xpath }' }
-      luv = HomePath + 'doc/assert_x.html'
+      luv = HomePath + 'doc/assert2_xpath.html'
       File.write(luv, doc)
       reveal luv, '' #, '#Nested_xpath_Faults'
     end
