@@ -42,6 +42,7 @@ require 'assert2/ripdoc' if RUBY_VERSION >= '1.9.0'
 require 'assert2/xpath'
 
 #  FIXME  correct string length on long comments
+#  FIXME  okay. Now make ithe test button clicakeble!!
 
 class AssertXhtmlSuite < Test::Unit::TestCase
 
