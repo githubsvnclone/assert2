@@ -274,7 +274,7 @@ force <code>xpath()</code> to keep searching for a hit.
       doc = Ripdoc.generate(HomePath + 'test/assert2_xpath_suite.rb', 'assert{ xpath }')
       assert_xhtml doc
       assert{ xpath '/html/head/title', ?. => 'assert{ xpath }' }
-      assert{ xpath :'div/h1/code/big', ?. => 'assert{ xpath }' }
+      assert{ xpath :big, ?. => 'assert{ xpath }' }
       luv = HomePath + 'doc/assert2_xpath.html'
       File.write(luv, doc)
       reveal luv, '' #, '#Nested_xpath_Faults'
