@@ -174,12 +174,18 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
 
   def test_format_inspection
     rf = RubyReflector.new
-    assert{ rf.format_inspection('foo', 42) == 'foo' }
+    assert{ rf.format_inspection('foo'.inspect, 42) == '"foo"' }
   end
 
   def test_format_multiline_inspection
     rf = RubyReflector.new
     assert{ rf.format_inspection("foo\nbar", 42) =~ /foo\n\s{42}bar/ }
+  end
+
+  def test_format_literal_multiline_inspection
+    rf = RubyReflector.new
+    return # FIXME
+    assert{ rf.format_inspection("foo\\nbar", 42) =~ /foo\n\s{42}bar/ }
   end
 
 end  #  TODO  ultimately, the top of _this_ file should document all of assert{ 2.x }
