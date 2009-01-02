@@ -143,11 +143,13 @@ pre { border-width: 10px;
 </head>
 
 <body style="font-family: Times,serif; background-image: url(images/sky_blue.png); background-repeat: repeat-x;">
-
+  <div style='position: absolute; top: 0px; left: 70%;'>
+    <img height="76" width="72" src="http://assert2.rubyforge.org/the_test_button.png"/>
+  </div>
+  
   <div id="container">
-    <table width='100%'><tr><td valign='top'>
+    
     <h1><code><big style='color: #008;'><%= @title %></big></code></h1>
-    </td><td align='right'><img height="76" width="72" src="http://assert2.rubyforge.org/the_test_button.png"/></td></tr></table>
 
     <div id="vertical_container">
       <%= @sauce %>
