@@ -166,10 +166,15 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
   end
 
   def test_trapped_faults_decorate_with_stack_traces
-    return if RUBY_VERSION == '1.9.1'  # TODO
+    return if RUBY_VERSION == '1.9.1'  # FIXME
     assert_flunk __FILE__ do
       assert{ 1 / 0 }
     end
+  end
+
+  def test_format_inspection
+    rf = RubyReflector.new
+    assert{ rf.format_inspection('foo', 42) == 'foo' }
   end
 
 end  #  TODO  ultimately, the top of _this_ file should document all of assert{ 2.x }
