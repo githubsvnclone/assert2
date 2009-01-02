@@ -30,7 +30,7 @@ module Test; module Unit; module Assertions
   def __build_message(reflection)
     __evaluate_diagnostics
     return (@__additional_diagnostics.uniq + [reflection]).compact.join("\n")
-  end
+  end  #  TODO  move this fluff to the ruby_reflector!
 
   def assert(*args, &block)
   #  This assertion calls a block, and faults if it returns
@@ -109,6 +109,37 @@ module Test; module Unit; module Assertions
       
       return nil
     end
+    
+    def reflect_assertion(block, got)
+      self.block = block
+      
+      extract_block.each do |statement|
+        sender statement
+      end
+      
+      inspection = got.pretty_inspect
+
+      return format_assertion_result(assertion_source, inspection) + 
+               format_captures
+    end
+
+    def format_inspection(inspection, spaces)
+      inspection = inspection.split("\n").map{|x| ' ' * spaces + x }.join("\n") 
+      return inspection.lstrip
+    end  #  FIXME  TDD this to wrap literal linefeeds cutely
+
+    def format_assertion_result(assertion_source, inspection)
+      spaces = " --> ".length
+      inspection = format_inspection(inspection, spaces)
+      return assertion_source.rstrip + "\n --> #{inspection.lstrip}\n"
+    end
+
+    def format_capture(width, snip, value)
+      return "#{ format_snip(width, snip) } --> #{ format_value(width, value) }"
+    end
+
+#  CONSIDER  fix if an assertion contains more than one command - reflect it all!
+
   end
   
   def colorize(to_color)
