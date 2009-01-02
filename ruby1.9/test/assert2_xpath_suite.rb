@@ -247,7 +247,7 @@ force <code>xpath()</code> to keep searching for a hit.
                 </Mean>'
     assert do
 
-      xpath(:Woman).text == 'Blues' and  #  FIXME  document this and in the assert2 page
+      xpath(:Woman).text == 'Blues' and
       xpath(:Woman, ?. => :Dub).text == 'Dub'
               # use a symbol ^ to match a string here, as a convenience
 
