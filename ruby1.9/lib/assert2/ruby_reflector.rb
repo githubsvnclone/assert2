@@ -89,30 +89,7 @@ module Test; module Unit; module Assertions
     #  CONSIDER  extract_block must not skip block-vars - intercept
     #  them here not down there
 
-    def reflect_assertion(block, got)
-      self.block = block
-      
-      extract_block.each do |statement|
-        sender statement
-      end
-      
-      inspection = got.pretty_inspect
-
-      return format_assertion_result(assertion_source, inspection) + 
-               format_captures
-    end
-
-    def format_assertion_result(assertion_source, inspection)
-      spaces = " --> ".length
-      inspection = inspection.split("\n").map{|x| ' ' * spaces + x }.join("\n") 
-      return assertion_source.rstrip + "\n --> #{inspection.lstrip}\n"
-    end
-
-    def format_capture(width, snip, value)
-      return "#{ format_snip(width, snip) } --> #{ format_value(width, value) }"
-    end
-
-#  CONSIDER  fix if an assertion contains more than one command - reflect it all!
+#  FIXME XPath Checker and assert_xpath  link is broken
 
     def format_snip(width, snip)
       snips = snip.split("\n")
