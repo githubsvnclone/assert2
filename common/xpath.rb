@@ -1,5 +1,5 @@
 require 'test/unit'
-#require 'xml'
+require 'assert2'
 require 'rexml/document'
 require 'rexml/entity'
 require 'rexml/formatters/pretty'
