@@ -268,8 +268,8 @@ force <code>xpath()</code> to keep searching for a hit.
         
         # puts indent_xml  #  Decomment this to see where you are in the document now
         
-        indent_xml.match("<pre>\n") # and  #  in this code sample
-        # ! indent_xml.match('Help Build' + ' your XPath')
+        indent_xml.match("<pre>\n") and  #  in this code sample
+        ! indent_xml.match('<html')
              #  the document outside this code sample is excluded
       end  #  FIXME  when this fails in Ruby1.8, why it does not spew its context??
     end
