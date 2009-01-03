@@ -143,9 +143,8 @@ module Test; module Unit; module Assertions
 
     def format_value(width, value)  #  TODO  width is a de-facto instance variable
       width += 4
-      source = value.pretty_inspect
-      source = source.split("\n").map{|snippet| ' ' * width + snippet }.join("\n")
-      return source.lstrip
+      source = value.pretty_inspect.rstrip
+      return format_inspection(source, width)
     end
 
     def measure_capture(kap)
