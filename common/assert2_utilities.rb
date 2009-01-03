@@ -124,7 +124,8 @@ module Test; module Unit; module Assertions
     end
 
     def format_inspection(inspection, spaces)
-      inspection = inspection.split("\n").map{|x| ' ' * spaces + x }.join("\n") 
+      spaces = ' ' * spaces
+      inspection = inspection.gsub("\n"){ "\n" + spaces }
       return inspection.lstrip
     end  #  FIXME  TDD this to wrap literal linefeeds cutely
 
