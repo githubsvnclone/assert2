@@ -11,7 +11,6 @@ require 'assert2/common/assert2_utilities'
 #  TODO  install Coulor
 #  TODO  add :verbose => option to assert{}
 #  TODO  pay for Staff Benda Bilili  ALBUM: Tr�s Tr�s Fort (Promo Sampler) !
-#  FIXME  express linefeeds in string results correctly
 
 module Test; module Unit; module Assertions
 

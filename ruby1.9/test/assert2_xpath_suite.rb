@@ -202,7 +202,6 @@ web pages:
          # and the pre finds the code sample you are reading
         xpath '../following-sibling::div[1]/pre' do
           
-# FIXME put pretty_write or whatever inside indent_xml
             # this will fail because that text ain't found in a span
             # (the concat() makes it into two spans!)
           xpath :'span[ . = concat(\"BAD\", \" CONTENTS\") ]'
@@ -424,7 +423,16 @@ force <code>xpath()</code> to keep searching for a hit.
     path = filename.relative_path_from(Pathname.new(Dir.pwd)).to_s.inspect
     system '"C:/Program Files/Mozilla Firefox/firefox.exe" ' + path + anchor + ' &'
   end
-  
+
+  def test_indent_xml
+   _assert_xml '<a><b><c/></b></a>'
+    assert{ indent_xml == '<a>
+  <b>
+    <c/>
+  </b>
+</a>' }
+  end  #  FIXME  document indent_xml
+
 end
 
 #  TODO  document we do strings correctly now

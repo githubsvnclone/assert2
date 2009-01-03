@@ -89,8 +89,6 @@ module Test; module Unit; module Assertions
     #  CONSIDER  extract_block must not skip block-vars - intercept
     #  them here not down there
 
-#  FIXME XPath Checker and assert_xpath  link is broken
-
     def format_snip(width, snip)
       snips = snip.split("\n")
 

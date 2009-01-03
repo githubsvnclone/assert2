@@ -12,6 +12,8 @@ class RubyReflectorSuite < Test::Unit::TestCase
     @effect.block = lambda{x}
   end
 
+#  FIXME  ripdoc could color regices better
+
   def test_detect_linefeeds
     rippage = @effect.rip(["x ==\n", '  42']) # \n tween!
     @effect.sender rippage.first
