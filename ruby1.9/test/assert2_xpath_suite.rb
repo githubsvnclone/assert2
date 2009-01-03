@@ -5,7 +5,7 @@
 to provide elaborate, detailed, formatted reports when your XHTML code has
 gone astray.
 
- # FIXME requiring instructions here
+ # FIXME requiring instructions here, and better intro
 
 First, generate your XHTML, then pass it into 
 #!link!assert_xhtml_xhtml!<code>assert_xhtml()</code>
@@ -42,7 +42,6 @@ require 'assert2/ripdoc' if RUBY_VERSION >= '1.9.0'
 require 'assert2/xpath'
 
 #  FIXME  correct string length on long comments
-#  FIXME  okay. Now make the test button run the page thru the w3c validator
 
 class AssertXhtmlSuite < Test::Unit::TestCase
 

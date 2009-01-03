@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
-#  FIXME  evaluate mashed strings
-
+#  FIXME  evaluate mashed strings (meaning: don't evaluate un-mashed ones!!!)
 
 class RubyReflectorSuite < Test::Unit::TestCase
 
