@@ -254,7 +254,20 @@ force <code>xpath()</code> to keep searching for a hit.
     end
   end
 #!end_panel!
+=begin
+Use <code>indent_xml</code> to Help Build your XPath
 
+<code>xpath()</code> returns the first node, in document order, which
+matches its XPath arguments. So <code>?.</code> will
+force <code>xpath()</code> to keep searching for a hit.
+=end
+  def test_indent_xml
+    assert_xhtml (DocPath + 'assert2_xpath.html').read
+    xpath :span, ?. => :test_indent_xml do
+      true
+    end
+  end  #  FIXME  document indent_xml
+#!end_panel!
 #!no_doc!
 
         # TODO  inner_text should use ?.
@@ -425,14 +438,14 @@ force <code>xpath()</code> to keep searching for a hit.
     system '"C:/Program Files/Mozilla Firefox/firefox.exe" ' + path + anchor + ' &'
   end
 
-  def test_indent_xml
+  def test_indent_xml_indents
    _assert_xml '<a><b><c/></b></a>'
     assert{ indent_xml == '<a>
   <b>
     <c/>
   </b>
 </a>' }
-  end  #  FIXME  document indent_xml
+  end
 
 end
 
