@@ -187,6 +187,7 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     return if RUBY_VERSION < '1.9.0'  #  TODO  Ruby 1.8.6 should indent its captures correctly
     rf = RubyReflector.new
     assert{ rf.format_inspection("foo\nbar".inspect, 42) =~ /"foo\\n" \+\n\s+"bar"/ }
+    assert{ rf.format_value(42, "foo\nbar") =~ /"foo\\n" \+\n\s+"bar"/ }
   end
 
 end  #  TODO  ultimately, the top of _this_ file should document all of assert{ 2.x }
