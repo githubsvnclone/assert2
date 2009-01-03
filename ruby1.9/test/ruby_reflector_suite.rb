@@ -1,6 +1,8 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
 #  FIXME  evaluate mashed strings (meaning: don't evaluate un-mashed ones!!!)
+#  FIXME  ripdoc could color regices better
+
 
 class RubyReflectorSuite < Test::Unit::TestCase
 
@@ -11,8 +13,6 @@ class RubyReflectorSuite < Test::Unit::TestCase
     x = 42
     @effect.block = lambda{x}
   end
-
-#  FIXME  ripdoc could color regices better
 
   def test_detect_linefeeds
     rippage = @effect.rip(["x ==\n", '  42']) # \n tween!

@@ -43,6 +43,7 @@ require 'assert2/xpath'
 
 #  FIXME  correct string length on long comments
 
+
 class AssertXhtmlSuite < Test::Unit::TestCase
 
   def setup
