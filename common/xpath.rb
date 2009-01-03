@@ -80,12 +80,9 @@ module Test; module Unit; module Assertions
     node = REXML::XPath.first(@xdoc, apa.xpath, nil, apa.subs)
     
     add_diagnostic :clear do
-      bar = REXML::Formatters::Pretty.new
-      out = String.new
-      bar.write(@xdoc, out)
       diagnostic = "xpath: #{ apa.xpath.inspect }\n"
       diagnostic << "arguments: #{ apa.subs.pretty_inspect }\n" if apa.subs.any?
-      diagnostic + "xml context:\n" + out
+      diagnostic + "xml context:\n" + indent_xml
     end
     
     assert_ nil, :args => [@xdoc = node], &block if node and block
@@ -95,8 +92,11 @@ module Test; module Unit; module Assertions
     @xdoc = former_xdoc
   end  #  TODO trap LibXML::XML::XPath::InvalidPath and explicate it's an XPath problem
  
-  def indent_xml
-    @xdoc.write($stdout, 2)
+  def indent_xml(node = @xdoc)
+    bar = REXML::Formatters::Pretty.new
+    out = String.new
+    bar.write(node, out)
+    return out
   end
   
 end; end; end
@@ -121,6 +121,24 @@ module REXML
         return string[0,place] + "\n" + wrap(string[place+1..-1], width)
       end
 
+    end
+  end
+
+  class Element
+    # this patches http://www.germane-software.com/projects/rexml/ticket/128
+    def write(output=$stdout, indent=-1, transitive=false, ie_hack=false)
+      Kernel.warn("#{self.class.name}.write is deprecated.  See REXML::Formatters")
+      formatter = if indent > -1
+          if transitive
+            require "rexml/formatters/transitive"
+            REXML::Formatters::Transitive.new( indent, ie_hack )
+          else
+            REXML::Formatters::Pretty.new( indent, ie_hack )
+          end
+        else
+          REXML::Formatters::Default.new( ie_hack )
+        end
+      formatter.write( self, output )
     end
   end
 end
