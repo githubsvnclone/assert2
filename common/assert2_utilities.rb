@@ -1,6 +1,7 @@
 require 'test/unit'
 require 'assert2/ruby_reflector'
 
+#  CONSIDER  fix if an assertion contains more than one command - reflect it all!
 
 module Test; module Unit; module Assertions
 
@@ -140,7 +141,18 @@ module Test; module Unit; module Assertions
       return "#{ format_snip(width, snip) } --> #{ format_value(width, value) }"
     end
 
-#  CONSIDER  fix if an assertion contains more than one command - reflect it all!
+    def format_value(width, value)
+      width += 4
+      source = value.pretty_inspect
+      source = source.split("\n").map{|snippet| ' ' * width + snippet }.join("\n")
+      return source.lstrip
+    end
+
+    def measure_capture(kap)
+      return kap.split("\n").inject(0){|x, v| v.strip.length > x ? v.strip.length : x } if kap.match("\n")
+      kap.length
+      # TODO  need the if?
+    end
 
   end
   
