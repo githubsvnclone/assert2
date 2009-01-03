@@ -141,7 +141,7 @@ module Test; module Unit; module Assertions
       return "#{ format_snip(width, snip) } --> #{ format_value(width, value) }"
     end
 
-    def format_value(width, value)
+    def format_value(width, value)  #  TODO  width is a de-facto instance variable
       width += 4
       source = value.pretty_inspect
       source = source.split("\n").map{|snippet| ' ' * width + snippet }.join("\n")
