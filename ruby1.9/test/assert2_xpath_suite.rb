@@ -264,7 +264,14 @@ force <code>xpath()</code> to keep searching for a hit.
   def test_indent_xml
     assert_xhtml (DocPath + 'assert2_xpath.html').read
     xpath :span, ?. => :test_indent_xml do
-      true
+      xpath '..' do
+        
+        # puts indent_xml  #  Decomment this to see where you are in the document now
+        
+        indent_xml.match("<pre>\n") # and  #  in this code sample
+        # ! indent_xml.match('Help Build' + ' your XPath')
+             #  the document outside this code sample is excluded
+      end  #  FIXME  when this fails in Ruby1.8, why it does not spew its context??
     end
   end  #  FIXME  document indent_xml
 #!end_panel!
