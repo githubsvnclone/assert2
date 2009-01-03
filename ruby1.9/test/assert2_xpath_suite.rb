@@ -273,7 +273,7 @@ force <code>xpath()</code> to keep searching for a hit.
              #  the document outside this code sample is excluded
       end  #  FIXME  when this fails in Ruby1.8, why it does not spew its context??
     end
-  end  #  FIXME  document indent_xml
+  end
 #!end_panel!
 #!no_doc!
 
