@@ -112,19 +112,6 @@ module Test; module Unit; module Assertions
       return snip.split("\n").map{|snippet| format_snip(width, snippet) }.join("\n")
     end
 
-    def format_value(width, value)
-      width += 4
-      source = value.pretty_inspect
-      source = source.split("\n").map{|snippet| ' ' * width + snippet }.join("\n")
-      return source.lstrip
-    end
-
-    def measure_capture(kap)
-      return kap.split("\n").inject(0){|x, v| v.strip.length > x ? v.strip.length : x } if kap.match("\n")
-      kap.length
-      # TODO  need the if?
-    end
-
     def format_captures
       width = @captures.inject(0){|x, (k, v)|  
         e = measure_capture(k)
