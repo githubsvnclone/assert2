@@ -125,6 +125,7 @@ module Test; module Unit; module Assertions
 
     def format_inspection(inspection, spaces)
       spaces = ' ' * spaces
+      inspection = inspection.gsub('\n'){ "\\n\" +\n \"" } if inspection =~ /^".*"$/
       inspection = inspection.gsub("\n"){ "\n" + spaces }
       return inspection.lstrip
     end  #  FIXME  TDD this to wrap literal linefeeds cutely
