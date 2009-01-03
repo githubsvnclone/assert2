@@ -175,6 +175,7 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
   def test_format_inspection
     rf = RubyReflector.new
     assert{ rf.format_inspection('foo'.inspect, 42) == '"foo"' }
+    assert{ rf.format_value(42, 'foo') == '"foo"' }
   end
 
   def test_format_multiline_inspection

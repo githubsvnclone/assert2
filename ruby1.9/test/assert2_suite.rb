@@ -264,7 +264,7 @@ to recover some 1.8.6 stability!
                   x = "line with\nlinefeed"
                   assert{ x =~ /nope/ }
                 end
-puts diagnostic
+puts diagnostic  #  FIXME indent by linefeeds, cutely
   end
 
   #  TODO  the =begin header can be multiple lines, down to a space!
