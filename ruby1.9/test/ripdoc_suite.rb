@@ -383,10 +383,18 @@ puts @xdoc.to_s
   def test_regexp_patterns
     assert_rip('foo /bar/')
     
-    assert do
+    assert do  #  FIXME  take out many assert do calls like this
       xpath :"span[ #{style(:regexp)} and contains(., 'bar')  ]" do
         xpath "span[ #{style(:regexp_delimiter)} and contains(., '/') ]"
       end
+    end
+  end
+
+  def test_regexps_are_purple
+    assert_rip('foo /bar/')
+    
+    xpath :span, ?. => :bar do |span|
+      span[:style] =~ /background: url/
     end
   end
 
