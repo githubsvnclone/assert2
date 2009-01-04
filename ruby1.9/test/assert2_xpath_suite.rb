@@ -286,7 +286,7 @@ force <code>xpath()</code> to keep searching for a hit.
 # TODO  the explicit diagnostic message of the top-level assertion should 
 #  TODO optional alias assert_xpath, and dorkument it
 #  appear in any nested assertion failures
-#  FIXME  comments in proportional font, and marked up
+#  FIXME  mark up comments
 #  FIXME  link from assert2.html to assert2_xpath.html and back
 
   if defined? Ripdoc
