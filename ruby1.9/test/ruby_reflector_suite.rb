@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
-#  FIXME  ripdoc could color regices better
-
 
 class RubyReflectorSuite < Test::Unit::TestCase
 
