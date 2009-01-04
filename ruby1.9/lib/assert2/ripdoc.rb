@@ -146,7 +146,8 @@ class Ripdoc < Ripper::Filter
     CHAR:               'color: brown; font-weight: bolder;',
     const:              "color: #FF4F00; font-weight: bolder;",
     backref:            "color: #f4f; font-weight: bolder;",
-    comment:            "font-style: italic; color: #446; font-family: Times;",
+    comment:            "font-style: italic; color: #446; font-family: Times; font-size: 110%;",
+       # TODO  use "font: Times italic 110%" to save space
     embdoc:             "background-color: #FFe; font-family: Times; font-size: 133%;",
     embdoc_beg:         "display: none;",
     embdoc_end:         "display: none;",
