@@ -53,7 +53,7 @@ class RipdocSuite < Test::Unit::TestCase
     @rip.on_comment('# ooh girl I t\'ink ya need a <code>Rasta</code>man!', @f)
    _assert_xml @output
    
-    xpath '/span' do |span|  #  FIXME a missing xpath with a block should fault
+    xpath '/span' do |span|
       span.attributes['style'] =~ /font-family: Times;/ and #  FIXME  shortcut here
       xpath 'code', ?. => :Rasta
     end

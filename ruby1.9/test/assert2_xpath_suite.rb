@@ -364,6 +364,14 @@ force <code>xpath()</code> to keep searching for a hit.
     deny{ xpath :bar }
   end
 
+  def test_a_missing_xpath_with_a_block_should_fault
+   _assert_xml '<foo/>'
+    diagnostic = assert_flunk /this xpath cannot find a node/i do
+      xpath(:bar){ true }  #  an xpath that misses its node, and has a block, flunks
+    end
+    #  puts diagnostic #  FIXME  preserve the diagnostic??
+  end
+
   def test_nested_contexts
    _assert_xml '<a><b/></a>'
    
