@@ -49,6 +49,16 @@ class RipdocSuite < Test::Unit::TestCase
     deny{ @output.match('whatever') }
   end
 
+  def test_mark_comments_up
+    @rip.on_comment('# ooh girl I t\'ink ya need a <code>Rasta</code>man!', @f)
+   _assert_xml @output
+   
+    xpath '/span' do |span|  #  FIXME a missing xpath with a block should fault
+      p span.attributes['style']  #  FIXME  shortcut here
+      true
+    end
+  end
+
   def test_embdocs_form_accordions_with_contents
     xhtml = Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
     assert_xhtml xhtml
