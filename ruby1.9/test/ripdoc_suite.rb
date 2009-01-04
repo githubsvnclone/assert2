@@ -54,10 +54,10 @@ class RipdocSuite < Test::Unit::TestCase
    _assert_xml @output
    
     xpath '/span' do |span|  #  FIXME a missing xpath with a block should fault
-      p span.attributes['style']  #  FIXME  shortcut here
-      true
+      span.attributes['style'] =~ /font-family: Times;/ and #  FIXME  shortcut here
+      xpath 'code', ?. => :Rasta
     end
-  end
+  end  #  TODO  forgive a broken tag in a comment!!!
 
   def test_embdocs_form_accordions_with_contents
     xhtml = Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')

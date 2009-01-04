@@ -156,7 +156,7 @@ useful <code>id</code>s, then use <code>xpath :div, :my_id</code> to restrict fu
     assert 'this tests the panel you are now reading' do
 
       xpath :a, :name => :Nested_xpath do  #  finds the panel's anchor
-        xpath '../following-sibling::div[1]' do   #  find that <a> tag's immediate sibling
+        xpath '../following-sibling::div[1]' do   #  find that A tag's immediate sibling
           xpath :'pre/span', ?. => 'test_nested_xpaths' do |span|
             span.text =~ /nested/  #  the block passes the target node thru the |goalposts|
           end

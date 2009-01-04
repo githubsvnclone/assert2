@@ -201,8 +201,7 @@ class Ripdoc < Ripper::Filter
     nodoc = is_no_doc?(tok)
 
     if !nodoc and !@in_no_doc and tok.strip !~ /^\s*#\!/
-      spanit :comment, f, tok.rstrip 
-      finish_one_span(f)
+      f << span(:comment) << enline(tok.rstrip) << '</span>'
       on_nl nil, f
     end
     
