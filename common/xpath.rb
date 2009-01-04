@@ -32,9 +32,10 @@ module Test; module Unit; module Assertions
 
   class AssertXPathArguments
     
-    def initialize()
+    def initialize(path = '', id = nil, options = {})
       @subs = {}
       @xpath = ''
+      to_xpath(path, id, options)
     end
     
     attr_reader :subs
@@ -75,8 +76,7 @@ module Test; module Unit; module Assertions
 
   def xpath(path, id = nil, options = {}, &block)
     former_xdoc = @xdoc
-    apa = AssertXPathArguments.new  #  FIXME  pass (path, id, options) in here!
-    apa.to_xpath(path, id, options)
+    apa = AssertXPathArguments.new(path, id, options)
     node = REXML::XPath.first(@xdoc, apa.xpath, nil, apa.subs)
     
     add_diagnostic :clear do
