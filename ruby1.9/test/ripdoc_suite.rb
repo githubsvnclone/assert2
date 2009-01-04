@@ -373,7 +373,6 @@ puts @xdoc.to_s
   def test_regexp_patterns
     assert_rip('foo /bar/')
     
-#    assert do  #  FIXME  take out many assert do calls like this
     xpath :"span[ #{style(:regexp)} and contains(., 'bar')  ]" do
       xpath "span[ #{style(:regexp_delimiter)} and contains(., '/') ]"
     end
