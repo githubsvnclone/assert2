@@ -75,7 +75,7 @@ module Test; module Unit; module Assertions
 
   def xpath(path, id = nil, options = {}, &block)
     former_xdoc = @xdoc
-    apa = AssertXPathArguments.new
+    apa = AssertXPathArguments.new  #  FIXME  pass (path, id, options) in here!
     apa.to_xpath(path, id, options)
     node = REXML::XPath.first(@xdoc, apa.xpath, nil, apa.subs)
     
@@ -84,7 +84,13 @@ module Test; module Unit; module Assertions
       diagnostic << "arguments: #{ apa.subs.pretty_inspect }\n" if apa.subs.any?
       diagnostic + "xml context:\n" + indent_xml
     end
-    
+
+    if node
+      def node.[](symbol)
+        return attributes[symbol.to_s]
+      end
+    end
+
     if block
       assert_('this xpath cannot find a node', :keep_diagnostics => true){ node }
       assert_ nil, :args => [@xdoc = node], :keep_diagnostics => true, &block  #  TODO  need the _ ?
