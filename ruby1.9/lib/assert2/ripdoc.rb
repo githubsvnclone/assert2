@@ -146,7 +146,7 @@ class Ripdoc < Ripper::Filter
     CHAR:               'color: brown; font-weight: bolder;',
     const:              "color: #FF4F00; font-weight: bolder;",
     backref:            "color: #f4f; font-weight: bolder;",
-    comment:            "font-style: italic; color: gray;",
+    comment:            "font-style: italic; color: #446; font-family: Times;",
     embdoc:             "background-color: #FFe; font-family: Times; font-size: 133%;",
     embdoc_beg:         "display: none;",
     embdoc_end:         "display: none;",
