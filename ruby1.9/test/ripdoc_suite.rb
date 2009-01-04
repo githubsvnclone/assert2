@@ -8,6 +8,7 @@ HomePath = Ripdoc::HomePath
 #  CONSIDER  think of a use for the horizontal accordion, and for nesting them
 #   TODO intersticial string mashers still don't color correctly
 #   TODO make function names bigger
+# FIXME  complete paths on image URLs 
 
 
 class RipdocSuite < Test::Unit::TestCase
@@ -22,12 +23,10 @@ class RipdocSuite < Test::Unit::TestCase
     assert_xhtml Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
     assert{ xpath('/html/head/title').text == 'assert{ 2.1 }' }
     assert{ xpath(:span, style: 'display: none;').text.index('=begin') }
-   
-    assert do
-      xpath :div, :vertical_container do
-        xpath(:'h1[ @class = "accordion_toggle accordion_toggle_active" ]').text =~ 
-                  /reinvents assert/
-      end
+
+    xpath :div, :vertical_container do
+      xpath(:'h1[ @class = "accordion_toggle accordion_toggle_active" ]').text =~ 
+                /reinvents assert/
     end
 
     # reveal
@@ -64,13 +63,11 @@ class RipdocSuite < Test::Unit::TestCase
     xhtml = Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
     assert_xhtml xhtml
     
-    assert do
-      xpath :div, :vertical_container do
-        xpath(:'div[ @class = "accordion_content" ]/p').text =~ 
-                  /complete, formatted report/
-      end
+    xpath :div, :vertical_container do
+      xpath(:'div[ @class = "accordion_content" ]/p').text =~ 
+                /complete, formatted report/
     end
-    
+
     deny{ xhtml.match('<p><p>') }
     deny{ xhtml.match('<pre></div>') }
     reveal xhtml, 'assert21.html'
@@ -176,12 +173,10 @@ class RipdocSuite < Test::Unit::TestCase
              :onclick => 'raise("froot")'
     end
 
-    assert do
-      xpath :a, :href => '#froot', 
-       # CONSIDER  :onclick => 'raise("froot")', # should not emit NoMethodError: undefined method `inject' for true:TrueClass>".
-             :'.' => :loop do
-        xpath :em, :'.' => :op
-      end
+    xpath :a, :href => '#froot', 
+     # CONSIDER  :onclick => 'raise("froot")', # should not emit NoMethodError: undefined method `inject' for true:TrueClass>".
+           :'.' => :loop do
+      xpath :em, :'.' => :op
     end
   end
 
@@ -337,11 +332,8 @@ class RipdocSuite < Test::Unit::TestCase
   def test_put_every_thing_into_a_pre_block
     lines = assert_rip('x = 42')
     
-    assert do
-      xpath :div, :content do
-        #puts(@xdoc.to_s) and
-        xpath 'pre/span'
-      end
+    xpath :div, :content do
+      xpath 'pre/span'
     end
   end
 
@@ -362,10 +354,8 @@ class RipdocSuite < Test::Unit::TestCase
   def test_string_mashers
     assert_rip 'x = "b#{ \'ar\' }"'
 
-    assert do 
-      xpath :"span[ #{style(:string)} and contains(., 'b')  ]" do
-        xpath(:"span[ #{style(:embexpr)} ]").text.index('#{') == 0
-      end
+    xpath :"span[ #{style(:string)} and contains(., 'b')  ]" do
+      xpath(:"span[ #{style(:embexpr)} ]").text.index('#{') == 0
     end
   end
 
@@ -394,9 +384,9 @@ puts @xdoc.to_s
     assert_rip('foo /bar/')
     
     xpath :span, ?. => :bar do |span|
-      span[:style] =~ /background: url/
+      span[:style] == 'background: url(images/hot_pink.png);'
     end
-  end
+  end  #  FIXME  now nest them recursively
 
   def reveal(xhtml = @sauce || @output, filename)  #  TODO  take out the default arguments
     path = HomePath + 'doc' + filename

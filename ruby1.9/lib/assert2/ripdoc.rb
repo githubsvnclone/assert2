@@ -12,9 +12,36 @@ require 'pathname'
 class Ripdoc < Ripper::Filter
   HomePath = (Pathname.new(__FILE__).dirname + '../..').expand_path
 
+  STYLES = {
+    CHAR:               'color: brown; font-weight: bolder;',
+    const:              "color: #FF4F00; font-weight: bolder;",
+    backref:            "color: #f4f; font-weight: bolder;",
+    comment:            "font-style: italic; color: #446; font-family: Times; font-size: 110%;",
+       # TODO  use "font: Times italic 110%" to save space
+    embdoc:             "background-color: #FFe; font-family: Times; font-size: 133%;",
+    embdoc_beg:         "display: none;",
+    embdoc_end:         "display: none;",
+    embexpr:            "background-color: #ccc;",
+    embexpr_delimiter:  "background-color: #aaa;",
+    gvar:               "color: #8f5902; font-weight: bolder;",
+    ivar:               "color: #240;",
+    int:                "color: #336600; font-weight: bolder;",
+    operator:           "font-weight: bolder; font-size: 120%;",
+    kw:                 "color: purple;",
+    regexp_delimiter:   "background-color: #faf;",
+    regexp:             "background-color: #fcf;",
+    string:             "background-color: white;", #dfc
+    string_delimiter:   "background-color: #cfa;",
+    symbol:             "color: #066;",
+    tstring_content: 'background: url(images/tstring.png) right;',
+    tstring_internal: 'background: url(images/tstring.png) right;',  #  TODO  merge these two!
+    tregexp_content: 'background: url(images/hot_pink.png);'
+  }
+
   def self.generate(filename, title)
     @sauce = compile_fragment(File.read(filename))
     @title = title
+    @string_background = :tstring_content
     erb = ERB.new((HomePath + 'lib/assert2/ripdoc.html.erb').read, nil, '>')
     xhtml = erb.result(binding())
     xhtml.gsub! /\<pre>\s*\<\/pre>/m, ''
@@ -142,31 +169,6 @@ class Ripdoc < Ripper::Filter
     return f
   end
 
-  STYLES = {
-    CHAR:               'color: brown; font-weight: bolder;',
-    const:              "color: #FF4F00; font-weight: bolder;",
-    backref:            "color: #f4f; font-weight: bolder;",
-    comment:            "font-style: italic; color: #446; font-family: Times; font-size: 110%;",
-       # TODO  use "font: Times italic 110%" to save space
-    embdoc:             "background-color: #FFe; font-family: Times; font-size: 133%;",
-    embdoc_beg:         "display: none;",
-    embdoc_end:         "display: none;",
-    embexpr:            "background-color: #ccc;",
-    embexpr_delimiter:  "background-color: #aaa;",
-    gvar:               "color: #8f5902; font-weight: bolder;",
-    ivar:               "color: #240;",
-    int:                "color: #336600; font-weight: bolder;",
-    operator:           "font-weight: bolder; font-size: 120%;",
-    kw:                 "color: purple;",
-    regexp_delimiter:   "background-color: #faf;",
-    regexp:             "background-color: #fcf;",
-    string:             "background-color: white;", #dfc
-    string_delimiter:   "background-color: #cfa;",
-    symbol:             "color: #066;",
-    tstring_content: 'background: url(images/tstring.png) right;',
-    tstring_internal: 'background: url(images/tstring.png) right;'
-  }
-
 #  TODO  need a tregexp_content to distinguish them!
 
   def span(kode)
@@ -245,20 +247,27 @@ class Ripdoc < Ripper::Filter
     return f if @in_no_doc
     @spans_owed += 1
     f << span(:string)
+    @string_background = :tstring_content
     f << %Q[#{span(:string_delimiter)}#{CGI.escapeHTML(tok)}</span>]
   end
 
   def on_tstring_content(tok, f, style = 'tstring_content')
     tok.split(/\n/).each_with_index do |sub_tok, index|
       if index == 0
-        on_kw(sub_tok, f, style)
+        on_string_stretch(sub_tok, f, style)
       else
         space, sub_tok = sub_tok.scan(/(\s*)(.*)/).first
         f << space
-        on_kw(sub_tok, f, style)
+        on_string_stretch(sub_tok, f, style)
       end
     end
     return f
+  end
+
+  def on_string_stretch(tok, f, klass = 'TODO remove me')
+    return f if @in_no_doc
+    f << span(@string_background.to_s) << CGI.escapeHTML(tok)
+    f << '</span>'
   end
 
 #  TODO  fix end-of-delim bug in // and %w() and %{} etc
@@ -269,7 +278,7 @@ class Ripdoc < Ripper::Filter
     if tok.length > 1
       margin, content, tok = tok.scan(/^(\s*)(.*)(.)$/).first
       f << margin if margin
-      on_tstring_content content, f, 'tstring_internal' if content
+      on_tstring_content content, f, 'tstring_internal' if content  #  TODO  is this used??
     end
     
     f << %Q[#{span(:string_delimiter)}#{CGI.escapeHTML(tok.to_s)}</span>]
@@ -281,6 +290,7 @@ class Ripdoc < Ripper::Filter
     return f if @in_no_doc
     @spans_owed += 1
     f << span(:regexp)
+    @string_background = :tregexp_content
     f << %Q[#{span(:regexp_delimiter)}#{CGI.escapeHTML(tok)}</span>]
   end
 

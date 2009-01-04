@@ -266,7 +266,7 @@ force <code>xpath()</code> to keep searching for a hit.
     xpath :span, ?. => :test_indent_xml do
       xpath '..' do
         
-        # puts indent_xml  #  Decomment this to see where you are in the document now
+        # <code>puts indent_xml and</code>  #  Decomment this to see where you are in the document now
         
         indent_xml.match("<pre>\n") and  #  in this code sample
         ! indent_xml.match('<html')
