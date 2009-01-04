@@ -136,19 +136,19 @@ which returns the nearest text contents:
 
 Raw <code>REXML::Node</code>s require a cluttered syntax
 to access node attributes. Because <code>xpath()</code>
-targets expedient queries, it adds a Hash-like accessor
+supports expedient queries, it adds a Hash-like accessor
 to returned nodes:
 =end
   def test_indent_xml
    _assert_xml '<a href="http://www.youtube.com/watch?v=lWqr3mFAJ0Y"
                     >YouTube - UB40 - Sardonicus</a>'
-    
     a = xpath('/a')
-    
     assert do
+
       a.attributes['href'] =~ /youtube/ and
       a['href']            =~ /youtube/ and
       a[:href ]            =~ /youtube/
+
     end
   end
 #!end_panel!
