@@ -85,7 +85,11 @@ module Test; module Unit; module Assertions
       diagnostic + "xml context:\n" + indent_xml
     end
     
-    assert_ nil, :args => [@xdoc = node], &block if node and block
+    if block
+      assert_('this xpath cannot find a node'){ node }
+      assert_ nil, :args => [@xdoc = node], &block  #  TODO  need the _ ?
+    end
+    
     return node
     # TODO raid http://thebogles.com/blog/an-hpricot-style-interface-to-libxml/
   ensure
