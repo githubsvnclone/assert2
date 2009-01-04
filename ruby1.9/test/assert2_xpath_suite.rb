@@ -271,7 +271,7 @@ force <code>xpath()</code> to keep searching for a hit.
         indent_xml.match("<pre>\n") and  #  in this code sample
         ! indent_xml.match('<html')
              #  the document outside this code sample is excluded
-      end  #  FIXME  the diagnostic capture evaluation system has one inspect too many!
+      end
     end
   end
 #!end_panel!
