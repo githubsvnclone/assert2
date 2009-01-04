@@ -59,6 +59,7 @@ module Test; module Unit; module Assertions
 
     def capture(&block)
       snip = capture_source(&block)
+      return if @captures.select{|k,v| k == snip }.length > 0  #  TODO  there's probably a shorter method...
 
       if @block
         value = detect(snip)

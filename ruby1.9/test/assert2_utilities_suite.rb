@@ -177,13 +177,18 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     assert{ rf.format_value(42, 'foo') == '"foo"' }
   end
 
-  def test_dont_reflect_strings_that_match_their_literals
+  def test_dont_reflect_duplicated_things_twice
     str = 'foo'
-    diagnostic = assert_flunk /bar/ do
-                   assert{ str == 'bar' }
+
+    diagnostic = assert_flunk /bafoor/ do
+                   assert{ str =~ /ba#{str}r/ }
                  end
-      puts diagnostic
-  end
+
+    assert{ diagnostic.scan(/str\s+--> "foo"/).length == 1 }
+  end  #  CONSIDER  do literal strings sometimes accidentally reflect??
+
+  #  TODO  don't re-reflect the top-level expression!
+  #   FIXME  document the side-effect issue
 
   def test_format_multiline_inspection
     rf = RubyReflector.new

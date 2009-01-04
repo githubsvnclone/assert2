@@ -1,6 +1,5 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
-#  FIXME  evaluate mashed strings (meaning: don't evaluate un-mashed ones!!!)
 #  FIXME  ripdoc could color regices better
 
 
