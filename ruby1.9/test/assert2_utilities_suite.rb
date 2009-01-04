@@ -177,6 +177,14 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     assert{ rf.format_value(42, 'foo') == '"foo"' }
   end
 
+  def test_dont_reflect_strings_that_match_their_literals
+    str = 'foo'
+    diagnostic = assert_flunk /bar/ do
+                   assert{ str == 'bar' }
+                 end
+      puts diagnostic
+  end
+
   def test_format_multiline_inspection
     rf = RubyReflector.new
     assert{ rf.format_inspection("foo\nbar", 42) =~ /foo\n\s+bar/ }
