@@ -346,11 +346,9 @@ force <code>xpath()</code> to keep searching for a hit.
    _assert_xml '<a><b><c/></b></a>'
    
     diagnostic = assert_flunk 'xpath: "descendant-or-self::si"' do
-      assert do
-        xpath :a do
-          xpath :b do
-            xpath :si
-          end
+      xpath :a do
+        xpath :b do
+          xpath :si
         end
       end
     end
