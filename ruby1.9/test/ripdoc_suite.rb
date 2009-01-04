@@ -317,9 +317,9 @@ class RipdocSuite < Test::Unit::TestCase
     @rip.on_tstring_end("bug'", f)
    _assert_xml "<x>#{f}</x>"
    
-    assert do
-      xpath("/x/span[1]").text == "bug" and
-      xpath("/x/span[2]").text == "'"
+    xpath '/x' do
+      xpath('span[1]').text == "bug" and
+      xpath('span[2]').text == "'"
     end
   end
 
@@ -373,10 +373,9 @@ puts @xdoc.to_s
   def test_regexp_patterns
     assert_rip('foo /bar/')
     
-    assert do  #  FIXME  take out many assert do calls like this
-      xpath :"span[ #{style(:regexp)} and contains(., 'bar')  ]" do
-        xpath "span[ #{style(:regexp_delimiter)} and contains(., '/') ]"
-      end
+#    assert do  #  FIXME  take out many assert do calls like this
+    xpath :"span[ #{style(:regexp)} and contains(., 'bar')  ]" do
+      xpath "span[ #{style(:regexp_delimiter)} and contains(., '/') ]"
     end
   end
 
