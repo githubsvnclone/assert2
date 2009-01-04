@@ -86,8 +86,8 @@ module Test; module Unit; module Assertions
     end
     
     if block
-      assert_('this xpath cannot find a node'){ node }
-      assert_ nil, :args => [@xdoc = node], &block  #  TODO  need the _ ?
+      assert_('this xpath cannot find a node', :keep_diagnostics => true){ node }
+      assert_ nil, :args => [@xdoc = node], :keep_diagnostics => true, &block  #  TODO  need the _ ?
     end
     
     return node

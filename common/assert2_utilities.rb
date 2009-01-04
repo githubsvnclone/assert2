@@ -191,7 +191,7 @@ module Test; module Unit; module Assertions
   #  blocks of assertive statements.
   #
   def assert_(diagnostic = nil, options = {}, &block)
-    @__additional_diagnostics = []
+    options[:keep_diagnostics] or add_diagnostic :clear
     
     begin
       got = block.call(*options[:args]) and add_assertion and return got
@@ -222,7 +222,7 @@ module Test; module Unit; module Assertions
   def deny(diagnostic = nil, options = {}, &block)
       #  "None shall pass!" --the Black Knight
       
-    @__additional_diagnostics = []
+    options[:keep_diagnostics] or add_diagnostic :clear
     
     begin
       got = block.call(*options[:args]) or (add_assertion and return true)
