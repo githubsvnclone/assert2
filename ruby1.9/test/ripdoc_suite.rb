@@ -384,7 +384,7 @@ puts @xdoc.to_s
     xpath :span, ?. => :bar do |span|
       span[:style] == 'background: url(images/hot_pink.png);'
     end
-  end  #  FIXME  now nest them recursively
+  end  #  TODO  now nest strings and regices recursively
 
   def reveal(xhtml = @sauce || @output, filename)  #  TODO  take out the default arguments
     path = HomePath + 'doc' + filename
