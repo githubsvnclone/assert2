@@ -286,7 +286,6 @@ force <code>xpath()</code> to keep searching for a hit.
 # TODO  the explicit diagnostic message of the top-level assertion should 
 #  TODO optional alias assert_xpath, and dorkument it
 #  appear in any nested assertion failures
-#  FIXME  mark up comments
 #  FIXME  link from assert2.html to assert2_xpath.html and back
 
   if defined? Ripdoc
@@ -366,10 +365,12 @@ force <code>xpath()</code> to keep searching for a hit.
 
   def test_a_missing_xpath_with_a_block_should_fault
    _assert_xml '<foo/>'
+    
     diagnostic = assert_flunk /this xpath cannot find a node/i do
       xpath(:bar){ true }  #  an xpath that misses its node, and has a block, flunks
     end
-    #  puts diagnostic #  FIXME  preserve the diagnostic??
+    
+    assert{ diagnostic =~ /xml context:.*foo/m }
   end
 
   def test_nested_contexts
