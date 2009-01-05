@@ -238,7 +238,7 @@ Do not, for example, do this:
 What about Ruby 1.8.7?
 
 <code>assert{ 2.0 }</code> uses RubyNode, which works with 1.8.6 and lower.
-<code>assert{ 2.1 }</code> uses Ripper, which is built into Ruby 1.9.
+<code>assert{ 2.1 }</code> uses Ripper, which is built into Ruby 1.9 and up.
 Ruby 1.8.7 includes some backports from 1.9 that break the internal API that
 RubyNode used. This means the <code>assert{ 2.0 }</code> project cannot support
 a Ruby 1.8 greater than 1.8.6!
