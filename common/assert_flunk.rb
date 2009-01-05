@@ -11,8 +11,9 @@ module Test; module Unit; module Assertions
     if expected_message.kind_of? String
       exception_message.gsub!(/^\s+/, '')  #  if we cosmetically strip leading spaces from both the matcher and matchee,
       expected_message.gsub!(/^\s+/, '')  #  then multi-line assert_flunk messages are easier on the eyes!
+      expected_message = Regexp.escape(expected_message)
     end
-    
+
     assert message do
       exception_message.match(expected_message)
     end
