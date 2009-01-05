@@ -1,11 +1,27 @@
 =begin
 <code>xpath{}</code> tests XML and XHTML
 
-<code>xpath{}</code> works closely with <code>assert{ 2.0</code> & <code>2.1 }</code> 
+<code>xpath{}</code> works closely with 
+<a href='http://assert2.rubyforge.org/assert21.html'><code>assert{ 2.0</code> & <code>2.1 }</code></a>
 to provide elaborate, detailed, formatted reports when your XHTML code has
 gone astray.
+=end
+#!end_panel!
+=begin
+Installation
 
- # FIXME requiring instructions here, and better intro
+<code>xpath{}</code> bundles with <code>assert{ 2.0 }</code>
+and <code>assert{ 2.1 }</code>. 
+<a href='http://assert2.rubyforge.org/assert21.html#Installation'>Install</a> 
+one of them first, then 
+
+ require 'assert2/xpath'
+
+That also imports <code>assert{ 2.0 }</code>.
+=end
+#!end_panel!
+=begin
+Strategy
 
 First, generate your XHTML, then pass it into 
 #!link!assert_xhtml_xhtml!<code>assert_xhtml()</code>
