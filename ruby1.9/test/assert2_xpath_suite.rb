@@ -152,6 +152,26 @@ a node's string contents with <code>?.</code>:
   end
 #!end_panel!
 =begin
+<code>xpath( <em>ID shortcut</em> )</code>
+
+When <code>xpath()</code>'s second argument is a <code>:symbol</code>,
+it expands to <code>[ @id = "<em>symbol</em>" ]</code>. Subsequent arguments
+use Hash notation:
+=end
+  def test_xpath_ID_shortcut
+    assert_xhtml '<html><body>
+                    <div id="forty_two" class="answer_to_the_great_question">
+                      42
+                    </div>
+                  </body></html>'
+
+    div_1 = xpath(:div, :forty_two, :class => :answer_to_the_great_question)
+    div_2 = xpath(:div, :id => :forty_two, :class => :answer_to_the_great_question)
+
+    assert{ div_1.text =~ /42/ and div_1 == div_2 }
+  end
+#!end_panel!
+=begin
 <code>xpath().text</code>
 
 <code>xpath()</code> returns the first matching 
@@ -340,13 +360,10 @@ force <code>xpath()</code> to keep searching for a hit.
         #  TODO  which back-ends support . = '' matching recursive stuff?
         #  TODO  which back-ends support . =~ '' matching regices?
 #  TODO  replace libxml with rexml in the documentation
-#  FIXME  code marked up inside comments should be non-italicized
 #  TODO  split off the tests that hit assert2_utilities.rb...
-#  FIXME  document the symbol-symbol-hash trick
 # TODO  the explicit diagnostic message of the top-level assertion should 
+#         appear in any nested assertion failures
 #  TODO optional alias assert_xpath, and dorkument it
-#  appear in any nested assertion failures
-#  FIXME  link from assert2.html to assert2_xpath.html and back
 
   if defined? Ripdoc
     def test_document_self

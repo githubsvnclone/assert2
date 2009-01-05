@@ -211,6 +211,30 @@ confuse the second one:
   end
 #!end_panel!
 =begin
+Warning: Assertions Repeat their Side-Effects
+
+<code>assert{}</code> works by exploiting marginal features in Ruby's interpreter.
+To reflect the value of captured expressions, they must be evaluated again.
+
+Passing assertions only evaluate once, as normal blocks. But failing assertions
+will evaluate twice (or more!), and their side-effects might interfere with your 
+diagnosis.
+
+FIXME link out to Assemble Activate Assert pattern here
+
+Do not, for example, do this:
+=end
+  def test_write_assertions_without_side_effects
+    x = 42
+
+    assert_flunk '(x += 1) == 44 --> true' do  #  note the diagnostic says we were correct!!
+
+      assert{ (x += 1) == 44 }
+
+    end
+  end
+#!end_panel!
+=begin
 What about Ruby 1.8.7?
 
 <code>assert{ 2.0 }</code> uses RubyNode, which works with 1.8.6 and lower.
@@ -235,6 +259,7 @@ to recover some 1.8.6 stability!
 #            to appear inside assert{}
 #  TODO  put a nav bar up the side already! 
   #  TODO  move all tests like these into assert2_utilities_suite.rb
+  #  TODO  add a .compare to strings to match other strings or regices?
 
   def daZone( whatever )
     add_diagnostic 'daybreak on the land'

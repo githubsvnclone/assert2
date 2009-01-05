@@ -8,7 +8,7 @@ HomePath = Ripdoc::HomePath
 #  CONSIDER  think of a use for the horizontal accordion, and for nesting them
 #   TODO intersticial string mashers still don't color correctly
 #   TODO make function names bigger
-# FIXME  complete paths on image URLs 
+# TODO  complete paths on image URLs 
 
 
 class RipdocSuite < Test::Unit::TestCase
