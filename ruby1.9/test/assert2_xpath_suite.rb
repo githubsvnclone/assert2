@@ -364,6 +364,7 @@ force <code>xpath()</code> to keep searching for a hit.
 # TODO  the explicit diagnostic message of the top-level assertion should 
 #         appear in any nested assertion failures
 #  TODO optional alias assert_xpath, and dorkument it
+#  FIXME  work with &apos; out of the box or die trying
 
   if defined? Ripdoc
     def test_document_self
