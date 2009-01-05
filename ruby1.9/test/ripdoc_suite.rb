@@ -53,8 +53,8 @@ class RipdocSuite < Test::Unit::TestCase
    _assert_xml @output
    
     xpath '/span' do |span|
-      span.attributes['style'] =~ /font-family: Times;/ and #  attributes[] comes from raw REXML
-      span[:style] =~ /font-family: Times;/ and #  FIXME  document these shortcuts
+      span.attributes['style'] =~ /font-family: Times;/ and
+      span[:style] =~ /font-family: Times;/ and
       xpath 'code', ?. => :Rasta
     end  #  TODO  also test these attributes in assert2_xpath_suite.rb
   end  #  TODO  forgive a broken tag in a comment!!!

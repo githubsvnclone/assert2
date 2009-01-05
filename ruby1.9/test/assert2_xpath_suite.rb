@@ -145,9 +145,9 @@ to returned nodes:
     a = xpath('/a')
     assert do
 
-      a.attributes['href'] =~ /youtube/ and
-      a['href']            =~ /youtube/ and
-      a[:href ]            =~ /youtube/
+      a.attributes['href'] =~ /youtube/ and #  raw REXML::Node
+      a['href']            =~ /youtube/ and #  permitted by <code>xpath()</code>
+      a[:href ]            =~ /youtube/     #  convenient
 
     end
   end
