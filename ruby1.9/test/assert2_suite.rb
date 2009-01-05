@@ -37,6 +37,9 @@ Installation
   gem install assert21  <em># for Ruby 1.9, via Ripper (comes with Ruby)</em>
 
 Then place <code>require 'assert2'</code> (for either package) above your tests.
+
+These gems also provide <a href='/assert2_xpath.html'><code>xpath{}</code></a>, to
+test XML and XHTML. 
 =end
 #!end_panel!
 #!no_doc!
@@ -230,7 +233,7 @@ to recover some 1.8.6 stability!
 #  TODO  system to embolden a word in the documented panel!
 #  TODO  demo test that explicates why we cannot allow the "money line" 
 #            to appear inside assert{}
-
+#  TODO  put a nav bar up the side already! 
   #  TODO  move all tests like these into assert2_utilities_suite.rb
 
   def daZone( whatever )
