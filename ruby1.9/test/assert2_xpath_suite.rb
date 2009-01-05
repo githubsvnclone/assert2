@@ -29,25 +29,45 @@ First, generate your XHTML, then pass it into
 #!link!_assert_xml!<code>_assert_xml()</code>
 if all you have is a fragment of XHTML, or XML from some other schema.
 
-Use a call like <code>xpath('/html/head/title')</code> 
+Use a call like <code>title = xpath('/html/head/title')</code> 
 alone, without <code>assert{}</code>, to
 extract XML nodes non-judgementally. It returns a <code>nil</code>
-when it fails.
+when it fails. The returned node will provide
+#!link!xpathtext!text
+and
+#!link!xpath_Attribute_Accessors!attribute
+helper methods.
 
 To learn XPath, read
 <a href='http://www.oreillynet.com/onlamp/blog/2007/08/xpath_checker_and_assert_xpath.html'>XPath
 Checker and assert_xpath</a>, and attach an XPath tool like XPath Checker or XPather to your Firefox
 web browser.
 
-#!link!xpath_path!<code>assert{ xpath() }</code>
-scans it for details.<br/>
-* you can program <code>xpath()</code> using XPath notation, or convenient 
-#!link!xpath_DSL!Ruby option-hashes<br/>
-* 
-#!link!xpathtext!<code>xpath().text</code>
-returns a copy of an XML node's (shallow) text contents<br/>
-* 
-#!link!Nested_xpath_Faults!assert{} and xpath()
+Then wrap your <code>xpath()</code> calls in <code>assert{}</code> to
+verify its details. For example, if your production code generates a 
+<code><form></code> with a useful edit field in it, you can capture the
+field like this:
+
+#!link!xpath_path!<code>assert{ xpath('//input[ @type = "text" and @name = "user" and @value = "Roosevelt Franklin" ]') }</code>
+
+You can program <code>xpath()</code> using XPath notation, or convenient 
+Ruby option-hash notation. The equivalent query is:
+
+#!link!xpath_DSL!<code>assert{ xpath(:input, :type => :text, :name => :user", :value => 'Roosevelt Franklin') }</code>
+
+When these assertions fail, <code>xpath()</code> works closely with
+<code>assert{}</code> to present a detailed, formatted, readable report
+of the XML node that failed, and its relevant context within a document.
+
+<code>xpath{}</code> can evaluate a block; if this contains more
+<code>xpath()</code> calls, they
+#!link!Nested_xpath!nest
+inside the outer <code>xpath{}</code>'s context. This lets you skip
+over irrelevant details in a document, and only test the relevant
+regions.
+
+If such alliances fail, 
+#!link!Nested_xpath_Faults!<code>assert{}</code> and <code>xpath()</code>
 work together to diagnose XHTML efficiently<br/>
 
 =end
@@ -110,6 +130,7 @@ Prefer the last notation, to cut thru a large XHTML web page down to the
     assert{ xpath('descendant-or-self::div[ @id = "forty_two" ]').text == '42' }
     assert{ xpath('//div[ @id = "forty_two" ]').text == '42' }
     assert{ xpath(:'div[ @id = "forty_two" ]').text == '42' }
+    assert{ xpath(:div, :id => :forty_two).text == '42' }
     assert{ xpath(:div, :forty_two).text == '42' }
   end
 #!end_panel!
@@ -315,6 +336,7 @@ force <code>xpath()</code> to keep searching for a hit.
 #!no_doc!
 
         # TODO  inner_text should use ?.
+        #  TODO  colorize stuff in <code> tags already!!!
         #  TODO  which back-ends support . = '' matching recursive stuff?
         #  TODO  which back-ends support . =~ '' matching regices?
 #  TODO  replace libxml with rexml in the documentation
