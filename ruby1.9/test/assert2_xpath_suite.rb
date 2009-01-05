@@ -146,7 +146,7 @@ a node's string contents with <code>?.</code>:
 
       xpath :a, 
             :href => 'http://antwrp.gsfc.nasa.gov/apod/',
-            ?. => 'apod'  #  the ?. resolves to XPath: 'a[ . = "apod" ]'
+            ?. => 'apod'  #  the <code>?.</code> resolves to XPath: '<code>a[ . = "apod" ]</code>'
 
     end
   end
@@ -340,6 +340,7 @@ force <code>xpath()</code> to keep searching for a hit.
         #  TODO  which back-ends support . = '' matching recursive stuff?
         #  TODO  which back-ends support . =~ '' matching regices?
 #  TODO  replace libxml with rexml in the documentation
+#  FIXME  code marked up inside comments should be non-italicized
 #  TODO  split off the tests that hit assert2_utilities.rb...
 #  FIXME  document the symbol-symbol-hash trick
 # TODO  the explicit diagnostic message of the top-level assertion should 
