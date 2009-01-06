@@ -188,7 +188,6 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
   end  #  CONSIDER  do literal strings sometimes accidentally reflect??
 
   #  TODO  don't re-reflect the top-level expression! (and account for test_write_assertions_without_side_effects)
-  #   FIXME  document the side-effect issue
 
   def test_format_multiline_inspection
     rf = RubyReflector.new

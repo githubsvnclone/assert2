@@ -45,15 +45,21 @@ web browser.
 
 Then wrap your <code>xpath()</code> calls in <code>assert{}</code> to
 verify its details. For example, if your production code generates a 
-<code><form></code> with a useful edit field in it, you can capture the
+<code><form></code> with a useful edit field in it, you can 
+#!link!xpath_path!capture
+the
 field like this:
 
-#!link!xpath_path!<code>assert{ xpath('//input[ @type = "text" and @name = "user" and @value = "Roosevelt Franklin" ]') }</code>
+  assert{ xpath('//input[ @type = "text" and @name = "user" and 
+                             @value = "Roosevelt Franklin" ]') }
 
 You can program <code>xpath()</code> using XPath notation, or convenient 
-Ruby option-hash notation. The equivalent query is:
+Ruby option-hash 
+#!link!xpath_DSL!notation.
+The equivalent query is:
 
-#!link!xpath_DSL!<code>assert{ xpath(:input, :type => :text, :name => :user", :value => 'Roosevelt Franklin') }</code>
+  assert{ xpath(:input, :type => :text, :name => :user", 
+                             :value => 'Roosevelt Franklin') }
 
 When these assertions fail, <code>xpath()</code> works closely with
 <code>assert{}</code> to present a detailed, formatted, readable report
@@ -69,6 +75,8 @@ regions.
 If such alliances fail, 
 #!link!Nested_xpath_Faults!<code>assert{}</code> and <code>xpath()</code>
 work together to diagnose XHTML efficiently<br/>
+
+#  FIXME  embiggen each strategic link
 
 =end
 #!end_panel!
@@ -226,7 +234,7 @@ block, evaluate within the XML context set by the outer block.
 This is useful because if you have a huge web page (such as the one you are reading)
 you need assertions that operate only on one small region - the place where you need
 a given feature to appear. You can typically give all your <code><div></code> regions 
-useful <code>id</code>s, then use <code>xpath :div, :my_id</code> to restrict further
+useful <code>id</code>s, then use <code>xpath(:div, :my_id)</code> to restrict further
 <code>xpath{}</code> calls:
 =end
   def test_nested_xpaths
@@ -234,9 +242,9 @@ useful <code>id</code>s, then use <code>xpath :div, :my_id</code> to restrict fu
     assert 'this tests the panel you are now reading' do
 
       xpath :a, :name => :Nested_xpath do  #  finds the panel's anchor
-        xpath '../following-sibling::div[1]' do   #  find that A tag's immediate sibling
+        xpath '../following-sibling::div[1]' do   #  finds that A tag's immediate sibling
           xpath :'pre/span', ?. => 'test_nested_xpaths' do |span|
-            span.text =~ /nested/  #  the block passes the target node thru the |goalposts|
+            span.text =~ /nested/  #  the block passes the target node thru the <code>|</code>goalposts<code>|</code>
           end
         end
       end
@@ -248,11 +256,11 @@ useful <code>id</code>s, then use <code>xpath :div, :my_id</code> to restrict fu
 =begin
 <code>xpath{ <em>block</em> }</code> Calls <code>assert{ <em>block</em> }</code>
 
-When <code>xpath{}</code> calls with a block, it optionally passes its 
+When <code>xpath{}</code> has a block, it passes its 
 detected <code>|</code>node<code>|</code> into
 the block. If the
 block returns <code>nil</code> or <code>false</code>, it will <code>flunk()</code>
-the block, using <code>assert{}</code>'s inner mechanisms:
+the block, using <code>assert{}</code>'s inner mechanics:
 =end
   def test_xpath_passes_its_block_to_assert_2
    _assert_xml '<tag>contents</tag>'
@@ -312,11 +320,15 @@ DSL converts <code>?.</code> into that notation:
   end
 #!end_panel!
 =begin
-<code>xpath().text</code> is not the same as <code>xpath( ?. )</code> notation
+<code>xpath( ?. )</code> Notation Is not the Same as <code>xpath().text</code>
 
 <code>xpath()</code> returns the first node, in document order, which
 matches its XPath arguments. So <code>?.</code> will
 force <code>xpath()</code> to keep searching for a hit.
+
+<code>xpath().text</code> will find the first matching node, then offer
+its <code>.text</code> for comparison. These assertions explicate 
+the difference:
 =end
   def test_xpath_text_is_not_the_same_as_question_dot_notation
     _assert_xml '<Mean>
@@ -327,7 +339,7 @@ force <code>xpath()</code> to keep searching for a hit.
 
       xpath(:Woman).text == 'Blues' and
       xpath(:Woman, ?. => :Dub).text == 'Dub'
-              # use a symbol ^ to match a string here, as a convenience
+                    # use a symbol ^ to match a string here, as a convenience
 
     end
   end
@@ -364,7 +376,6 @@ force <code>xpath()</code> to keep searching for a hit.
 # TODO  the explicit diagnostic message of the top-level assertion should 
 #         appear in any nested assertion failures
 #  TODO optional alias assert_xpath, and dorkument it
-#  FIXME  work with &apos; out of the box or die trying
 
   if defined? Ripdoc
     def test_document_self
@@ -519,6 +530,16 @@ force <code>xpath()</code> to keep searching for a hit.
       apa.xpath == "descendant-or-self::a[ . = $_text and @href = $href ]"
     end
     assert{ apa.subs == { 'href' => 'http://www.sinfest.net/', '_text' => 'SinFest' } }
+  end
+
+  def test_apos_does_not_freak_rexml_out
+    assert_xhtml '<html><body>&apos;</body></html>'
+    assert{ xpath('/html/body').text == "'" }
+  end
+
+  def test_apos_does_not_freak_rexml_out_even_in_xml_mode
+   _assert_xml '<xml>&apos;</xml>'
+    assert{ xpath('/xml').text == "'" }
   end
 
   def reveal(filename, anchor)

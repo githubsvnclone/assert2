@@ -216,9 +216,9 @@ Warning: Assertions Repeat their Side-Effects
 <code>assert{}</code> works by exploiting marginal features in Ruby's interpreter.
 To reflect the value of captured expressions, they must be evaluated again.
 
-Passing assertions only evaluate once, as normal blocks. But failing assertions
-will evaluate twice (or more!), and their side-effects might interfere with your 
-diagnosis.
+When an assertion passes, it will only evaluate once, as a normal block. When assertions
+fail, however, their expressions will evaluate twice (or more!). Their 
+side-effects might interfere with your diagnosis.
 
 FIXME link out to Assemble Activate Assert pattern here
 
