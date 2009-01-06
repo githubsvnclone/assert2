@@ -2,7 +2,7 @@
 <code>xpath{}</code> tests XML and XHTML
 
 <code>xpath{}</code> works closely with 
-<a href='http://assert2.rubyforge.org/assert21.html'><code>assert{ 2.0</code> & <code>2.1 }</code></a>
+<a href='http://assert2.rubyforge.org/assert21.html'><code>assert{ 2.0 }</code></a>
 to provide elaborate, detailed, formatted reports when your XHTML code has
 gone astray.
 =end
@@ -44,7 +44,7 @@ Checker and assert_xpath</a>, and attach an XPath tool like XPath Checker or XPa
 web browser.
 
 Then wrap your <code>xpath()</code> calls in <code>assert{}</code> to
-verify its details. For example, if your production code generates a 
+verify their details. For example, if your production code generates a 
 <code><form></code> with a useful edit field in it, you can 
 #!link!xpath_path!capture
 the
@@ -72,11 +72,11 @@ inside the outer <code>xpath{}</code>'s context. This lets you skip
 over irrelevant details in a document, and only test the relevant
 regions.
 
-If such alliances fail, 
-#!link!Nested_xpath_Faults!<code>assert{}</code> and <code>xpath()</code>
-work together to diagnose XHTML efficiently<br/>
-
-#  FIXME  embiggen each strategic link
+If a nested <code>xpath{}</code> fails, the diagnostic only
+reflects the 
+#!link!Nested_xpath_Faults!inner context.
+This is you don't have to read an entire document to find the
+part that failed.
 
 =end
 #!end_panel!
@@ -86,7 +86,7 @@ require 'assert2/ripdoc' if RUBY_VERSION >= '1.9.0'
 require 'assert2/xpath'
 
 #  FIXME  correct string length on long comments
-
+#  FIXME  given :' why is the tick not colored?
 
 class AssertXhtmlSuite < Test::Unit::TestCase
 
@@ -126,11 +126,12 @@ passed an XHTML fragment, or XML under some other schema. Use
 
 The function's first argument can be raw XPath in a string, or a symbol. All the 
 following queries reach out to the same node. The first symbol gets decorated
-with the <code>'descendant-or-self::'</code> XPath axis, and a second symbol
-converts into a predicate, like <code>'[ @id = "forty_two" ]'</code>.
+with the <code>'descendant-or-self::'</code> XPath axis, and a second symbol,
+or an option hash,
+convert into a predicate, like <code>[ @id = "forty_two" ]</code>.
 
 Prefer the last notation, to cut thru a large XHTML web page down to the 
-<code><div></code> containing the contents that you need to test:
+element containing the contents that you need to test:
 =end
   def test_assert_xpath
     assert_xhtml '<html><body><div id="forty_two">42</div></body></html>'
@@ -154,7 +155,7 @@ a node's string contents with <code>?.</code>:
 
       xpath :a, 
             :href => 'http://antwrp.gsfc.nasa.gov/apod/',
-            ?. => 'apod'  #  the <code>?.</code> resolves to XPath: '<code>a[ . = "apod" ]</code>'
+            ?. => 'apod'  #  the <code>?.</code> resolves to XPath: <code>a[ . = "apod" ]</code>
 
     end
   end
@@ -190,9 +191,9 @@ which returns the nearest text contents:
   def test_xpath_text
    _assert_xml '<Mean><Woman>Blues</Woman></Mean>'
     assert do
-      
+
       xpath('/Mean/Woman').text == 'Blues'
-      
+
     end
   end
 #!end_panel!
@@ -232,7 +233,7 @@ Nested <code>xpath{}</code>
 block, evaluate within the XML context set by the outer block.
 
 This is useful because if you have a huge web page (such as the one you are reading)
-you need assertions that operate only on one small region - the place where you need
+you need assertions that operate on one small region alone - the place where you need
 a given feature to appear. You can typically give all your <code><div></code> regions 
 useful <code>id</code>s, then use <code>xpath(:div, :my_id)</code> to restrict further
 <code>xpath{}</code> calls:
@@ -242,7 +243,7 @@ useful <code>id</code>s, then use <code>xpath(:div, :my_id)</code> to restrict f
     assert 'this tests the panel you are now reading' do
 
       xpath :a, :name => :Nested_xpath do  #  finds the panel's anchor
-        xpath '../following-sibling::div[1]' do   #  finds that A tag's immediate sibling
+        xpath '../following-sibling::div[1]' do   #  finds that <code>a</code> tag's immediate sibling
           xpath :'pre/span', ?. => 'test_nested_xpaths' do |span|
             span.text =~ /nested/  #  the block passes the target node thru the <code>|</code>goalposts<code>|</code>
           end
@@ -285,19 +286,19 @@ web pages:
     diagnostic = assert_flunk /BAD.*CONTENTS/ do
       xpath :a, :name => :Nested_xpath_Faults do
 
-         # the .. finds this entire panel, the div[1] finds its content area,
-         # and the pre finds the code sample you are reading
+         # the <code>../</code> finds this entire panel, the <code>div[1]</code> finds its content area,
+         # and the <code>pre</code> finds the code sample you are reading
         xpath '../following-sibling::div[1]/pre' do
           
-            # this will fail because that text ain't found in a span
-            # (the concat() makes it into two spans!)
-          xpath :'span[ . = concat(\"BAD\", \" CONTENTS\") ]'
+            # this will fail because that text ain't found in a <code>span</code>
+            # (the <code>concat()</code> makes it into two <code>span</code>s!)
+          xpath :'span[ . = concat("BAD", " CONTENTS") ]'
         end
 
       end
     end
       # the diagnostic won't cantain the string "excessive spew", from
-      # the top of the panel, because the second xpath{} call excluded it
+      # the top of the panel, because the second <code>xpath{}</code> call excluded it
     deny{ diagnostic =~ /excessive spew/ } 
   end
 #!end_panel!
@@ -307,16 +308,15 @@ web pages:
 =begin
 <code>xpath( ?. )</code> Matches Recursive Text
 
-When an XML node contains nodes with text, 
-the XPath predicate <code>[ . = "..." ]</code> matches
+When an XML node contains child nodes with text, 
+the XPath predicate <code>[ . = "</code>...<code>" ]</code> matches
 all their text, concatenated together. <code>xpath()</code>'s 
 DSL converts <code>?.</code> into that notation:
 =end
   def test_nested_xpath_text
    _assert_xml '<boats><a>frig</a><b>ates</b></boats>'
-    assert do
-      xpath :boats, ?. => 'frigates'
-    end
+
+    assert{ xpath :boats, ?. => 'frigates' }
   end
 #!end_panel!
 =begin
@@ -339,7 +339,7 @@ the difference:
 
       xpath(:Woman).text == 'Blues' and
       xpath(:Woman, ?. => :Dub).text == 'Dub'
-                    # use a symbol ^ to match a string here, as a convenience
+                   # use a symbol ^ to match a string here, as a convenience
 
     end
   end
@@ -347,9 +347,10 @@ the difference:
 =begin
 Use <code>indent_xml</code> to Help Build your XPath
 
-<code>xpath()</code> returns the first node, in document order, which
-matches its XPath arguments. So <code>?.</code> will
-force <code>xpath()</code> to keep searching for a hit.
+To see what region <code>xpath{}</code> has selected in
+a big document, temporarily add <code>puts</code> 
+<code>indent_xml</code> <code>and</code>
+to <code>xpath</code>'s block, then run your tests:
 =end
   def test_indent_xml
     assert_xhtml (DocPath + 'assert2_xpath.html').read
@@ -358,9 +359,8 @@ force <code>xpath()</code> to keep searching for a hit.
         
         # <code>puts indent_xml and</code>  #  Decomment this to see where you are in the document now
         
-        indent_xml.match("<pre>\n") and  #  in this code sample
+        indent_xml.match("<pre>\n") and
         ! indent_xml.match('<html')
-             #  the document outside this code sample is excluded
       end
     end
   end
@@ -376,6 +376,8 @@ force <code>xpath()</code> to keep searching for a hit.
 # TODO  the explicit diagnostic message of the top-level assertion should 
 #         appear in any nested assertion failures
 #  TODO optional alias assert_xpath, and dorkument it
+# FIXME  gentler fades in the green string background
+#  FIXME do the backgrounds work on Safari and Firefox for Mac?
 
   if defined? Ripdoc
     def test_document_self
