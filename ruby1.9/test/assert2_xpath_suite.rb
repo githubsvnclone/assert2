@@ -39,8 +39,8 @@ and
 helper methods.
 
 To learn XPath, read
-<a href='http://www.oreillynet.com/onlamp/blog/2007/08/xpath_checker_and_assert_xpath.html'>XPath
-Checker and assert_xpath</a>, and attach an XPath tool like XPath Checker or XPather to your Firefox
+"<a href='http://www.oreillynet.com/onlamp/blog/2007/08/xpath_checker_and_assert_xpath.html'>XPath
+Checker and assert_xpath</a>", and attach an XPath tool like XPath Checker or XPather to your Firefox
 web browser.
 
 Then wrap your <code>xpath()</code> calls in <code>assert{}</code> to
@@ -124,13 +124,15 @@ passed an XHTML fragment, or XML under some other schema. Use
 =begin
 <code>xpath( '<em>path</em>' )</code>
 
-The function's first argument can be raw XPath in a string, or a symbol. All the 
-following queries reach out to the same node. The first symbol gets decorated
+The function's first argument can be raw XPath in a string, or a symbol. The first 
+symbol gets decorated
 with the <code>'descendant-or-self::'</code> XPath axis, and a second symbol,
 or an option hash,
-convert into a predicate, like <code>[ @id = "forty_two" ]</code>.
+get converted into a predicate, like <code>[ @id = "forty_two" ]</code>.
 
-Prefer the last notation, to cut thru a large XHTML web page down to the 
+All the 
+following queries reach out to the same node. Prefer the last notation, 
+to cut thru a large XHTML web page down to the 
 element containing the contents that you need to test:
 =end
   def test_assert_xpath
@@ -150,7 +152,10 @@ You can write simple XPath queries using Ruby's familiar hash notation. Query
 a node's string contents with <code>?.</code>:
 =end
   def test_xpath_dsl
-    assert_xhtml 'hit <a href="http://antwrp.gsfc.nasa.gov/apod/">apod</a> daily!'
+    assert_xhtml 'hit
+                  <a href="http://antwrp.gsfc.nasa.gov/apod/"
+                    >apod</a>
+                  daily!'
     assert do
 
       xpath :a, 
@@ -208,8 +213,7 @@ to returned nodes:
   def test_indent_xml
    _assert_xml '<a href="http://www.youtube.com/watch?v=lWqr3mFAJ0Y"
                     >YouTube - UB40 - Sardonicus</a>'
-    a = xpath('/a')
-    assert do
+    xpath '/a' do |a|
 
       a.attributes['href'] =~ /youtube/ and #  raw REXML::Node
       a['href']            =~ /youtube/ and #  permitted by <code>xpath()</code>
@@ -297,9 +301,10 @@ web pages:
 
       end
     end
+#    puts diagnostic  
       # the diagnostic won't cantain the string "excessive spew", from
       # the top of the panel, because the second <code>xpath{}</code> call excluded it
-    deny{ diagnostic =~ /excessive spew/ } 
+    deny{ diagnostic =~ /excessive spew/ } #  FIXME  uh, this is the wrong context!!
   end
 #!end_panel!
 #!no_doc!
