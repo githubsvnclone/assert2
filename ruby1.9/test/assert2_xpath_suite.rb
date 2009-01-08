@@ -376,12 +376,11 @@ to <code>xpath</code>'s block, then run your tests:
         #  TODO  colorize stuff in <code> tags already!!!
         #  TODO  which back-ends support . = '' matching recursive stuff?
         #  TODO  which back-ends support . =~ '' matching regices?
-#  TODO  replace libxml with rexml in the documentation
+#  fim  replace libxml with rexml in the documentation
 #  TODO  split off the tests that hit assert2_utilities.rb...
 # TODO  the explicit diagnostic message of the top-level assertion should 
 #         appear in any nested assertion failures
 #  TODO optional alias assert_xpath, and dorkument it
-# FIXME  gentler fades in the green string background
 #  FIXME do the backgrounds work on Safari and Firefox for Mac?
 #  TODO  ripdoc should lint your work as it goes
 
@@ -397,20 +396,25 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
   
+  def test_deny_xpath
+   _assert_xml '<foo/>'
+    deny{ xpath :bar }
+  end
+
   def test_xpath_converts_symbols_to_ids
-   _assert_xml '<a id="b"/>'
-    assert{ xpath(:a, :b) == xpath('/a[ @id = "b" ]') }
+   _assert_xml '<x><a id="wrong_one"/><a id="b"/></x>'
+    assert{ xpath(:a, :b) == xpath('//a[ @id = "b" ]') }
   end
 
 #  TODO  deal with horizontal overflow in panels!
 
   def test_xpath_converts_silly_notation_to_text_matches
-    _assert_xml '<a>b</a>'
-    assert{ xpath(:a, :'.' => :b) == xpath('/a[ . = "b" ]') }
+   _assert_xml '<x><a>wrong one</a><a>b</a></x>'
+    assert{ xpath(:a, :'.' => :b) == xpath('//a[ . = "b" ]') }
   end
 
   def test_xpath_wraps_assert
-    return if RUBY_VERSION < '1.9' # TODO  fix!
+    return if RUBY_VERSION < '1.9' # FIXME  fix!
     assert_xhtml '<html/>'
 
     assert_flunk /node.name --> "html"/ do
@@ -420,7 +424,7 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
 
-  def test_deny_xpath_decorates
+  def test_deny_diagnoses_its_xpath
     assert_xhtml '<html><body/></html>'
 
     spew = assert_flunk /xml context/ do
@@ -430,7 +434,7 @@ to <code>xpath</code>'s block, then run your tests:
     assert{ spew =~ /xpath: "\/html\/body"/ }
   end
 
-  def test_failing_xpaths_indent_their_returnage
+  def test_failing_xpaths_indent_their_xml_contexts
     return if RUBY_VERSION < '1.9' # TODO  fix!
     assert_xhtml '<html><body/></html>'
     
@@ -451,11 +455,6 @@ to <code>xpath</code>'s block, then run your tests:
     end
     
     deny{ diagnostic.match('<a>') }
-  end
-
-  def test_deny_xpath
-   _assert_xml '<foo/>'
-    deny{ xpath :bar }
   end
 
   def test_a_missing_xpath_with_a_block_should_fault
