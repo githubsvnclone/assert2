@@ -383,6 +383,7 @@ to <code>xpath</code>'s block, then run your tests:
 #  TODO optional alias assert_xpath, and dorkument it
 # FIXME  gentler fades in the green string background
 #  FIXME do the backgrounds work on Safari and Firefox for Mac?
+#  TODO  ripdoc should lint your work as it goes
 
   if defined? Ripdoc
     def test_document_self
