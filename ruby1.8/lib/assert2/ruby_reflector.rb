@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'rubynode'
 require 'pp'
 
 
@@ -69,7 +68,15 @@ module Test; module Unit; module Assertions
     return got
   end
 
-  class RubyReflector  #  turn hamburger back into live cattle
+  class RubyReflector  #  this class turns hamburger back into live cattle
+    begin
+      raise LoadError, 'whatever' if ENV['TEST_ASSERT_2_IN_1_8_7_MODE'] == 'true'
+      require 'rubynode'
+      HAS_RUBYNODE = true
+    rescue LoadError
+      HAS_RUBYNODE = false
+    end
+    
     attr_reader :evaluations,
                 :result,
                 :transformation
@@ -85,7 +92,7 @@ module Test; module Unit; module Assertions
     end
 
     def block=(yo_block)
-      @block = yo_block and
+      @block = yo_block and HAS_RUBYNODE and
         reflect_nodes(@block.body_node)
     end
 

@@ -17,7 +17,7 @@ class Assert2Suite < Test::Unit::TestCase #:nodoc:
 
   def test_assert_with_linefeeds
     x = 42
-    
+    return unless RubyReflector::HAS_RUBYNODE
     diagnostic = assert_flunk /x.*42/ do
                    assert{ x ==
                                43 }

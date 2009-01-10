@@ -3,7 +3,7 @@ require 'ripper'  #   note we only work with Ruby >= 1.9 !
 
 module Test; module Unit; module Assertions
 
-  class RubyReflector
+  class RubyReflector  #  this class turns hamburger back into live cattle
 
     attr_reader   :assertion_source,
                   :captures,
