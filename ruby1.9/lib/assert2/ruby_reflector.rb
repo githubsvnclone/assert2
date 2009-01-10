@@ -1,8 +1,13 @@
-require 'ripper'  #   note we only work with Ruby >= 1.9 !
 require 'pp'
 
-
 module Test; module Unit; module Assertions
+
+begin
+  require 'ripper'  #   note we only work with Ruby >= 1.9 !
+  HAVE_RIPPER = true
+rescue LoadError
+  HAVE_RIPPER = false
+end
 
   class RubyReflector
 

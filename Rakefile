@@ -12,8 +12,11 @@ end
 
 task :int => :default do
   sh 'svn commit --message development ruby1.8/lib/assert2/common'
+  sleep 1
   sh 'svn commit --message development ruby1.9/lib/assert2/common'
+  sleep 1
   sh 'svn commit --message development'
+  sleep 1
   sh 'svn update --quiet'
 end
 
