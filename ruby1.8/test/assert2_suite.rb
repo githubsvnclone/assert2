@@ -34,6 +34,7 @@ class Assert2Suite < Test::Unit::TestCase #:nodoc:
 
   def test_catch_exceptions
     x = 42
+    return unless RubyReflector::HAS_RUBYNODE
 
     assert_flunk /RuntimeError.*gotcha.*42/m do
       assert{ x; raise 'gotcha' }
