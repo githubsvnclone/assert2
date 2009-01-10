@@ -1,6 +1,5 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
-
 class RubyReflectorTest < Test::Unit::TestCase
 
   def setup
@@ -9,6 +8,8 @@ class RubyReflectorTest < Test::Unit::TestCase
     x = 42
     @effect.block = lambda{ x == 42 }
   end
+
+if RubyReflector::HAS_RUBYNODE
 
   def test_pass_args_to_detector
     @effect.captured_block_vars = 'x, y'
@@ -613,12 +614,6 @@ class RubyReflectorTest < Test::Unit::TestCase
   #############################################################
   ######## whatnot
 
-  def test_each_slice
-    twizzled = []
-    [1, 2, 3, 7].in_groups_of(2){|a,z| twizzled << [a,z]}
-    assert{ twizzled == [[1, 2], [3, 7]] }
-  end
-
   class BufferStdout #:nodoc:
     def tty?; false end
     def write(stuff)
@@ -646,6 +641,14 @@ class RubyReflectorTest < Test::Unit::TestCase
     return $stderr.output
   ensure
     $stderr = waz
+  end
+
+end # if RubyReflector::HAS_RUBYNODE
+
+  def test_each_slice
+    twizzled = []
+    [1, 2, 3, 7].in_groups_of(2){|a,z| twizzled << [a,z]}
+    assert{ twizzled == [[1, 2], [3, 7]] }
   end
 
 end
