@@ -85,7 +85,6 @@ require File.dirname(__FILE__) + '/../../test_helper'
 require 'assert2/ripdoc' if RUBY_VERSION >= '1.9.0'
 require 'assert2/xpath'
 
-#  FIXME  correct string length on long comments
 #  FIXME  given :' why is the tick not colored?
 
 class AssertXhtmlSuite < Test::Unit::TestCase
@@ -217,7 +216,7 @@ to returned nodes:
 
       a.attributes['href'] =~ /youtube/ and #  raw REXML::Node
       a['href']            =~ /youtube/ and #  permitted by <code>xpath()</code>
-      a[:href ]            =~ /youtube/     #  convenient
+      a[:href ]            =~ /youtube/     #  convenient!
 
     end
   end
@@ -225,7 +224,7 @@ to returned nodes:
 #!no_doc!
   #  the assert2_xpath.html file passed http://validator.w3.org/check
   #  with flying colors, the first time I ran it. However,
-  #  something in these tests blows Ruby1.8's REXML's tiny brain,
+  #  something in these tests blows Ruby1.8's REXML's mind,
   #  so these tests gotta be blocked out
   if RUBY_VERSION >= '1.9.0'
 #!doc!
@@ -237,8 +236,8 @@ Nested <code>xpath{}</code>
 block, evaluate within the XML context set by the outer block.
 
 This is useful because if you have a huge web page (such as the one you are reading)
-you need assertions that operate on one small region alone - the place where you need
-a given feature to appear. You can typically give all your <code><div></code> regions 
+you need assertions that operate on one small region alone - the place where a feature
+must appear. You can typically give all your <code><div></code> regions 
 useful <code>id</code>s, then use <code>xpath(:div, :my_id)</code> to restrict further
 <code>xpath{}</code> calls:
 =end
@@ -247,7 +246,7 @@ useful <code>id</code>s, then use <code>xpath(:div, :my_id)</code> to restrict f
     assert 'this tests the panel you are now reading' do
 
       xpath :a, :name => :Nested_xpath do  #  finds the panel's anchor
-        xpath '../following-sibling::div[1]' do   #  finds that <code>a</code> tag's immediate sibling
+        xpath '../following-sibling::div[1]' do   #  finds that <code>a</code> tag's adjacent sibling
           xpath :'pre/span', ?. => 'test_nested_xpaths' do |span|
             span.text =~ /nested/  #  the block passes the target node thru the <code>|</code>goalposts<code>|</code>
           end
@@ -383,6 +382,9 @@ to <code>xpath</code>'s block, then run your tests:
 #  TODO optional alias assert_xpath, and dorkument it
 #  FIXME do the backgrounds work on Safari and Firefox for Mac?
 #  TODO  ripdoc should lint your work as it goes
+#  TODO  :class => :symbol should do the trick contains(concat(' ', @class, ' '), ' w0 ')
+#  TODO  :class => [] should do the trick contains(concat(' ', @class, ' '), ' w0 ') && contains(concat(' ',@class, ' '), ' g ')
+#  TODO  :class => a string should be raw.
 
   if defined? Ripdoc
     def test_document_self
