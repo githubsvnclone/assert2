@@ -46,6 +46,7 @@ class Assert2Suite < Test::Unit::TestCase #:nodoc:
 
   def test_catch_undeniable_exceptions
     x = 42
+    return unless RubyReflector::HAS_RUBYNODE
 
     assert_flunk /RuntimeError.*me_too.*42/m do
       denigh{ x; raise 'me_too' }
@@ -57,6 +58,7 @@ class Assert2Suite < Test::Unit::TestCase #:nodoc:
   end
 
   def test_flunk_2_0
+    return unless RubyReflector::HAS_RUBYNODE
     x = 43
     assert_flunk /43.*but.*42/m    do  assert_equal x, 42           end
     assert_flunk /x == 42/         do  assert_{ x == 42 }           end
