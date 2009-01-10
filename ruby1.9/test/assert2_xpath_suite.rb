@@ -380,7 +380,6 @@ to <code>xpath</code>'s block, then run your tests:
 # TODO  the explicit diagnostic message of the top-level assertion should 
 #         appear in any nested assertion failures
 #  TODO optional alias assert_xpath, and dorkument it
-#  FIXME do the backgrounds work on Safari and Firefox for Mac?
 #  TODO  ripdoc should lint your work as it goes
 #  TODO  :class => :symbol should do the trick contains(concat(' ', @class, ' '), ' w0 ')
 #  TODO  :class => [] should do the trick contains(concat(' ', @class, ' '), ' w0 ') && contains(concat(' ',@class, ' '), ' g ')

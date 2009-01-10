@@ -1,10 +1,10 @@
 #  this is assert{ 2.1 }, the Ruby 1.9+ rewrite of assert{ 2.0 }, using Ripper
 #   note we only work with Ruby >= 1.9 !
 
-if RUBY_VERSION < '1.9.0'
-  puts "\nWarning: This version of assert{ 2.0 } only works\n" +
-       "with Ripper, which requires a Ruby version >= 1.9\n\n"
-end
+#~ if RUBY_VERSION < '1.9.0'
+  #~ puts "\nWarning: This version of assert{ 2.0 } only works\n" +
+       #~ "with Ripper, which requires a Ruby version >= 1.9\n\n"
+#~ end
 
 require 'assert2/common/assert2_utilities'
 
