@@ -13,6 +13,11 @@ task :default do
   sh 'ruby1.8.6 test/assert2_utilities_suite.rb'
   sh 'ruby1.9.0 test/assert2_utilities_suite.rb'
   sh 'ruby1.9.1 test/assert2_utilities_suite.rb'  #  FIXME  merge into assert2_suite.rb
+  sh 'ruby1.9.0 test/ripdoc_suite.rb'
+  sh 'ruby1.9.1 test/ripdoc_suite.rb'
+  
+  # assert2_spec.rb   
+ 
 #  #sh 'ruby1.8.6 test/assert2_shoulda_suite.rb'
 
 end
