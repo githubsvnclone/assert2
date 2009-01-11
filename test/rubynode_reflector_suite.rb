@@ -550,12 +550,12 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_we_dont_do_plus_equals_like_that
-    return # FIXME
+    #~ return # FIXME
     assert{ 'foo = foo + 1' == reflect_string('foo += 1') }
   end
 
   def test_reflect_map_index
-    return # FIXME
+    #~ return # FIXME
     colorize(false)
     mapper = { 'foo' => 'cue'}
     reflection = reflect{ 'cue' == mapper['foo'] }
@@ -565,13 +565,13 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_reflect_inverse_parens
-    return # FIXME
+    #~ return # FIXME
     reflection = reflect{ q = 21 + (21 * 1) }
     assert{ reflection.index("q = 21 + ( 21 * 1 )") }
   end
 
   def test_reflect_functions
-    return # FIXME
+    #~ return # FIXME
     x = 42
     y = 43
     foo = Foo.new
