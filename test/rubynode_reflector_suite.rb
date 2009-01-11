@@ -19,7 +19,6 @@ class RubyReflectorTest < Test::Unit::TestCase
   end  #  TODO  both .detects should get exactly the same interface...
 
   def test_all_op_codes
-    return # FIXME
     [
       "def foo(x, y)\nreturn ( x + y )\nend\n",
       "def foo(x, *y)\nreturn ( x + y )\nend\n",         #  trailing star
@@ -136,7 +135,6 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_bug_in_args_opcodes   #  can Ruby do this one??
-    #~ return # FIXME
     # colorize(:always)
 
     assert do
@@ -550,12 +548,10 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_we_dont_do_plus_equals_like_that
-    #~ return # FIXME
     assert{ 'foo = foo + 1' == reflect_string('foo += 1') }
   end
 
   def test_reflect_map_index
-    #~ return # FIXME
     colorize(false)
     mapper = { 'foo' => 'cue'}
     reflection = reflect{ 'cue' == mapper['foo'] }
@@ -585,7 +581,6 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_backticks
-    #~ return # FIXME
     assert{ reflect_source{ `exon is #{foo}` } == "`exon is \#{ foo }`" }
     assert{ reflect_source{ `hatch is \#` } == "`hatch is #`" }
     assert{ reflect_source{ `intron is \#{nope` } == "`intron is \\\#{nope`" }
@@ -596,7 +591,6 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_reflect_literal_strings
-    #~ return # FIXME
     colorize(false)
     x = '42'
     y =   1
@@ -610,7 +604,6 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_reflect
-    #~ return # FIXME
     x = 42
     y = 43
     assert{ reflect{  x == 42 }.index("x == 42\t--> true"       ) == 0 }
