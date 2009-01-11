@@ -425,14 +425,14 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_reflect_constants
-    return # FIXME
+    #~ return # FIXME
     y =   6
     assert{ /LinkHogThrob == "L\#\{ 1 \+ y \}".*LinkHogThrob.*L7/m =~
                reflect{ LinkHogThrob == "L#{ 1 + y }" } }
   end
 
   def test_reflect_functions_with_arguments_splats_hashes_and_blockers
-    return # FIXME
+    #~ return # FIXME
     foo      = Foo.new
     y        = 2
     splat_me = [40, 2]
@@ -465,7 +465,7 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_reflect_arrays
-    return # FIXME
+    #~ return # FIXME
     colorize(false)
     assert{ '4yo2'.index('yo')   }
       deny{ '4yo2'.index('yoyo') }
