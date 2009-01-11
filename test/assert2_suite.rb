@@ -325,5 +325,28 @@ to recover some 1.8.6 stability!
     assert_{ x == 42 }  #  TODO  retire this silly thing
   end
 
+  #############################################################
+  ######## for manual tests
+
+  def create_topics
+    return { 'first' => 'wrong topic' }
+  end
+
+# TODO  * flip2 and flip3 are for rubys flip-flop operator
+#> (http://redhanded.hobix.com/inspect/hopscotchingArraysWithFlipFlops.html)
+
+  #  use these to manually test the diagnostic failures
+  #
+  def test_topics
+    topics = create_topics
+    x = 43
+#    assert{ x == 42 }
+#    deny{ x == 43 }
+#    assert_equal 'a topic', topics['first']
+#    assert{ 'a topic' == topics['first'] }
+#    assert_not_nil topics['second']
+#    assert_{ topics['second'] }
+  end
+
 end
 
