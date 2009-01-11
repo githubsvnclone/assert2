@@ -3,6 +3,21 @@ require 'test/unit'
 
 module Test; module Unit; module Assertions
 
+  # Assert that a block raises a given Exception type matching 
+  # a given message
+  # 
+  # * +types+ - single exception class or array of classes
+  # * +matcher+ - Regular Expression to match the inner_text of XML nodes
+  # * +diagnostic+ - optional string to add to failure message
+  # * +block+ - Ruby statements that should raise an exception
+  #
+  # Examples:
+  # %transclude AssertXPathSuite#test_assert_raise_message_detects_assertion_failure
+  #
+  # %transclude AssertXPathSuite#test_assert_raise_message_raises_message
+  #
+  # See: {assert_raise - Don't Just Say "No"}[http://www.oreillynet.com/onlamp/blog/2007/07/assert_raise_on_ruby_dont_just.html]
+  #
   def assert_raise_message(types, expected_message, message = nil, &block)
     args = [types].flatten + [message]
     exception = _assert_raise(*args, &block)

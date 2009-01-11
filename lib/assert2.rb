@@ -4,6 +4,15 @@ require 'test/unit'
 #  TODO  install Coulor
 #  TODO  add :verbose => option to assert{}
 #  TODO  pay for Staff Benda Bilili  ALBUM: Tr�s Tr�s Fort (Promo Sampler) !
+#  TODO  evaluate parts[3]
+#  ERGO  if the block is a block, decorate with do-end
+#  ERGO  decorate assert_latest's block at fault time
+
+#~ if RUBY_VERSION > '1.8.6'
+  #~ puts "\nWarning: This version of assert{ 2.0 } requires\n" +
+       #~ "RubyNode, which only works on Ruby versions < 1.8.7.\n" +
+       #~ "Upgrade to Ruby1.9, and try 'gem install assert21'\n\n"
+#~ end
 
   #~ def colorize(whatever)
     #~ # FIXME stop ignoring this and start colorizing v2.1!

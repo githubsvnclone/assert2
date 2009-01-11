@@ -1,35 +1,8 @@
 # this is assert{ 2.0 }, for Ruby <= 1.8.6
 
-if RUBY_VERSION > '1.8.6'
-  puts "\nWarning: This version of assert{ 2.0 } requires\n" +
-       "RubyNode, which only works on Ruby versions < 1.8.7.\n" +
-       "Upgrade to Ruby1.9, and try 'gem install assert21'\n\n"
-end
-
-require 'assert2/common/assert2_utilities'
-
-#  TODO  evaluate parts[3]
-#  ERGO  if the block is a block, decorate with do-end
-#  ERGO  decorate assert_latest's block at fault time
-
 
 module Test; module Unit; module Assertions
 
-  # Assert that a block raises a given Exception type matching 
-  # a given message
-  # 
-  # * +types+ - single exception class or array of classes
-  # * +matcher+ - Regular Expression to match the inner_text of XML nodes
-  # * +diagnostic+ - optional string to add to failure message
-  # * +block+ - Ruby statements that should raise an exception
-  #
-  # Examples:
-  # %transclude AssertXPathSuite#test_assert_raise_message_detects_assertion_failure
-  #
-  # %transclude AssertXPathSuite#test_assert_raise_message_raises_message
-  #
-  # See: {assert_raise - Don't Just Say "No"}[http://www.oreillynet.com/onlamp/blog/2007/07/assert_raise_on_ruby_dont_just.html]
-  #
   def assert_raise_message(types, matcher, diagnostic = nil, &block)
     args = [types].flatten + [diagnostic]
     exception = assert_raise(*args, &block)
