@@ -271,7 +271,6 @@ to recover some 1.8.6 stability!
   end
 
   def test_daZone
-    return # FIXME
     assert_flunk /daybreak on the land.*nested/m do
       assert{ daZone("string \"nested\"") }
     end
