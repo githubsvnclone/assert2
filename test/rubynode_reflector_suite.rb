@@ -333,7 +333,7 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_insert_critical_newlines
-    return # FIXME
+    #~ return # FIXME
     assert_equal "( if ( 42 ) then ( foo << \" \"\n( if ( false ) then ( bar ) end )\n ) end )",
       reflect_source{
               if 42
@@ -359,7 +359,7 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_dont_duplicate_intermediate_evaluations
-    return # FIXME
+    #~ return # FIXME
     colorize(false)
     x = 42
     rf = RubyReflector.new
@@ -373,7 +373,7 @@ class RubyReflectorTest < Test::Unit::TestCase
   ######## regices
 
   def test_match3  #  note:  where's match3?
-    return # FIXME
+    #~ return # FIXME
     q = 'foobar'
     r = /^foo(bar)$/
     assert_{ /foo(bar)/ =~ reflect{ q =~ r } }
@@ -381,7 +381,7 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_reflect_regices
-    return # FIXME
+    #~ return # FIXME
     x = '42'
     foo = Foo.new
     assert_match "/4/ =~ x\t--> 0", reflect{ /4/ =~ x }
