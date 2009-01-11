@@ -1,7 +1,9 @@
 require 'fileutils'
 
 task :default do
-# FIXME  sh 'ruby1.8.6 test/ruby_reflector_suite.rb'
+# FIXME  sh 'ruby1.8.6 test/rubynode_reflector_suite.rb'
+  sh 'ruby1.9.0 test/ripper_reflector_suite.rb'
+  sh 'ruby1.9.1 test/ripper_reflector_suite.rb'
   sh 'ruby1.8.6 test/assert2_suite.rb'
   sh 'ruby1.9.0 test/assert2_suite.rb'
   sh 'ruby1.9.1 test/assert2_suite.rb'
