@@ -194,6 +194,9 @@ expressions, so you can interrogate related variables in one expression:
     end
   end
 #!end_panel!
+#!no_doc!
+if RubyReflector::HAS_RIPPER
+#!doc!
 =begin
 Warning: Put Assertions on Separate Lines
 
@@ -204,7 +207,6 @@ Do not, for example, put two assertions in one line, because the first one will
 confuse the second one:
 =end
   def test_put_assertions_on_separate_lines
-    return # FIXME
     x = 42
     assert_flunk /not like this/ do  #  but the outer assertion did not fail!
 
@@ -213,6 +215,9 @@ confuse the second one:
     end
   end
 #!end_panel!
+#!no_doc!
+end # if RubyReflector::HAS_RIPPER
+#!doc!
 =begin
 Warning: Assertions Repeat their Side-Effects
 
