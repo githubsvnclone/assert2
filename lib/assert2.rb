@@ -105,6 +105,17 @@ module Test; module Unit; module Assertions
       return nil
     end
     
+    def __evaluate_diagnostics
+      @__additional_diagnostics.each_with_index do |d, x|
+        @__additional_diagnostics[x] = d.call if d.respond_to? :call
+      end
+    end  #  CONSIDER  pass the same args as blocks take?
+
+    def __build_message(reflection)
+      __evaluate_diagnostics
+      return (@__additional_diagnostics.uniq + [reflection]).compact.join("\n")
+    end  #  TODO  move this fluff to the ruby_reflector!
+
     def format_inspection(inspection, spaces)
       spaces = ' ' * spaces
       inspection = inspection.gsub('\n'){ "\\n\" +\n \"" } if inspection =~ /^".*"$/

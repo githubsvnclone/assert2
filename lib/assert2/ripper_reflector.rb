@@ -12,13 +12,17 @@ module Test; module Unit; module Assertions
     attr_writer   :block
 
     def initialize(called = '')
-      source = split_and_read(called)
-      @ripped = rip(source) if source
+      reset(called)
       @reflect = ''
       @captures = []
       @line_number = nil
     end
 
+    def reset(called)
+      source = split_and_read(called)
+      @ripped = rip(source) if source
+    end
+    
     def rip(lines)
       lines = [lines].flatten
       x = 0
@@ -694,6 +698,24 @@ module Test; module Unit; module Assertions
 
       return format_assertion_result(assertion_source, inspection) + 
                format_captures
+    end
+
+    def __reflect_assertion(called, options, block, got)
+      effect = self
+      effect.args = *options[:args]
+      effect.block = block
+      reset(called)
+      return effect.reflect_assertion(block, got)  #  TODO  merge this and its copies
+    end
+
+    def diagnose(diagnostic = nil, got = nil, called = caller[0],
+                  options = {}, block = nil, additional_diagnostics)
+      @__additional_diagnostics = additional_diagnostics
+  #    rf.diagnose(diagnostic, got, called, options, block, @__additional_diagnostics)
+      options = { :args => [] }.merge(options)
+      # CONSIDER only capture the block_vars if there be args?
+      @__additional_diagnostics.unshift diagnostic
+      return __build_message(__reflect_assertion(called, options, block, got))
     end
 
   end
