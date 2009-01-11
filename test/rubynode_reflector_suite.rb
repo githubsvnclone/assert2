@@ -162,19 +162,19 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_op_asgn_or
-    return # FIXME
+    # return # FIXME
     x = nil
     assert_equal 'x ||= 42', reflect_source{ x ||= 42 }
   end
 
   def test_broken_parens
-    return # FIXME
+    # return # FIXME
     assert_equal '( ( ( node[:head] ).last() ) or ( [] ) ).each(){}',
       reflect_source{ (node[:head].last || []).each{} }
   end
 
   def test_violate_law_of_demeter
-    return # FIXME
+    # return # FIXME
     assert_equal   'node[:body]',          reflect_source{ node[:body] }
     assert_equal '( node[:body] ).last()', reflect_source{ node[:body].last }
 
