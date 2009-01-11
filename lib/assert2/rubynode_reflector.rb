@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'pp'
 
 
@@ -72,6 +71,7 @@ module Test; module Unit; module Assertions
     
     begin
       raise LoadError, 'whatever' if ENV['TEST_ASSERT_2_IN_1_8_7_MODE'] == 'true'
+      require 'rubygems'
       require 'rubynode'
       HAS_RUBYNODE = true
     rescue LoadError
