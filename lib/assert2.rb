@@ -1,5 +1,14 @@
 require 'test/unit'
 
+#  FIXME  the first failing assertion of a batch should suggest you get with Ruby1.9...
+#  TODO  install Coulor
+#  TODO  add :verbose => option to assert{}
+#  TODO  pay for Staff Benda Bilili  ALBUM: Tr�s Tr�s Fort (Promo Sampler) !
+
+  #~ def colorize(whatever)
+    #~ # FIXME stop ignoring this and start colorizing v2.1!
+  #~ end
+
 if RUBY_VERSION < '1.9.0'
   require 'assert2/rubynode_reflector'  # FIXME default to null_reflector if rubynode not available
 else
