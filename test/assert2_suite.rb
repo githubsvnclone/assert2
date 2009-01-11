@@ -315,5 +315,15 @@ to recover some 1.8.6 stability!
 
   #  TODO  the =begin header can be multiple lines, down to a space!
 
+  def test_assert_2_0
+    x = 42
+    assert{ x == 42 }
+  end
+
+  def test_assert_
+    x = 42
+    assert_{ x == 42 }  #  TODO  retire this silly thing
+  end
+
 end
 

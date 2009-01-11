@@ -5,16 +5,6 @@ class Assert2Suite < Test::Unit::TestCase #:nodoc:
 
   def setup;  colorize(true);  end
 
-  def test_assert_2_0
-    x = 42
-    assert{ x == 42 }
-  end
-
-  def test_assert_
-    x = 42
-    assert_{ x == 42 }  #  TODO  retire this silly thing
-  end
-
   def test_assert_with_linefeeds
     x = 42
     return unless RubyReflector::HAS_RUBYNODE
