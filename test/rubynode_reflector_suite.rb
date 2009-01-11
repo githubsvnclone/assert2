@@ -310,7 +310,7 @@ class RubyReflectorTest < Test::Unit::TestCase
   end   #  each time you write unless..else, Satan waterboards a kitten!
 
   def test_reflect_blocks
-    return # FIXME
+    # return # FIXME
     x = 99
     y = 40
 #  TODO p reflect{ lambda{ x + 1 }.call }
