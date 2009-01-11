@@ -136,7 +136,7 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_bug_in_args_opcodes   #  can Ruby do this one??
-    return # FIXME
+    #~ return # FIXME
     # colorize(:always)
 
     assert do
@@ -565,13 +565,11 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_reflect_inverse_parens
-    #~ return # FIXME
     reflection = reflect{ q = 21 + (21 * 1) }
     assert{ reflection.index("q = 21 + ( 21 * 1 )") }
   end
 
   def test_reflect_functions
-    #~ return # FIXME
     x = 42
     y = 43
     foo = Foo.new
@@ -587,7 +585,7 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_backticks
-    return # FIXME
+    #~ return # FIXME
     assert{ reflect_source{ `exon is #{foo}` } == "`exon is \#{ foo }`" }
     assert{ reflect_source{ `hatch is \#` } == "`hatch is #`" }
     assert{ reflect_source{ `intron is \#{nope` } == "`intron is \\\#{nope`" }
@@ -598,7 +596,7 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_reflect_literal_strings
-    return # FIXME
+    #~ return # FIXME
     colorize(false)
     x = '42'
     y =   1
@@ -612,7 +610,7 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_reflect
-    return # FIXME
+    #~ return # FIXME
     x = 42
     y = 43
     assert{ reflect{  x == 42 }.index("x == 42\t--> true"       ) == 0 }
