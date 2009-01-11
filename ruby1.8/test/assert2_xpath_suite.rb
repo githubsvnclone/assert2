@@ -1,1 +1,0 @@
-load File.dirname(__FILE__) + '/../../ruby1.9/test/assert2_xpath_suite.rb'
