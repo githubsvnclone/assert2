@@ -332,6 +332,23 @@ to recover some 1.8.6 stability!
     assert_flunk /message/ do  assert x == 42, 'message'  end
   end
   
+  def test_assert_with_linefeeds
+    x = 42
+    return unless RubyReflector::HAS_RUBYNODE
+    diagnostic = assert_flunk /x.*42/ do
+                   assert{ x ==
+                               43 }
+                 end
+    return # TODO  attend to linefeeds in 1.8 code reflections
+    
+    assert{ diagnostic =~ /x ==\n\s+43/ }
+  end
+
+  def test_deny_2_0
+    x = 43
+    deny{ x == 42 }
+  end
+
   #############################################################
   ######## for manual tests
 

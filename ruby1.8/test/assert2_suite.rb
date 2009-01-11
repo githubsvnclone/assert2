@@ -5,23 +5,6 @@ class Assert2Suite < Test::Unit::TestCase #:nodoc:
 
   def setup;  colorize(true);  end
 
-  def test_assert_with_linefeeds
-    x = 42
-    return unless RubyReflector::HAS_RUBYNODE
-    diagnostic = assert_flunk /x.*42/ do
-                   assert{ x ==
-                               43 }
-                 end
-    return # TODO  attend to linefeeds in 1.8 code reflections
-    
-    assert{ diagnostic =~ /x ==\n\s+43/ }
-  end
-
-  def test_deny_2_0
-    x = 43
-    deny{ x == 42 }
-  end
-
   def test_catch_exceptions
     x = 42
     return unless RubyReflector::HAS_RUBYNODE
@@ -49,7 +32,7 @@ class Assert2Suite < Test::Unit::TestCase #:nodoc:
   end
 
   def test_flunk_2_0
-    return unless RubyReflector::HAS_RUBYNODE
+# FIXME    return unless RubyReflector::HAS_RUBYNODE
     x = 43
     assert_flunk /43.*but.*42/m    do  assert_equal x, 42           end
     assert_flunk /x == 42/         do  assert_{ x == 42 }           end
