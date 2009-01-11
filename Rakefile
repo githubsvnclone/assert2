@@ -1,10 +1,10 @@
 require 'fileutils'
 
 task :default do
-#  sh 'ruby1.8.6 test/ruby_reflector_suite.rb'
+# FIXME  sh 'ruby1.8.6 test/ruby_reflector_suite.rb'
   sh 'ruby1.8.6 test/assert2_suite.rb'
-#  sh 'ruby1.8.6 test/assert2_xpath_suite.rb'
-#  sh 'ruby1.8.6 test/assert2_utilities_suite.rb'
+# FIXME sh 'ruby1.8.6 test/assert2_xpath_suite.rb'
+# FIXME sh 'ruby1.8.6 test/assert2_utilities_suite.rb'
 #  #sh 'ruby1.8.6 test/assert2_shoulda_suite.rb'
 
 end
