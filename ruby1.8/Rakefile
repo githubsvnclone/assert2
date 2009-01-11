@@ -9,5 +9,6 @@ end
 
 task :int => :default do
   sh 'svn commit --message development'
+  sh 'svn commit --message development lib/assert2/common'
   sh 'svn update ..'
 end
