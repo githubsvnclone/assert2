@@ -322,8 +322,17 @@ to recover some 1.8.6 stability!
 
   def test_assert_
     x = 42
-    assert_{ x == 42 }  #  TODO  retire this silly thing
+    assert_{ x == 42 }  #  FIXME  retire this silly thing
   end
+
+  def test_assert
+    assert_flunk /x == 42.*false.*x \s*--> 43/m do
+      x = 43
+      assert{ x == 42 }
+    end
+  end
+  
+#  FIXME test that, in 1.8.7 mode, we at least reflect our diagnostics
 
   def test_assert_classic_message
     x = 41

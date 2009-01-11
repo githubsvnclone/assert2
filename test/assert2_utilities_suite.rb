@@ -7,13 +7,6 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     colorize(false)
   end
 
-  def test_assert
-    assert_flunk /x == 42.*false.*x \s*--> 43/m do
-      x = 43
-      assert{ x == 42 }
-    end
-  end
-
   def test_deny_everything
     assert_flunk /x.*true.*\s+--> 42/m do
       x = 42
