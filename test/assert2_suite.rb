@@ -215,9 +215,6 @@ confuse the second one:
     end
   end
 #!end_panel!
-#!no_doc!
-end # if RubyReflector::HAS_RIPPER
-#!doc!
 =begin
 Warning: Assertions Repeat their Side-Effects
 
@@ -233,7 +230,6 @@ FIXME link out to Assemble Activate Assert pattern here
 Do not, for example, do this:
 =end
   def test_write_assertions_without_side_effects
-    return # FIXME
     x = 42
 
     assert_flunk '(x += 1) == 44 --> true' do  #  note the diagnostic says we were correct!!
@@ -243,8 +239,13 @@ Do not, for example, do this:
     end
   end
 #!end_panel!
+#!no_doc!
+end # if RubyReflector::HAS_RIPPER
+#!doc!
 =begin
 What about Ruby 1.8.7?
+
+FIXME redo!
 
 <code>assert{ 2.0 }</code> uses RubyNode, which works with 1.8.6 and lower.
 <code>assert{ 2.1 }</code> uses Ripper, which is built into Ruby 1.9 and up.
