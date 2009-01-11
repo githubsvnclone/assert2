@@ -179,7 +179,6 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_assign_splat
-    # return # FIXME
     assert_equal '( name, pops, rets, pushs1, pushs2 = ' +
                     '*calc_stack(insn, from, after, opops) )',
       reflect_source{
@@ -189,22 +188,18 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_assign_arrays
-    # return # FIXME
     assert_equal '( a, b = 1, 2 )', reflect_source{ ( a, b = 1, 2 ) }
   end
 
   def test_array_bug
-    # return # FIXME
     assert_equal '42, 43, 44', reflect_source{ [ 42, 43, 44 ] }
   end
 
   def test_to_ary
-    # return # FIXME
     assert_equal '( a, b = foo )', reflect_source{ ( a, b = foo ) }
   end
 
   def test_mix_conditionals_and_matchers
-    # return # FIXME
     assert_equal "def we_b_op(zone)\n" +
                    "return ( ( ( zone[:mid] ) and " +
                      "( (not(/^[a-z]/i =~ ( zone[:mid] ).to_s())) ) ) )\n" +
@@ -225,7 +220,6 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_collect_intermediate_evaluations
-    # return # FIXME
     x = 42
     y = 41
     rf = RubyReflector.new
@@ -255,13 +249,11 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_cvasgn
-    # return # FIXME
     assert_equal '@@cvasgn = @@froot_loop',
       reflect_source{ @@cvasgn = @@froot_loop }
   end
 
   def test_empty_goalposts
-    # return # FIXME
     assert_equal 'lambda{||}',      reflect_source{ lambda{ | |    } }
     assert_equal 'lambda{|| 42 }',  reflect_source{ lambda{ | | 42 } }
     assert_equal 'lambda{|*| 42 }', reflect_source{ lambda{ |*| 42 } }
@@ -275,7 +267,6 @@ class RubyReflectorTest < Test::Unit::TestCase
 #  ERGO  learn what's Regexp.union do?
 
   def test_trap_block_args
-    # return # FIXME
     rf = RubyReflector.new
     assert{ rf.captured_block_vars.nil? }
     rf.absorb_block_args ['assert do']
@@ -289,7 +280,6 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_format_intermediate_evaluations
-    # return # FIXME
     colorize(false)
     x = 42
     rf = RubyReflector.new
