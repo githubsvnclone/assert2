@@ -33,7 +33,8 @@ module Test; module Unit; module Assertions
   #
   def reflect(&block)
     result = block.call
-    rf = RubyReflector.new(block)
+    rf = RubyReflector.new
+    rf.block = block
     
     begin
       waz = rf.colorize?

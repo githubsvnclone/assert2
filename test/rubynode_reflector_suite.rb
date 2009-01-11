@@ -310,11 +310,9 @@ class RubyReflectorTest < Test::Unit::TestCase
   end   #  each time you write unless..else, Satan waterboards a kitten!
 
   def test_reflect_blocks
-    return # FIXME
     x = 99
     y = 40
 #  TODO p reflect{ lambda{ x + 1 }.call }
-
     assert_match /lambda\{|| x \+ 1 \}.call\(\)\t--> 100.*call.*100/m, reflect{ lambda{ x + 1 }.call }
     assert_match /proc\{|| y \+ 2 \}.*call\(\)\t--> 42/, reflect{ proc{ y + 2 }.call }
     assert_match /lambda\{|q| x \+ q \}.*call\(1\)\t--> 100.*q.*\?/m, reflect{ lambda{|q| x + q }.call(1) }
