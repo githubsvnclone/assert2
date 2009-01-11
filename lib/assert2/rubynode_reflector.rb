@@ -59,8 +59,6 @@ module Test; module Unit; module Assertions
   #  as another string.
   #  
   def reflect_string(string)
-    #p HAS_RUBYNODE  #  FIXME
-    #p 'HAS_RUBYNODE'
     rf = RubyReflector.new # def initialize
     rf.block = proc{}
     rf.reflect_values = false
