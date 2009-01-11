@@ -282,10 +282,14 @@ to recover some 1.8.6 stability!
   end
 
   def test_extra_assertion_diagnostics_with_ripper
-    return # FIXME
     tattle = "doc says what's the condition?"
-    
-    assert_flunk /the condition.*tattle/m do
+    expect = if RubyReflector::HAS_RIPPER
+               /the condition.*tattle/m
+             else
+               /the condition/
+             end
+      
+    assert_flunk expect do
       x = 43
       assert(tattle){ x == 42 }
     end

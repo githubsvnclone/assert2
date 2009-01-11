@@ -4,7 +4,9 @@ require 'ripper'  #   note we only work with Ruby >= 1.9 !
 module Test; module Unit; module Assertions
 
   class RubyReflector  #  this class turns hamburger back into live cattle
-
+    HAS_RUBYNODE = false
+    HAS_RIPPER = true
+    
     attr_reader   :assertion_source,
                   :captures,
                   :reflect
