@@ -49,14 +49,19 @@ module Test; module Unit; module Assertions
   #  a string of disassembled Ruby
   #  
   def reflect_source(&block)
-    return RubyReflector.new(block, false).result
+    rf = RubyReflector.new(nil, false)
+    rf.block = block
+    return rf.result
   end
 
   #  This compiles a string and +reflect+s its source...
   #  as another string.
   #  
   def reflect_string(string)
-    rf = RubyReflector.new(proc{})
+    p HAS_RUBYNODE  #  FIXME
+    p 'HAS_RUBYNODE'
+    rf = RubyReflector.new # def initialize
+    rf.block = proc{}
     rf.reflect_values = false
       # pp string.parse_to_nodes.transform
     got = rf.reflect_nodes(string.parse_to_nodes)

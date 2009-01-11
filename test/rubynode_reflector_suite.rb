@@ -411,7 +411,6 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_escaped_regices
-    return # FIXME
     assert{ reflect_source{ /hatch is \#/ } == "/hatch is \\#/" }
     assert{ reflect_source{ /solidus is \\/ } == "/solidus is \\\\/" }
     assert{ reflect_source{ /ticks are \`\'\"/ } == "/ticks are \\`\\'\\\"/" }
