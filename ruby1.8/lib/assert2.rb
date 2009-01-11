@@ -122,32 +122,6 @@ module Test; module Unit; module Assertions
     procks.each do |prock|  assert(fuss, &prock);  end
   end
 
-  private
-
-#  ERGO  write "The Elements of Ruby Style"
-
-    def diagnose(diagnostic, result, called, options, block)
-      @__additional_diagnostics.unshift diagnostic
-      rf = RubyReflector.new
-      rf.args = options.fetch(:args, [])
-      polarity = 'assert{ '
-      lines = rf.split_and_read(called) 
-
-      if lines.first =~ /^\s*(assert|deny)/
-        polarity = $1 + '{ '
-      end
-      
-      rf.absorb_block_args lines 
-      rf.block = block
-      effect = " - should #{ 'not ' if polarity =~ /deny/ }pass\n"
-
-      report = rf.magenta(polarity) + rf.bold(rf.result) + rf.magenta(" }") + 
-                rf.red(arrow_result(result) + effect) + 
-                rf.format_evaluations
-
-      return __build_message(report)
-    end
-
 end ; end ; end  #  "Eagle-eyes it!"
 
 

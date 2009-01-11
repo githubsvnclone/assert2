@@ -16,22 +16,7 @@ require 'assert2/common/assert2_utilities'
 module Test; module Unit; module Assertions
 
   def colorize(whatever)
-    # TODO stop ignoring this and start colorizing v2.1!
-  end
-
-  def __reflect_assertion(called, options, block, got)
-    effect = RubyReflector.new(called)
-    effect.args = *options[:args]
-    return effect.reflect_assertion(block, got)  #  TODO  merge this and its copies into assert2_utilities
-  end
-
-  #!doc!
-  def diagnose(diagnostic = nil, got = nil, called = caller[0],
-                options = {}, block = nil)                    #   TODO  make this directly callable
-    options = { :args => [] }.merge(options)
-     # CONSIDER only capture the block_vars if there be args?
-    @__additional_diagnostics.unshift diagnostic
-    return __build_message(__reflect_assertion(called, options, block, got))
+    # FIXME stop ignoring this and start colorizing v2.1!
   end
 
 end; end; end

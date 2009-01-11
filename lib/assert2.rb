@@ -1,5 +1,10 @@
 require 'test/unit'
-require 'assert2/ruby_reflector'
+
+if RUBY_VERSION < '1.9.0'
+  require 'assert2/rubynode_reflector'  # FIXME default to null_reflector if rubynode not available
+else
+  require 'assert2/ripper_reflector'
+end
 
 #  CONSIDER  fix if an assertion contains more than one command - reflect it all!
 
@@ -21,17 +26,6 @@ module Test; module Unit; module Assertions
     
     @__additional_diagnostics += [whatever, block]  # note .compact will take care of them if they don't exist
   end
-
-  def __evaluate_diagnostics
-    @__additional_diagnostics.each_with_index do |d, x|
-      @__additional_diagnostics[x] = d.call if d.respond_to? :call
-    end
-  end  #  CONSIDER  pass the same args as blocks take?
-
-  def __build_message(reflection)
-    __evaluate_diagnostics
-    return (@__additional_diagnostics.uniq + [reflection]).compact.join("\n")
-  end  #  TODO  move this fluff to the ruby_reflector!
 
   def assert(*args, &block)
   #  This assertion calls a block, and faults if it returns
@@ -111,19 +105,6 @@ module Test; module Unit; module Assertions
       return nil
     end
     
-    def reflect_assertion(block, got)
-      self.block = block
-      
-      extract_block.each do |statement|
-        sender statement
-      end
-      
-      inspection = got.pretty_inspect
-
-      return format_assertion_result(assertion_source, inspection) + 
-               format_captures
-    end
-
     def format_inspection(inspection, spaces)
       spaces = ' ' * spaces
       inspection = inspection.gsub('\n'){ "\\n\" +\n \"" } if inspection =~ /^".*"$/
@@ -237,6 +218,30 @@ module Test; module Unit; module Assertions
 
   alias denigh deny  #  to line assert{ ... } and 
                      #          denigh{ ... } statements up neatly!
+
+  #~ def __reflect_assertion(called, options, block, got)
+    #~ effect = RubyReflector.new(called)
+    #~ effect.args = *options[:args]
+    #~ return effect.reflect_assertion(block, got)
+  #~ end
+
+  #~ def __reflect_assertion(called, options, block, got)
+    #~ effect = RubyReflector.new(called)
+    #~ effect.args = *options[:args]
+    #~ effect.block = block
+    #~ return effect.reflect_assertion(block, got)  #  TODO  merge this and its copies into assert2_utilities
+  #~ end
+
+  #!doc!
+  def diagnose(diagnostic = nil, got = nil, called = caller[0],
+                options = {}, block = nil)                    #   TODO  make this directly callable
+    rf = RubyReflector.new
+    rf.diagnose(diagnostic, got, called, options, block, @__additional_diagnostics)
+    #~ options = { :args => [] }.merge(options)
+     #~ # CONSIDER only capture the block_vars if there be args?
+    #~ @__additional_diagnostics.unshift diagnostic
+    #~ return __build_message(__reflect_assertion(called, options, block, got))
+  end
 
 end ; end ; end
 

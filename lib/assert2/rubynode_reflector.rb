@@ -43,12 +43,7 @@ module Test; module Unit; module Assertions
       rf.colorize(waz)
     end
   end
-
-  def arrow_result(result) #:nodoc:
-    return "\t--> #{ result.inspect }"
-  end
-  private :arrow_result
-  
+ 
   #  This +reflect+s a block of code, /without/ evaluating it.
   #  The function only compiles the source and reflects it as
   #  a string of disassembled Ruby
@@ -76,14 +71,15 @@ module Test; module Unit; module Assertions
     rescue LoadError
       HAS_RUBYNODE = false
     end
-    
+
     attr_reader :evaluations,
                 :result,
                 :transformation
     attr_writer :block,
                 :reflect_values
 
-    def initialize(yo_block = nil, reflect_values = true)  #  note that a block, from your context, is not optional
+    def initialize(called = nil, yo_block = nil, reflect_values = true)  #  note that a block, from your context, is not optional
+        #  FIXME  these args are bogus use or lose
       @reflect_values = reflect_values
       @evaluations    = []
       @result         = ''
@@ -814,7 +810,45 @@ p node
       return head_(node) + ', *' + 
                nest_if(node[:body].first == :array, '[', ']'){ body_(node) }
     end
-       
+
+    def __evaluate_diagnostics
+      @__additional_diagnostics.each_with_index do |d, x|
+        @__additional_diagnostics[x] = d.call if d.respond_to? :call
+      end
+    end  #  CONSIDER  pass the same args as blocks take?
+
+    def __build_message(reflection)
+      __evaluate_diagnostics
+      return (@__additional_diagnostics.uniq + [reflection]).compact.join("\n")
+    end  #  TODO  move this fluff to the ruby_reflector!
+
+    def diagnose(diagnostic, result, called, options, block, additional_diagnostics)
+      @__additional_diagnostics = additional_diagnostics
+      @__additional_diagnostics.unshift diagnostic
+      self.args = options.fetch(:args, [])
+      rf = self
+      polarity = 'assert{ '
+      lines = rf.split_and_read(called) 
+
+      if lines.first =~ /^\s*(assert|deny)/
+        polarity = $1 + '{ '
+      end
+      
+      rf.absorb_block_args lines 
+      rf.block = block
+      effect = " - should #{ 'not ' if polarity =~ /deny/ }pass\n"
+
+      report = rf.magenta(polarity) + rf.bold(rf.result) + rf.magenta(" }") + 
+                rf.red(arrow_result(result) + effect) + 
+                rf.format_evaluations
+
+      return __build_message(report)
+    end
+    
+    def arrow_result(result) #:nodoc:
+      return "\t--> #{ result.inspect }"
+    end
+
   end
 
 end; end; end

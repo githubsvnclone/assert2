@@ -683,13 +683,20 @@ module Test; module Unit; module Assertions
       puts "    rippage = #{ args.pretty_inspect } "
     end
 
+    def reflect_assertion(block, got)
+      self.block = block
+      
+      extract_block.each do |statement|
+        sender statement
+      end
+      
+      inspection = got.pretty_inspect
+
+      return format_assertion_result(assertion_source, inspection) + 
+               format_captures
+    end
+
   end
   
-  def __reflect_assertion(called, options, block, got)
-    effect = RubyReflector.new(called)
-    effect.args = *options[:args]
-    return effect.reflect_assertion(block, got)
-  end
-
 end; end; end
 

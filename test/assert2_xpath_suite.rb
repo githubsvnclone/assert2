@@ -81,7 +81,7 @@ part that failed.
 =end
 #!end_panel!
 #!no_doc!
-require File.dirname(__FILE__) + '/../../test_helper'
+require File.dirname(__FILE__) + '/test_helper'
 require 'assert2/ripdoc' if RUBY_VERSION >= '1.9.0'
 require 'assert2/xpath'
 
