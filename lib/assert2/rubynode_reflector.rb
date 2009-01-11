@@ -38,7 +38,7 @@ module Test; module Unit; module Assertions
     begin
       waz = rf.colorize?
       rf.colorize(false)
-      return rf.result + arrow_result(result) + "\n" + rf.format_evaluations
+      return rf.result + rf.arrow_result(result) + "\n" + rf.format_evaluations
     ensure
       rf.colorize(waz)
     end
