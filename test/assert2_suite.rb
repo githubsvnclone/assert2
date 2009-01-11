@@ -325,6 +325,13 @@ to recover some 1.8.6 stability!
     assert_{ x == 42 }  #  TODO  retire this silly thing
   end
 
+  def test_assert_classic_message
+    x = 41
+    expect = RUBY_VERSION > '1.9.0' ? /Failed/ : /false/
+    assert_flunk expect    do  assert x == 42             end
+    assert_flunk /message/ do  assert x == 42, 'message'  end
+  end
+  
   #############################################################
   ######## for manual tests
 

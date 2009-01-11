@@ -64,12 +64,6 @@ class Assert2Suite < Test::Unit::TestCase #:nodoc:
     assert_flunk /x.* > 43/ do  assert x > 430, 'x should be > 43'  end
   end
 
-  def test_assert_classic
-    x = 41
-    assert_flunk /false/   do  assert x == 42             end
-    assert_flunk /message/ do  assert x == 42, 'message'  end
-  end
-
   def test_assert_yin_yang
     q = 41
 
@@ -119,5 +113,4 @@ class Assert2Suite < Test::Unit::TestCase #:nodoc:
     end
   end
 
-  
 end
