@@ -36,6 +36,21 @@ module Test; module Unit; module Assertions
     return exception.message
   end
 
+  # TODO rebuild this
+  def deny_raise_message(types, matcher, diagnostic = nil, &block) #:nodoc:
+    exception = assert_raise_message(types, //, diagnostic, &block)
+    
+    assert_no_match matcher,
+                 exception.message,
+                 [ diagnostic, 
+                   "exception #{ exception.class.name 
+                     } with this message should not raise from block:", 
+                   "\t"+reflect_source(&block).split("\n").join("\n\t")
+                   ].compact.join("\n")
+    
+    return exception.message
+  end
+
   def assert_flunk(matcher, message = nil, &block)
     assert_raise_message FlunkError, matcher, message, &block
   end

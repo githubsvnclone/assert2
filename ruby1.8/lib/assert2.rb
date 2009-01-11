@@ -3,42 +3,6 @@
 
 module Test; module Unit; module Assertions
 
-  def assert_raise_message(types, matcher, diagnostic = nil, &block)
-    args = [types].flatten + [diagnostic]
-    exception = assert_raise(*args, &block)
-    
-    assert_match matcher,  #  TODO  merge this stuff into the utilities
-                 exception.message,
-                 [ diagnostic, 
-                   "incorrect #{ exception.class.name 
-                     } message raised from block:", 
-                   "\t"+reflect_source(&block).split("\n").join("\n\t")
-                   ].compact.join("\n")
-
-    return exception
-  end
-
-  def deny_raise_message(types, matcher, diagnostic = nil, &block) #:nodoc:
-    exception = assert_raise_message(types, //, diagnostic, &block)
-    
-    assert_no_match matcher,
-                 exception.message,
-                 [ diagnostic, 
-                   "exception #{ exception.class.name 
-                     } with this message should not raise from block:", 
-                   "\t"+reflect_source(&block).split("\n").join("\n\t")
-                   ].compact.join("\n")
-    
-    return exception.message
-  end
-
-  #~ def assert_flunked(gripe, diagnostic = nil, &block) #:nodoc:
-    #~ assert_raise_message Test::Unit::AssertionFailedError,
-                         #~ gripe,
-                         #~ diagnostic,
-                        #~ &block
-  #~ end
-
   def deny_flunked(gripe, diagnostic = nil, &block) #:nodoc:
     deny_raise_message Test::Unit::AssertionFailedError,
                        gripe,
