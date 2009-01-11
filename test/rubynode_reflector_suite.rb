@@ -489,20 +489,17 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_reflect_instance_of
-    #~ return # FIXME
     that = self  #  ERGO  can't we bind to this context correctly?
     assert_match /that.*instance_of?.*Test::Unit::TestCase/, reflect{ that.instance_of?(Test::Unit::TestCase) }
     assert_match /that.*kind_of?.*Test::Unit::TestCase/, reflect{ that.kind_of?(Test::Unit::TestCase) }
   end
 
   def test_reflect_operator
-    #~ return # FIXME
     f = -4.2
     assert_{ /f >= 0.0/ =~ reflect{ f >= 0.0 } }
   end
 
   def test_reflect_nil_true_false
-    #~ return # FIXME
     q, @t, @f = nil, true, false
     assert_{ /nil/           =~ reflect{ nil         } }
     assert_{ /nil\.nil\?/    =~ reflect{ nil.nil?    } }
@@ -514,7 +511,6 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_operator_madness
-    #~ return # FIXME
     colorize(false)
     assert_{ reflect{ q = 40 }.index('q = 40') }
     n = 12
@@ -547,7 +543,6 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_reflect_linefeeds_and_parens
-    #~ return # FIXME
     reflection = reflect do
                    q = 42
                    q == (21 + 21) * 1
