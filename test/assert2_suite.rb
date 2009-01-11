@@ -297,7 +297,6 @@ to recover some 1.8.6 stability!
   end
 
   def test_adjust_linefeeds_in_diagnostics
-    return # FIXME
     diagnostic = assert_flunk /nope/ do
                   x = "line with\nlinefeed"
                   assert{ x =~ /nope/ }
