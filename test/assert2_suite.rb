@@ -104,7 +104,7 @@ are too cheerful and happy, to bring them down:
 string. At fault time, this appears in the output diagnostic, above all other spew:
 =end
   def test_diagnostic_string
-    return # FIXME
+    #~ return # FIXME
     x = 42
     assert_flunk 'medium rare' do
       
@@ -122,7 +122,7 @@ Custom test-side methods which know they are inside
 can use this to explain what's wrong with some situation.
 =end
   def test_add_diagnostic
-    return # FIXME
+    #~ return # FIXME
     assert_flunk /silly Rabbi!/ do
 
       deny do
@@ -141,7 +141,7 @@ To keep all your assertions fast, wrap your diagnostics
 in blocks. They only call when their assertions fail fail:
 =end
   def test_add_diagnostic_lambda
-    return # FIXME
+    #~ return # FIXME
     ark = ''
     assert_flunk /^remarkable/ do
 
@@ -175,7 +175,7 @@ Error Handling
 <code>assert{}</code> interprets program errors and decorates their diagnostics:
 =end
   def test_error_handling
-    return # FIXME
+    #~ return # FIXME
     assert_flunk /ZeroDivisionError: divided by 0/ do
 
       assert{ 1 / 0 }  # would you believe some math professors frown upon that?!
