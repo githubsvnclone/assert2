@@ -254,6 +254,48 @@ module Test; module Unit; module Assertions
     #~ return __build_message(__reflect_assertion(called, options, block, got))
   end
 
+if RubyReflector::HAS_RUBYNODE
+  #  wrap this common idiom:
+  #    foo = assemble()
+  #    deny{ foo.bar() }
+  #    foo.activate()
+  #    assert{ foo.bar() }
+  #
+  #  that becomes:
+  #    foo = assemble()
+  #
+  #    assert_yin_yang proc{ foo.bar() } do
+  #      foo.activate()
+  #    end
+  #
+  def assert_yin_yang(*args, &block)
+      # prock(s), diagnostic = nil, &block)
+    procks, diagnostic = args.partition{|p| p.respond_to? :call }
+    block ||= procks.shift
+    source = reflect_source(&block)
+    fuss = [diagnostic, "fault before calling:", source].compact.join("\n")
+    procks.each do |prock|  deny(fuss, &prock);  end
+    block.call
+    fuss = [diagnostic, "fault after calling:", source].compact.join("\n")
+    procks.each do |prock|  assert(fuss, &prock);  end
+  end
+
+  #  the prock assertion must pass on both sides of the called block
+  #
+  def deny_yin_yang(*args, &block)
+      # prock(s), diagnostic = nil, &block)
+    procks, diagnostic = args.partition{|p| p.respond_to? :call }
+    block ||= procks.shift
+    source = reflect_source(&block)
+    fuss = [diagnostic, "fault before calling:", source].compact.join("\n")
+    procks.each do |prock|  assert(fuss, &prock);  end
+    block.call
+    fuss = [diagnostic, "fault after calling:", source].compact.join("\n")
+    procks.each do |prock|  assert(fuss, &prock);  end
+  end
+
+end
+
 end ; end ; end
 
 class File

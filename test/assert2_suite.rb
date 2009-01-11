@@ -392,6 +392,58 @@ to recover some 1.8.6 stability!
     end
   end
 
+if RubyReflector::HAS_RUBYNODE #  TODO
+  
+  def test_assert_yin_yang
+    q = 41
+
+    assert_yin_yang lambda{ q == 42 } do
+      q += 1
+    end
+
+    deny_yin_yang lambda{ q == 42 } do
+      q += 0
+    end
+  end
+
+  def oO(&block); lambda &block;  end
+
+  def test_assert_yin_yang_postfix_style
+    q = 41
+
+    assert_yin_yang oO{ q +=  1 },
+                    oO{ q == 42 }
+  end
+
+  def test_deny_yin_yang_postfix_style
+    q = 41
+    deny_yin_yang oO{ q +=  0 },
+                  oO{ q == 41 }
+
+    assert_flunk /fault before calling/ do
+      deny_yin_yang oO{ q +=  0 },
+                    oO{ q == 42 }
+    end
+  end
+
+  def test_deny_multiple_yin_yangs
+    q = 41
+    whatever = 1
+    deny_yin_yang oO{ q +=  0 },
+                  oO{ q == 41 },
+                  oO{ whatever == 1 }
+  end
+
+  def test_assert_yin_yang_corn_plain
+    q = 41
+
+    assert_flunk /it broke!/ do
+      assert_yin_yang oO{ q +=  0 }, 'it broke!',
+                      oO{ q == 42 }
+    end
+  end
+end
+
   #############################################################
   ######## for manual tests
 
