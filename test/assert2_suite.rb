@@ -57,6 +57,7 @@ class Assert21Suite < Test::Unit::TestCase
     @effect.block = lambda{x}
   end
 
+if RubyReflector::HAS_RIPPER
 #!doc!
 =begin
 <code>assert{ <em>boolean expression</em> }</code> and Fault Diagnostics
@@ -65,7 +66,6 @@ to detect that when <code>assert{ 2.0 }</code> fails, it prints out a diagnostic
 containing the assertion's variables and values:
 =end
   def test_assert_reflects_your_expression_in_its_fault_diagnostic
-    return # FIXME
     x = 42
     assert_flunk '      assert{ x == 43 }  #  even comments reflect!
                    --> false
@@ -84,7 +84,6 @@ This shows <code>assert{}</code>'s arch-nemesis,
 are too cheerful and happy, to bring them down:
 =end
   def test_deny_reflects_your_expression_in_its_fault_diagnostic
-    return # FIXME
     x = 42
     assert_flunk '      deny{ x == 42 }
                    --> true
@@ -98,6 +97,9 @@ are too cheerful and happy, to bring them down:
     denigh{ x == 43 }  #  an alternate spelling, for smooth columns of code...
   end
 #!end_panel!
+#!no_doc!
+end # if RubyReflector::HAS_RIPPER
+#!doc!
 =begin
 <code>assert('<em>extra spew</em>'){ <em>boolean...</em> }</code>
 <code>assert{}</code> and <code>deny{}</code> take an optional first argument&mdash;a
