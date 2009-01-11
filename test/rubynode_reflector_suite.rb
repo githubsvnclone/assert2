@@ -333,7 +333,6 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_insert_critical_newlines
-    #~ return # FIXME
     assert_equal "( if ( 42 ) then ( foo << \" \"\n( if ( false ) then ( bar ) end )\n ) end )",
       reflect_source{
               if 42
@@ -359,7 +358,6 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_dont_duplicate_intermediate_evaluations
-    #~ return # FIXME
     colorize(false)
     x = 42
     rf = RubyReflector.new
@@ -373,7 +371,6 @@ class RubyReflectorTest < Test::Unit::TestCase
   ######## regices
 
   def test_match3  #  note:  where's match3?
-    #~ return # FIXME
     q = 'foobar'
     r = /^foo(bar)$/
     assert_{ /foo(bar)/ =~ reflect{ q =~ r } }
@@ -381,7 +378,7 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_reflect_regices
-    #~ return # FIXME
+
     x = '42'
     foo = Foo.new
     assert_match "/4/ =~ x\t--> 0", reflect{ /4/ =~ x }
@@ -425,14 +422,12 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_reflect_constants
-    #~ return # FIXME
     y =   6
     assert{ /LinkHogThrob == "L\#\{ 1 \+ y \}".*LinkHogThrob.*L7/m =~
                reflect{ LinkHogThrob == "L#{ 1 + y }" } }
   end
 
   def test_reflect_functions_with_arguments_splats_hashes_and_blockers
-    #~ return # FIXME
     foo      = Foo.new
     y        = 2
     splat_me = [40, 2]
@@ -465,7 +460,6 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_reflect_arrays
-    #~ return # FIXME
     colorize(false)
     assert{ '4yo2'.index('yo')   }
       deny{ '4yo2'.index('yoyo') }
@@ -486,7 +480,6 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_reflect_hash
-    return # FIXME
     colorize(false)
     a = { :href => 'Snoopy' }
     reflection = reflect{ /opy$/ =~ a[:href] }
@@ -496,20 +489,20 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_reflect_instance_of
-    return # FIXME
+    #~ return # FIXME
     that = self  #  ERGO  can't we bind to this context correctly?
     assert_match /that.*instance_of?.*Test::Unit::TestCase/, reflect{ that.instance_of?(Test::Unit::TestCase) }
     assert_match /that.*kind_of?.*Test::Unit::TestCase/, reflect{ that.kind_of?(Test::Unit::TestCase) }
   end
 
   def test_reflect_operator
-    return # FIXME
+    #~ return # FIXME
     f = -4.2
     assert_{ /f >= 0.0/ =~ reflect{ f >= 0.0 } }
   end
 
   def test_reflect_nil_true_false
-    return # FIXME
+    #~ return # FIXME
     q, @t, @f = nil, true, false
     assert_{ /nil/           =~ reflect{ nil         } }
     assert_{ /nil\.nil\?/    =~ reflect{ nil.nil?    } }
@@ -521,7 +514,7 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_operator_madness
-    return # FIXME
+    #~ return # FIXME
     colorize(false)
     assert_{ reflect{ q = 40 }.index('q = 40') }
     n = 12
@@ -554,7 +547,7 @@ class RubyReflectorTest < Test::Unit::TestCase
   end
 
   def test_reflect_linefeeds_and_parens
-    return # FIXME
+    #~ return # FIXME
     reflection = reflect do
                    q = 42
                    q == (21 + 21) * 1
