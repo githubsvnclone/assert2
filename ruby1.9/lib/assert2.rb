@@ -24,8 +24,3 @@ end; end; end
 require '../test/assert2_suite.rb' if $0 == __FILE__ and File.exist?('../test/assert2_suite.rb')
 #require 'ripdoc_suite.rb' if $0 == __FILE__ and File.exist?('ripdoc_suite.rb')
 
-class File
-  def self.write(filename, contents)
-    open(filename, 'w'){|f|  f.write(contents)  }
-  end
-end

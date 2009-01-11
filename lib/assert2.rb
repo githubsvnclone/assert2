@@ -256,3 +256,8 @@ module Test; module Unit; module Assertions
 
 end ; end ; end
 
+class File
+  def self.write(filename, contents)
+    open(filename, 'w'){|f|  f.write(contents)  }
+  end
+end

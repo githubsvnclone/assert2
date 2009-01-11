@@ -157,6 +157,3 @@ end
 
 
 require '../../test/assert_xhtml_suite.rb' if $0 == __FILE__ and File.exist?('../../test/assert_xhtml_suite.rb')
-
-
-
