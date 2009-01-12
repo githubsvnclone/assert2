@@ -245,6 +245,24 @@ module Test; module Unit; module Assertions
     flunk diagnose(diagnostic, got, caller[0], options, block)
   end  #  "You're a looney!"  -- King Arthur
 
+  def deny_(diagnostic = nil, options = {}, &block)
+      #  "None shall pass!" --the Black Knight
+      
+    options[:keep_diagnostics] or add_diagnostic :clear
+    
+    begin
+      got = block.call(*options[:args]) or (add_assertion and return true)
+    rescue FlunkError
+      raise
+    rescue => got
+      add_exception got
+    end
+  
+    flunk diagnose(diagnostic, got, caller[0], options, block)
+  end  #  "You're a looney!"  -- King Arthur
+
+#  FIXME  document why this deny_ is here, and how to alias it back to deny
+
   alias denigh deny  #  to line assert{ ... } and 
                      #          denigh{ ... } statements up neatly!
 

@@ -32,7 +32,7 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
 
     assert_flunk /on a mission/m do
       x = 42
-      deny("I'm a man that's on a mission"){ x == 42 }
+      deny_("I'm a man that's on a mission"){ x == 42 }
     end
   end
   

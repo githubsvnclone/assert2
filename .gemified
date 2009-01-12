@@ -1,10 +1,8 @@
 --- 
-:homepage: http://assert2.rubyforge.org/
-:rubyforge_project: assert2
 :author: Phlip
-:name: assert2
-:version: 0.3.1
-:dependencies: 
-- rubynode
 :summary: An assertion that reflects its block, with all intermediate values
 :email: phlip2005@gmail.com
+:name: assert2
+:homepage: http://assert2.rubyforge.org/
+:rubyforge_project: assert2
+:version: 0.3.3
