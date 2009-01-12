@@ -334,6 +334,66 @@ to recover some 1.8.6 stability!
   
 #  FIXME test that, in 1.8.7 mode, we at least reflect our diagnostics
 
+  def test_assert_args_flunk
+    assert_flunk /x.*--> 42/ do
+      assert nil, :args => [42] do |x|
+        x == 43
+      end
+    end
+  end
+
+  def test_deny_args_flunk
+    assert_flunk /x.*--> 42/ do
+      deny nil, :args => [42] do |x|
+        x == 42
+      end
+    end
+  end
+
+  def test_deny_everything
+    assert_flunk /x.*true.*\s+--> 42/m do
+      x = 42
+      deny{ x == 42 }
+    end
+  end
+
+  def test_dont_reflect_duplicated_things_twice
+    str = 'foo'
+
+    diagnostic = assert_flunk /bafoor/ do
+                   assert{ str =~ /ba#{str}r/ }
+                 end
+
+    assert{ diagnostic.scan(/str\s+--> "foo"/).length == 1 }
+  end  #  CONSIDER  do literal strings sometimes accidentally reflect??
+
+  #  TODO  don't re-reflect the top-level expression! (and account for test_write_assertions_without_side_effects)
+
+  def test_multi_line_assertion
+    return if RUBY_VERSION == '1.9.1'  # FIXME
+    assert_flunk /false.*nil/m do
+      assert do
+        false
+        42; nil
+      end
+    end
+  end
+  
+  def morgothrond(thumpwhistle)
+    return false  #  what did you think such a function would do?? (-:
+  end
+  
+  def test_morgothrond_thumpwhistle
+    thumpwistle = 42
+    
+    x = assert_raise FlunkError do
+      assert{ self.morgothrond(thumpwistle) }
+    end
+    
+    assert{ x.message =~ /thumpwistle\s+--> 42/ }
+    denigh{ x.message =~ /self.morgothrond\s+--> / }
+  end
+
   def test_assert_classic_message
     x = 41
     expect = RUBY_VERSION > '1.9.0' ? /Failed/ : /false/

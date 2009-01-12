@@ -7,13 +7,6 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     colorize(false)
   end
 
-  def test_deny_everything
-    assert_flunk /x.*true.*\s+--> 42/m do
-      x = 42
-      deny{ x == 42 }
-    end
-  end
-
   def test_assert_classic
     assert_flunk /(false. is not true)|(Failed assertion)/ do
       assert false
@@ -29,16 +22,6 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     deny{ complaint =~ /fat chance/ }
   end
 
-  def test_multi_line_assertion    
-    return if RUBY_VERSION == '1.9.1'  # TODO
-    assert_flunk /false.*nil/m do
-      assert do
-        false
-        42; nil
-      end
-    end
-  end
-  
   def test_assertion_diagnostics
     tattle = "doc says what's the condition?"
     
@@ -53,21 +36,6 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     end
   end
   
-  def morgothrond(thumpwhistle)
-    return false  #  what did you think such a function would do?? (-:
-  end
-  
-  def test_morgothrond_thumpwhistle
-    thumpwistle = 42
-    
-    x = assert_raise FlunkError do
-      assert{ self.morgothrond(thumpwistle) }
-    end
-    
-    assert{ x.message =~ /thumpwistle\s+--> 42/ }
-    denigh{ x.message =~ /self.morgothrond\s+--> / }
-  end
-
   def test_assert_diagnose
     x = 42
 
@@ -142,22 +110,6 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     deny('always consume diagnostics'){ x =~ /silly Rabbi/ }
   end
 
-  def test_assert_args_flunk
-    assert_flunk /x.*--> 42/ do
-      assert nil, :args => [42] do |x|
-        x == 43
-      end
-    end
-  end
-
-  def test_deny_args_flunk
-    assert_flunk /x.*--> 42/ do
-      deny nil, :args => [42] do |x|
-        x == 42
-      end
-    end
-  end
-
   def test_trapped_faults_decorate_with_stack_traces
     assert_flunk __FILE__ do
       assert{ 1 / 0 }
@@ -169,18 +121,6 @@ class Assert2UtilitiesSuite < Test::Unit::TestCase
     assert{ rf.format_inspection('foo'.inspect, 42) == '"foo"' }
     assert{ rf.format_value(42, 'foo') == '"foo"' }
   end
-
-  def test_dont_reflect_duplicated_things_twice
-    str = 'foo'
-
-    diagnostic = assert_flunk /bafoor/ do
-                   assert{ str =~ /ba#{str}r/ }
-                 end
-
-    assert{ diagnostic.scan(/str\s+--> "foo"/).length == 1 }
-  end  #  CONSIDER  do literal strings sometimes accidentally reflect??
-
-  #  TODO  don't re-reflect the top-level expression! (and account for test_write_assertions_without_side_effects)
 
   def test_format_multiline_inspection
     rf = RubyReflector.new

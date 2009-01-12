@@ -13,7 +13,7 @@ task :default do
   sh 'ruby1.8.6 test/assert2_utilities_suite.rb'
   # FIXME sh 'ruby1.8.7 test/assert2_utilities_suite.rb'
   sh 'ruby1.9.0 test/assert2_utilities_suite.rb'
-  sh 'ruby1.9.1 test/assert2_utilities_suite.rb'  #  FIXME  balance against assert2_suite.rb
+  sh 'ruby1.9.1 test/assert2_utilities_suite.rb'
   sh 'ruby1.9.0 test/ripdoc_suite.rb'
   sh 'ruby1.9.1 test/ripdoc_suite.rb'
   
@@ -24,13 +24,11 @@ task :default do
 end
 
 task :int => :default do
-  #sh 'svn commit --message development ruby1.8/lib/assert2/common'
-  #sleep 1
-  #sh 'svn commit --message development ruby1.9/lib/assert2/common'
-  #sleep 1
   sh 'svn commit --message development'
-  #sleep 1
-  #sh 'svn update --quiet'
+end
+
+task :zip => :default do
+  sh 'zip assert21.zip -f'
 end
 
 task :todo do
