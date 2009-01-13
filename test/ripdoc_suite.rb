@@ -8,7 +8,7 @@ HomePath = Ripdoc::HomePath
 #  CONSIDER  think of a use for the horizontal accordion, and for nesting them
 #   TODO intersticial string mashers still don't color correctly
 #   TODO make function names bigger
-# TODO  complete paths on image URLs 
+# FIXME optionally  complete paths on image URLs 
 
 
 class RipdocSuite < Test::Unit::TestCase
@@ -20,8 +20,8 @@ class RipdocSuite < Test::Unit::TestCase
   end
 
   def _test_generate_accordion_with_test_file
-    assert_xhtml Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
-    assert{ xpath('/html/head/title').text == 'assert{ 2.1 }' }
+    assert_xhtml Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.0 }')
+    assert{ xpath('/html/head/title').text == 'assert{ 2.0 }' }
     assert{ xpath(:span, style: 'display: none;').text.index('=begin') }
 
     xpath :div, :vertical_container do
@@ -33,7 +33,7 @@ class RipdocSuite < Test::Unit::TestCase
   end  #  CONSIDER  why we crash when any other tests generate a ripped doc?
 
   def test_a_ripped_doc_contains_no_empty_pre_tags
-    assert_xhtml Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
+    assert_xhtml Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.0 }')
     
     xpath :div, :content do
       deny{ @xdoc.to_s =~ /<pre>\s*<\/pre>/m }
@@ -60,7 +60,7 @@ class RipdocSuite < Test::Unit::TestCase
   end  #  TODO  forgive a broken tag in a comment!!!
 
   def test_embdocs_form_accordions_with_contents
-    xhtml = Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.1 }')
+    xhtml = Ripdoc.generate(HomePath + 'test/assert2_suite.rb', 'assert{ 2.0 }')
     assert_xhtml xhtml
     
     xpath :div, :vertical_container do
@@ -70,7 +70,7 @@ class RipdocSuite < Test::Unit::TestCase
 
     deny{ xhtml.match('<p><p>') }
     deny{ xhtml.match('<pre></div>') }
-    reveal xhtml, 'assert21.html'
+    reveal xhtml, 'index.html'
   end
 
   def test_on_embdoc_beg

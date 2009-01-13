@@ -1,5 +1,5 @@
 =begin
-<code>assert{ 2.1 }</code> reinvents <code>assert{ 2.0 }</code> for <a href='http://www.ruby-lang.org/en/news/2007/12/25/ruby-1-9-0-released/' onclick='window.location.href = "http://www.ruby-lang.org/en/news/2007/12/25/ruby-1-9-0-released/";'>Ruby 1.9</a>.
+<code>assert{ 2.0 }</code> now supports <a href='http://www.ruby-lang.org/en/news/2007/12/25/ruby-1-9-0-released/' onclick='window.location.href = "http://www.ruby-lang.org/en/news/2007/12/25/ruby-1-9-0-released/";'>Ruby 1.9</a>.
 
 <code>assert{ 2.0 }</code> is the industry's most aggressive TDD 
 system&mdash;for Ruby, or any other language. Each time it fails, it analyzes the 
@@ -8,7 +8,7 @@ easy to rapidly identify and fix. <code>assert{ 2.0 }</code> is like a
 debugger's "inspect variable" system, and it makes your TDD cycle more
 effective.
 
-Here's an example of the output diagnostic when <code>assert{ 2.1 }</code> 
+Here's an example of the output diagnostic when <code>assert{ 2.0 }</code> 
 fails. The first line reflects the source of the entire assertion:
 
      assert{ z =~ /=begon/ } # complete with comments
@@ -233,7 +233,6 @@ Do not, for example, do this:
 =end
   def test_write_assertions_without_side_effects
     x = 42
-
     assert_flunk '(x += 1) == 44 --> true' do  #  note the diagnostic says we were correct!!
 
       assert{ (x += 1) == 44 }
