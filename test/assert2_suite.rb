@@ -321,7 +321,7 @@ to recover some 1.8.6 stability!
 
   def test_assert_
     x = 42
-    assert_{ x == 42 }  #  FIXME  retire this silly thing
+    assert_{ x == 42 }  #  FIXME  document this silly thing, enable in 1.9, and match with deny_
   end
 
   def test_assert
@@ -330,8 +330,8 @@ to recover some 1.8.6 stability!
       assert{ x == 42 }
     end
   end
-  
-#  FIXME test that, in 1.8.7 mode, we at least reflect our diagnostics
+
+#  note that, in 1.8.7 mode, we at least reflect our diagnostics!
 
   def test_assert_args_flunk
     assert_flunk /x.*--> 42/ do

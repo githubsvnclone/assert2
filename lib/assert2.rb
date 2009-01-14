@@ -19,7 +19,7 @@ require 'test/unit'
   #~ end
 
 if RUBY_VERSION < '1.9.0'
-  require 'assert2/rubynode_reflector'  # FIXME default to null_reflector if rubynode not available
+  require 'assert2/rubynode_reflector'
 else
   require 'assert2/ripper_reflector'
 end
@@ -35,7 +35,7 @@ module Test; module Unit; module Assertions
                end
 
   def add_diagnostic(whatever = nil, &block)
-    @__additional_diagnostics ||= []
+    @__additional_diagnostics ||= []  #  TODO move that inside the reflector object, and persist it thru a test case event
     
     if whatever == :clear
       @__additional_diagnostics = []

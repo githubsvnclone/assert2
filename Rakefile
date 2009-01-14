@@ -50,6 +50,11 @@ task :fixme_files do
   sh 'find . -name \*rb | xargs grep FIXME -l'
 end
 
+desc 'send docs to rubyforge.org'
+task :publish do
+ # sh 'scp -r rdoc/* phlip@assertxpath.rubyforge.org:/var/www/gforge-projects/assertxpath/'
+  sh 'rsync -av -e ssh --exclude "*.svn" doc/* phlip@assert2.rubyforge.org:/var/www/gforge-projects/assert2/'
+end
 
 # TODO  learn and install and use this!
 #~ ruby crash.rb
