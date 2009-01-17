@@ -1,32 +1,32 @@
 require 'fileutils'
 
 task :default do
-  sh 'ruby1.8.6 test/rubynode_reflector_suite.rb'
-  sh 'ruby1.9.0 test/ripper_reflector_suite.rb'
-  sh 'ruby1.9.1 test/ripper_reflector_suite.rb'
+  sh 'ruby186 test/rubynode_reflector_suite.rb'
+  sh 'ruby190 test/ripper_reflector_suite.rb'
+  sh 'ruby191 test/ripper_reflector_suite.rb'
   
-  sh 'ruby1.8.6 test/assert2_suite.rb'
-  sh 'ruby1.9.0 test/assert2_suite.rb'
-  sh 'ruby1.9.1 test/assert2_suite.rb'
+  sh 'ruby186 test/assert2_suite.rb'
+  sh 'ruby190 test/assert2_suite.rb'
+  sh 'ruby191 test/assert2_suite.rb'
   
-  sh 'ruby1.8.6 test/assert2_xpath_suite.rb'
-  sh 'ruby1.8.7 test/assert2_xpath_suite.rb'
-  sh 'ruby1.9.0 test/assert2_xpath_suite.rb'
-  sh 'ruby1.9.1 test/assert2_xpath_suite.rb'
+  sh 'ruby186 test/assert2_xpath_suite.rb'
+  sh 'ruby187 test/assert2_xpath_suite.rb'
+  sh 'ruby190 test/assert2_xpath_suite.rb'
+  sh 'ruby191 test/assert2_xpath_suite.rb'
   
-  sh 'ruby1.8.6 test/assert2_utilities_suite.rb'
-  sh 'ruby1.8.7 test/assert2_utilities_suite.rb'
-  sh 'ruby1.9.0 test/assert2_utilities_suite.rb'
-  sh 'ruby1.9.1 test/assert2_utilities_suite.rb'
+  sh 'ruby186 test/assert2_utilities_suite.rb'
+  sh 'ruby187 test/assert2_utilities_suite.rb'
+  sh 'ruby190 test/assert2_utilities_suite.rb'
+  sh 'ruby191 test/assert2_utilities_suite.rb'
   
-  sh 'ruby1.9.0 test/ripdoc_suite.rb'
-  sh 'ruby1.9.1 test/ripdoc_suite.rb'
+  sh 'ruby190 test/ripdoc_suite.rb'
+  sh 'ruby191 test/ripdoc_suite.rb'
   
   # assert2_spec.rb   
  
 # TODO  solve MiniTest too!
  
-#  #sh 'ruby1.8.6 test/assert2_shoulda_suite.rb'
+#  #sh 'ruby186 test/assert2_shoulda_suite.rb'
 
 end
 
