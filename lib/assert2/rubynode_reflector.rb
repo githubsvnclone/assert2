@@ -4,28 +4,28 @@ require 'pp'
 module Test; module Unit; module Assertions
 
   # ERGO
-  #		:bmethod      => [:cval],
-  #		:cfunc        => [:argc, :cfnc],
-  #		:cref         => [:next, :clss],
-  #		:defs         => [:mid, :defn, :recv],
-  #		:dmethod      => [:cval],
-  #		:dot2         => [:beg, :end],
-  #		:dot3         => [:beg, :end],
-  #		:dregx_once   => [:next, :lit, :cflag],
-  #		:fbody        => [:orig, :mid, :head],
-  #		:flip2        => [:cnt, :beg, :end],
-  #		:flip3        => [:cnt, :beg, :end],
-  #		:gasgn        => [:vid, :value], # entry not supported
-  #		:ifunc        => [:tval, :state, :cfnc],
-  #		:lasgn        => [:vid, :cnt, :value],
-  #		:last         => [],
-  #		:match        => [:lit],
-  #		:memo         => {:u1_value=>:u1_value}, # different uses in enum.c, variabe.c and eval.c ...
-  #		:method       => [:body, :noex, :cnt], # cnt seems to be always 0 in 1.8.4
-  #		:module       => [:cpath, :body],
-  #		:next         => [:stts],
-  #		:opt_n        => [:body],
-  #		:to_ary       => [:head],
+  #     :bmethod      => [:cval],
+  #     :cfunc        => [:argc, :cfnc],
+  #     :cref         => [:next, :clss],
+  #     :defs         => [:mid, :defn, :recv],
+  #     :dmethod      => [:cval],
+  #     :dot2         => [:beg, :end],
+  #     :dot3         => [:beg, :end],
+  #     :dregx_once   => [:next, :lit, :cflag],
+  #     :fbody        => [:orig, :mid, :head],
+  #     :flip2        => [:cnt, :beg, :end],
+  #     :flip3        => [:cnt, :beg, :end],
+  #     :gasgn        => [:vid, :value], # entry not supported
+  #     :ifunc        => [:tval, :state, :cfnc],
+  #     :lasgn        => [:vid, :cnt, :value],
+  #     :last         => [],
+  #     :match        => [:lit],
+  #     :memo         => {:u1_value=>:u1_value}, # different uses in enum.c, variabe.c and eval.c ...
+  #     :method       => [:body, :noex, :cnt], # cnt seems to be always 0 in 1.8.4
+  #     :module       => [:cpath, :body],
+  #     :next         => [:stts],
+  #     :opt_n        => [:body],
+  #     :to_ary       => [:head],
 
   #  This +reflect+s a block of code, by evaluating it, reflecting its
   #  source, and reflecting all its intermediate values
@@ -93,14 +93,15 @@ module Test; module Unit; module Assertions
     end
 
     def block=(yo_block)
-      @block = yo_block and HAS_RUBYNODE and
+      @block = yo_block and @block.respond_to?(:body_node) and
         reflect_nodes(@block.body_node)
     end
 
     def reflect_nodes(body_node)
-      return unless body_node
-      @transformation = body_node.transform(:include_node => true)
-      return @result = _send(@transformation)
+      if body_node
+        @transformation = body_node.transform(:include_node => true)
+        return @result = _send(@transformation)
+      end
     rescue
       puts "\nOffending line: #{ @line }"
       raise
@@ -409,7 +410,7 @@ p node
       return 'END'
     end
 
-    #		:argscat      => [:body, :head],
+    #       :argscat      => [:body, :head],
 
     ########################################################
     ####  assignments

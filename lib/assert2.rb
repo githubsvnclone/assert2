@@ -1,7 +1,7 @@
 require 'test/unit'
 
 #  FIXME  the first failing assertion of a batch should suggest you get with Ruby1.9...
-#  TODO  install Coulor
+#  TODO  install Coulor (flibberty) 
 #  TODO  add :verbose => option to assert{}
 #  TODO  pay for Staff Benda Bilili  ALBUM: Tr�s Tr�s Fort (Promo Sampler) !
 #  TODO  evaluate parts[3]
