@@ -371,7 +371,9 @@ to <code>xpath</code>'s block, then run your tests:
 #!end_panel!
 #!no_doc!
 
-        # TODO  inner_text should use ?.
+# FIXME  assert_tidy
+
+# TODO  inner_text should use ?.
         #  TODO  colorize stuff in <code> tags already!!!
         #  TODO  which back-ends support . = '' matching recursive stuff?
         #  TODO  which back-ends support . =~ '' matching regices?
