@@ -115,7 +115,7 @@ module Test; module Unit; module Assertions
     include Coulor
     
     def split_and_read(called)
-      if called =~ /([^:]+):(\d+):/
+      if called + ':' =~ /([^:]+):(\d+):/
         file, line = $1, $2.to_i
         return File.readlines(file)[line - 1 .. -1]
       end
@@ -204,7 +204,10 @@ module Test; module Unit; module Assertions
     options[:keep_diagnostics] or add_diagnostic :clear
     
     begin
-      got = block.call(*options[:args]) and add_assertion and return got
+      if got = block.call(*options[:args])
+        add_assertion
+        return got
+      end
     rescue FlunkError
       raise  #  asserts inside assertions that fail do not decorate the outer assertion
     rescue => got
@@ -235,7 +238,7 @@ module Test; module Unit; module Assertions
     options[:keep_diagnostics] or add_diagnostic :clear
     
     begin
-      got = block.call(*options[:args]) or (add_assertion and return true)
+      got = block.call(*options[:args]) or (add_assertion ; return true)
     rescue FlunkError
       raise
     rescue => got
@@ -251,7 +254,7 @@ module Test; module Unit; module Assertions
     options[:keep_diagnostics] or add_diagnostic :clear
     
     begin
-      got = block.call(*options[:args]) or (add_assertion and return true)
+      got = block.call(*options[:args]) or (add_assertion ; return true)
     rescue FlunkError
       raise
     rescue => got
