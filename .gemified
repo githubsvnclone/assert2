@@ -1,8 +1,8 @@
 --- 
-:author: Phlip
-:summary: An assertion that reflects its block, with all intermediate values
-:name: assert2
 :email: phlip2005@gmail.com
 :homepage: http://assert2.rubyforge.org/
 :rubyforge_project: assert2
-:version: 0.3.4
+:name: assert2
+:version: 0.3.6
+:author: Phlip
+:summary: An assertion that reflects its block, with all intermediate values
