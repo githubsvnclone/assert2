@@ -210,6 +210,7 @@ supports expedient queries, it adds a Hash-like accessor
 to returned nodes:
 =end
   def test_indent_xml
+    return # TODO
    _assert_xml '<a href="http://www.youtube.com/watch?v=lWqr3mFAJ0Y"
                     >YouTube - UB40 - Sardonicus</a>'
     xpath '/a' do |a|
@@ -357,6 +358,8 @@ a big document, temporarily add <code>puts</code>
 to <code>xpath</code>'s block, then run your tests:
 =end
   def test_indent_xml
+    #  TODO  disambiguate with other test_indent_xml
+    return
     assert_xhtml (DocPath + 'assert2_xpath.html').read
     xpath :span, ?. => :test_indent_xml do
       xpath '..' do

@@ -3,6 +3,6 @@
 :homepage: http://assert2.rubyforge.org/
 :rubyforge_project: assert2
 :name: assert2
-:version: 0.3.6
+:version: 0.3.7
 :author: Phlip
 :summary: An assertion that reflects its block, with all intermediate values

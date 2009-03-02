@@ -81,6 +81,7 @@ module Test; module Unit; module Assertions
   end
 
   module Coulor  #:nodoc:
+    #  TODO  shell into term-ansicolor!
     def colorize(we_color)
       @@we_color = we_color
     end
