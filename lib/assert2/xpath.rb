@@ -3,6 +3,7 @@ require 'assert2'
 require 'rexml/document'
 require 'rexml/entity'
 require 'rexml/formatters/pretty'
+require 'nokogiri'  #  must be installed to use xpath{}!
 
 module Test; module Unit; module Assertions
   
@@ -26,6 +27,30 @@ module Test; module Unit; module Assertions
       #  CONSIDER  figure out how entities are supposed to work!!
       xml = xml.gsub('&mdash;', '--')
       doc = REXML::Document.new(xml)
+      @xdoc = doc.root
+    end
+  end 
+
+  def assert_xhtml_(xhtml)
+    return _assert_xml_(xhtml) # , XML::HTMLParser)
+  end 
+
+  def _assert_xml_(xml) #, parser = XML::Parser)
+    if false
+      xp = parser.new()
+      xp.string = xml
+      
+      if XML.respond_to? :'default_pedantic_parser='
+        XML.default_pedantic_parser = true
+      else
+        XML::Parser.default_pedantic_parser = true
+      end  #  CONSIDER  uh, figure out the best libxml-ruby??
+      
+      @xdoc = xp.parse.root
+    else
+      #  TODO  figure out how entities are supposed to work!!
+      xml = xml.gsub('&mdash;', '--')
+      doc = Nokogiri::XML(xml)
       @xdoc = doc.root
     end
   end 

@@ -407,6 +407,11 @@ to <code>xpath</code>'s block, then run your tests:
     deny{ xpath :bar }
   end
 
+  def test_nokogiri_xpath
+   _assert_xml_ '<foo/>'
+    p @xdoc
+  end
+
   def test_xpath_converts_symbols_to_ids
    _assert_xml '<x><a id="wrong_one"/><a id="b"/></x>'
     assert{ xpath(:a, :b) == xpath('//a[ @id = "b" ]') }
