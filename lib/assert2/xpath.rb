@@ -127,6 +127,35 @@ module Test; module Unit; module Assertions
     @xdoc = former_xdoc
   end  #  TODO trap LibXML::XML::XPath::InvalidPath and explicate it's an XPath problem
  
+  def xpath_(path, id = nil, options = {}, &block)
+    former_xdoc = @xdoc
+    apa = AssertXPathArguments.new(path, id, options)
+    node = @xdoc.xpath(apa.xpath) #, nil, apa.subs)
+       # TODO  advise Nokogiri to provide substitution arguments
+    
+    add_diagnostic :clear do
+      diagnostic = "xpath: #{ apa.xpath.inspect }\n"
+      diagnostic << "arguments: #{ apa.subs.pretty_inspect }\n" if apa.subs.any?
+      diagnostic + "xml context:\n" + indent_xml
+    end
+
+    if node
+      def node.[](symbol)
+        return attributes[symbol.to_s]
+      end
+    end
+
+    if block
+      assert_('this xpath cannot find a node', :keep_diagnostics => true){ node }
+      assert_ nil, :args => [@xdoc = node], :keep_diagnostics => true, &block  #  TODO  need the _ ?
+    end
+    
+    return node
+    # TODO raid http://thebogles.com/blog/an-hpricot-style-interface-to-libxml/
+  ensure
+    @xdoc = former_xdoc
+  end  #  TODO trap LibXML::XML::XPath::InvalidPath and explicate it's an XPath problem
+ 
   def indent_xml(node = @xdoc)
     bar = REXML::Formatters::Pretty.new
     out = String.new

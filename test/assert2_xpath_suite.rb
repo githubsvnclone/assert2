@@ -404,12 +404,51 @@ to <code>xpath</code>'s block, then run your tests:
   
   def test_deny_xpath
    _assert_xml '<foo/>'
+   # p 'rexml'
+#    p @xdoc.find('/foo')
+    #puts @xdoc.document.public_methods.sort.map{|m| m + ":noko"}
+    
     deny{ xpath :bar }
   end
 
   def test_nokogiri_xpath
    _assert_xml_ '<foo/>'
-    p @xdoc
+    assert{ xpath_:foo }
+  end
+
+  def test_nokogiri_custom_matcher
+    _assert_xml_ '<body>
+                    <a href="whatever">whatevs</a>
+                    <a id="one" href="http://zeroplayer.com/">zp.com</a>
+                  </body>'
+
+    @xdoc.xpath('//a[_search(.)]', Class.new {
+ 
+      def initialize hash = {}
+        @hash = hash
+      end
+
+      def _evalerate(node)
+        @hash.each do |k, v|
+          return false unless q = node[k.to_s] and
+            #  TODO  are entities substituted?
+          case v
+            when Symbol ; q == v.to_s
+            when String ; q.index(v)
+            when Regexp ; q =~ v
+            when NilObject; true
+            else        ; false # TODO raise bad arg error
+          end
+        end
+        return true
+      end
+      
+      def _search nodes
+        nodes.find_all{|node| _evalerate(node) }
+      end
+ 
+    }.new(:href => /zeroplayer/, :id => 'one' ))
+    
   end
 
   def test_xpath_converts_symbols_to_ids
