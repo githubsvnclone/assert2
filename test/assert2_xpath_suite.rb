@@ -416,39 +416,37 @@ to <code>xpath</code>'s block, then run your tests:
     assert{ xpath_:foo }
   end
 
+  class NokoMatcher
+    def initialize hash = {}
+      @hash = hash
+    end
+
+    def __evalerate(node)
+      @hash.each do |k, v|
+        return false unless q = node[k.to_s] and
+        case v
+          when Symbol ; q == v.to_s
+          when String ; q.index(v)
+          when Regexp ; q =~ v
+          when NilObject; true
+          else        ; false # TODO raise bad arg error
+        end
+      end
+    end   #  TODO  are entities substituted?
+    
+    def _search(nodes)
+      nodes.find_all{|node| __evalerate(node) }
+    end
+  end
+
   def test_nokogiri_custom_matcher
     _assert_xml_ '<body>
                     <a href="whatever">whatevs</a>
                     <a id="one" href="http://zeroplayer.com/">zp.com</a>
                   </body>'
 
-    @xdoc.xpath('//a[_search(.)]', Class.new {
- 
-      def initialize hash = {}
-        @hash = hash
-      end
-
-      def _evalerate(node)
-        @hash.each do |k, v|
-          return false unless q = node[k.to_s] and
-            #  TODO  are entities substituted?
-          case v
-            when Symbol ; q == v.to_s
-            when String ; q.index(v)
-            when Regexp ; q =~ v
-            when NilObject; true
-            else        ; false # TODO raise bad arg error
-          end
-        end
-        return true
-      end
-      
-      def _search nodes
-        nodes.find_all{|node| _evalerate(node) }
-      end
- 
-    }.new(:href => /zeroplayer/, :id => 'one' ))
-    
+    nm = NokoMatcher.new(:href => /zeroplayer/, :id => 'one' )
+    @xdoc.xpath('//a[_search(.)]', nm)   
   end
 
   def test_xpath_converts_symbols_to_ids
