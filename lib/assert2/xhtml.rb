@@ -141,7 +141,11 @@ if any, from our matching node.
       if @last_match > this_match
         return complaint(match, doc, 'node is out of specified order!')
       end
-      
+# p match.name
+# p node.name
+# p match.text
+# p node.text
+
       @last_match = this_match
 
       # http://www.zvon.org/xxl/XPathTutorial/Output/example18.html
@@ -156,7 +160,8 @@ if any, from our matching node.
 # p lastest.path if lastest
 
         #  TODO  try xpath('*')
-      match.children.grep(Nokogiri::XML::Element).each do |child|
+#      match.children.grep(Nokogiri::XML::Element).each do |child|
+      match.xpath('*').each do |child|
         issue = match_nodes(child, node) and 
           return issue
       end
