@@ -84,6 +84,7 @@ part that failed.
 require File.dirname(__FILE__) + '/test_helper'
 require 'assert2/ripdoc' if RUBY_VERSION >= '1.9.0'
 require 'assert2/xpath'
+require 'assert2/xhtml'
 
 #  FIXME  given :' why is the tick not colored?
 
@@ -613,6 +614,32 @@ to <code>xpath</code>'s block, then run your tests:
 </a>' }
   end
 
+#  TODO  become a new suite
+
+  def test_assert_xhtml_for_forms
+    assert_xhtml SAMPLE_FORM do
+      form :action => '/users' do
+        fieldset do
+          legend 'Personal Information'
+          label 'First name'
+          input :type => 'text', :name => 'user[first_name]'
+        end
+      end
+    end
+  end
+
+  def test_assert_xhtml_counts_its_shots
+    assert_xhtml SAMPLE_LIST do
+      ul :style => 'font-size: 18' do
+        li 'model' do
+          li 'Billings report'
+          li 'Sales report'
+          li 'Billings criteria'
+        end
+      end
+    end    
+  end
+
 end
 
 #  TODO  document we do strings correctly now
@@ -628,3 +655,39 @@ end
         #~ end
       #~ end
 
+SAMPLE_FORM = <<EOH
+<form action="/users">
+  <fieldset>
+    <legend>Personal Information</legend>
+    <ol>
+      <li id="control_user_first_name">
+        <label for="user_first_name">First name</label>
+        <input type="text" name="user[first_name]" id="user_first_name" />
+      </li>
+    </ol>
+  </fieldset>
+</form>
+EOH
+
+SAMPLE_LIST = <<EOH
+<html>
+  <body>
+    <ul style='font-size: 18'>
+      <li>model
+        <ul>
+          <li>Billings report</li>
+          <li>Sales report</li>
+          <li>Billings criteria</li>
+          <li>Common system</li>
+        </ul>
+      </li>
+      <li>controller
+        <ul>
+          <li>All Sales report criteria</li>
+          <li>All Billings reports</li>
+        </ul>
+      </li>
+    </ul>
+  </body>
+</html>
+EOH
