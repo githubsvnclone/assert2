@@ -105,6 +105,16 @@ RSpec "matcher":
         path = node.xpath('ancestor::*')
         return [nil] + path.map{|n|n} + [node]
       end
+      
+      def decorate_path(node_list)
+        path = '//' + node_list[1].name + '[hits(., 1)]'
+        node_list[2..-1].each_with_index do |node, index|
+          index += 2
+          path << '/descendant::' + node.name + "[hits(., #{index})]"
+        end
+        return path
+      end
+      
     end
     
     def matches?(stwing, &block)

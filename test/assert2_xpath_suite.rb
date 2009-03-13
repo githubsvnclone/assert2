@@ -710,6 +710,24 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
 
+  def test_node_matcher_turns_node_lists_into_decorated_paths
+    doc = Nokogiri::XML(SAMPLE_FORM)
+    node = doc.xpath('//input[ @id = "user_first_name" ]').first
+    matcher = BeHtmlWith::NodeMatcher.new
+    node_list = matcher.pathmark(node)
+    path = matcher.decorate_path(node_list)
+
+    expect = '//form[hits(., 1)]' +
+       '/descendant::fieldset[hits(., 2)]' +
+       '/descendant::ol[hits(., 3)]' +
+       '/descendant::li[hits(., 4)]' +
+       '/descendant::input[hits(., 5)]'
+
+    assert path do 
+      path == expect
+    end
+  end
+
   def test_assert_xhtml_counts_its_shots
     assert_xhtml SAMPLE_LIST do
       ul :style => 'font-size: 18' do
