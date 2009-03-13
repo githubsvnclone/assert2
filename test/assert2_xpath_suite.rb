@@ -674,6 +674,22 @@ to <code>xpath</code>'s block, then run your tests:
     assert{ node.text == 'First \'name\'' }
   end
 
+  def test_node_matcher_matches_node_text
+    doc = Nokogiri::HTML('<ul>
+                            <li>strange<ul><li>magic</li></ul>
+                            <li>strangemagic</li>
+                            <li>strangemagic</li>
+                          </ul>')
+    node_1 = doc.xpath('//ul/li[1]').first
+    node_2 = doc.xpath('//ul/li[2]').first
+    node_3 = doc.xpath('//ul/li[3]').first
+    matcher = BeHtmlWith::NodeMatcher.new
+    denigh{ matcher.match_text(node_1, node_2) }
+    denigh{ matcher.match_text(node_2, node_1) }
+    assert{ matcher.match_text(node_2, node_3) }
+    assert{ matcher.match_text(node_3, node_2) }
+  end
+
   def test_assert_xhtml_counts_its_shots
     assert_xhtml SAMPLE_LIST do
       ul :style => 'font-size: 18' do

@@ -92,7 +92,16 @@ RSpec "matcher":
 =end
 
   class BeHtmlWith
-
+    
+    class NodeMatcher
+      def match_text(node, hit)
+        node_text = node.xpath('text()').map{|x|x.to_s.strip}
+        hits_text = hit. xpath('text()').map{|x|x.to_s.strip}
+          #  TODO regices? zero-len strings?
+        ( hits_text - node_text ).length == 0
+      end      
+    end
+    
     def matches?(stwing, &block)
    #   @scope.wrap_expectation self do
         begin
