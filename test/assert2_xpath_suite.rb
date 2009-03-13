@@ -647,7 +647,7 @@ to <code>xpath</code>'s block, then run your tests:
 
     node = doc.doc.root.xpath("//form[hit(., 1)]/descendant::label[hit(., 2)]", Class.new {
  
-      def initialize hits
+      def initialize(hits = [])
         @hits = hits
       end
  

@@ -94,6 +94,8 @@ RSpec "matcher":
   class BeHtmlWith
     
     class NodeMatcher
+      def initialize(hits = [])  @hits = hits  end
+ 
       def match_text(node, hit)
         node_text = node.xpath('text()').map{|x|x.to_s.strip}
         hits_text = hit. xpath('text()').map{|x|x.to_s.strip}
