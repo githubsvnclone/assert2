@@ -102,7 +102,8 @@ RSpec "matcher":
       end
       
       def pathmark(node)
-        return [nil] + node.xpath('ancestor::*').map{|n|n} + [node]
+        path = node.xpath('ancestor::*')
+        return [nil] + path.map{|n|n} + [node]
       end
     end
     
