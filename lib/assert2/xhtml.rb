@@ -104,27 +104,27 @@ RSpec "matcher":
           #  TODO regices? zero-len strings?
         ( hits_text - node_text ).length == 0
       end
-      
-      def pathmark(node)
-        path = node.xpath('ancestor::*')
-        return [nil] + path.map{|n|n} + [node]
-      end  #  TODO  stop throwing away NodeSet abilities!
-      
-      def decorate_path(node_list)
-        path = '//' + node_list[1].name + '[hits(., 1)]'
-        node_list[2..-1].each_with_index do |node, index|
-          index += 2
-          path << '/descendant::' + node.name + "[hits(., #{index})]"
-        end
-        return path
-      end
 
     end
     
     def find_terminal_nodes(doc)
       doc.xpath('//*[ not(./descendant::*) ]').map{|n|n}
     end
+
+    def pathmark(node)
+      path = node.xpath('ancestor::*') #  TODO  ancestor-or-self
+      return [nil] + path.map{|n|n} + [node]
+    end  #  TODO  stop throwing away NodeSet abilities!
     
+    def decorate_path(node_list)
+      path = '//' + node_list[1].name + '[hits(., 1)]'
+      node_list[2..-1].each_with_index do |node, index|
+        index += 2
+        path << '/descendant::' + node.name + "[hits(., #{index})]"
+      end
+      return path
+    end
+
     def matches?(stwing, &block)
    #   @scope.wrap_expectation self do
         begin
@@ -133,7 +133,11 @@ RSpec "matcher":
           match = builder.doc.root
           doc = Nokogiri::HTML(stwing)
           
-          nm = NodeMatcher.new(builder)
+          #  TODO  complain if no terminals?
+          terminals = find_terminal_nodes(builder)
+          terminals.each do |terminal|
+            nm = NodeMatcher.new(builder)
+          end
           
           @last_match = 0
           @failure_message = match_nodes(match, doc)

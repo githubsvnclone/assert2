@@ -693,10 +693,10 @@ to <code>xpath</code>'s block, then run your tests:
   def test_node_matcher_extracts_node_lists
     doc = Nokogiri::XML(SAMPLE_FORM)
     node = doc.xpath('//input[ @id = "user_first_name" ]').first
-    matcher = BeHtmlWith::NodeMatcher.new
+    bhw = BeHtmlWith.new(SAMPLE_FORM)
 
-    path = matcher.pathmark(node)
-    assert{ path.first == nil }
+    path = bhw.pathmark(node)
+    assert{ path.first == nil }  #  TODO  get rid of this nil!
     path.shift
     assert do
       path.map{|n|n.name} == [
@@ -713,9 +713,9 @@ to <code>xpath</code>'s block, then run your tests:
   def test_node_matcher_turns_node_lists_into_decorated_paths
     doc = Nokogiri::XML(SAMPLE_FORM)
     node = doc.xpath('//input[ @id = "user_first_name" ]').first
-    matcher = BeHtmlWith::NodeMatcher.new
-    node_list = matcher.pathmark(node)
-    path = matcher.decorate_path(node_list)
+    bhw = BeHtmlWith.new(SAMPLE_FORM)
+    node_list = bhw.pathmark(node)
+    path = bhw.decorate_path(node_list)
 
     expect = '//form[hits(., 1)]' +
        '/descendant::fieldset[hits(., 2)]' +
