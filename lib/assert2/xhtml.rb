@@ -132,7 +132,9 @@ if any, from our matching node.
  #  TODO does a multi-modal top axis work?
  
     def match_nodes(match, doc)
-      node = doc.xpath("descendant::#{match.name.sub(/\!$/, '')}").
+      tag = match.name.sub(/\!$/, '')
+      
+      node = doc.xpath("descendant::#{tag}").
                 select{|n| resemble(match, n) }.
                 first or return complaint(match, doc)
 
@@ -141,12 +143,16 @@ if any, from our matching node.
       if @last_match > this_match
         return complaint(match, doc, 'node is out of specified order!')
       end
-# p match.name
-# p node.name
-# p match.text
-# p node.text
 
       @last_match = this_match
+
+      match.xpath('*').each do |child|
+        issue = match_nodes(child, node) and 
+          return issue
+      end
+
+      return nil
+    end
 
       # http://www.zvon.org/xxl/XPathTutorial/Output/example18.html
       # The preceding axis contains all nodes in the same document 
@@ -158,16 +164,6 @@ if any, from our matching node.
 # p node.path if lastest
 #p node.text
 # p lastest.path if lastest
-
-        #  TODO  try xpath('*')
-#      match.children.grep(Nokogiri::XML::Element).each do |child|
-      match.xpath('*').each do |child|
-        issue = match_nodes(child, node) and 
-          return issue
-      end
-
-      return nil
-    end
     
 =begin
 At any point in that recursion, if we can't find a match,

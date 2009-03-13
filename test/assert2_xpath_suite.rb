@@ -628,6 +628,52 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
 
+  def test_prototype_recursive_algorithm
+    bhw = BeHtmlWith.new(SAMPLE_FORM)
+
+    doc = Nokogiri::HTML::Builder.new do
+      div do
+        form do  label 'not me'  end
+        form :action => '/us"ers' do
+          label 'not me either'
+          fieldset do  label 'First \'name\''  end
+        end
+      end
+    end
+ 
+ #  TODO  publish this ability as a Nokogiri patch when I figure it out
+ #  TODO  can we skip an earlier descendant who is a near miss?
+    hits = [nil, form = doc.doc.root.xpath("//form[2]").first, form.xpath("./descendant::label[2]").first]
+
+    node = doc.doc.root.xpath("//form[hit(., 1)]/descendant::label[hit(., 2)]", Class.new {
+ 
+      def initialize hits
+        @hits = hits
+      end
+ 
+      def match_text(node, hit)
+        node_text = node.xpath('text()').map{|x|x.to_s.strip}
+        hits_text = hit. xpath('text()').map{|x|x.to_s.strip}
+          #  TODO regices? zero-len strings?
+        ( hits_text - node_text ).length == 0
+      end
+ 
+      def hit nodes, index
+        nodes.find_all { |node|
+          all_match = true
+          if all_match = match_text(node, @hits[index])
+            @hits[index].attribute_nodes.each do |attr|
+              break unless all_match = node[attr.name] == attr.value
+            end
+          end
+          all_match
+        }
+      end
+ 
+    }.new(hits)).first
+    assert{ node.text == 'First \'name\'' }
+  end
+
   def test_assert_xhtml_counts_its_shots
     assert_xhtml SAMPLE_LIST do
       ul :style => 'font-size: 18' do
@@ -640,12 +686,14 @@ to <code>xpath</code>'s block, then run your tests:
     end    
   end
 
-  def teest_assert_xhtml_queries_by_complete_path
+  def test_assert_xhtml_queries_by_complete_path
     assert_xhtml SAMPLE_LIST do
       ul{ li{ ul{ li 'Sales report'              } } }
       ul{ li{ ul{ li 'All Sales report criteria' } } }
     end    
   end
+  
+  
 
 end
 

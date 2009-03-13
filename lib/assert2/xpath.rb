@@ -131,8 +131,7 @@ module Test; module Unit; module Assertions
     former_xdoc = @xdoc
     apa = AssertXPathArguments.new(path, id, options)
     node = @xdoc.xpath(apa.xpath) #, nil, apa.subs)
-       # TODO  advise Nokogiri to provide substitution arguments
-    
+       
     add_diagnostic :clear do
       diagnostic = "xpath: #{ apa.xpath.inspect }\n"
       diagnostic << "arguments: #{ apa.subs.pretty_inspect }\n" if apa.subs.any?
