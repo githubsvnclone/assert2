@@ -99,7 +99,11 @@ RSpec "matcher":
         hits_text = hit. xpath('text()').map{|x|x.to_s.strip}
           #  TODO regices? zero-len strings?
         ( hits_text - node_text ).length == 0
-      end      
+      end
+      
+      def pathmark(node)
+        return [nil] + node.xpath('ancestor::*').map{|n|n} + [node]
+      end
     end
     
     def matches?(stwing, &block)

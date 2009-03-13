@@ -690,6 +690,26 @@ to <code>xpath</code>'s block, then run your tests:
     assert{ matcher.match_text(node_3, node_2) }
   end
 
+  def test_node_matcher_extracts_node_lists
+    doc = Nokogiri::XML(SAMPLE_FORM)
+    node = doc.xpath('//input[ @id = "user_first_name" ]').first
+    matcher = BeHtmlWith::NodeMatcher.new
+
+    path = matcher.pathmark(node)
+    assert{ path.first == nil }
+    path.shift
+    assert do
+      path.map{|n|n.name} == [
+        #  TODO will the fake html and body here cause trouble?
+        'form',
+        'fieldset',
+        'ol',
+        'li',
+        'input'
+      ]
+    end
+  end
+
   def test_assert_xhtml_counts_its_shots
     assert_xhtml SAMPLE_LIST do
       ul :style => 'font-size: 18' do
@@ -708,23 +728,9 @@ to <code>xpath</code>'s block, then run your tests:
       ul{ li{ ul{ li 'All Sales report criteria' } } }
     end    
   end
-  
-  
 
 end
 
-#  TODO  document we do strings correctly now
-
-#  TODO  test when this fails the outermost diagnostic appears!
-    #~ assert 'this tests the panel you are now reading' do
-
-      #~ xpath :a, :name => :Nested_xpath do  #  finds the panel's anchor
-        #~ xpath '../following-sibling::div[1]' do   #  find that A tag's immediate sibling
-          #~ xpath :'pre/span', ?. => 'test_nested_xpaths' do |span|
-            #~ span.text =~ /nested/  #  the block passes the target node thru the |goalposts|
-          #~ end
-        #~ end
-      #~ end
 
 SAMPLE_FORM = <<EOH
 <form action="/users">
@@ -762,3 +768,16 @@ SAMPLE_LIST = <<EOH
   </body>
 </html>
 EOH
+
+#  TODO  document we do strings correctly now
+
+#  TODO  test when this fails the outermost diagnostic appears!
+    #~ assert 'this tests the panel you are now reading' do
+
+      #~ xpath :a, :name => :Nested_xpath do  #  finds the panel's anchor
+        #~ xpath '../following-sibling::div[1]' do   #  find that A tag's immediate sibling
+          #~ xpath :'pre/span', ?. => 'test_nested_xpaths' do |span|
+            #~ span.text =~ /nested/  #  the block passes the target node thru the |goalposts|
+          #~ end
+        #~ end
+      #~ end
