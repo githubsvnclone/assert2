@@ -733,7 +733,7 @@ to <code>xpath</code>'s block, then run your tests:
     legend = doc.xpath('//legend').first
     label  = doc.xpath('//label').first
     input  = doc.xpath('//input').first
-    matcher = BeHtmlWith::NodeMatcher.new
+    matcher = BeHtmlWith.new(SAMPLE_FORM)
     assert{ [legend, label, input] == matcher.find_terminal_nodes(doc) }
   end
 

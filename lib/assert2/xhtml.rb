@@ -94,7 +94,9 @@ RSpec "matcher":
   class BeHtmlWith
     
     class NodeMatcher
-      def initialize(hits = [])  @hits = hits  end
+      def initialize(hits = [])
+        @hits = hits
+      end
  
       def match_text(node, hit)
         node_text = node.xpath('text()').map{|x|x.to_s.strip}
@@ -116,11 +118,11 @@ RSpec "matcher":
         end
         return path
       end
-      
-      def find_terminal_nodes(doc)
-        doc.xpath('//*[ not(./descendant::*) ]').map{|n|n}
-      end
-      
+
+    end
+    
+    def find_terminal_nodes(doc)
+      doc.xpath('//*[ not(./descendant::*) ]').map{|n|n}
     end
     
     def matches?(stwing, &block)
@@ -130,6 +132,9 @@ RSpec "matcher":
           builder = Nokogiri::HTML::Builder.new(&bwock)
           match = builder.doc.root
           doc = Nokogiri::HTML(stwing)
+          
+          nm = NodeMatcher.new(builder)
+          
           @last_match = 0
           @failure_message = match_nodes(match, doc)
           return @failure_message.nil?
