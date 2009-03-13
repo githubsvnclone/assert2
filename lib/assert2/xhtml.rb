@@ -104,7 +104,7 @@ RSpec "matcher":
       def pathmark(node)
         path = node.xpath('ancestor::*')
         return [nil] + path.map{|n|n} + [node]
-      end
+      end  #  TODO  stop throwing away NodeSet abilities!
       
       def decorate_path(node_list)
         path = '//' + node_list[1].name + '[hits(., 1)]'
@@ -113,6 +113,10 @@ RSpec "matcher":
           path << '/descendant::' + node.name + "[hits(., #{index})]"
         end
         return path
+      end
+      
+      def find_terminal_nodes(doc)
+        doc.xpath('//*[ not(./descendant::*) ]').map{|n|n}
       end
       
     end

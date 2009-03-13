@@ -728,6 +728,15 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
 
+  def test_find_terminal_nodes
+    doc = Nokogiri::XML(SAMPLE_FORM)
+    legend = doc.xpath('//legend').first
+    label  = doc.xpath('//label').first
+    input  = doc.xpath('//input').first
+    matcher = BeHtmlWith::NodeMatcher.new
+    assert{ [legend, label, input] == matcher.find_terminal_nodes(doc) }
+  end
+
   def test_assert_xhtml_counts_its_shots
     assert_xhtml SAMPLE_LIST do
       ul :style => 'font-size: 18' do
