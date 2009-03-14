@@ -108,7 +108,12 @@ RSpec "matcher":
     end
     
     def find_terminal_nodes(doc)
-      doc.xpath('//*[ not(./descendant::*) ]').map{|n|n}
+      doc.xpath('//*[ not(./descendant::*) ]').
+        map{|n|n}
+#           while n.class == Nokogiri::XML::Text 
+#             n = n.parent
+#           end
+#           n }
     end
 
     def pathmark(node)
@@ -116,12 +121,14 @@ RSpec "matcher":
       return [nil] + path.map{|n|n} + [node]
     end  #  TODO  stop throwing away NodeSet abilities!
     
-    def decorate_path(node_list)
+    def decorate_path(node_list) # pathmark(node)
       path = '//' + node_list[1].name + '[hits(., 1)]'
+      
       node_list[2..-1].each_with_index do |node, index|
         index += 2
         path << '/descendant::' + node.name + "[hits(., #{index})]"
       end
+      
       return path
     end
 
@@ -135,8 +142,12 @@ RSpec "matcher":
           
           #  TODO  complain if no terminals?
           terminals = find_terminal_nodes(builder)
+          
           terminals.each do |terminal|
-            nm = NodeMatcher.new(builder)
+#            nodes = pathmark(terminal)
+#             nm = NodeMatcher.new(nodes)
+#             path = decorate_path(nodes)
+#             p path
           end
           
           @last_match = 0
