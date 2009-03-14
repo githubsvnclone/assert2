@@ -124,15 +124,13 @@ RSpec "matcher":
     def decorate_path(node_list) # pathmark(node)
       index = -1
       
-      return '//' + 
-        node_list.map{|node|
-            index += 1
-            node.name + "[hits(., #{index})]"
-          }.join('/descendant::')
+      return '//' + node_list.map{|node|
+                        node.name + "[hits(., #{ index += 1 })]"
+                      }.join('/descendant::')
     end
 
     def matches?(stwing, &block)
-   #   @scope.wrap_expectation self do
+   #   @scope.wrap_expectation self do  #  TODO  put that back online
         begin
           bwock = block || @block || proc{}
           builder = Nokogiri::HTML::Builder.new(&bwock)
@@ -140,10 +138,10 @@ RSpec "matcher":
           doc = Nokogiri::HTML(stwing)
           
           #  TODO  complain if no terminals?
-          terminals = find_terminal_nodes(builder)
+          terminals = find_terminal_nodes(builder.doc)
           
           terminals.each do |terminal|
-#            nodes = pathmark(terminal)
+            nodes = pathmark(terminal)
 #             nm = NodeMatcher.new(nodes)
 #             path = decorate_path(nodes)
 #             p path
@@ -283,14 +281,15 @@ and plug our matcher object into RSpec:
 
 module Test::Unit::Assertions
   def assert_xhtml(xhtml = @response.body, &block)  # TODO merge
-   _assert_xml(xhtml) # , XML::HTMLParser)
     if block
      # require 'should_be_html_with_spec'
       matcher = BeHtmlWith.new(self, &block)
       matcher.matches?(xhtml, &block)
       message = matcher.failure_message
       flunk message if message.to_s != ''
+    else
+     _assert_xml(xhtml) # , XML::HTMLParser)
+      return @xdoc
     end
-    return @xdoc
   end
 end
