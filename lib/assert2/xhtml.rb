@@ -96,7 +96,10 @@ RSpec "matcher":
     class NodeMatcher
       def initialize(hits = [])
         @hits = hits
+        @lowest_hits = []
       end
+      
+      attr_reader :lowest_hits
  
       def match_text(node, hit)
         node_text = node.xpath('text()').map{|x|x.to_s.strip}
@@ -106,7 +109,7 @@ RSpec "matcher":
       end
 
       def hit(nodes, index)  #  TODO  low-level test on this; merge with test-side copy
-        nodes.find_all{|node|
+        @lowest_hits = nodes.find_all{|node|
           all_match = true
           if all_match = match_text(node, @hits[index])
             @hits[index].attribute_nodes.each do |attr|
@@ -151,9 +154,8 @@ RSpec "matcher":
             nodes = pathmark(terminal)
             path = decorate_paths(nodes)
             nm = NodeMatcher.new(nodes)
-#             p path
             got = doc.xpath(path, nm)
-#             p got.class
+
           end
           
           @last_match = 0
