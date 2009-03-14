@@ -744,8 +744,7 @@ to <code>xpath</code>'s block, then run your tests:
       nodes = bhw.pathmark(terminal)
       path = bhw.decorate_paths(nodes)
       nm = BeHtmlWith::NodeMatcher.new(nodes)
-      p path # .gsub!(/\[hits\(\., \d\)\]/, '')
-      p doc.xpath(path, nm)
+      assert{ doc.xpath(path, nm) }
     end
   end
 

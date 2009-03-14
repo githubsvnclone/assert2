@@ -106,8 +106,6 @@ RSpec "matcher":
       end
 
       def hit(nodes, index)  #  TODO  low-level test on this; merge with test-side copy
-      p 'hitting it'
-      
         nodes.find_all{|node|
           all_match = true
           if all_match = match_text(node, @hits[index])
