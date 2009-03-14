@@ -152,7 +152,7 @@ RSpec "matcher":
             path = decorate_paths(nodes)
             nm = NodeMatcher.new(nodes)
 #             p path
-#             got = doc.xpath(path, nm)
+            got = doc.xpath(path, nm)
 #             p got.class
           end
           
