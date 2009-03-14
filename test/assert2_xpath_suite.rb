@@ -727,15 +727,22 @@ to <code>xpath</code>'s block, then run your tests:
   end
 
   def test_find_terminal_nodes
-    doc = Nokogiri::XML(SAMPLE_FORM)
+    doc    = Nokogiri::XML(SAMPLE_FORM)
     legend = doc.xpath('//legend').first
-    label  = doc.xpath('//label').first
-    input  = doc.xpath('//input').first
-    matcher = BeHtmlWith.new(SAMPLE_FORM)
-    
-    p matcher.find_terminal_nodes(doc).map{|x|x.class.name}
-    
-    assert{ [legend, label, input] == matcher.find_terminal_nodes(doc) }
+    label  = doc.xpath('//label' ).first
+    input  = doc.xpath('//input' ).first
+    bhw    = BeHtmlWith.new(SAMPLE_FORM)
+    assert{ [legend, label, input] == bhw.find_terminal_nodes(doc) }
+  end
+
+  def test_each_terminal_node_has_a_pathmark
+    doc = Nokogiri::XML(SAMPLE_LIST)
+    bhw = BeHtmlWith.new(SAMPLE_LIST)
+    terminals = bhw.find_terminal_nodes(doc)
+
+    terminals.each do |node|
+      bhw.pathmark(node)  #  TODO  assert something about them
+    end
   end
 
   def test_assert_xhtml_counts_its_shots
