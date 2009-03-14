@@ -105,27 +105,38 @@ RSpec "matcher":
         ( hits_text - node_text ).length == 0
       end
 
+      def hit(nodes, index)  #  TODO  low-level test on this; merge with test-side copy
+      p 'hitting it'
+      
+        nodes.find_all{|node|
+          all_match = true
+          if all_match = match_text(node, @hits[index])
+            @hits[index].attribute_nodes.each do |attr|
+              break unless all_match = node[attr.name] == attr.value
+            end
+          end
+          all_match
+        }
+      end
     end
     
     def find_terminal_nodes(doc)
-      doc.xpath('//*[ not(./descendant::*) ]').
-        map{|n|n}
-#           while n.class == Nokogiri::XML::Text 
-#             n = n.parent
-#           end
-#           n }
+      doc.xpath('//*[ not(./descendant::*) ]').map{|n|n}
     end
 
     def pathmark(node)
-      path = node.xpath('ancestor-or-self::*')
-      return path.map{|n|n}
+      path = node.xpath('ancestor-or-self::*').map{|n|n}
+      #  TODO  only remove path items above root node of current node!
+      path.shift if path.first.name == 'html'
+      path.shift if path.first.name == 'body'
+      return path
     end  #  TODO  stop throwing away NodeSet abilities!
     
     def decorate_paths(node_list) # pathmark(node)
       index = -1
       
       return '//' + node_list.map{|node|
-                        node.name + "[hits(., #{ index += 1 })]"
+                        node.name + "[hit(., #{ index += 1 })]"
                       }.join('/descendant::')
     end
 

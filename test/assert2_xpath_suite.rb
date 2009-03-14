@@ -658,8 +658,8 @@ to <code>xpath</code>'s block, then run your tests:
         ( hits_text - node_text ).length == 0
       end
  
-      def hit nodes, index
-        nodes.find_all { |node|
+      def hit(nodes, index)  #  TODO  low-level test on this; merge with test-side copy
+        nodes.find_all{|node|
           all_match = true
           if all_match = match_text(node, @hits[index])
             @hits[index].attribute_nodes.each do |attr|
@@ -715,11 +715,11 @@ to <code>xpath</code>'s block, then run your tests:
     node_list = bhw.pathmark(node)
     path = bhw.decorate_paths(node_list)
 
-    expect = '//form[hits(., 0)]' +
-       '/descendant::fieldset[hits(., 1)]' +
-       '/descendant::ol[hits(., 2)]' +
-       '/descendant::li[hits(., 3)]' +
-       '/descendant::input[hits(., 4)]'
+    expect = '//form[hit(., 0)]' +
+       '/descendant::fieldset[hit(., 1)]' +
+       '/descendant::ol[hit(., 2)]' +
+       '/descendant::li[hit(., 3)]' +
+       '/descendant::input[hit(., 4)]'
 
     assert path do 
       path == expect
@@ -744,6 +744,8 @@ to <code>xpath</code>'s block, then run your tests:
       nodes = bhw.pathmark(terminal)
       path = bhw.decorate_paths(nodes)
       nm = BeHtmlWith::NodeMatcher.new(nodes)
+      p path # .gsub!(/\[hits\(\., \d\)\]/, '')
+      p doc.xpath(path, nm)
     end
   end
 
