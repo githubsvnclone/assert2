@@ -122,15 +122,13 @@ RSpec "matcher":
     end  #  TODO  stop throwing away NodeSet abilities!
     
     def decorate_path(node_list) # pathmark(node)
-      path = '//' # /' + node_list[0].name + '[hits(., 0)]'
       index = -1
       
-      path << node_list[0..-1].map{|node|
-        index += 1
-        node.name + "[hits(., #{index})]"
-      }.join('/descendant::')
-      
-      return path
+      return '//' + 
+        node_list.map{|node|
+            index += 1
+            node.name + "[hits(., #{index})]"
+          }.join('/descendant::')
     end
 
     def matches?(stwing, &block)
