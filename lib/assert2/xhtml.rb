@@ -123,11 +123,8 @@ RSpec "matcher":
     end
 
     def pathmark(node)
-      path = node.xpath('ancestor-or-self::*').map{|n|n}
-      #  TODO  only remove path items above root node of current node!
-      path.shift if path.first.name == 'html'
-      path.shift if path.first.name == 'body'
-      return path
+      node.xpath('ancestor-or-self::*').
+        map{|n|n}
     end  #  TODO  stop throwing away NodeSet abilities!
     
     def decorate_paths(node_list) # pathmark(node)
