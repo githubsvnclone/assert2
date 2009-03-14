@@ -117,8 +117,8 @@ RSpec "matcher":
     end
 
     def pathmark(node)
-      path = node.xpath('ancestor-or-self::*') #  TODO  ancestor-or-self
-      return [nil] + path.map{|n|n} #+ [node]
+      path = node.xpath('ancestor-or-self::*')
+      return [nil] + path.map{|n|n}
     end  #  TODO  stop throwing away NodeSet abilities!
     
     def decorate_path(node_list) # pathmark(node)
