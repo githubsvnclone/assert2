@@ -735,13 +735,15 @@ to <code>xpath</code>'s block, then run your tests:
     assert{ [legend, label, input] == bhw.find_terminal_nodes(doc) }
   end
 
-  def test_each_terminal_node_has_a_pathmark
+  def test_use_each_terminals_marked_path
     doc = Nokogiri::XML(SAMPLE_LIST)
     bhw = BeHtmlWith.new(SAMPLE_LIST)
     terminals = bhw.find_terminal_nodes(doc)
 
-    terminals.each do |node|
-      bhw.pathmark(node)  #  TODO  assert something about them
+    terminals.each do |terminal|
+      nodes = bhw.pathmark(terminal)
+      path = bhw.decorate_paths(nodes)
+      nm = BeHtmlWith::NodeMatcher.new(nodes)
     end
   end
 

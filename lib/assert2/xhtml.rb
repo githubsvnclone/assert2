@@ -139,12 +139,15 @@ RSpec "matcher":
           
           #  TODO  complain if no terminals?
           terminals = find_terminal_nodes(builder.doc)
+          #  TODO  complain if found paths don't have the same root!
           
           terminals.each do |terminal|
             nodes = pathmark(terminal)
             path = decorate_paths(nodes)
             nm = NodeMatcher.new(nodes)
-            p path
+#             p path
+#             got = doc.xpath(path, nm)
+#             p got.class
           end
           
           @last_match = 0
