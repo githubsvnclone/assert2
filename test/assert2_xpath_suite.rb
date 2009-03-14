@@ -760,6 +760,8 @@ to <code>xpath</code>'s block, then run your tests:
     assert{ nm.lowest_hits.first.name == doc.xpath('/a/b').first.name }
   end
 
+#  TODO  rename lowest_hits to matched_nodes
+
   def test_assert_xhtml_counts_its_shots
     assert_xhtml SAMPLE_LIST do
       ul :style => 'font-size: 18' do
