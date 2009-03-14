@@ -694,10 +694,8 @@ to <code>xpath</code>'s block, then run your tests:
     doc = Nokogiri::XML(SAMPLE_FORM)
     node = doc.xpath('//input[ @id = "user_first_name" ]').first
     bhw = BeHtmlWith.new(SAMPLE_FORM)
-
     path = bhw.pathmark(node)
-    assert{ path.first == nil }  #  TODO  get rid of this nil!
-    path.shift
+
     assert do
       path.map{|n|n.name} == [
         #  TODO will the fake html and body here cause trouble?
@@ -717,11 +715,11 @@ to <code>xpath</code>'s block, then run your tests:
     node_list = bhw.pathmark(node)
     path = bhw.decorate_path(node_list)
 
-    expect = '//form[hits(., 1)]' +
-       '/descendant::fieldset[hits(., 2)]' +
-       '/descendant::ol[hits(., 3)]' +
-       '/descendant::li[hits(., 4)]' +
-       '/descendant::input[hits(., 5)]'
+    expect = '//form[hits(., 0)]' +
+       '/descendant::fieldset[hits(., 1)]' +
+       '/descendant::ol[hits(., 2)]' +
+       '/descendant::li[hits(., 3)]' +
+       '/descendant::input[hits(., 4)]'
 
     assert path do 
       path == expect
@@ -734,6 +732,9 @@ to <code>xpath</code>'s block, then run your tests:
     label  = doc.xpath('//label').first
     input  = doc.xpath('//input').first
     matcher = BeHtmlWith.new(SAMPLE_FORM)
+    
+    p matcher.find_terminal_nodes(doc).map{|x|x.class.name}
+    
     assert{ [legend, label, input] == matcher.find_terminal_nodes(doc) }
   end
 

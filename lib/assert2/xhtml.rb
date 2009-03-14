@@ -118,14 +118,14 @@ RSpec "matcher":
 
     def pathmark(node)
       path = node.xpath('ancestor-or-self::*')
-      return [nil] + path.map{|n|n}
+      return path.map{|n|n}
     end  #  TODO  stop throwing away NodeSet abilities!
     
     def decorate_path(node_list) # pathmark(node)
-      path = '//' + node_list[1].name + '[hits(., 1)]'
+      path = '//' + node_list[0].name + '[hits(., 0)]'
       
-      node_list[2..-1].each_with_index do |node, index|
-        index += 2
+      node_list[1..-1].each_with_index do |node, index|
+        index += 1
         path << '/descendant::' + node.name + "[hits(., #{index})]"
       end
       
