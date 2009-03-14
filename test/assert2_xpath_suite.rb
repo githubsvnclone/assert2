@@ -713,7 +713,7 @@ to <code>xpath</code>'s block, then run your tests:
     node = doc.xpath('//input[ @id = "user_first_name" ]').first
     bhw = BeHtmlWith.new(SAMPLE_FORM)
     node_list = bhw.pathmark(node)
-    path = bhw.decorate_path(node_list)
+    path = bhw.decorate_paths(node_list)
 
     expect = '//form[hits(., 0)]' +
        '/descendant::fieldset[hits(., 1)]' +
