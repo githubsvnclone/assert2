@@ -713,7 +713,7 @@ to <code>xpath</code>'s block, then run your tests:
     node = doc.xpath('//input[ @id = "user_first_name" ]').first
     bhw = BeHtmlWith.new(SAMPLE_FORM)
     node_list = bhw.pathmark(node)
-    path = bhw.decorate_paths(node_list)
+    path = bhw.decorate_path(node_list)
 
     expect = '//form[hit(., 0)]' +
        '/descendant::fieldset[hit(., 1)]' +
@@ -742,7 +742,7 @@ to <code>xpath</code>'s block, then run your tests:
 
     terminals.each do |terminal|
       nodes = bhw.pathmark(terminal)
-      path = bhw.decorate_paths(nodes)
+      path = bhw.decorate_path(nodes)
       nm = BeHtmlWith::NodeMatcher.new(nodes)
       assert{ doc.xpath(path, nm).any? }
     end
@@ -754,7 +754,7 @@ to <code>xpath</code>'s block, then run your tests:
     bhw     = BeHtmlWith.new('<a><b><e><o/></e></b></a>')
     terminal = bhw.find_terminal_nodes(built).first
     nodes    = bhw.pathmark(terminal)
-    path     = bhw.decorate_paths(nodes)
+    path     = bhw.decorate_path(nodes)
     nm       = BeHtmlWith::NodeMatcher.new(nodes)
     deny{ doc.xpath(path, nm).any? }
     assert{ nm.lowest_hits.first.name == doc.xpath('/a/b').first.name }

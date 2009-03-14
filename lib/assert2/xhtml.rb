@@ -130,7 +130,7 @@ RSpec "matcher":
         map{|n|n}
     end  #  TODO  stop throwing away NodeSet abilities!
     
-    def decorate_paths(node_list) # pathmark(node)
+    def decorate_path(node_list) # pathmark(node)
       index = -1
       
       return '//' + node_list.map{|node|
@@ -152,7 +152,7 @@ RSpec "matcher":
           
           terminals.each do |terminal|
             nodes = pathmark(terminal)
-            path = decorate_paths(nodes)
+            path = decorate_path(nodes)
             nm = NodeMatcher.new(nodes)
             got = doc.xpath(path, nm)
 
