@@ -149,10 +149,12 @@ end
           
           terminals.each do |terminal|
             samples, refered = match_one_terminal(terminal)  #  TODO  return in different order
-#             if samples and refered
-#               @failure_message = complain_about(refered, samples)
-#               return false
-#             end
+            if samples and refered
+#             p samples.map{|q|q.path}  #  TODO  why [] ?
+#             p refered.path
+             # @failure_message = complain_about(refered, samples)
+            #  return false
+            end
           end
           
           @last_match = 0  #  TODO  get rid of @last_match

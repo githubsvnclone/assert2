@@ -785,6 +785,15 @@ to <code>xpath</code>'s block, then run your tests:
     assert{ nodes_equal(refered, reference.xpath('//b/c').first) }
   end
 
+  def test_can_match_the_second_of_two_paths
+    reference = Nokogiri::XML('<b><c d="g"></c></b>')
+    bhw       = BeHtmlWith.create('<a><b><c d="f"></c></b>
+                                     <b><c d="g"></c></b></a>')
+    terminal  = bhw.find_terminal_nodes(reference).first
+    complaint = bhw.match_one_terminal(terminal)
+    deny{ complaint }
+  end
+
   def nodes_equal(node_1, node_2)
     node_1.document == node_2.document and node_1.path == node_2.path
   end
@@ -832,7 +841,7 @@ to <code>xpath</code>'s block, then run your tests:
   def test_assert_xhtml_queries_by_complete_path
     assert_xhtml SAMPLE_LIST do
       ul{ li{ ul{ li 'Sales report'              } } }
-#      ul{ li{ ul{ li 'All Sales report criteria' } } }
+      ul{ li{ ul{ li 'All Sales report criteria' } } }
     end    #  TODO  the references should not be blank
   end
 
