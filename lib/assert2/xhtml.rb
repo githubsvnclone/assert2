@@ -102,15 +102,15 @@ end
       references = pathmark(terminal)
       path = decorate_path(references)
       lowest_samples = []
-      lowest_reference = nil
+      @reference = nil
       
       matches = @doc.xpath_callback(path, :refer) do |nodes, index|
         lowest_samples = nodes.find_all{|node|
           all_match = true
-          lowest_reference = references[index]
+          @reference = references[index]
           
-          if all_match = match_text(node, lowest_reference)
-            lowest_reference.attribute_nodes.each do |attr|
+          if all_match = match_text(node)
+            @reference.attribute_nodes.each do |attr|
               break unless all_match = node[attr.name] == attr.value
             end
           end
@@ -120,14 +120,14 @@ end
       end
 
       return nil if matches.any?
-      return lowest_samples, lowest_reference
+      return lowest_samples, @reference
     end
      
-    def match_text(node, hit)  #  TODO  rename them already
-      node_text = node.xpath('text()').map{|x|x.to_s.strip}
-      hits_text = hit. xpath('text()').map{|x|x.to_s.strip}
+    def match_text(sample, ref = @reference)  #  TODO  better testing
+      ref_text = ref   .xpath('text()').map{|x|x.to_s.strip}
+      sam_text = sample.xpath('text()').map{|x|x.to_s.strip}
         #  TODO regices? zero-len strings?
-      ( hits_text - node_text ).length == 0
+      ( sam_text - ref_text ).empty?
     end
 
     attr_accessor :doc
