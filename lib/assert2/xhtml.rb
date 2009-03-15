@@ -115,6 +115,7 @@ RSpec "matcher":
         @lowest_hits = nodes.find_all{|node|
           all_match = true
           @lowest_matches = @hits
+          #  TODO assert @hits here
           if all_match = match_text(node, @hits[index])
             @hits[index].attribute_nodes.each do |attr|
               break unless all_match = node[attr.name] == attr.value
@@ -147,11 +148,11 @@ RSpec "matcher":
       path = decorate_path(nodes)
       nm = NodeMatcher.new(nodes)
       return nil if @doc.xpath(path, nm)
-      unless got
 p nm.lowest_hits
 p nm.lowest_matches
-      end
     end
+    
+    attr_writer :doc  #  TODO  use this to DRY up the tests
     
     def matches?(stwing, &block)
    #   @scope.wrap_expectation self do  #  TODO  put that back online

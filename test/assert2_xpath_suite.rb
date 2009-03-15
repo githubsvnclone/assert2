@@ -760,6 +760,27 @@ to <code>xpath</code>'s block, then run your tests:
     assert{ nm.lowest_hits.first.name == doc.xpath('/a/b').first.name }
   end
 
+  def test_match_one_terminal
+    built = Nokogiri::XML('<b><c><d/></c></b>')
+    doc    = Nokogiri::XML(stwing = '<a><b><c><d/></c></b></a>')
+    bhw     = BeHtmlWith.new('<a><b><c><d/></c></b></a>')
+    terminal = bhw.find_terminal_nodes(built).first
+    bhw.doc = Nokogiri::HTML(stwing)
+    got = bhw.match_one_terminal(terminal)
+    @doc = Nokogiri::HTML(stwing)
+    assert{ got == nil }
+  end
+
+  def test_cant_match_one_terminal
+    built = Nokogiri::XML('<a><b><c><d/></c></b></a>')
+    doc    = Nokogiri::XML(stwing = '<a><b><e><o/></e></b></a>')
+    bhw     = BeHtmlWith.new('<a><b><e><o/></e></b></a>')
+    terminal = bhw.find_terminal_nodes(built).first
+    bhw.doc = Nokogiri::HTML(stwing)
+    got = bhw.match_one_terminal(terminal)
+    assert{ got == nil }  #  TODO  crack out the error response here!
+  end
+
 #  TODO  rename lowest_hits to matched_nodes
 
   def test_assert_xhtml_counts_its_shots
