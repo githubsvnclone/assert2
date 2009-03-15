@@ -827,11 +827,13 @@ to <code>xpath</code>'s block, then run your tests:
     end    
   end
 
+#  TODO does the latest assert_raise take a Regexp
+
   def test_assert_xhtml_queries_by_complete_path
     assert_xhtml SAMPLE_LIST do
       ul{ li{ ul{ li 'Sales report'              } } }
-      ul{ li{ ul{ li 'All Sales report criteria' } } }
-    end    
+#      ul{ li{ ul{ li 'All Sales report criteria' } } }
+    end    #  TODO  the references should not be blank
   end
 
 end

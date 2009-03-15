@@ -102,7 +102,7 @@ end
       @reference.attribute_nodes.each do |attr|
         @sample[attr.name] == attr.value or return false
       end
-            
+
       return true
     end
 
@@ -148,12 +148,17 @@ end
           #  TODO  complain if found paths don't have the same root!
           
           terminals.each do |terminal|
-            match_one_terminal(terminal)
+            samples, refered = match_one_terminal(terminal)  #  TODO  return in different order
+#             if samples and refered
+#               @failure_message = complain_about(refered, samples)
+#               return false
+#             end
           end
           
-          @last_match = 0
+          @last_match = 0  #  TODO  get rid of @last_match
           @failure_message = match_nodes(match, @doc)
           return @failure_message.nil?
+          true
         end
   #    end
     end
@@ -167,7 +172,7 @@ end
  
  #  TODO does a multi-modal top axis work?
  
-    def match_nodes(match, doc)
+    def match_nodes(match, doc)  #  TODO  get very rid of me!
       tag = match.name.sub(/\!$/, '')
       
       node = doc.xpath("descendant::#{tag}").
@@ -213,7 +218,7 @@ attributes are a subset of your page's element's
 attributes, and if their text is similar:
 =end
 
-    def resemble(match, node)
+    def resemble(match, node)  #  TODO  no longer need our services
       keys = match.attributes.keys
       node_keys = valuate(node.attributes.select{|k,v| keys.include? k })
       match_keys = valuate(match.attributes)
