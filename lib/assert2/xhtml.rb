@@ -98,6 +98,14 @@ end
                       }.join('/descendant::')
     end
 
+    def match_attributes
+      @reference.attribute_nodes.each do |attr|
+        @sample[attr.name] == attr.value or return false
+      end
+            
+      return true
+    end
+
     def match_one_terminal(terminal)
       references = pathmark(terminal)
       path = decorate_path(references)
@@ -108,14 +116,8 @@ end
         samples = nodes.find_all{|sample|
           all_match = true
           @reference = references[index]
-          @sample = sample          
-          if all_match = match_text
-        
-          @reference.attribute_nodes.each do |attr|
-            break unless all_match = @sample[attr.name] == attr.value
-          end
-          end
-          all_match
+          @sample = sample
+          match_text and match_attributes
         }
         lowest_samples = samples if samples.any?
         samples
