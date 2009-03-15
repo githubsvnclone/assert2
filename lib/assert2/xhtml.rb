@@ -129,19 +129,8 @@ RSpec "matcher":
       end
 
       def refer(nodes, index)  #  TODO  low-level test on this; merge with test-side copy
-        @block.call(nodes, index) if @block
-        
-        @lowest_samples = nodes.find_all{|node|
-          all_match = true
-          @lowest_reference = @references[index]
-
-          if all_match = match_text(node, @references[index])
-            @references[index].attribute_nodes.each do |attr|
-              break unless all_match = node[attr.name] == attr.value
-            end
-          end
-          all_match
-        }
+        raise 'must call with block' unless @block
+        return @block.call(nodes, index)
       end
     end
 
@@ -168,7 +157,8 @@ RSpec "matcher":
                  end
       matches = @doc.xpath(path, nm)
       return nil if matches.any?
-      return nm.lowest_samples, nm.lowest_reference
+      
+      return @lowest_samples, @lowest_reference
     end
     
       attr_reader :lowest_samples,
