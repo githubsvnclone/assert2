@@ -939,10 +939,22 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
 
-  def test_third_times_a_charm
+  def test_build_deep_xpath
     bhw = BeHtmlWith.create(SAMPLE_FORM)
-    puts
-    p bhw.doc.xpath('//fieldset[ ./descendant::li[ ./descendant::label ] ]/descendant::input')
+    built = Nokogiri::HTML::Builder.new do
+      fieldset do
+        legend 'Personal Information'
+        li do
+          label 'First name', :for=> :user_first_name
+          input :type => :text, :name => 'user[first_name]'
+        end
+      end
+    end
+
+    path = bhw.build_deep_xpath(built.doc.root)
+    assert{ path.index('//fieldset') == 0 }
+#     puts built.doc.root.to_html
+#     p bhw.doc.xpath('//fieldset[ ./descendant::li[ ./descendant::label ] ]/descendant::input')
   end
 
 #  TODO does the latest assert_raise take a Regexp

@@ -212,6 +212,16 @@ end
   #    end
     end
 
+    def build_deep_xpath(element)
+      return '//' + element.name
+    end
+
+
+
+
+
+
+
     def complain_about(refered, samples, reason = nil)
       reason = " (#{reason})" if reason
       "\nCould not find this reference#{reason}...\n\n" +
