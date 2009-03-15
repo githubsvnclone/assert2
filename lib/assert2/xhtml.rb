@@ -143,18 +143,14 @@ end
 
         #  TODO  complain if tuple_1 == tuple_2, or tuple_1.position < tuple_2
       
-      loop do
-        return false unless nodes_equal(a_ref, b_ref) == 
-            nodes_equal(a_sam, b_sam)
-        break unless a_ref = (a_ref.parent rescue nil) and
-                     b_ref = (b_ref.parent rescue nil) and
-                     a_sam = (a_sam.parent rescue nil) and
-                     b_sam = (b_sam.parent rescue nil)
-        break if a_ref.class == Nokogiri::HTML::Document
-        break if b_ref.class == Nokogiri::HTML::Document
-        break if a_sam.class == Nokogiri::HTML::Document
-        break if b_sam.class == Nokogiri::HTML::Document
-
+      while a_ref and b_ref and a_sam and b_sam
+        nodes_equal(a_ref, b_ref) == 
+          nodes_equal(a_sam, b_sam) or
+            return false
+        a_ref = (a_ref.parent rescue nil)
+        b_ref = (b_ref.parent rescue nil)
+        a_sam = (a_sam.parent rescue nil)
+        b_sam = (b_sam.parent rescue nil)
       end
       return true
     end
