@@ -219,12 +219,13 @@ end
     def build_xpath(element)
       path = element.name
 
-      if element.children.any?
+      node_kids = element.children.grep(Nokogiri::XML::Element)
+      if node_kids.any?
         path << '[ '
         
-        element.children.each do |child|
-          path << './descendant::' + build_xpath(child)
-        end
+        path << node_kids.map{|child|
+          './descendant::' + build_xpath(child)
+        }.join(' and ')
         
         path << ' ]'
       end
