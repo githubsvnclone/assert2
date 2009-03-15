@@ -714,11 +714,11 @@ to <code>xpath</code>'s block, then run your tests:
     node_list = bhw.pathmark(terminal)
     path = bhw.decorate_path(node_list)
 
-    expect = '//form[refer(., 0)]' +
-       '/descendant::fieldset[refer(., 1)]' +
-       '/descendant::ol[refer(., 2)]' +
-       '/descendant::li[refer(., 3)]' +
-       '/descendant::input[refer(., 4)]'
+    expect = '//form[refer(.,\'0\')]' +
+       '/descendant::fieldset[refer(.,\'1\')]' +
+       '/descendant::ol[refer(.,\'2\')]' +
+       '/descendant::li[refer(.,\'3\')]' +
+       '/descendant::input[refer(.,\'4\')]'
 
     assert path do 
       path == expect
@@ -803,13 +803,23 @@ to <code>xpath</code>'s block, then run your tests:
     deny{ complaint }
   end
 
-  def test_can_match_the_second_of_two_paths_by_text
+  def test_match_one_terminal_can_match_the_second_of_two_paths_by_text
     reference = Nokogiri::XML('<ul><li><ul><li>Sales report</li></ul></li></ul>' +
                               '<ul><li><ul><li>All Sales report criteria</li></ul></li></ul>')
     bhw       = BeHtmlWith.create(SAMPLE_LIST)
     terminal  = bhw.find_terminal_nodes(reference).first
     complaint = bhw.match_one_terminal(terminal)
     deny{ complaint }
+  end
+
+  def teest_match_one_terminal_reports_both_sides_of_a_fault
+    reference = Nokogiri::XML('<ul><li><ul><li>Sales SPIKE</li></ul></li></ul>' +
+                              '<ul><li><ul><li>All Sales report criteria</li></ul></li></ul>')
+    bhw       = BeHtmlWith.create(SAMPLE_LIST)
+    terminal  = bhw.find_terminal_nodes(reference).first
+    complaint = bhw.match_one_terminal(terminal)
+    p complaint
+#    deny{ complaint }
   end
 
   def nodes_equal(node_1, node_2)

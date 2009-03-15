@@ -63,7 +63,7 @@ sample website. I add Nokogiri, for our XML engine:
 require 'nokogiri'
 
 class Nokogiri::XML::Node
-  
+
   class XPathYielder
     def initialize(method_name, &block)
       self.class.send :define_method, method_name do |*args|
@@ -76,7 +76,7 @@ class Nokogiri::XML::Node
   def xpath_callback(path, method_name, &block)
     xpath path, XPathYielder.new(method_name, &block)
   end
-  
+
 end
 
   class BeHtmlWith
@@ -94,7 +94,7 @@ end
       index = -1
       
       return '//' + node_list.map{|node|
-                        node.name + "[refer(., #{ index += 1 })]"
+                        node.name + "[refer(.,'#{ index += 1 }')]"
                       }.join('/descendant::')
     end
 
@@ -112,7 +112,8 @@ end
       lowest_samples = []
       @reference = nil
 
-      matches = @doc.xpath_callback(path, :refer) do |nodes, index|
+      matches = @doc.xpath_callback path, :refer do |nodes, index|
+        index = index.to_i  #  because the libraries pass a float, which might have rounding errors
         samples = nodes.find_all{|sample|
           @reference = references[index]
           @sample = sample
