@@ -869,7 +869,7 @@ to <code>xpath</code>'s block, then run your tests:
     assert_xhtml SAMPLE_LIST do
       ul{ li{ ul{ li 'Sales report'              } } }
       ul{ li{ ul{ li 'All Sales report criteria' } } }
-    end    #  TODO  the references should not be blank
+    end
   end
 
 end
