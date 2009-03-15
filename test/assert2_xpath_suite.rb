@@ -683,7 +683,7 @@ to <code>xpath</code>'s block, then run your tests:
     node_1 = doc.xpath('//ul/li[1]').first
     node_2 = doc.xpath('//ul/li[2]').first
     node_3 = doc.xpath('//ul/li[3]').first
-    matcher = BeHtmlWith::NodeMatcher.new
+    matcher = BeHtmlWith.create('<yo>')
     denigh{ matcher.match_text(node_1, node_2) }
     denigh{ matcher.match_text(node_2, node_1) }
     assert{ matcher.match_text(node_2, node_3) }

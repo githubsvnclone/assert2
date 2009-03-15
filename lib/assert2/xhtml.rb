@@ -110,12 +110,9 @@ RSpec "matcher":
                       }.join('/descendant::')
     end
 
-    class NodeMatcher  #  TODO  replace this with a yielder
-      def initialize(references = [], &block)
+    class XPathYielder
+      def initialize(&block)
         @block = block
-        @references = references
-        @lowest_samples = []
-        @lowest_reference = []
       end  #  TODO  make generic by passing in method name
 
       attr_reader :lowest_samples,
@@ -139,7 +136,7 @@ RSpec "matcher":
       path = decorate_path(nodes)
       @lowest_samples = []
       @lowest_reference = nil
-      nm = NodeMatcher.new(nodes) do |nodes, index|
+      nm = XPathYielder.new do |nodes, index|
 
         @lowest_samples = nodes.find_all{|node|
           all_match = true
