@@ -837,16 +837,22 @@ to <code>xpath</code>'s block, then run your tests:
   end
   
   def test_two_terminals_with_common_roots_must_align_congruently
-    return
     reference = Nokogiri::XML('<ul><li><ul>
                                  <li>Sales report</li>
+                                 <li>Billings report</li>
                                  <li>All Sales report criteria</li>
                                </ul></li></ul>')
     bhw       = BeHtmlWith.create(SAMPLE_LIST)
-    terminals = bhw.find_terminal_nodes(reference)
+    terminal_1 = reference.xpath('//li[ . = "Sales report" ]').first
+    terminal_2 = reference.xpath('//li[ . = "Billings report" ]').first
+    terminal_3 = reference.xpath('//li[ . = "All Sales report criteria" ]').first
+    sought_ = bhw.doc.xpath('//li[ . = "Sales report" ]').first
+    sought_ = bhw.doc.xpath('//li[ . = "Billings report" ]').first
+    sought_ = bhw.doc.xpath('//li[ . = "All Sales report criteria" ]').first
+    return
     complaint = bhw.match_one_terminal(terminals.first)
     deny{ complaint }
-    ancestor_list = bhw.doc.xpath('//li[ . = "Sales report" ]/ancestor::*')
+    ancestor_list = bhw.doc.xpath('//li[ . = "Sales report" ]')
     mapper    = bhw.terminal_map.first
     assert{ nodes_equal(mapper.first, terminals.first) }
     mapper.last.each_with_index do |node, index|
