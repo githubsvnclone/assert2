@@ -106,18 +106,18 @@ end
       ref_text.empty? or ( get_texts(sam) - ref_text ).empty?
     end
 
-    def match_attributes_and_text
-      @reference.attribute_nodes.each do |attr|
-        @sample[attr.name] == attr.value or return false
+    def match_attributes_and_text(reference, sample)
+      reference.attribute_nodes.each do |attr|
+        sample[attr.name] == attr.value or return false
       end
 
-      return match_text(@reference, @sample)
+      return match_text(reference, sample)
     end
 
     def match_all_by_attributes_and_text(nodes)
       samples = nodes.find_all do |sample|
-        @reference, @sample = @references[@index], sample
-        match_attributes_and_text
+        @reference = @references[@index]
+        match_attributes_and_text(@reference, sample)
       end
       
       @lowest_samples ||= samples if samples.any?
@@ -138,8 +138,7 @@ end
       end
       
       #  CONSIDER  raise an error if more than one matches found?
-      
-      @lowest_samples ||= []  #  TODO  need the ||= ?
+
       return nil if @matches.any? and all_mapped_terminals_are_congruent
       return @lowest_samples, @reference
     end
