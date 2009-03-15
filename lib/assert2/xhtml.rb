@@ -114,7 +114,6 @@ end
       
       matches = @doc.xpath_callback(path, :refer) do |nodes, index|
         samples = nodes.find_all{|sample|
-          all_match = true
           @reference = references[index]
           @sample = sample
           match_text and match_attributes
