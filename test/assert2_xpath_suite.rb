@@ -794,6 +794,24 @@ to <code>xpath</code>'s block, then run your tests:
     deny{ complaint }
   end
 
+  def test_can_match_the_second_of_two_paths_by_text
+    reference = Nokogiri::XML('<b><c><b>f</b></c></b>')
+    bhw       = BeHtmlWith.create('<a><b><c><b>e</b></c></b>
+                                     <b><c><b>f</b></c></b></a>')
+    terminal  = bhw.find_terminal_nodes(reference).first
+    complaint = bhw.match_one_terminal(terminal)
+    deny{ complaint }
+  end
+
+  def test_can_match_the_second_of_two_paths_by_text
+    reference = Nokogiri::XML('<ul><li><ul><li>Sales report</li></ul></li></ul>' +
+                              '<ul><li><ul><li>All Sales report criteria</li></ul></li></ul>')
+    bhw       = BeHtmlWith.create(SAMPLE_LIST)
+    terminal  = bhw.find_terminal_nodes(reference).first
+    complaint = bhw.match_one_terminal(terminal)
+    deny{ complaint }
+  end
+
   def nodes_equal(node_1, node_2)
     node_1.document == node_2.document and node_1.path == node_2.path
   end
@@ -819,7 +837,7 @@ to <code>xpath</code>'s block, then run your tests:
       complaint.index(samples.first.to_html) and
       complaint =~ /...or.../ and
       complaint.index(samples.last.to_html)
-    end    
+    end
   end
 
 #  TODO  rename lowest_samples to matched_nodes

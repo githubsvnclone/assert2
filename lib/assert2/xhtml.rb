@@ -111,7 +111,7 @@ end
       path = decorate_path(references)
       lowest_samples = []
       @reference = nil
-      
+
       matches = @doc.xpath_callback(path, :refer) do |nodes, index|
         samples = nodes.find_all{|sample|
           @reference = references[index]
@@ -121,25 +121,25 @@ end
         lowest_samples = samples if samples.any?
         samples
       end
-
       return nil if matches.any?
       return lowest_samples, @reference
     end
      
     def match_text(sam = @sample, ref = @reference)  #  TODO  better testing
-      ref_text = ref.xpath('text()').map{|x|x.to_s.strip}
-      sam_text = sam.xpath('text()').map{|x|x.to_s.strip}
+      ref_text = ref.xpath('text()').map{|x|x.to_s.strip}.reject{|x|x==''}.compact
+      sam_text = sam.xpath('text()').map{|x|x.to_s.strip}.reject{|x|x==''}.compact
         #  TODO regices? zero-len strings?
-      ( sam_text - ref_text ).empty?
+      ref_text.empty? or ( sam_text - ref_text ).empty?
     end
 
     attr_accessor :doc
+    attr_reader :builder # TODO  get rid of this
     
     def matches?(stwing, &block)
    #   @scope.wrap_expectation self do  #  TODO  put that back online
         begin
           bwock = block || @block || proc{}
-          builder = Nokogiri::HTML::Builder.new(&bwock)
+          @builder = builder = Nokogiri::HTML::Builder.new(&bwock)
           match = builder.doc.root
           @doc = Nokogiri::HTML(stwing)
           
@@ -150,8 +150,8 @@ end
           terminals.each do |terminal|
             samples, refered = match_one_terminal(terminal)  #  TODO  return in different order
             if samples and refered
-#             p samples.map{|q|q.path}  #  TODO  why [] ?
-#             p refered.path
+            p samples.map{|q|q.path}  #  TODO  why [] ?
+            p refered.path
              # @failure_message = complain_about(refered, samples)
             #  return false
             end
@@ -160,7 +160,6 @@ end
           @last_match = 0  #  TODO  get rid of @last_match
           @failure_message = match_nodes(match, @doc)
           return @failure_message.nil?
-          true
         end
   #    end
     end
@@ -290,6 +289,7 @@ module Test::Unit::Assertions
       matcher.matches?(xhtml, &block)
       message = matcher.failure_message
       flunk message if message.to_s != ''
+      return matcher.builder.doc.to_html # TODO return something reasonable
     else
      _assert_xml(xhtml) # , XML::HTMLParser)
       return @xdoc
