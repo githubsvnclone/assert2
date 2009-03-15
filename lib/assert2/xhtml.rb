@@ -99,18 +99,18 @@ end
     end
 
     def match_one_terminal(terminal)
-      @references = nodes = pathmark(terminal)
-      path = decorate_path(nodes)
+      references = pathmark(terminal)
+      path = decorate_path(references)
       lowest_samples = []
       @lowest_reference = nil
       matches = @doc.xpath_callback(path, :refer) do |nodes, index|
 
         lowest_samples = nodes.find_all{|node|
           all_match = true
-          @lowest_reference = @references[index]
+          @lowest_reference = references[index]
 
-          if all_match = match_text(node, @references[index])
-            @references[index].attribute_nodes.each do |attr|
+          if all_match = match_text(node, references[index])
+            references[index].attribute_nodes.each do |attr|
               break unless all_match = node[attr.name] == attr.value
             end
           end
