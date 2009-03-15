@@ -106,7 +106,7 @@ RSpec "matcher":
       index = -1
       
       return '//' + node_list.map{|node|
-                        node.name + "[hit(., #{ index += 1 })]"
+                        node.name + "[refer(., #{ index += 1 })]"
                       }.join('/descendant::')
     end
 
@@ -127,7 +127,7 @@ RSpec "matcher":
         ( hits_text - node_text ).length == 0
       end
 
-      def hit(nodes, index)  #  TODO  low-level test on this; merge with test-side copy
+      def refer(nodes, index)  #  TODO  low-level test on this; merge with test-side copy
         
         @lowest_samples = nodes.find_all{|node|
           all_match = true

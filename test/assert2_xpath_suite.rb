@@ -691,14 +691,13 @@ to <code>xpath</code>'s block, then run your tests:
   end
 
   def test_node_matcher_extracts_node_lists
-    doc = Nokogiri::XML(SAMPLE_FORM)
-    node = doc.xpath('//input[ @id = "user_first_name" ]').first
-    bhw = BeHtmlWith.new(SAMPLE_FORM)
-    path = bhw.pathmark(node)
+    reference = Nokogiri::XML(SAMPLE_FORM)
+    node      = reference.xpath('//input[ @id = "user_first_name" ]').first
+    bhw       = BeHtmlWith.create(SAMPLE_FORM)
+    path      = bhw.pathmark(node)
 
     assert do
       path.map{|n|n.name} == [
-        #  TODO will the fake html and body here cause trouble?
         'form',
         'fieldset',
         'ol',
@@ -709,17 +708,17 @@ to <code>xpath</code>'s block, then run your tests:
   end
 
   def test_node_matcher_turns_node_lists_into_decorated_paths
-    doc = Nokogiri::XML(SAMPLE_FORM)
-    node = doc.xpath('//input[ @id = "user_first_name" ]').first
-    bhw = BeHtmlWith.new(SAMPLE_FORM)
-    node_list = bhw.pathmark(node)
+    reference = Nokogiri::XML(SAMPLE_FORM)
+    bhw       = BeHtmlWith.create(SAMPLE_FORM)
+    terminal  = reference.xpath('//input[ @id = "user_first_name" ]').first
+    node_list = bhw.pathmark(terminal)
     path = bhw.decorate_path(node_list)
 
-    expect = '//form[hit(., 0)]' +
-       '/descendant::fieldset[hit(., 1)]' +
-       '/descendant::ol[hit(., 2)]' +
-       '/descendant::li[hit(., 3)]' +
-       '/descendant::input[hit(., 4)]'
+    expect = '//form[refer(., 0)]' +
+       '/descendant::fieldset[refer(., 1)]' +
+       '/descendant::ol[refer(., 2)]' +
+       '/descendant::li[refer(., 3)]' +
+       '/descendant::input[refer(., 4)]'
 
     assert path do 
       path == expect
