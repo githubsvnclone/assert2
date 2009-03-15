@@ -838,27 +838,20 @@ to <code>xpath</code>'s block, then run your tests:
   
   def test_two_terminals_with_common_roots_must_align_congruently
     reference = Nokogiri::XML('<ul><li><ul>
-                                 <li>Sales report</li>
                                  <li>Billings report</li>
+                                 <li>Sales report</li>
                                  <li>All Sales report criteria</li>
                                </ul></li></ul>')
     bhw       = BeHtmlWith.create(SAMPLE_LIST)
-    terminal_1 = reference.xpath('//li[ . = "Sales report" ]').first
-    terminal_2 = reference.xpath('//li[ . = "Billings report" ]').first
+    terminal_1 = reference.xpath('//li[ . = "Billings report" ]').first
+    terminal_2 = reference.xpath('//li[ . = "Sales report" ]').first
     terminal_3 = reference.xpath('//li[ . = "All Sales report criteria" ]').first
-    sought_ = bhw.doc.xpath('//li[ . = "Sales report" ]').first
-    sought_ = bhw.doc.xpath('//li[ . = "Billings report" ]').first
-    sought_ = bhw.doc.xpath('//li[ . = "All Sales report criteria" ]').first
+    sought_1 = bhw.doc.xpath('//li[ . = "Billings report" ]').first
+    sought_2 = bhw.doc.xpath('//li[ . = "Sales report" ]').first
+    sought_3 = bhw.doc.xpath('//li[ . = "All Sales report criteria" ]').first
+    assert{ bhw.congruent([terminal_1, sought_1], [terminal_2, sought_2]) }
     return
-    complaint = bhw.match_one_terminal(terminals.first)
-    deny{ complaint }
-    ancestor_list = bhw.doc.xpath('//li[ . = "Sales report" ]')
-    mapper    = bhw.terminal_map.first
-    assert{ nodes_equal(mapper.first, terminals.first) }
-    mapper.last.each_with_index do |node, index|
-      assert{ nodes_equal(node, ancestor_list[index]) }
-    end
-      #  TODO !
+    denigh{ bhw.congruent([terminal_2, sought_2], [terminal_3, sought_3]) }
   end
   
   def nodes_equal(node_1, node_2)

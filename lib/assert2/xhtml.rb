@@ -132,6 +132,40 @@ end
       return (@lowest_samples || []), @reference
     end
     
+    def nodes_equal(node_1, node_2)
+      raise 'programming error: mismatched nodes' unless node_1.document == node_2.document
+      node_1.path == node_2.path
+    end
+    
+    def congruent( tuple_a, tuple_b )
+      a_ref, a_sam = tuple_a
+      b_ref, b_sam = tuple_b
+      p a_ref.class
+      p b_ref.class
+      p a_sam.class
+      p b_sam.class
+        #  TODO  complain if tuple_1 == tuple_2, or tuple_1.position < tuple_2
+      puts
+      while nodes_equal(a_ref, b_ref) == 
+            nodes_equal(a_sam, b_sam)
+        break unless a_ref = (a_ref.parent rescue nil) and
+                     b_ref = (b_ref.parent rescue nil) and
+                     a_sam = (a_sam.parent rescue nil) and
+                     b_sam = (b_sam.parent rescue nil)
+        break if a_ref.class == Nokogiri::HTML::Document
+        break if b_ref.class == Nokogiri::HTML::Document
+        break if a_sam.class == Nokogiri::HTML::Document
+        break if b_sam.class == Nokogiri::HTML::Document
+
+      end
+      return true
+      puts
+      p tuple_1.first.path
+      p tuple_1.last.path
+      p tuple_2.first.path
+      p tuple_2.last.path
+    end
+    
     def get_texts(node)
       node.xpath('text()').map{|x|x.to_s.strip}.reject{|x|x==''}.compact
     end
