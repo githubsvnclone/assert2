@@ -855,6 +855,8 @@ to <code>xpath</code>'s block, then run your tests:
     denigh{ bhw.congruent([terminal_2, sought_2], [terminal_3, sought_3]) }
   end
   
+  #  TODO  use the xdoc if available
+  
   def nodes_equal(node_1, node_2)
     node_1.document == node_2.document and node_1.path == node_2.path
   end
@@ -920,6 +922,14 @@ to <code>xpath</code>'s block, then run your tests:
             li 'Billings criteria'
           end
         end
+      end
+    end
+  end
+
+  def test_bad_text_flunks
+    assert_flunk /could not find/i do
+      assert_xhtml SAMPLE_LIST do
+        li 'not found'
       end
     end
   end

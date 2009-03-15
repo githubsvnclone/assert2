@@ -138,9 +138,8 @@ end
       end
       
       #  CONSIDER  raise an error if more than one matches found?
-
       return nil if @matches.any? and all_mapped_terminals_are_congruent
-      return @lowest_samples, @reference
+      return @lowest_samples || [@doc.root], @reference
     end
 
     def all_mapped_terminals_are_congruent
