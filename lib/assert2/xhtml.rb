@@ -105,14 +105,14 @@ end
       @reference = nil
       
       matches = @doc.xpath_callback(path, :refer) do |nodes, index|
-        lowest_samples = nodes.find_all{|node|
+        lowest_samples = nodes.find_all{|sample|
           all_match = true
           @reference = references[index]
+          @sample = sample          
+          break unless all_match = match_text
           
-          if all_match = match_text(node)
-            @reference.attribute_nodes.each do |attr|
-              break unless all_match = node[attr.name] == attr.value
-            end
+          @reference.attribute_nodes.each do |attr|
+            break unless all_match = @sample[attr.name] == attr.value
           end
           
           all_match
@@ -123,9 +123,9 @@ end
       return lowest_samples, @reference
     end
      
-    def match_text(sample, ref = @reference)  #  TODO  better testing
-      ref_text = ref   .xpath('text()').map{|x|x.to_s.strip}
-      sam_text = sample.xpath('text()').map{|x|x.to_s.strip}
+    def match_text(sam = @sample, ref = @reference)  #  TODO  better testing
+      ref_text = ref.xpath('text()').map{|x|x.to_s.strip}
+      sam_text = sam.xpath('text()').map{|x|x.to_s.strip}
         #  TODO regices? zero-len strings?
       ( sam_text - ref_text ).empty?
     end
