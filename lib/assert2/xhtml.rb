@@ -84,7 +84,7 @@ end
       doc.xpath('//*[ not(./descendant::*) ]').map{|n|n}
     end
 
-    def pathmark(node)
+    def pathmark(node = @terminal)
       node.xpath('ancestor-or-self::*').map{|n|n}
     end  #  TODO  stop throwing away NodeSet abilities!
 
@@ -96,17 +96,37 @@ end
                        }.join('/descendant::')
     end
 
-    def match_attributes
+    def get_texts(node)
+      node.xpath('text()').map{|x|x.to_s.strip}.reject{|x|x==''}.compact
+    end
+    
+    def match_text(sam = @sample, ref = @reference)  #  TODO  better testing
+      ref_text = get_texts(ref)
+        #  TODO regices?
+      ref_text.empty? or ( get_texts(sam) - ref_text ).empty?
+    end
+
+    def match_attributes_and_text
       @reference.attribute_nodes.each do |attr|
         @sample[attr.name] == attr.value or return false
       end  #  TODO   restore ability to skip unreferenced nodes
 
-      return true
+      return match_text
+    end
+
+    def match_all_by_attributes_and_text(nodes)
+      samples = nodes.find_all do |sample|
+        @reference, @sample = @references[@index], sample
+        match_attributes_and_text
+      end
+      
+      @lowest_samples ||= samples if samples.any?
+      samples
     end
 
     def match_one_terminal(terminal)
       @terminal = terminal
-      @references = pathmark(@terminal)
+      @references = pathmark
       @lowest_samples = nil
       @reference = nil
 
@@ -114,19 +134,12 @@ end
         @index = index_.to_i
           #  ^  because the libraries pass raw numbers as float, which 
           #     might have rounding errors... CONSIDER complain?
-        samples = nodes.find_all do |sample|
-          @reference, @sample = @references[@index], sample
-          match_text and match_attributes
-        end
-        
-        @lowest_samples ||= samples if samples.any?
-        samples
+        match_all_by_attributes_and_text(nodes)
       end
       
-      #  TODO  raise an error if more than one terminal found
+      #  CONSIDER  raise an error if more than one matches found?
       
       @lowest_samples ||= []  #  TODO  need the ||= ?
-      
       return nil if @matches.any? and all_mapped_terminals_are_congruent
       return @lowest_samples, @reference
     end
@@ -167,16 +180,6 @@ end
       return true
     end
     
-    def get_texts(node)
-      node.xpath('text()').map{|x|x.to_s.strip}.reject{|x|x==''}.compact
-    end
-    
-    def match_text(sam = @sample, ref = @reference)  #  TODO  better testing
-      ref_text = get_texts(ref)
-        #  TODO regices?
-      ref_text.empty? or ( get_texts(sam) - ref_text ).empty?
-    end
-
     attr_accessor :doc,
                   :terminal_map
     
