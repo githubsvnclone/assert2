@@ -953,7 +953,8 @@ to <code>xpath</code>'s block, then run your tests:
     end
 
     path = bhw.build_deep_xpath(built.doc.root)
-    assert{ path.index('//fieldset[ ') == 0 }
+    assert{ path.index('//fieldset[ ./descendant::legend') == 0 }
+    assert{ path =~ / \]/ }
     path = bhw.build_xpath(built.doc.root.xpath('//br').first)
     assert{ path == 'br' }
 #     puts built.doc.root.to_html

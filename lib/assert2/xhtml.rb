@@ -218,9 +218,17 @@ end
 
     def build_xpath(element)
       path = element.name
+
       if element.children.any?
         path << '[ '
+        
+        element.children.each do |child|
+          path << './descendant::' + build_xpath(child)
+        end
+        
+        path << ' ]'
       end
+
       return path
     end
 
