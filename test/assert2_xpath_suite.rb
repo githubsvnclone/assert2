@@ -839,7 +839,7 @@ to <code>xpath</code>'s block, then run your tests:
     end
     
     assert complaint do
-      complaint =~ /...in these reference\(s\).../
+      complaint =~ /...in these sample\(s\).../
     end
     
     assert complaint do

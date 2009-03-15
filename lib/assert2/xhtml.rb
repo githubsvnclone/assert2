@@ -164,7 +164,7 @@ end
     def complain_about(refered, samples)
       "\n\nCould not find this reference...\n\n" +
         refered.to_html +
-        "\n\n...in these reference(s)...\n\n" +
+        "\n\n...in these sample(s)...\n\n" +
         samples.map{|s|s.to_html}.join("\n\n...or...\n\n")
     end
   
