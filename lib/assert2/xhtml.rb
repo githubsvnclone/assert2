@@ -84,11 +84,10 @@ end
     end
 
     def pathmark(node)
-      node.xpath('ancestor-or-self::*').
-        map{|n|n}
+      node.xpath('ancestor-or-self::*').map{|n|n}
     end  #  TODO  stop throwing away NodeSet abilities!
-    
-    def decorate_path(node_list) # pathmark(node)
+
+    def decorate_path(node_list = @references)
       index = -1
       
       return '//' + node_list.map{|node|
@@ -105,25 +104,24 @@ end
     end
 
     def match_one_terminal(terminal)
-      references = pathmark(terminal)
-      path = decorate_path(references)
-      lowest_samples = nil
+      @references = pathmark(terminal)
+      path = decorate_path
+      @lowest_samples = nil
       @reference = nil
 
       matches = @doc.xpath_callback path, :refer do |nodes, index_|
-        index = index_.to_i
+        @index = index_.to_i
           #  ^  because the libraries pass a float, which 
           #     might have rounding errors...
         samples = nodes.find_all{|sample|
-          @reference = references[index]
-          @sample = sample
+          @reference, @sample = @references[@index], sample
           match_text and match_attributes
         }
-        lowest_samples ||= samples if samples.any?
+        @lowest_samples ||= samples if samples.any?
         samples
       end
       return nil if matches.any?
-      return (lowest_samples || []), @reference
+      return (@lowest_samples || []), @reference
     end
     
     def get_texts(node)
@@ -144,7 +142,6 @@ end
         begin
           bwock = block || @block || proc{}
           @builder = builder = Nokogiri::HTML::Builder.new(&bwock)
-          match = builder.doc.root
           @doc = Nokogiri::HTML(stwing)
           
           #  TODO  complain if no terminals?

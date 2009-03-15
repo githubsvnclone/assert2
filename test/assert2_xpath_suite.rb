@@ -872,13 +872,13 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
 
-  def teest_assert_xhtml_queries_by_congruent_path
-    assert_flunk /TODO/ do
-      assert_xhtml SAMPLE_LIST do
+  def test_assert_xhtml_queries_by_congruent_path
+#     assert_flunk /TODO/ do
+puts      assert_xhtml SAMPLE_LIST do
         ul{ li{ ul{ li 'Sales report'
                     li 'All Sales report criteria' } } }
       end
-    end
+#     end
   end
 
 end
