@@ -105,11 +105,12 @@ end
     end
 
     def match_one_terminal(terminal)
-      @references = pathmark(terminal)
+      @terminal = terminal
+      @references = pathmark(@terminal)
       @lowest_samples = nil
       @reference = nil
 
-      matches = @doc.xpath_callback decorate_path, :refer do |nodes, index_|
+      @matches = @doc.xpath_callback decorate_path, :refer do |nodes, index_|
         @index = index_.to_i
           #  ^  because the libraries pass raw numbers as float, which 
           #     might have rounding errors... CONSIDER complain?
@@ -126,23 +127,24 @@ end
       
       @lowest_samples ||= []  #  TODO  need the ||= ?
       
-      if matches.any?
-        tuple = [terminal, matches.first]
-        
-        @terminal_map.each do |tuple_2|
-          unless congruent(tuple, tuple_2)
-            @reason = 'nodes found in different contexts'
-            return @lowest_samples, @reference
-          end
-        end
-        
-        @terminal_map << tuple
-        return nil
-      end
-      
+      return nil if @matches.any? and all_mapped_terminals_are_congruent
       return @lowest_samples, @reference
     end
-    
+
+    def all_mapped_terminals_are_congruent
+      tuple = [@terminal, @matches.first]
+      
+      @terminal_map.each do |tuple_2|
+        unless congruent(tuple, tuple_2)
+          @reason = 'nodes found in different contexts'
+          return false
+        end
+      end
+      
+      @terminal_map << tuple  #  you win - join the club
+      return true
+    end
+
     def nodes_equal(node_1, node_2)
       raise 'programming error: mismatched nodes' unless node_1.document == node_2.document
       node_1.path == node_2.path
