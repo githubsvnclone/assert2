@@ -66,13 +66,17 @@ class Nokogiri::XML::Node
   
   class XPathYielder
     def initialize(method_name, &block)
-      raise 'must call with block' unless block
-
       self.class.send :define_method, method_name do |*args|
-        return block.call(*args)
-      end        
+        raise 'must call with block' unless block
+        block.call(*args)
+      end
     end
   end
+
+  def xpath_callback(path, method_name, &block)
+    xpath path, XPathYielder.new(method_name, &block)
+  end
+  
 end
 
   class BeHtmlWith
@@ -97,11 +101,11 @@ end
     def match_one_terminal(terminal)
       @references = nodes = pathmark(terminal)
       path = decorate_path(nodes)
-      @lowest_samples = []
+      lowest_samples = []
       @lowest_reference = nil
-      nm = Nokogiri::XML::Node::XPathYielder.new :refer do |nodes, index|
+      matches = @doc.xpath_callback(path, :refer) do |nodes, index|
 
-        @lowest_samples = nodes.find_all{|node|
+        lowest_samples = nodes.find_all{|node|
           all_match = true
           @lowest_reference = @references[index]
 
@@ -113,16 +117,13 @@ end
           all_match
         }
 
-
-                 end
-      matches = @doc.xpath(path, nm)
+      end
       return nil if matches.any?
       
-      return @lowest_samples, @lowest_reference
+      return lowest_samples, @lowest_reference
     end
     
-      attr_reader :lowest_samples,
-                  :lowest_reference
+      attr_reader :lowest_reference
  
       def match_text(node, hit)  #  TODO  rename them already
         node_text = node.xpath('text()').map{|x|x.to_s.strip}
