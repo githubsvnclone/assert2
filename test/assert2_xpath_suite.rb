@@ -747,7 +747,7 @@ to <code>xpath</code>'s block, then run your tests:
     bhw       = BeHtmlWith.create('<a><b><e><o/></e></b></a>')
     terminal  = bhw.find_terminal_nodes(reference).first
     samples, refered = bhw.match_one_terminal(terminal)
-    assert{ nodes_equal(samples.first, bhw.doc.xpath('//a/b').first) }
+    assert{ nodes_equal(samples.first, bhw.doc.xpath('//a').first) }
     assert{ nodes_equal(refered, reference.xpath('//a/b').first) }
   end
 
@@ -812,14 +812,13 @@ to <code>xpath</code>'s block, then run your tests:
     deny{ complaint }
   end
 
-  def teest_match_one_terminal_reports_both_sides_of_a_fault
+  def test_match_one_terminal_reports_both_sides_of_a_fault
     reference = Nokogiri::XML('<ul><li><ul><li>Sales SPIKE</li></ul></li></ul>' +
                               '<ul><li><ul><li>All Sales report criteria</li></ul></li></ul>')
     bhw       = BeHtmlWith.create(SAMPLE_LIST)
     terminal  = bhw.find_terminal_nodes(reference).first
     complaint = bhw.match_one_terminal(terminal)
-    p complaint
-#    deny{ complaint }
+    assert{ complaint.inspect.match('Common system') }
   end
 
   def nodes_equal(node_1, node_2)
@@ -861,7 +860,7 @@ to <code>xpath</code>'s block, then run your tests:
           li 'Billings criteria'
         end
       end
-    end    
+    end
   end
 
 #  TODO does the latest assert_raise take a Regexp

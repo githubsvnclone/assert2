@@ -109,7 +109,7 @@ end
     def match_one_terminal(terminal)
       references = pathmark(terminal)
       path = decorate_path(references)
-      lowest_samples = []
+      lowest_samples = nil
       @reference = nil
 
       matches = @doc.xpath_callback path, :refer do |nodes, index|
@@ -119,11 +119,11 @@ end
           @sample = sample
           match_text and match_attributes
         }
-        lowest_samples = samples if samples.any?
+        lowest_samples ||= samples if samples.any?
         samples
       end
       return nil if matches.any?
-      return lowest_samples, @reference
+      return (lowest_samples || []), @reference
     end
      
     def match_text(sam = @sample, ref = @reference)  #  TODO  better testing
