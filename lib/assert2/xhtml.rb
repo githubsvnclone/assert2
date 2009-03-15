@@ -56,8 +56,6 @@ requirements:
  - at fault time, the matcher prints out the failing elements
      and their immediate context.
 
-First, we take care of the paperwork. This spec works with Yuri's
-sample website. I add Nokogiri, for our XML engine:
 =end
 
 require 'nokogiri'
@@ -101,7 +99,7 @@ end
     def match_attributes
       @reference.attribute_nodes.each do |attr|
         @sample[attr.name] == attr.value or return false
-      end
+      end  #  TODO   restore ability to skip unreferenced nodes
 
       return true
     end
@@ -113,7 +111,9 @@ end
       @reference = nil
 
       matches = @doc.xpath_callback path, :refer do |nodes, index_|
-        index = index_.to_i  #  because the libraries pass a float, which might have rounding errors
+        index = index_.to_i
+          #  ^  because the libraries pass a float, which 
+          #     might have rounding errors...
         samples = nodes.find_all{|sample|
           @reference = references[index]
           @sample = sample
@@ -125,12 +125,15 @@ end
       return nil if matches.any?
       return (lowest_samples || []), @reference
     end
-     
+    
+    def get_texts(node)
+      node.xpath('text()').map{|x|x.to_s.strip}.reject{|x|x==''}.compact
+    end
+    
     def match_text(sam = @sample, ref = @reference)  #  TODO  better testing
-      ref_text = ref.xpath('text()').map{|x|x.to_s.strip}.reject{|x|x==''}.compact
-      sam_text = sam.xpath('text()').map{|x|x.to_s.strip}.reject{|x|x==''}.compact
-        #  TODO regices? zero-len strings?
-      ref_text.empty? or ( sam_text - ref_text ).empty?
+      ref_text = get_texts(ref)
+        #  TODO regices?
+      ref_text.empty? or ( get_texts(sam) - ref_text ).empty?
     end
 
     attr_accessor :doc
