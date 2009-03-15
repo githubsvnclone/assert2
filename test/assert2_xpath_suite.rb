@@ -779,7 +779,7 @@ to <code>xpath</code>'s block, then run your tests:
     bhw.doc = Nokogiri::HTML(stwing)
     hits, matcher = bhw.match_one_terminal(terminal)
     assert{ nodes_equal(hits.first, bhw.doc.xpath('//a/b').first) }
-#    assert{ got.last == [doc.xpath('/a/b'), built.xpath('/a/b').first] }
+    assert{ nodes_equal(matcher, built.xpath('//a/b').first) }
   end
 
   def nodes_equal(node_1, node_2)
