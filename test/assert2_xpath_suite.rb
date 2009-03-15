@@ -821,6 +821,13 @@ to <code>xpath</code>'s block, then run your tests:
     assert{ complaint.inspect.match('Common system') }
   end
 
+  def test_two_terminals_with_common_roots_must_align_congruently
+    reference = Nokogiri::XML('<ul><li><ul>
+                                 <li>Sales report</li>
+                                 <li>All Sales report criteria</li>
+                               </ul></li></ul>')
+  end
+  
   def nodes_equal(node_1, node_2)
     node_1.document == node_2.document and node_1.path == node_2.path
   end
@@ -872,9 +879,9 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
 
-  def test_assert_xhtml_queries_by_congruent_path
+  def teest_assert_xhtml_queries_by_congruent_path
 #     assert_flunk /TODO/ do
-puts      assert_xhtml SAMPLE_LIST do
+      assert_xhtml SAMPLE_LIST do
         ul{ li{ ul{ li 'Sales report'
                     li 'All Sales report criteria' } } }
       end

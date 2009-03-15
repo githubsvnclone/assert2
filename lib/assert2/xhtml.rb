@@ -140,11 +140,11 @@ end
    #   @scope.wrap_expectation self do  #  TODO  put that back online
         begin
           bwock = block || @block || proc{}
-          @builder = builder = Nokogiri::HTML::Builder.new(&bwock)
+          @builder = Nokogiri::HTML::Builder.new(&bwock)
           @doc = Nokogiri::HTML(stwing)
           
           #  TODO  complain if no terminals?
-          terminals = find_terminal_nodes(builder.doc)
+          terminals = find_terminal_nodes(@builder.doc)
           #  TODO  complain if found paths don't have the same root!
           
           terminals.each do |terminal|
