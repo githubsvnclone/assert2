@@ -134,7 +134,6 @@ end
     end
 
     attr_accessor :doc
-    attr_reader :builder # TODO  get rid of this
     
     def matches?(stwing, &block)
    #   @scope.wrap_expectation self do  #  TODO  put that back online
@@ -202,7 +201,7 @@ module Test::Unit::Assertions
       matcher.matches?(xhtml, &block)
       message = matcher.failure_message
       flunk message if message.to_s != ''
-      return matcher.builder.doc.to_html # TODO return something reasonable
+#       return matcher.builder.doc.to_html # TODO return something reasonable
     else
      _assert_xml(xhtml) # , XML::HTMLParser)
       return @xdoc

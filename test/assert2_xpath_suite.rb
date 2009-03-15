@@ -826,6 +826,9 @@ to <code>xpath</code>'s block, then run your tests:
                                  <li>Sales report</li>
                                  <li>All Sales report criteria</li>
                                </ul></li></ul>')
+    bhw       = BeHtmlWith.create(SAMPLE_LIST)
+    terminals = bhw.find_terminal_nodes(reference)
+      #  TODO !
   end
   
   def nodes_equal(node_1, node_2)
