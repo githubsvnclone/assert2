@@ -927,8 +927,14 @@ to <code>xpath</code>'s block, then run your tests:
   end
 
   def test_bad_text_flunks
-    assert_flunk /could not find/i do
-      assert_xhtml SAMPLE_LIST do
+#     assert_flunk /could not find/i do
+#       assert_xhtml SAMPLE_LIST do
+#         li 'not found'
+#       end
+#     end
+
+    assert_flunk /Could not find/ do
+      assert_xhtml SAMPLE_FORM do
         li 'not found'
       end
     end

@@ -103,7 +103,7 @@ end
     def match_text(ref, sam)
       ref_text = get_texts(ref)
         #  TODO regices?
-      ref_text.empty? or ( get_texts(sam) - ref_text ).empty?
+      ref_text.empty? or ( ref_text - get_texts(sam) ).empty?
     end
 
     def match_attributes_and_text(reference, sample)
@@ -136,7 +136,7 @@ end
           #     might have rounding errors... CONSIDER complain?
         match_all_by_attributes_and_text(nodes)
       end
-      
+
       #  CONSIDER  raise an error if more than one matches found?
       return nil if @matches.any? and all_mapped_terminals_are_congruent
       return @lowest_samples || [@doc.root], @reference
