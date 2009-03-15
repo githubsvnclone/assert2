@@ -102,37 +102,35 @@ end
       references = pathmark(terminal)
       path = decorate_path(references)
       lowest_samples = []
-      @lowest_reference = nil
+      lowest_reference = nil
+      
       matches = @doc.xpath_callback(path, :refer) do |nodes, index|
-
         lowest_samples = nodes.find_all{|node|
           all_match = true
-          @lowest_reference = references[index]
-
-          if all_match = match_text(node, references[index])
-            references[index].attribute_nodes.each do |attr|
+          lowest_reference = references[index]
+          
+          if all_match = match_text(node, lowest_reference)
+            lowest_reference.attribute_nodes.each do |attr|
               break unless all_match = node[attr.name] == attr.value
             end
           end
+          
           all_match
         }
-
       end
+
       return nil if matches.any?
-      
-      return lowest_samples, @lowest_reference
+      return lowest_samples, lowest_reference
     end
-    
-      attr_reader :lowest_reference
- 
-      def match_text(node, hit)  #  TODO  rename them already
-        node_text = node.xpath('text()').map{|x|x.to_s.strip}
-        hits_text = hit. xpath('text()').map{|x|x.to_s.strip}
-          #  TODO regices? zero-len strings?
-        ( hits_text - node_text ).length == 0
-      end
+     
+    def match_text(node, hit)  #  TODO  rename them already
+      node_text = node.xpath('text()').map{|x|x.to_s.strip}
+      hits_text = hit. xpath('text()').map{|x|x.to_s.strip}
+        #  TODO regices? zero-len strings?
+      ( hits_text - node_text ).length == 0
+    end
 
-    attr_accessor :doc  #  TODO  use this to DRY up the tests, by way of making it go away
+    attr_accessor :doc
     
     def matches?(stwing, &block)
    #   @scope.wrap_expectation self do  #  TODO  put that back online
