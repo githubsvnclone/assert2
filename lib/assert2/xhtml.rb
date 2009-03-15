@@ -97,9 +97,11 @@ RSpec "matcher":
       def initialize(hits = [])
         @hits = hits
         @lowest_hits = []
+        @lowest_matches = []
       end
       
-      attr_reader :lowest_hits
+      attr_reader :lowest_hits,
+                  :lowest_matches
  
       def match_text(node, hit)
         node_text = node.xpath('text()').map{|x|x.to_s.strip}
@@ -109,8 +111,10 @@ RSpec "matcher":
       end
 
       def hit(nodes, index)  #  TODO  low-level test on this; merge with test-side copy
+        
         @lowest_hits = nodes.find_all{|node|
           all_match = true
+          @lowest_matches = @hits
           if all_match = match_text(node, @hits[index])
             @hits[index].attribute_nodes.each do |attr|
               break unless all_match = node[attr.name] == attr.value
@@ -138,28 +142,35 @@ RSpec "matcher":
                       }.join('/descendant::')
     end
 
+    def match_one_terminal(terminal)
+      nodes = pathmark(terminal)
+      path = decorate_path(nodes)
+      nm = NodeMatcher.new(nodes)
+      got = @doc.xpath(path, nm)
+      unless got
+p nm.lowest_hits
+p nm.lowest_matches
+      end
+    end
+    
     def matches?(stwing, &block)
    #   @scope.wrap_expectation self do  #  TODO  put that back online
         begin
           bwock = block || @block || proc{}
           builder = Nokogiri::HTML::Builder.new(&bwock)
           match = builder.doc.root
-          doc = Nokogiri::HTML(stwing)
+          @doc = Nokogiri::HTML(stwing)
           
           #  TODO  complain if no terminals?
           terminals = find_terminal_nodes(builder.doc)
           #  TODO  complain if found paths don't have the same root!
           
           terminals.each do |terminal|
-            nodes = pathmark(terminal)
-            path = decorate_path(nodes)
-            nm = NodeMatcher.new(nodes)
-            got = doc.xpath(path, nm)
-
+            match_one_terminal(terminal)
           end
           
           @last_match = 0
-          @failure_message = match_nodes(match, doc)
+          @failure_message = match_nodes(match, @doc)
           return @failure_message.nil?
         end
   #    end
