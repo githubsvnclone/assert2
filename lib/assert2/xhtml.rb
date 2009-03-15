@@ -213,7 +213,15 @@ end
     end
 
     def build_deep_xpath(element)
-      return '//' + element.name
+      return '//' + build_xpath(element)
+    end
+
+    def build_xpath(element)
+      path = element.name
+      if element.children.any?
+        path << '[ '
+      end
+      return path
     end
 
 
