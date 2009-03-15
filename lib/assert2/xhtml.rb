@@ -100,7 +100,7 @@ end
       node.xpath('text()').map{|x|x.to_s.strip}.reject{|x|x==''}.compact
     end
     
-    def match_text(sam = @sample, ref = @reference)  #  TODO  better testing
+    def match_text(ref, sam)
       ref_text = get_texts(ref)
         #  TODO regices?
       ref_text.empty? or ( get_texts(sam) - ref_text ).empty?
@@ -109,9 +109,9 @@ end
     def match_attributes_and_text
       @reference.attribute_nodes.each do |attr|
         @sample[attr.name] == attr.value or return false
-      end  #  TODO   restore ability to skip unreferenced nodes
+      end
 
-      return match_text
+      return match_text(@reference, @sample)
     end
 
     def match_all_by_attributes_and_text(nodes)
