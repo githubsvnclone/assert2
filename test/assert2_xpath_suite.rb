@@ -757,7 +757,7 @@ to <code>xpath</code>'s block, then run your tests:
     path     = bhw.decorate_path(nodes)
     nm       = BeHtmlWith::NodeMatcher.new(nodes)
     deny{ doc.xpath(path, nm).any? }
-    assert{ nm.lowest_hits.first.name == doc.xpath('/a/b').first.name }
+    assert{ nm.lowest_samples.first.name == doc.xpath('/a/b').first.name }
   end
 
   def test_match_one_terminal
@@ -786,7 +786,7 @@ to <code>xpath</code>'s block, then run your tests:
     node_1.document == node_2.document and node_1.path == node_2.path
   end
 
-#  TODO  rename lowest_hits to matched_nodes
+#  TODO  rename lowest_samples to matched_nodes
 
   def test_assert_xhtml_counts_its_shots
     assert_xhtml SAMPLE_LIST do

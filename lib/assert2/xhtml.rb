@@ -113,11 +113,11 @@ RSpec "matcher":
     class NodeMatcher  #  TODO  replace this with a yielder
       def initialize(hits = [])
         @hits = hits
-        @lowest_hits = []
+        @lowest_samples = []
         @lowest_reference = []
       end
       
-      attr_reader :lowest_hits,
+      attr_reader :lowest_samples,
                   :lowest_reference
  
       def match_text(node, hit)
@@ -129,7 +129,7 @@ RSpec "matcher":
 
       def hit(nodes, index)  #  TODO  low-level test on this; merge with test-side copy
         
-        @lowest_hits = nodes.find_all{|node|
+        @lowest_samples = nodes.find_all{|node|
           all_match = true
           @lowest_reference = @hits[index]
           #  TODO assert @hits here
@@ -149,7 +149,7 @@ RSpec "matcher":
       nm = NodeMatcher.new(nodes)
       matches = @doc.xpath(path, nm)
       return nil if matches.any?
-      return nm.lowest_hits, nm.lowest_reference
+      return nm.lowest_samples, nm.lowest_reference
     end
     
     attr_accessor :doc  #  TODO  use this to DRY up the tests, by way of making it go away
