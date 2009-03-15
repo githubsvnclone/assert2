@@ -146,7 +146,7 @@ RSpec "matcher":
       nodes = pathmark(terminal)
       path = decorate_path(nodes)
       nm = NodeMatcher.new(nodes)
-      got = @doc.xpath(path, nm)
+      return nil if @doc.xpath(path, nm)
       unless got
 p nm.lowest_hits
 p nm.lowest_matches
