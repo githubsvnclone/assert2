@@ -146,7 +146,8 @@ end
       p b_sam.class
         #  TODO  complain if tuple_1 == tuple_2, or tuple_1.position < tuple_2
       puts
-      while nodes_equal(a_ref, b_ref) == 
+      loop do
+        return false unless nodes_equal(a_ref, b_ref) == 
             nodes_equal(a_sam, b_sam)
         break unless a_ref = (a_ref.parent rescue nil) and
                      b_ref = (b_ref.parent rescue nil) and

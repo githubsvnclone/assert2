@@ -850,7 +850,6 @@ to <code>xpath</code>'s block, then run your tests:
     sought_2 = bhw.doc.xpath('//li[ . = "Sales report" ]').first
     sought_3 = bhw.doc.xpath('//li[ . = "All Sales report criteria" ]').first
     assert{ bhw.congruent([terminal_1, sought_1], [terminal_2, sought_2]) }
-    return
     denigh{ bhw.congruent([terminal_2, sought_2], [terminal_3, sought_3]) }
   end
   
