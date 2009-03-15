@@ -777,8 +777,13 @@ to <code>xpath</code>'s block, then run your tests:
     bhw     = BeHtmlWith.new('<a><b><e><o/></e></b></a>')
     terminal = bhw.find_terminal_nodes(built).first
     bhw.doc = Nokogiri::HTML(stwing)
-    got = bhw.match_one_terminal(terminal)
-    assert{ got == nil }  #  TODO  crack out the error response here!
+    hits, matcher = bhw.match_one_terminal(terminal)
+    assert{ nodes_equal(hits.first, bhw.doc.xpath('//a/b').first) }
+#    assert{ got.last == [doc.xpath('/a/b'), built.xpath('/a/b').first] }
+  end
+
+  def nodes_equal(node_1, node_2)
+    node_1.document == node_2.document and node_1.path == node_2.path
   end
 
 #  TODO  rename lowest_hits to matched_nodes

@@ -93,7 +93,24 @@ RSpec "matcher":
 
   class BeHtmlWith
     
-    class NodeMatcher
+    def find_terminal_nodes(doc)
+      doc.xpath('//*[ not(./descendant::*) ]').map{|n|n}
+    end
+
+    def pathmark(node)
+      node.xpath('ancestor-or-self::*').
+        map{|n|n}
+    end  #  TODO  stop throwing away NodeSet abilities!
+    
+    def decorate_path(node_list) # pathmark(node)
+      index = -1
+      
+      return '//' + node_list.map{|node|
+                        node.name + "[hit(., #{ index += 1 })]"
+                      }.join('/descendant::')
+    end
+
+    class NodeMatcher  #  TODO  replace this with a yielder
       def initialize(hits = [])
         @hits = hits
         @lowest_hits = []
@@ -114,7 +131,7 @@ RSpec "matcher":
         
         @lowest_hits = nodes.find_all{|node|
           all_match = true
-          @lowest_matches = @hits
+          @lowest_matches = @hits[index]
           #  TODO assert @hits here
           if all_match = match_text(node, @hits[index])
             @hits[index].attribute_nodes.each do |attr|
@@ -126,33 +143,18 @@ RSpec "matcher":
       end
     end
     
-    def find_terminal_nodes(doc)
-      doc.xpath('//*[ not(./descendant::*) ]').map{|n|n}
-    end
-
-    def pathmark(node)
-      node.xpath('ancestor-or-self::*').
-        map{|n|n}
-    end  #  TODO  stop throwing away NodeSet abilities!
-    
-    def decorate_path(node_list) # pathmark(node)
-      index = -1
-      
-      return '//' + node_list.map{|node|
-                        node.name + "[hit(., #{ index += 1 })]"
-                      }.join('/descendant::')
-    end
-
     def match_one_terminal(terminal)
       nodes = pathmark(terminal)
       path = decorate_path(nodes)
       nm = NodeMatcher.new(nodes)
-      return nil if @doc.xpath(path, nm)
-p nm.lowest_hits
-p nm.lowest_matches
+      matches = @doc.xpath(path, nm)
+      return nil if matches.any?
+# p nm.lowest_hits
+# p nm.lowest_matches
+      return nm.lowest_hits, nm.lowest_matches  #  TODO  rename to lowest_matchers
     end
     
-    attr_writer :doc  #  TODO  use this to DRY up the tests
+    attr_accessor :doc  #  TODO  use this to DRY up the tests, by way of making it go away
     
     def matches?(stwing, &block)
    #   @scope.wrap_expectation self do  #  TODO  put that back online
