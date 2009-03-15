@@ -80,6 +80,7 @@ end
   class BeHtmlWith
     
     def find_terminal_nodes(doc)
+      @terminal_map = []
       doc.xpath('//*[ not(./descendant::*) ]').map{|n|n}
     end
 
@@ -90,9 +91,9 @@ end
     def decorate_path(node_list = @references)
       index = -1
       
-      return '//' + node_list.map{|node|
-                        node.name + "[refer(.,'#{ index += 1 }')]"
-                      }.join('/descendant::')
+      '//' + node_list.map{|node|
+                         node.name + "[refer(.,'#{ index += 1 }')]"
+                       }.join('/descendant::')
     end
 
     def match_attributes
@@ -110,8 +111,8 @@ end
 
       matches = @doc.xpath_callback decorate_path, :refer do |nodes, index_|
         @index = index_.to_i
-          #  ^  because the libraries pass a float, which 
-          #     might have rounding errors...
+          #  ^  because the libraries pass raw numbers as float, which 
+          #     might have rounding errors... CONSIDER complain?
         samples = nodes.find_all{|sample|
           @reference, @sample = @references[@index], sample
           match_text and match_attributes
@@ -119,7 +120,15 @@ end
         @lowest_samples ||= samples if samples.any?
         samples
       end
-      return nil if matches.any?
+      
+      #  TODO  raise an error if more than one terminal found
+      
+      if matches.any?
+        @terminal_map << [terminal, matches.first]
+      
+        return nil
+      end
+      
       return (@lowest_samples || []), @reference
     end
     
@@ -133,7 +142,8 @@ end
       ref_text.empty? or ( get_texts(sam) - ref_text ).empty?
     end
 
-    attr_accessor :doc
+    attr_accessor :doc,
+                  :terminal_map
     
     def matches?(stwing, &block)
    #   @scope.wrap_expectation self do  #  TODO  put that back online
