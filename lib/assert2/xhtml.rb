@@ -114,11 +114,11 @@ RSpec "matcher":
       def initialize(hits = [])
         @hits = hits
         @lowest_hits = []
-        @lowest_matches = []
+        @lowest_reference = []
       end
       
       attr_reader :lowest_hits,
-                  :lowest_matches
+                  :lowest_reference
  
       def match_text(node, hit)
         node_text = node.xpath('text()').map{|x|x.to_s.strip}
@@ -131,7 +131,7 @@ RSpec "matcher":
         
         @lowest_hits = nodes.find_all{|node|
           all_match = true
-          @lowest_matches = @hits[index]
+          @lowest_reference = @hits[index]
           #  TODO assert @hits here
           if all_match = match_text(node, @hits[index])
             @hits[index].attribute_nodes.each do |attr|
@@ -149,9 +149,7 @@ RSpec "matcher":
       nm = NodeMatcher.new(nodes)
       matches = @doc.xpath(path, nm)
       return nil if matches.any?
-# p nm.lowest_hits
-# p nm.lowest_matches
-      return nm.lowest_hits, nm.lowest_matches  #  TODO  rename to lowest_matchers
+      return nm.lowest_hits, nm.lowest_reference
     end
     
     attr_accessor :doc  #  TODO  use this to DRY up the tests, by way of making it go away
