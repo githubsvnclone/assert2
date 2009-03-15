@@ -932,12 +932,17 @@ to <code>xpath</code>'s block, then run your tests:
 #         li 'not found'
 #       end
 #     end
-
     assert_flunk /Could not find/ do
       assert_xhtml SAMPLE_FORM do
         li 'not found'
       end
     end
+  end
+
+  def test_third_times_a_charm
+    bhw = BeHtmlWith.create(SAMPLE_FORM)
+    puts
+    p bhw.doc.xpath('//fieldset[ ./descendant::li[ ./descendant::label ] ]/descendant::input')
   end
 
 #  TODO does the latest assert_raise take a Regexp
