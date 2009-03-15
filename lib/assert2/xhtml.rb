@@ -62,34 +62,18 @@ sample website. I add Nokogiri, for our XML engine:
 
 require 'nokogiri'
 
-=begin
-That block after "response.body.should be_html_with" answers
-Yuri's question. Any HTML we can think of, we can specify
-it in there.
+class Nokogiri::XML::Node
+  
+  class XPathYielder
+    def initialize(method_name, &block)
+      raise 'must call with block' unless block
 
-If we inject a fault, such as :name => 'user[first_nome]', we 
-get this diagnostic:
-
-  <input type="text" name="user[first_nome]">
-  does not match
-  <fieldset>
-  <legend>Personal Information</legend>
-      <ol>
-  <li id="control_user_first_name">
-          <label for="user_first_name">First name</label>
-          <input type="text" name="user[first_name]" id="user_first_name">
-  </li>
-      </ol>
-  </fieldset>
-
-The diagnostic only reported the fault's immediate 
-context - the <fieldset> where the matcher sought the 
-errant <input> field. It would not, for example, spew
-an entire website into our faces.
-
-To support that specification, we will create a new
-RSpec "matcher":
-=end
+      self.class.send :define_method, method_name do |*args|
+        return block.call(*args)
+      end        
+    end
+  end
+end
 
   class BeHtmlWith
     
@@ -110,22 +94,12 @@ RSpec "matcher":
                       }.join('/descendant::')
     end
 
-    class XPathYielder
-      def initialize(method_name, &block)
-        raise 'must call with block' unless block
-
-        self.class.send :define_method, method_name do |*args|
-          return block.call(*args)
-        end        
-      end
-    end
-
     def match_one_terminal(terminal)
       @references = nodes = pathmark(terminal)
       path = decorate_path(nodes)
       @lowest_samples = []
       @lowest_reference = nil
-      nm = XPathYielder.new :refer do |nodes, index|
+      nm = Nokogiri::XML::Node::XPathYielder.new :refer do |nodes, index|
 
         @lowest_samples = nodes.find_all{|node|
           all_match = true
