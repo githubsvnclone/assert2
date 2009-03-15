@@ -105,11 +105,10 @@ end
 
     def match_one_terminal(terminal)
       @references = pathmark(terminal)
-      path = decorate_path
       @lowest_samples = nil
       @reference = nil
 
-      matches = @doc.xpath_callback path, :refer do |nodes, index_|
+      matches = @doc.xpath_callback decorate_path, :refer do |nodes, index_|
         @index = index_.to_i
           #  ^  because the libraries pass a float, which 
           #     might have rounding errors...
