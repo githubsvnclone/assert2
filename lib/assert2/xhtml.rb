@@ -112,8 +112,8 @@ end
       lowest_samples = nil
       @reference = nil
 
-      matches = @doc.xpath_callback path, :refer do |nodes, index|
-        index = index.to_i  #  because the libraries pass a float, which might have rounding errors
+      matches = @doc.xpath_callback path, :refer do |nodes, index_|
+        index = index_.to_i  #  because the libraries pass a float, which might have rounding errors
         samples = nodes.find_all{|sample|
           @reference = references[index]
           @sample = sample
@@ -151,125 +151,36 @@ end
           terminals.each do |terminal|
             samples, refered = match_one_terminal(terminal)  #  TODO  return in different order
             if samples and refered
-#             p samples.map{|q|q.path}  #  TODO  why [] ?
-#             p refered.path
-
               @failure_message = complain_about(refered, samples)
               return false
             end
           end
 
           return true
-#           @last_match = 0  #  TODO  get rid of @last_match
-#           @failure_message = match_nodes(match, @doc)
-#           return @failure_message.nil?
         end
   #    end
     end
 
     def complain_about(refered, samples)
       "\n\nCould not find this reference...\n\n" +
-      refered.to_html +
-      "\n\n...in these reference(s)...\n\n" +
-      samples.map{|s|s.to_html}.join("\n\n...or...\n\n")
+        refered.to_html +
+        "\n\n...in these reference(s)...\n\n" +
+        samples.map{|s|s.to_html}.join("\n\n...or...\n\n")
     end
- 
- #  TODO does a multi-modal top axis work?
- 
-    def match_nodes(match, doc)  #  TODO  get very rid of me!
-      tag = match.name.sub(/\!$/, '')
+  
+  #  TODO does a multi-modal top axis work?
+  # TODO      this_match = node.xpath('preceding::*').length
       
-      node = doc.xpath("descendant::#{tag}").
-                select{|n| resemble(match, n) }.
-                first or return complaint(match, doc)
-
-      this_match = node.xpath('preceding::*').length
-      
-      if @last_match > this_match
-        return complaint(match, doc, 'node is out of specified order!')
-      end
-
-      @last_match = this_match
-
-      match.xpath('*').each do |child|
-        issue = match_nodes(child, node) and 
-          return issue
-      end
-
-      return nil
-    end
-
       # http://www.zvon.org/xxl/XPathTutorial/Output/example18.html
       # The preceding axis contains all nodes in the same document 
       # as the context node that are before the context node in 
       # document order, excluding any ancestors and excluding 
       # attribute nodes and namespace nodes 
 
-#p [node.name, node.text]
-# p node.path if lastest
-#p node.text
-# p lastest.path if lastest
-    
-=begin
-At any point in that recursion, if we can't find a match,
-we build a string describing that situation, and pass it
-back up the call stack. This immediately stops any iterating
-and recursing underway!
-
-Two nodes "resemble" each other if their names are the
-same (naturally!); if your matching element's
-attributes are a subset of your page's element's 
-attributes, and if their text is similar:
-=end
-
-    def resemble(match, node)  #  TODO  no longer need our services
-      keys = match.attributes.keys
-      node_keys = valuate(node.attributes.select{|k,v| keys.include? k })
-      match_keys = valuate(match.attributes)
-      node_keys == match_keys or return false
-        
-    #  TODO  try
-#       match_text = match.xpath('text()').map{|x|x.to_s}
-#        node_text = match.xpath('text()').map{|x|x.to_s}
-
-      match_text = match.children.grep(Nokogiri::XML::Text).map{|t| t.to_s.strip }
-       node_text = node .children.grep(Nokogiri::XML::Text).map{|t| t.to_s.strip }
-      match_text.empty? or 0 == ( match_text - node_text ).length
-    end
-
-=begin
-That method cannot simply compare node.text, because Nokogiri
-conglomerates all that node's descendants' texts together, and
-these would gum up our search. So those elaborate lines with
-grep() and map() serve to extract all the current node's 
-immediate textual children, then compare them as sets.
-
-Put another way, <form> does not appear to contain "First name".
-Specifications can only match text by declaring their immediate 
-parent.
-
-The remaining support methods are self-explanatory. They
-prepare Node attributes for comparison, build our diagnostics,
-and plug our matcher object into RSpec:
-=end
- 
-    def valuate(attributes)
-      attributes.inject({}) do |h,(k,v)| 
-        h.merge(k => v.value) 
-      end  #  this converts objects to strings, so our Hashes
-    end    #  can compare for equality
-
-    def complaint(node, match, berate = nil)
-      "\n    #{berate}".rstrip +
-      "\n\n#{node.to_html}\n" +
-          "    does not match\n\n" +
-           match.to_html
-    end
-
     attr_accessor :failure_message
  
     def negative_failure_message
-      "yack yack yack"
+      "TODO"
     end
     
     def initialize(scope, &block)
