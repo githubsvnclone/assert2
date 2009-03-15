@@ -773,10 +773,10 @@ to <code>xpath</code>'s block, then run your tests:
 
   def test_cant_match_one_terminal
     built = Nokogiri::XML('<a><b><c><d/></c></b></a>')
-    doc    = Nokogiri::XML(stwing = '<a><b><e><o/></e></b></a>')
-    bhw     = BeHtmlWith.new('<a><b><e><o/></e></b></a>')
+    stwing = '<a><b><e><o/></e></b></a>'
+    bhw     = BeHtmlWith.create('<a><b><e><o/></e></b></a>')
     terminal = bhw.find_terminal_nodes(built).first
-    bhw.doc = Nokogiri::HTML(stwing)
+#     bhw.doc = Nokogiri::HTML(stwing)
     hits, matcher = bhw.match_one_terminal(terminal)
     assert{ nodes_equal(hits.first, bhw.doc.xpath('//a/b').first) }
     assert{ nodes_equal(matcher, built.xpath('//a/b').first) }

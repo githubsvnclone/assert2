@@ -300,6 +300,13 @@ and plug our matcher object into RSpec:
     def initialize(scope, &block)
       @scope, @block = scope, block
     end
+
+    def self.create(stwing)
+      bhw = BeHtmlWith.new(nil)
+      bhw.doc = Nokogiri::HTML(stwing)
+      return bhw
+    end
+
   end
 
 module Test::Unit::Assertions
