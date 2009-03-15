@@ -158,27 +158,12 @@ end
   #    end
     end
 
-=begin
-The trick up our sleeve is Nokogiri::HTML::Builder. We passed
-the matching block into it - that's where all the 'form', 
-'fieldset', 'input', etc. elements came from. And this trick 
-exposes both our target page and our matched elements to the 
-full power of Nokogiri. Schema validation, for example, would 
-be very easy.
-
-The matches? method works by building two DOMs, and forcing
-our page's DOM to satisfy each element, attribute, and text
-in our specification's DOM.
-
-To match nodes, we first find all nodes, by name, below
-the current node. Note that match_nodes() recurses. Then
-we throw away all nodes that don't satisfy our matching
-criteria.
-
-We pick the first node that passes that check, and 
-then recursively match its children to each child,
-if any, from our matching node.
-=end
+    def complain_about(refered, samples)
+      "\n\nCould not find this reference...\n\n" +
+      refered.to_html +
+      "\n\n...in these reference(s)...\n\n" +
+      samples.map{|s|s.to_html}.join("\n\n...or...\n\n")
+    end
  
  #  TODO does a multi-modal top axis work?
  

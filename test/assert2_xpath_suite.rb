@@ -763,9 +763,9 @@ to <code>xpath</code>'s block, then run your tests:
     reference = Nokogiri::XML('<b><c>d</c></b>')
     bhw       = BeHtmlWith.create('<a><b><c>o</e></b></a>')
     terminal  = bhw.find_terminal_nodes(reference).first
-    hits, matcher = bhw.match_one_terminal(terminal)
-    assert{ nodes_equal(hits.first, bhw.doc.xpath('//a/b').first) }
-    assert{ nodes_equal(matcher, reference.xpath('//b/c').first) }
+    samples, refered = bhw.match_one_terminal(terminal)
+    assert{ nodes_equal(samples.first, bhw.doc.xpath('//a/b').first) }
+    assert{ nodes_equal(refered, reference.xpath('//b/c').first) }
   end
 
   def test_match_one_terminal_with_an_attribute
@@ -780,13 +780,37 @@ to <code>xpath</code>'s block, then run your tests:
     reference = Nokogiri::XML('<b><c d="e"></c></b>')
     bhw       = BeHtmlWith.create('<a><b><c d="f"></c></b></a>')
     terminal  = bhw.find_terminal_nodes(reference).first
-    hits, matcher = bhw.match_one_terminal(terminal)
-    assert{ nodes_equal(hits.first, bhw.doc.xpath('//a/b').first) }
-    assert{ nodes_equal(matcher, reference.xpath('//b/c').first) }
+    samples, refered = bhw.match_one_terminal(terminal)
+    assert{ nodes_equal(samples.first, bhw.doc.xpath('//a/b').first) }
+    assert{ nodes_equal(refered, reference.xpath('//b/c').first) }
   end
 
   def nodes_equal(node_1, node_2)
     node_1.document == node_2.document and node_1.path == node_2.path
+  end
+
+  def test_node_complaint
+    reference = Nokogiri::XML('<b><c d="e"></c></b>')
+    bhw       = BeHtmlWith.create('<a><b><c d="f"></c>
+                                        <c d="g"></c></b></a>')
+    samples   = bhw.doc.xpath('//a/b/c')
+    refered   = reference.xpath('//b/c').first
+    complaint = bhw.complain_about(refered, samples)
+
+    assert complaint do
+      complaint =~ /Could not find this reference.../ and
+      complaint.index(refered.to_html)
+    end
+    
+    assert complaint do
+      complaint =~ /...in these reference\(s\).../
+    end
+    
+    assert complaint do
+      complaint.index(samples.first.to_html) and
+      complaint =~ /...or.../ and
+      complaint.index(samples.last.to_html)
+    end    
   end
 
 #  TODO  rename lowest_samples to matched_nodes
