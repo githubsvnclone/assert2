@@ -147,8 +147,8 @@ end
       tuple = [@terminal, @matches.first]
       
       @terminal_map.each do |tuple_2|
-        congruent(tuple, tuple_2) and next
-        @reason = 'nodes found in different contexts'
+        congruent(tuple_2, tuple) and next
+        @reason ||= 'nodes found in different contexts'
         return false
       end
       
@@ -165,13 +165,11 @@ end
       a_ref, a_sam = tuple_a
       b_ref, b_sam = tuple_b
 
-#       if count_elements_to_node(a_ref.document, a_ref) <
-#          count_elements_to_node(b_ref.document, b_ref)
-# p count_elements_to_node(a_ref.document, a_ref)
-#  p        count_elements_to_node(b_ref.document, b_ref)
-#         @reason = 'elements are out of order'
-#         return false
-#       end  #  TODO  more "elements" less "nodes"
+      if count_elements_to_node(a_sam.document, a_sam) >
+         count_elements_to_node(b_sam.document, b_sam)
+        @reason = 'elements are out of order'
+        return false
+      end  #  TODO  more "elements" less "nodes"
       
         #  TODO  complain if tuple_1 == tuple_2, or tuple_1.position < tuple_2
 

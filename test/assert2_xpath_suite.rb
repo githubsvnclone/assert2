@@ -901,7 +901,7 @@ to <code>xpath</code>'s block, then run your tests:
 
   def test_distance_algorithm
 #    bhw = BeHtmlWith.new(SAMPLE_FORM) #  TODO find this and reeducate it
-    bhw = BeHtmlWith.create(SAMPLE_FORM) #  TODO find this and reeducate it
+    bhw = BeHtmlWith.create(SAMPLE_FORM)
     element = bhw.doc.xpath('//input').first
     count = bhw.count_elements_to_node(element.document, element)
     assert{ count == 7 }
@@ -910,7 +910,7 @@ to <code>xpath</code>'s block, then run your tests:
     assert{ count == 4 }
   end
 
-  def TODO_test_assert_xhtml_counts_its_shots
+  def test_assert_xhtml_counts_its_shots
     assert_flunk /out of order/ do
       assert_xhtml SAMPLE_LIST do
         ul :style => 'font-size: 18' do
