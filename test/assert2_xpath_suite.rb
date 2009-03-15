@@ -749,12 +749,12 @@ to <code>xpath</code>'s block, then run your tests:
   end
 
   def test_node_matcher_reports_lowest_match
-    built = Nokogiri::XML('<a><b><c><d/></c></b></a>')
-    bhw     = BeHtmlWith.create('<a><b><e><o/></e></b></a>')
-    terminal = bhw.find_terminal_nodes(built).first
-    nodes    = bhw.pathmark(terminal)
-    path     = bhw.decorate_path(nodes)
-    nm       = BeHtmlWith::NodeMatcher.new(nodes)
+    reference = Nokogiri::XML('<a><b><c><d/></c></b></a>')
+    bhw       = BeHtmlWith.create('<a><b><e><o/></e></b></a>')
+    terminal  = bhw.find_terminal_nodes(reference).first
+    nodes     = bhw.pathmark(terminal)
+    path      = bhw.decorate_path(nodes)
+    nm        = BeHtmlWith::NodeMatcher.new(nodes)
     deny{ bhw.doc.xpath(path, nm).any? }
     assert{ nm.lowest_samples.first.name == bhw.doc.xpath('//a/b').first.name }
   end
