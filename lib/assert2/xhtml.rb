@@ -113,23 +113,34 @@ end
         @index = index_.to_i
           #  ^  because the libraries pass raw numbers as float, which 
           #     might have rounding errors... CONSIDER complain?
-        samples = nodes.find_all{|sample|
+        samples = nodes.find_all do |sample|
           @reference, @sample = @references[@index], sample
           match_text and match_attributes
-        }
+        end
+        
         @lowest_samples ||= samples if samples.any?
         samples
       end
       
       #  TODO  raise an error if more than one terminal found
       
-      if matches.any?
-        @terminal_map << [terminal, matches.first]
+      @lowest_samples ||= []  #  TODO  need the ||= ?
       
+      if matches.any?
+        tuple = [terminal, matches.first]
+        
+        @terminal_map.each do |tuple_2|
+          unless congruent(tuple, tuple_2)
+            @reason = 'nodes found in different contexts'
+            return @lowest_samples, @reference
+          end
+        end
+        
+        @terminal_map << tuple
         return nil
       end
       
-      return (@lowest_samples || []), @reference
+      return @lowest_samples, @reference
     end
     
     def nodes_equal(node_1, node_2)
@@ -142,7 +153,7 @@ end
       b_ref, b_sam = tuple_b
 
         #  TODO  complain if tuple_1 == tuple_2, or tuple_1.position < tuple_2
-      
+
       while a_ref and b_ref and a_sam and b_sam
         nodes_equal(a_ref, b_ref) == 
           nodes_equal(a_sam, b_sam) or
@@ -174,6 +185,7 @@ end
           bwock = block || @block || proc{}
           @builder = Nokogiri::HTML::Builder.new(&bwock)
           @doc = Nokogiri::HTML(stwing)
+          @reason = nil
           
           #  TODO  complain if no terminals?
           terminals = find_terminal_nodes(@builder.doc)
@@ -182,7 +194,7 @@ end
           terminals.each do |terminal|
             samples, refered = match_one_terminal(terminal)  #  TODO  return in different order
             if samples and refered
-              @failure_message = complain_about(refered, samples)
+              @failure_message = complain_about(refered, samples, @reason)
               return false
             end
           end
@@ -192,8 +204,9 @@ end
   #    end
     end
 
-    def complain_about(refered, samples)
-      "\nCould not find this reference...\n\n" +
+    def complain_about(refered, samples, reason = nil)
+      reason = " (#{reason})" if reason
+      "\nCould not find this reference#{reason}...\n\n" +
         refered.to_html +
         "\n\n...in these sample(s)...\n\n" +  #  TODO  how many samples?
         samples.map{|s|s.to_html}.join("\n\n...or...\n\n")

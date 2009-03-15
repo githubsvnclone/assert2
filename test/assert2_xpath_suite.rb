@@ -621,8 +621,10 @@ to <code>xpath</code>'s block, then run your tests:
       form :action => '/users' do
         fieldset do
           legend 'Personal Information'
-          label 'First name'
-          input :type => 'text', :name => 'user[first_name]'
+          li do  #  TODO  blog we needed this li
+            label 'First name'
+            input :type => 'text', :name => 'user[first_name]'
+          end
         end
       end
     end
@@ -881,6 +883,20 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
 
+  def test_complain_about
+    reference = Nokogiri::XML('<b><c d="e"></c></b>')
+    bhw       = BeHtmlWith.create('<a><b><c d="f"></c>
+                                        <c d="g"></c></b></a>')
+    samples   = bhw.doc.xpath('//a/b/c')
+    refered   = reference.xpath('//b/c').first
+    complaint = bhw.complain_about(refered, samples, 'nodes found in different contexts')
+
+    assert complaint do
+      complaint =~ /Could not find this reference \(nodes found in different contexts\).../ and
+      complaint.index(refered.to_html)
+    end
+  end
+  
 #  TODO  rename lowest_samples to matched_nodes
 
   def test_assert_xhtml_counts_its_shots
@@ -899,18 +915,18 @@ to <code>xpath</code>'s block, then run your tests:
 
   def test_assert_xhtml_queries_by_complete_path
     assert_xhtml SAMPLE_LIST do
-      ul{ li{ ul{ li 'Sales report'              } } }
-      ul{ li{ ul{ li 'All Sales report criteria' } } }
+      ul{ li{ ul{ li 'Sales report'              } }
+          li{ ul{ li 'All Sales report criteria' } } }
     end
   end
 
-  def teest_assert_xhtml_queries_by_congruent_path
-#     assert_flunk /TODO/ do
+  def test_assert_xhtml_queries_by_congruent_path
+    assert_flunk /nodes found in different contexts/ do
       assert_xhtml SAMPLE_LIST do
         ul{ li{ ul{ li 'Sales report'
                     li 'All Sales report criteria' } } }
       end
-#     end
+    end
   end
 
 end
