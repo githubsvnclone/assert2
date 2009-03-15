@@ -111,9 +111,9 @@ RSpec "matcher":
     end
 
     class NodeMatcher  #  TODO  replace this with a yielder
-      def initialize(hits = [], &block)
+      def initialize(references = [], &block)
         @block = block
-        @hits = hits
+        @hits = references
         @lowest_samples = []
         @lowest_reference = []
       end  #  TODO  make generic by passing in method name
@@ -144,14 +144,24 @@ RSpec "matcher":
         }
       end
     end
-    
+
+      attr_reader :lowest_samples,
+                  :lowest_reference
+ 
+      def match_text(node, hit)
+        node_text = node.xpath('text()').map{|x|x.to_s.strip}
+        hits_text = hit. xpath('text()').map{|x|x.to_s.strip}
+          #  TODO regices? zero-len strings?
+        ( hits_text - node_text ).length == 0
+      end
+
     def match_one_terminal(terminal)
       nodes = pathmark(terminal)
       path = decorate_path(nodes)
-      nm = NodeMatcher.new(nodes)
-      matches = @doc.xpath(path, nm) do |nodes, index|
-                  p 'yo'
+      nm = NodeMatcher.new(nodes) do |nodes, index|
+                   
                  end
+      matches = @doc.xpath(path, nm)
       return nil if matches.any?
       return nm.lowest_samples, nm.lowest_reference
     end
