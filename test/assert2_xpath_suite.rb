@@ -750,36 +750,30 @@ to <code>xpath</code>'s block, then run your tests:
 
   def test_node_matcher_reports_lowest_match
     built = Nokogiri::XML('<a><b><c><d/></c></b></a>')
-    doc    = Nokogiri::XML('<a><b><e><o/></e></b></a>')
-    bhw     = BeHtmlWith.new('<a><b><e><o/></e></b></a>')
+    bhw     = BeHtmlWith.create('<a><b><e><o/></e></b></a>')
     terminal = bhw.find_terminal_nodes(built).first
     nodes    = bhw.pathmark(terminal)
     path     = bhw.decorate_path(nodes)
     nm       = BeHtmlWith::NodeMatcher.new(nodes)
-    deny{ doc.xpath(path, nm).any? }
-    assert{ nm.lowest_samples.first.name == doc.xpath('/a/b').first.name }
+    deny{ bhw.doc.xpath(path, nm).any? }
+    assert{ nm.lowest_samples.first.name == bhw.doc.xpath('//a/b').first.name }
   end
 
   def test_match_one_terminal
-    built = Nokogiri::XML('<b><c><d/></c></b>')
-    doc    = Nokogiri::XML(stwing = '<a><b><c><d/></c></b></a>')
-    bhw     = BeHtmlWith.new('<a><b><c><d/></c></b></a>')
-    terminal = bhw.find_terminal_nodes(built).first
-    bhw.doc = Nokogiri::HTML(stwing)
+    reference = Nokogiri::XML('<b><c><d/></c></b>')
+    bhw       = BeHtmlWith.create('<a><b><c><d/></c></b></a>')
+    terminal  = bhw.find_terminal_nodes(reference).first
     got = bhw.match_one_terminal(terminal)
-    @doc = Nokogiri::HTML(stwing)
     assert{ got == nil }
   end
 
   def test_cant_match_one_terminal
-    built = Nokogiri::XML('<a><b><c><d/></c></b></a>')
-    stwing = '<a><b><e><o/></e></b></a>'
-    bhw     = BeHtmlWith.create('<a><b><e><o/></e></b></a>')
-    terminal = bhw.find_terminal_nodes(built).first
-#     bhw.doc = Nokogiri::HTML(stwing)
+    reference = Nokogiri::XML('<a><b><c><d/></c></b></a>')
+    bhw       = BeHtmlWith.create('<a><b><e><o/></e></b></a>')
+    terminal  = bhw.find_terminal_nodes(reference).first
     hits, matcher = bhw.match_one_terminal(terminal)
     assert{ nodes_equal(hits.first, bhw.doc.xpath('//a/b').first) }
-    assert{ nodes_equal(matcher, built.xpath('//a/b').first) }
+    assert{ nodes_equal(matcher, reference.xpath('//a/b').first) }
   end
 
   def nodes_equal(node_1, node_2)
