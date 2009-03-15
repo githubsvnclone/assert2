@@ -140,12 +140,9 @@ end
     def congruent( tuple_a, tuple_b )
       a_ref, a_sam = tuple_a
       b_ref, b_sam = tuple_b
-      p a_ref.class
-      p b_ref.class
-      p a_sam.class
-      p b_sam.class
+
         #  TODO  complain if tuple_1 == tuple_2, or tuple_1.position < tuple_2
-      puts
+      
       loop do
         return false unless nodes_equal(a_ref, b_ref) == 
             nodes_equal(a_sam, b_sam)
@@ -160,11 +157,6 @@ end
 
       end
       return true
-      puts
-      p tuple_1.first.path
-      p tuple_1.last.path
-      p tuple_2.first.path
-      p tuple_2.last.path
     end
     
     def get_texts(node)
