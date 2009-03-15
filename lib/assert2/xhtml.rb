@@ -111,23 +111,12 @@ RSpec "matcher":
     end
 
     class XPathYielder
-      def initialize(&block)
-        @block = block
-      end  #  TODO  make generic by passing in method name
+      def initialize(method_name, &block)
+        raise 'must call with block' unless block
 
-      attr_reader :lowest_samples,
-                  :lowest_reference
- 
-      def match_text(node, hit)
-        node_text = node.xpath('text()').map{|x|x.to_s.strip}
-        hits_text = hit. xpath('text()').map{|x|x.to_s.strip}
-          #  TODO regices? zero-len strings?
-        ( hits_text - node_text ).length == 0
-      end
-
-      def refer(nodes, index)  #  TODO  low-level test on this; merge with test-side copy
-        raise 'must call with block' unless @block
-        return @block.call(nodes, index)
+        self.class.send :define_method, method_name do |*args|
+          return block.call(*args)
+        end        
       end
     end
 
@@ -136,7 +125,7 @@ RSpec "matcher":
       path = decorate_path(nodes)
       @lowest_samples = []
       @lowest_reference = nil
-      nm = XPathYielder.new do |nodes, index|
+      nm = XPathYielder.new :refer do |nodes, index|
 
         @lowest_samples = nodes.find_all{|node|
           all_match = true
