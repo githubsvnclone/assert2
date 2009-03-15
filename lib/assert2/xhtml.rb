@@ -165,6 +165,14 @@ end
       a_ref, a_sam = tuple_a
       b_ref, b_sam = tuple_b
 
+#       if count_elements_to_node(a_ref.document, a_ref) <
+#          count_elements_to_node(b_ref.document, b_ref)
+# p count_elements_to_node(a_ref.document, a_ref)
+#  p        count_elements_to_node(b_ref.document, b_ref)
+#         @reason = 'elements are out of order'
+#         return false
+#       end  #  TODO  more "elements" less "nodes"
+      
         #  TODO  complain if tuple_1 == tuple_2, or tuple_1.position < tuple_2
 
       while a_ref and b_ref and a_sam and b_sam
@@ -214,7 +222,18 @@ end
         "\n\n...in these sample(s)...\n\n" +  #  TODO  how many samples?
         samples.map{|s|s.to_html}.join("\n\n...or...\n\n")
     end
-  
+
+    def count_elements_to_node(container, element)
+      return 0 if nodes_equal(container, element)
+      count = 0
+      container.children.each do |child|
+        sub_count = count_elements_to_node(child, element)
+        return count + sub_count if sub_count        
+        count += 1
+      end
+      return nil
+    end
+
   #  TODO does a multi-modal top axis work?
   # TODO      this_match = node.xpath('preceding::*').length
       

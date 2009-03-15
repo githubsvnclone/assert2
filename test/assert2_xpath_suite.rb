@@ -899,13 +899,26 @@ to <code>xpath</code>'s block, then run your tests:
   
 #  TODO  rename lowest_samples to matched_nodes
 
-  def test_assert_xhtml_counts_its_shots
-    assert_xhtml SAMPLE_LIST do
-      ul :style => 'font-size: 18' do
-        li 'model' do
-          li 'Billings report'
-          li 'Sales report'
-          li 'Billings criteria'
+  def test_distance_algorithm
+#    bhw = BeHtmlWith.new(SAMPLE_FORM) #  TODO find this and reeducate it
+    bhw = BeHtmlWith.create(SAMPLE_FORM) #  TODO find this and reeducate it
+    element = bhw.doc.xpath('//input').first
+    count = bhw.count_elements_to_node(element.document, element)
+    assert{ count == 7 }
+    element = bhw.doc.xpath('//li').first
+    count = bhw.count_elements_to_node(element.document, element)
+    assert{ count == 4 }
+  end
+
+  def TODO_test_assert_xhtml_counts_its_shots
+    assert_flunk /out of order/ do
+      assert_xhtml SAMPLE_LIST do
+        ul :style => 'font-size: 18' do
+          li 'model' do
+            li 'Sales report'  #  out of order!
+            li 'Billings report'
+            li 'Billings criteria'
+          end
         end
       end
     end
