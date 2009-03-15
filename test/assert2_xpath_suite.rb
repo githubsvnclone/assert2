@@ -770,9 +770,27 @@ to <code>xpath</code>'s block, then run your tests:
     reference = Nokogiri::XML('<a><b><c><d/></c></b></a>')
     bhw       = BeHtmlWith.create('<a><b><e><o/></e></b></a>')
     terminal  = bhw.find_terminal_nodes(reference).first
+    #  TODO  rename hits, matcher
     hits, matcher = bhw.match_one_terminal(terminal)
     assert{ nodes_equal(hits.first, bhw.doc.xpath('//a/b').first) }
     assert{ nodes_equal(matcher, reference.xpath('//a/b').first) }
+  end
+
+  def test_match_one_terminal_with_text
+    reference = Nokogiri::XML('<b><c>d</c></b>')
+    bhw       = BeHtmlWith.create('<a><b><c>d</c></b></a>')
+    terminal  = bhw.find_terminal_nodes(reference).first
+    got = bhw.match_one_terminal(terminal)
+    assert{ got == nil }
+  end
+
+  def test_cant_match_one_terminal_because_of_bad_text
+    reference = Nokogiri::XML('<b><c>d</c></b>')
+    bhw       = BeHtmlWith.create('<a><b><c>o</e></b></a>')
+    terminal  = bhw.find_terminal_nodes(reference).first
+    hits, matcher = bhw.match_one_terminal(terminal)
+    assert{ nodes_equal(hits.first, bhw.doc.xpath('//a/b').first) }
+    assert{ nodes_equal(matcher, reference.xpath('//b/c').first) }
   end
 
   def nodes_equal(node_1, node_2)

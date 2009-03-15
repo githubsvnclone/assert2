@@ -105,18 +105,20 @@ end
       @reference = nil
       
       matches = @doc.xpath_callback(path, :refer) do |nodes, index|
-        lowest_samples = nodes.find_all{|sample|
+        samples = nodes.find_all{|sample|
           all_match = true
           @reference = references[index]
           @sample = sample          
-          break unless all_match = match_text
-          
+          if all_match = match_text
+        
           @reference.attribute_nodes.each do |attr|
             break unless all_match = @sample[attr.name] == attr.value
           end
-          
+          end
           all_match
         }
+        lowest_samples = samples if samples.any?
+        samples
       end
 
       return nil if matches.any?
