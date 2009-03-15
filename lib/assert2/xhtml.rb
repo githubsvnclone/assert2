@@ -135,10 +135,9 @@ end
       tuple = [@terminal, @matches.first]
       
       @terminal_map.each do |tuple_2|
-        unless congruent(tuple, tuple_2)
-          @reason = 'nodes found in different contexts'
-          return false
-        end
+        congruent(tuple, tuple_2) and next
+        @reason = 'nodes found in different contexts'
+        return false
       end
       
       @terminal_map << tuple  #  you win - join the club
