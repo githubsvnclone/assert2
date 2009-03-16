@@ -122,12 +122,12 @@ end
                          match_attributes_and_text(@references[index.to_i], node)
                        end
 
-                       first_samples ||= samples
+                       first_samples ||= samples if samples.any?
                        samples
                      end
           
           if matchers.empty?
-            @failure_message = complain_about(builder.doc.root, first_samples)
+            @failure_message = complain_about(builder.doc.root, first_samples || [doc.root])
           end  #  TODO  use or lose @reason
           
           # TODO complain if too many matchers or not enough!
@@ -173,11 +173,13 @@ end
     def count_elements_to_node(container, element)
       return 0 if nodes_equal(container, element)
       count = 0
+      
       container.children.each do |child|
         sub_count = count_elements_to_node(child, element)
         return count + sub_count if sub_count        
         count += 1
       end
+      
       return nil
     end  #  TODO  use or lose these
 
