@@ -71,6 +71,7 @@ class Nokogiri::XML::Node
     end
   end
 
+#  TODO  move outer loop inside, rename to xpath_with_callback
   def xpath_callback(path, method_name, &block)
     xpath path, XPathYielder.new(method_name, &block)
   end
