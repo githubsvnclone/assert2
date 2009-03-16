@@ -121,7 +121,6 @@ class BeHtmlWith
       begin
         bwock = block || @block || proc{} #  TODO  what to do with no block? validate?
         builder = Nokogiri::HTML::Builder.new(&bwock)
-puts builder.doc.root.to_html
         @doc = Nokogiri::HTML(stwing)
         @reason = nil
 
@@ -129,7 +128,8 @@ puts builder.doc.root.to_html
           @first_samples = []
             # TODO warn if child is text
           path = build_deep_xpath(child)
-p path
+          next if path == "//html[ refer(., '0') ]" # CONSIDER wtf is this?
+
           matchers = doc.root.xpath_with_callback path, :refer do |elements, index|
                       collect_samples(elements, index.to_i)
                     end
