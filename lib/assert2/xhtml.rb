@@ -128,7 +128,7 @@ class BeHtmlWith
         builder.doc.children.each do |child|
             # TODO warn if child is text
           path = build_deep_xpath(child)
-
+p path
           matchers = doc.root.xpath_with_callback path, :refer do |elements, index|
                       collect_samples(elements, index.to_i)
                     end
