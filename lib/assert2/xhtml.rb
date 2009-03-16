@@ -213,10 +213,14 @@ end
     end
 
     def build_deep_xpath(element)
+      @references = []
       return '//' + build_xpath(element)
     end
 
+    attr_reader :references
+
     def build_xpath(element)
+      @references << element if element.xpath('text()').any? or element.attributes.any?
       path = element.name
       node_kids = element.children.grep(Nokogiri::XML::Element)
       

@@ -960,6 +960,9 @@ to <code>xpath</code>'s block, then run your tests:
     assert{ bhw.doc.root.xpath(path).length == 1 }
     path = bhw.build_xpath(built.doc.root.xpath('//br').first)
     assert{ path == 'br' }
+    bhw.references[0] = built.doc.root.xpath('//legend').first
+    bhw.references[1] = built.doc.root.xpath('//label').first
+    bhw.references[2] = built.doc.root.xpath('//input').first
   end
 
 #  TODO does the latest assert_raise take a Regexp
