@@ -221,11 +221,10 @@ end
       node_kids = element.children.grep(Nokogiri::XML::Element)
       
       if node_kids.any?
-        path << '[ ' +
-          node_kids.map{|child|
-            './descendant::' + build_xpath(child)
-          }.join(' and ') +        
-         ' ]'
+        kids = node_kids.map{|child|
+                  './descendant::' + build_xpath(child)
+                }.join(' and ')
+        path << '[ ' + kids + ' ]'
       end
 
       return path
