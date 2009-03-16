@@ -79,23 +79,6 @@ class Nokogiri::XML::Node
 end
 
   class BeHtmlWith
-    
-#     def find_terminal_nodes(doc)
-#       @terminal_map = []
-#       doc.xpath('//*[ not(./descendant::*) ]').map{|n|n}
-#     end
-# 
-#     def pathmark(node = @terminal)
-#       node.xpath('ancestor-or-self::*').map{|n|n}
-#     end  #  TODO  stop throwing away NodeSet abilities!
-# 
-#     def decorate_path(node_list = @references)
-#       index = -1
-#       
-#       '//' + node_list.map{|node|
-#                          node.name + "[refer(.,'#{ index += 1 }')]"
-#                        }.join('/descendant::')
-#     end
 
     def get_texts(node)
       node.xpath('text()').map{|x|x.to_s.strip}.reject{|x|x==''}.compact
@@ -115,78 +98,14 @@ end
       return match_text(reference, sample)
     end
 
-#     def match_all_by_attributes_and_text(nodes)
-#       samples = nodes.find_all do |sample|
-#         @reference = @references[@index]
-#         match_attributes_and_text(@reference, sample)
-#       end
-#       
-#       @lowest_samples ||= samples if samples.any?
-#       samples
-#     end
-# 
-#     def match_one_terminal(terminal)
-#       @terminal = terminal
-#       @references = pathmark
-#       @lowest_samples = nil
-#       @reference = nil
-# 
-#       @matches = @doc.xpath_callback decorate_path, :refer do |nodes, index_|
-#         @index = index_.to_i
-#           #  ^  because the libraries pass raw numbers as float, which 
-#           #     might have rounding errors... CONSIDER complain?
-#         match_all_by_attributes_and_text(nodes)
-#       end
-# 
-#       #  CONSIDER  raise an error if more than one matches found?
-#       return nil if @matches.any? and all_mapped_terminals_are_congruent
-#       return @lowest_samples || [@doc.root], @reference
-#     end
-
-#     def all_mapped_terminals_are_congruent
-#       tuple = [@terminal, @matches.first]
-#       
-#       @terminal_map.each do |tuple_2|
-#         congruent(tuple_2, tuple) and next
-#         @reason ||= 'nodes found in different contexts'
-#         return false
-#       end
-#       
-#       @terminal_map << tuple  #  you win - join the club
-#       return true
-#     end
-
     def nodes_equal(node_1, node_2)
       raise 'programming error: mismatched nodes' unless node_1.document == node_2.document
       node_1.path == node_2.path
     end
     
-#     def congruent( tuple_a, tuple_b )
-#       a_ref, a_sam = tuple_a
-#       b_ref, b_sam = tuple_b
-# 
-#       if count_elements_to_node(a_sam.document, a_sam) >
-#          count_elements_to_node(b_sam.document, b_sam)
-#         @reason = 'elements are out of order'
-#         return false
 #       end  #  TODO  more "elements" less "nodes"
-#       
-#         #  TODO  complain if tuple_1 == tuple_2, or tuple_1.position < tuple_2
-# 
-#       while a_ref and b_ref and a_sam and b_sam
-#         nodes_equal(a_ref, b_ref) == 
-#           nodes_equal(a_sam, b_sam) or
-#             return false
-#         a_ref = (a_ref.parent rescue nil)
-#         b_ref = (b_ref.parent rescue nil)
-#         a_sam = (a_sam.parent rescue nil)
-#         b_sam = (b_sam.parent rescue nil)
-#       end
-#       return true
-#     end
     
-    attr_accessor :doc,
-                  :terminal_map
+    attr_accessor :doc
     
     def matches?(stwing, &block)
    #   @scope.wrap_expectation self do  #  TODO  put that back online
