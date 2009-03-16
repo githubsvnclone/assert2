@@ -79,8 +79,8 @@ end
 
   class BeHtmlWith
 
-    def get_texts(node)
-      node.xpath('text()').map{|x|x.to_s.strip}.reject{|x|x==''}.compact
+    def get_texts(element)
+      element.xpath('text()').map{|x|x.to_s.strip}.reject{|x|x==''}.compact
     end
     
     def match_text(ref, sam)
@@ -97,26 +97,27 @@ end
       return match_text(reference, sample)
     end
 
-    def nodes_equal(node_1, node_2)
-      raise 'programming error: mismatched nodes' unless node_1.document == node_2.document
-      node_1.path == node_2.path
+    def elements_equal(element_1, element_2)
+      raise 'programming error: mismatched elements' unless element_1.document == element_2.document
+      element_1.path == element_2.path
     end
     
 #       end  #  TODO  more "elements" less "nodes"
 
-    def collect_samples(nodes, index)
-      samples = nodes.find_all do |node|
-        match_attributes_and_text(@references[index], node)
+    def collect_samples(elements, index)
+      samples = elements.find_all do |element|
+        match_attributes_and_text(@references[index], element)
       end
 
       @first_samples += samples if samples.any? and index = 0
       return samples
     end
     
-    attr_accessor :doc
+    attr_accessor :doc,
+                  :scope
     
     def matches?(stwing, &block)
-   #   @scope.wrap_expectation self do  #  TODO  put that back online
+      @scope.wrap_expectation self do  #  TODO  put that back online
         begin
           bwock = block || @block || proc{} #  TODO  what to do with no block? validate?
           builder = Nokogiri::HTML::Builder.new(&bwock)
@@ -128,21 +129,22 @@ end
               # TODO warn if child is text
             path = build_deep_xpath(child)
 
-            matchers = doc.root.xpath_with_callback path, :refer do |nodes, index|
-                        collect_samples(nodes, index.to_i)
+            matchers = doc.root.xpath_with_callback path, :refer do |elements, index|
+                        collect_samples(elements, index.to_i)
                       end
             
             if matchers.empty?
-              @first_samples << doc.root if @first_samples.empty?  #  TODO  test the first_samples system
+              @first_samples << @doc.root if @first_samples.empty?  #  TODO  test the first_samples system
               @failure_message = complain_about(builder.doc.root, @first_samples)
               return false
             end  #  TODO  use or lose @reason
           end
-          # TODO complain if too many matchers or not enough!
+          
+          # TODO complain if too many matchers
 
           return true
         end
-  #    end
+      end
     end
 
     def build_deep_xpath(element)
@@ -154,13 +156,13 @@ end
 
     def build_xpath(element)
       path = element.name
-      node_kids = element.children.grep(Nokogiri::XML::Element)
+      element_kids = element.children.grep(Nokogiri::XML::Element)
       path << "[ refer(., '#{@references.length}')"
       @references << element
 
-      if node_kids.any?
+      if element_kids.any?
         path << ' and ' +
-                node_kids.map{|child|
+                element_kids.map{|child|
                   './descendant::' + build_xpath(child)
                 }.join(' and ')
       end
@@ -178,7 +180,7 @@ end
     end
 
     def count_elements_to_node(container, element)
-      return 0 if nodes_equal(container, element)
+      return 0 if elements_equal(container, element)
       count = 0
       
       container.children.each do |child|
@@ -218,6 +220,9 @@ end
   end
 
 module Test::Unit::Assertions
+
+  def wrap_expectation whatever;  yield;  end unless defined? wrap_expectation
+
   def assert_xhtml(xhtml = @response.body, &block)  # TODO merge
     if block
      # require 'should_be_html_with_spec'
