@@ -221,15 +221,25 @@ end
     attr_reader :references
 
     def build_xpath(element)
-      @references << element if element.xpath('text()').any? or element.attributes.any?
+      decorated = element.xpath('text()').any? || element.attributes.any?
       path = element.name
       node_kids = element.children.grep(Nokogiri::XML::Element)
       
-      if node_kids.any?
-        kids = node_kids.map{|child|
+      if node_kids.any? or decorated
+        path << '[ '
+        
+        if decorated
+          path << "refer(., '#{@references.length}')"
+          @references << element
+        end
+        
+        path << ' and ' if node_kids.any? and decorated
+        
+        path <<  node_kids.map{|child|
                   './descendant::' + build_xpath(child)
                 }.join(' and ')
-        path << '[ ' + kids + ' ]'
+                
+        path << ' ]'
       end
 
       return path

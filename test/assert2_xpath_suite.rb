@@ -954,8 +954,9 @@ to <code>xpath</code>'s block, then run your tests:
 
     path = bhw.build_deep_xpath(built.doc.root)
     assert{ path.index('//fieldset[ ./descendant::legend') == 0 }
-    assert{ path =~ / \]/ }
     p path
+    assert(path){ path.index("label[ refer(., '1') ]") }
+    assert{ path =~ / \]/ }
     
     assert{ built.doc.root.xpath_callback(path, :refer){|nodes, index| nodes}.length == 1 }
     assert{ bhw.doc.root.xpath_callback(path, :refer){|nodes, index| nodes}.length == 1 }
