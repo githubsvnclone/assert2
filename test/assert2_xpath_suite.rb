@@ -758,12 +758,13 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
 
-  def TODO_test_bad_text_flunks
-#     assert_flunk /could not find/i do
-#       assert_xhtml SAMPLE_LIST do
-#         li 'not found'
-#       end
-#     end
+  def test_bad_text_flunks
+    assert_flunk /could not find/i do
+      assert_xhtml SAMPLE_LIST do
+        li 'not found'
+      end
+    end
+
     assert_flunk /Could not find/ do
       assert_xhtml SAMPLE_FORM do
         li 'not found'
@@ -786,7 +787,6 @@ to <code>xpath</code>'s block, then run your tests:
 
     path = bhw.build_deep_xpath(built.doc.root)
     assert{ path.index('//fieldset[ ./descendant::legend') == 0 }
-    p path
     assert(path){ path.index("label[ refer(., '1') ]") }
     assert{ path =~ / \]/ }
     

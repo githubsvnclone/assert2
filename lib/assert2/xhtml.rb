@@ -114,14 +114,20 @@ end
           builder = Nokogiri::HTML::Builder.new(&bwock)
           @doc = Nokogiri::HTML(stwing)
           @reason = nil
+          first_samples = nil
           path = build_deep_xpath(builder.doc.root)
 
-          matchers = doc.root.xpath_callback(path, :refer){|nodes, index| 
-                       nodes.find_all do |node|
+          matchers = doc.root.xpath_callback path, :refer do |nodes, index|
+                       samples = nodes.find_all do |node|
                          match_attributes_and_text(@references[index.to_i], node)
                        end
-                     }
+                       first_samples ||= samples
+                       samples
+                     end
           
+          if matchers.empty?
+            @failure_message = complain_about(builder.doc.root, first_samples)
+          end  #  TODO  use or lose @reason
           
           # TODO complain if too many matchers or not enough!
 
@@ -162,7 +168,7 @@ end
       return path
     end
 
-    def complain_about(refered, samples, reason = nil)
+    def complain_about(refered, samples, reason = nil)  #  TODO  put argumnets in order
       reason = " (#{reason})" if reason
       "\nCould not find this reference#{reason}...\n\n" +
         refered.to_html +
