@@ -240,7 +240,7 @@ module Test; module Unit; module Assertions
 end; end; end
 
 if defined? RSpec
-  def be_html_with(&block)
+  def html_with(&block)
     BeHtmlWith.new(self, &block)
   end
 end
