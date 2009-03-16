@@ -151,18 +151,19 @@ end
     def build_xpath(element)
       path = element.name
       node_kids = element.children.grep(Nokogiri::XML::Element)
-      path << '[ '
-      path << "refer(., '#{@references.length}')"
+      path << "[ refer(., '#{@references.length}')"
       @references << element
+
+#  TODO  fault if some attributes do not match
 
       if node_kids.any?
         path << ' and ' +
                 node_kids.map{|child|
                   './descendant::' + build_xpath(child)
                 }.join(' and ')
-      end        
-      path << ' ]'
+      end
 
+      path << ' ]'
       return path
     end
 
