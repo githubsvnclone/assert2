@@ -121,6 +121,7 @@ end
                        samples = nodes.find_all do |node|
                          match_attributes_and_text(@references[index.to_i], node)
                        end
+
                        first_samples ||= samples
                        samples
                      end
