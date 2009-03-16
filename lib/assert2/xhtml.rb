@@ -145,26 +145,19 @@ end
     attr_reader :references
 
     def build_xpath(element)
-      decorated = element.xpath('text()').any? || element.attributes.any?
       path = element.name
       node_kids = element.children.grep(Nokogiri::XML::Element)
-      
-      if node_kids.any? or decorated
-        path << '[ '
-        
-        if decorated
-          path << "refer(., '#{@references.length}')"
-          @references << element
-        end
-        
-        path << ' and ' if node_kids.any? and decorated
-        
-        path <<  node_kids.map{|child|
+      path << '[ '
+      path << "refer(., '#{@references.length}')"
+      @references << element
+
+      if node_kids.any?
+        path << ' and ' +
+                node_kids.map{|child|
                   './descendant::' + build_xpath(child)
                 }.join(' and ')
-                
-        path << ' ]'
-      end
+      end        
+      path << ' ]'
 
       return path
     end
@@ -186,7 +179,7 @@ end
         count += 1
       end
       return nil
-    end
+    end  #  TODO  use or lose these
 
   #  TODO does a multi-modal top axis work?
   # TODO      this_match = node.xpath('preceding::*').length
