@@ -226,17 +226,21 @@ module Test; module Unit; module Assertions
 
   def assert_xhtml(xhtml = @response.body, &block)  # TODO merge
     if block
-     # require 'should_be_html_with_spec'
       matcher = BeHtmlWith.new(self, &block)
       matcher.matches?(xhtml, &block)
       message = matcher.failure_message
       flunk message if message.to_s != ''
 #       return matcher.builder.doc.to_html # TODO return something reasonable
     else
-     _assert_xml(xhtml) # , XML::HTMLParser)
+     _assert_xml(xhtml)
       return @xdoc
     end
   end
 
 end; end; end
 
+if defined? RSpec
+  def be_html_with(&block)
+    BeHtmlWith.new(self, &block)
+  end
+end
