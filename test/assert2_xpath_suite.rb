@@ -912,7 +912,7 @@ to <code>xpath</code>'s block, then run your tests:
     assert{ count == 4 }
   end
 
-  def test_assert_xhtml_counts_its_shots
+  def TODO_test_assert_xhtml_counts_its_shots
     assert_flunk /out of order/ do
       assert_xhtml SAMPLE_LIST do
         ul :style => 'font-size: 18' do
@@ -926,7 +926,7 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
 
-  def test_bad_text_flunks
+  def TODO_test_bad_text_flunks
 #     assert_flunk /could not find/i do
 #       assert_xhtml SAMPLE_LIST do
 #         li 'not found'
@@ -976,7 +976,7 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
 
-  def test_assert_xhtml_queries_by_congruent_path
+  def TODO_test_assert_xhtml_queries_by_congruent_path
     assert_flunk /nodes found in different contexts/ do
       assert_xhtml SAMPLE_LIST do
         ul{ li{ ul{ li 'Sales report'
