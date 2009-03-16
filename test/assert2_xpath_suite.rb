@@ -793,8 +793,8 @@ to <code>xpath</code>'s block, then run your tests:
     assert{ path.index("//fieldset[ refer(., '0') and ./descendant::legend") == 0 }
     assert(path){ path.index("label[ refer(., '3') ]") }
     assert{ path =~ / \]/ }
-    assert{ built.doc.root.xpath_callback(path, :refer){|nodes, index| nodes}.length == 1 }
-    assert{ bhw.doc.root.xpath_callback(path, :refer){|nodes, index| nodes}.length == 1 }
+    assert{ built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.length == 1 }
+    assert{ bhw.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.length == 1 }
     path = bhw.build_xpath(built.doc.root.xpath('//br').first)
     assert{ path == "br[ refer(., '6') ]" }
     bhw.references[0] = built.doc.root.xpath('//fieldset').first

@@ -71,8 +71,7 @@ class Nokogiri::XML::Node
     end
   end
 
-#  TODO  move outer loop inside, rename to xpath_with_callback
-  def xpath_callback(path, method_name, &block)
+  def xpath_with_callback(path, method_name, &block)
     xpath path, XPathYielder.new(method_name, &block)
   end
 
@@ -114,20 +113,21 @@ end
           builder = Nokogiri::HTML::Builder.new(&bwock)
           @doc = Nokogiri::HTML(stwing)
           @reason = nil
-          first_samples = nil
+          @first_samples = []
           path = build_deep_xpath(builder.doc.root)
 
-          matchers = doc.root.xpath_callback path, :refer do |nodes, index|
+          matchers = doc.root.xpath_with_callback path, :refer do |nodes, index|
                        samples = nodes.find_all do |node|
                          match_attributes_and_text(@references[index.to_i], node)
                        end
 
-                       first_samples ||= samples if samples.any?
+                       @first_samples += samples if samples.any? and index = '0'
                        samples
                      end
           
           if matchers.empty?
-            @failure_message = complain_about(builder.doc.root, first_samples || [doc.root])
+            @first_samples << doc.root if @first_samples.empty?  #  TODO  test the first_samples system
+            @failure_message = complain_about(builder.doc.root, @first_samples)
           end  #  TODO  use or lose @reason
           
           # TODO complain if too many matchers or not enough!
