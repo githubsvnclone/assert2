@@ -239,8 +239,8 @@ module Test; module Unit; module Assertions
 
 end; end; end
 
-if defined? Spec
+# if defined? Spec
   def html_with(&block)
     BeHtmlWith.new(self, &block)
   end
-end
+# end
