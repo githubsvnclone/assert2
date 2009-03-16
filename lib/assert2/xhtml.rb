@@ -103,6 +103,15 @@ end
     end
     
 #       end  #  TODO  more "elements" less "nodes"
+
+    def collect_samples(nodes, index)
+      samples = nodes.find_all do |node|
+        match_attributes_and_text(@references[index], node)
+      end
+
+      @first_samples += samples if samples.any? and index = 0
+      return samples
+    end
     
     attr_accessor :doc
     
@@ -117,12 +126,7 @@ end
           path = build_deep_xpath(builder.doc.root)
 
           matchers = doc.root.xpath_with_callback path, :refer do |nodes, index|
-                       samples = nodes.find_all do |node|
-                         match_attributes_and_text(@references[index.to_i], node)
-                       end
-
-                       @first_samples += samples if samples.any? and index = '0'
-                       samples
+                       collect_samples(nodes, index.to_i)
                      end
           
           if matchers.empty?
