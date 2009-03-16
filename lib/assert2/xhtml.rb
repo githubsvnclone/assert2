@@ -109,7 +109,7 @@ end
         match_attributes_and_text(@references[index], element)
       end
 
-      @first_samples += samples if samples.any? and index = 0
+      @first_samples += samples if samples.any? and index == 0
       return samples
     end
     
@@ -219,7 +219,8 @@ end
 
   end
 
-module Test::Unit::Assertions
+
+module Test; module Unit; module Assertions
 
   def wrap_expectation whatever;  yield;  end unless defined? wrap_expectation
 
@@ -236,4 +237,6 @@ module Test::Unit::Assertions
       return @xdoc
     end
   end
-end
+
+end; end; end
+
