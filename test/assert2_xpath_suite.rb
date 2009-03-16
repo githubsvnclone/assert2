@@ -359,7 +359,7 @@ a big document, temporarily add <code>puts</code>
 to <code>xpath</code>'s block, then run your tests:
 =end
   def test_indent_xml
-    #  TODO  disambiguate with other test_indent_xml
+    #  ERGO  disambiguate with other test_indent_xml
     return
     assert_xhtml (DocPath + 'assert2_xpath.html').read
     xpath :span, ?. => :test_indent_xml do
@@ -621,7 +621,7 @@ to <code>xpath</code>'s block, then run your tests:
       form :action => '/users' do
         fieldset do
           legend 'Personal Information'
-          li do  #  TODO  blog we needed this li
+          li do
             label 'First name'
             input :type => 'text', :name => 'user[first_name]'
           end
@@ -631,7 +631,7 @@ to <code>xpath</code>'s block, then run your tests:
   end
 
   def test_prototype_recursive_algorithm
-    bhw = BeHtmlWith.new(SAMPLE_FORM)
+    bhw = BeHtmlWith.create(SAMPLE_FORM)
 
     doc = Nokogiri::HTML::Builder.new do
       div do
@@ -643,8 +643,6 @@ to <code>xpath</code>'s block, then run your tests:
       end
     end
  
- #  TODO  publish this ability as a Nokogiri patch when I figure it out
- #  TODO  can we skip an earlier descendant who is a near miss?
     hits = [nil, form = doc.doc.root.xpath("//form[2]").first, form.xpath("./descendant::label[2]").first]
 
     node = doc.doc.root.xpath("//form[hit(., 1)]/descendant::label[hit(., 2)]", Class.new {
@@ -736,10 +734,7 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
   
-#  TODO  rename lowest_samples to matched_nodes
-
   def test_distance_algorithm
-#    bhw = BeHtmlWith.new(SAMPLE_FORM) #  TODO find this and reeducate it
     bhw = BeHtmlWith.create(SAMPLE_FORM)
     element = bhw.doc.xpath('//input').first
     count = bhw.count_elements_to_node(element.document, element)

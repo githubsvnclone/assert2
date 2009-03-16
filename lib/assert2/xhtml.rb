@@ -110,32 +110,20 @@ end
     def matches?(stwing, &block)
    #   @scope.wrap_expectation self do  #  TODO  put that back online
         begin
-          bwock = block || @block || proc{}
-          @builder = Nokogiri::HTML::Builder.new(&bwock)
+          bwock = block || @block || proc{} #  TODO  what to do with no block? validate?
+          builder = Nokogiri::HTML::Builder.new(&bwock)
           @doc = Nokogiri::HTML(stwing)
           @reason = nil
+          path = build_deep_xpath(builder.doc.root)
 
-          path = build_deep_xpath(@builder.doc.root)
-          p path
           matchers = doc.root.xpath_callback(path, :refer){|nodes, index| 
                        nodes.find_all do |node|
                          match_attributes_and_text(@references[index.to_i], node)
                        end
                      }
           
-          # TODO complain if too many matchers or not enough!
           
-#           #  TODO  complain if no terminals?
-#           terminals = find_terminal_nodes(@builder.doc)
-#           #  TODO  complain if found paths don't have the same root!
-#           
-#           terminals.each do |terminal|
-#             samples, refered = match_one_terminal(terminal)  #  TODO  return in different order
-#             if samples and refered
-#               @failure_message = complain_about(refered, samples, @reason)
-#               return false
-#             end
-#           end
+          # TODO complain if too many matchers or not enough!
 
           return matchers.any?
         end
@@ -173,12 +161,6 @@ end
 
       return path
     end
-
-
-
-
-
-
 
     def complain_about(refered, samples, reason = nil)
       reason = " (#{reason})" if reason
