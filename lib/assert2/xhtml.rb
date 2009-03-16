@@ -91,6 +91,7 @@ end
 
     def match_attributes_and_text(reference, sample)
       reference.attribute_nodes.each do |attr|
+      p attr.value
         sample[attr.name] == attr.value or return false
       end
 
@@ -123,20 +124,24 @@ end
           @doc = Nokogiri::HTML(stwing)
           @reason = nil
           @first_samples = []
-          path = build_deep_xpath(builder.doc.root)
 
-          matchers = doc.root.xpath_with_callback path, :refer do |nodes, index|
-                       collect_samples(nodes, index.to_i)
-                     end
-          
-          if matchers.empty?
-            @first_samples << doc.root if @first_samples.empty?  #  TODO  test the first_samples system
-            @failure_message = complain_about(builder.doc.root, @first_samples)
-          end  #  TODO  use or lose @reason
-          
+          builder.doc.children.each do |child|
+              # TODO warn if child is text
+            path = build_deep_xpath(child)
+
+            matchers = doc.root.xpath_with_callback path, :refer do |nodes, index|
+                        collect_samples(nodes, index.to_i)
+                      end
+            
+            if matchers.empty?
+              @first_samples << doc.root if @first_samples.empty?  #  TODO  test the first_samples system
+              @failure_message = complain_about(builder.doc.root, @first_samples)
+              return false
+            end  #  TODO  use or lose @reason
+          end
           # TODO complain if too many matchers or not enough!
 
-          return matchers.any?
+          return true
         end
   #    end
     end
@@ -153,8 +158,6 @@ end
       node_kids = element.children.grep(Nokogiri::XML::Element)
       path << "[ refer(., '#{@references.length}')"
       @references << element
-
-#  TODO  fault if some attributes do not match
 
       if node_kids.any?
         path << ' and ' +
