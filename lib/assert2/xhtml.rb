@@ -91,7 +91,6 @@ end
 
     def match_attributes_and_text(reference, sample)
       reference.attribute_nodes.each do |attr|
-      p attr.value
         sample[attr.name] == attr.value or return false
       end
 
