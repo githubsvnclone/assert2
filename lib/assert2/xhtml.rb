@@ -77,147 +77,147 @@ class Nokogiri::XML::Node
 
 end
 
-  class BeHtmlWith
+class BeHtmlWith
 
-    def get_texts(element)
-      element.xpath('text()').map{|x|x.to_s.strip}.reject{|x|x==''}.compact
-    end
-    
-    def match_text(ref, sam)
-      ref_text = get_texts(ref)
-        #  TODO regices?
-      ref_text.empty? or ( ref_text - get_texts(sam) ).empty?
-    end
+  def get_texts(element)
+    element.xpath('text()').map{|x|x.to_s.strip}.reject{|x|x==''}.compact
+  end
+  
+  def match_text(ref, sam)
+    ref_text = get_texts(ref)
+      #  TODO regices?
+    ref_text.empty? or ( ref_text - get_texts(sam) ).empty?
+  end
 
-    def match_attributes_and_text(reference, sample)
-      reference.attribute_nodes.each do |attr|
-        sample[attr.name] == attr.value or return false
-      end
-
-      return match_text(reference, sample)
+  def match_attributes_and_text(reference, sample)
+    reference.attribute_nodes.each do |attr|
+      sample[attr.name] == attr.value or return false
     end
 
-    def elements_equal(element_1, element_2)
-      raise 'programming error: mismatched elements' unless element_1.document == element_2.document
-      element_1.path == element_2.path
-    end
-    
+    return match_text(reference, sample)
+  end
+
+  def elements_equal(element_1, element_2)
+    raise 'programming error: mismatched elements' unless element_1.document == element_2.document
+    element_1.path == element_2.path
+  end
+  
 #       end  #  TODO  more "elements" less "nodes"
 
-    def collect_samples(elements, index)
-      samples = elements.find_all do |element|
-        match_attributes_and_text(@references[index], element)
-      end
-
-      @first_samples += samples if samples.any? and index == 0
-      return samples
-    end
-    
-    attr_accessor :doc,
-                  :scope
-    
-    def matches?(stwing, &block)
-      @scope.wrap_expectation self do  #  TODO  put that back online
-        begin
-          bwock = block || @block || proc{} #  TODO  what to do with no block? validate?
-          builder = Nokogiri::HTML::Builder.new(&bwock)
-          @doc = Nokogiri::HTML(stwing)
-          @reason = nil
-          @first_samples = []
-
-          builder.doc.children.each do |child|
-              # TODO warn if child is text
-            path = build_deep_xpath(child)
-
-            matchers = doc.root.xpath_with_callback path, :refer do |elements, index|
-                        collect_samples(elements, index.to_i)
-                      end
-            
-            if matchers.empty?
-              @first_samples << @doc.root if @first_samples.empty?  #  TODO  test the first_samples system
-              @failure_message = complain_about(builder.doc.root, @first_samples)
-              return false
-            end  #  TODO  use or lose @reason
-          end
-          
-          # TODO complain if too many matchers
-
-          return true
-        end
-      end
+  def collect_samples(elements, index)
+    samples = elements.find_all do |element|
+      match_attributes_and_text(@references[index], element)
     end
 
-    def build_deep_xpath(element)
-      @references = []
-      return '//' + build_xpath(element)
-    end
-
-    attr_reader :references
-
-    def build_xpath(element)
-      path = element.name
-      element_kids = element.children.grep(Nokogiri::XML::Element)
-      path << "[ refer(., '#{@references.length}')"
-      @references << element
-
-      if element_kids.any?
-        path << ' and ' +
-                element_kids.map{|child|
-                  './descendant::' + build_xpath(child)
-                }.join(' and ')
-      end
-
-      path << ' ]'
-      return path
-    end
-
-    def complain_about(refered, samples, reason = nil)  #  TODO  put argumnets in order
-      reason = " (#{reason})" if reason
-      "\nCould not find this reference#{reason}...\n\n" +
-        refered.to_html +
-        "\n\n...in these sample(s)...\n\n" +  #  TODO  how many samples?
-        samples.map{|s|s.to_html}.join("\n\n...or...\n\n")
-    end
-
-    def count_elements_to_node(container, element)
-      return 0 if elements_equal(container, element)
-      count = 0
-      
-      container.children.each do |child|
-        sub_count = count_elements_to_node(child, element)
-        return count + sub_count if sub_count        
-        count += 1
-      end
-      
-      return nil
-    end  #  TODO  use or lose these
-
-  #  TODO does a multi-modal top axis work?
-  # TODO      this_match = node.xpath('preceding::*').length
-      
-      # http://www.zvon.org/xxl/XPathTutorial/Output/example18.html
-      # The preceding axis contains all nodes in the same document 
-      # as the context node that are before the context node in 
-      # document order, excluding any ancestors and excluding 
-      # attribute nodes and namespace nodes 
-
-    attr_accessor :failure_message
- 
-    def negative_failure_message
-      "TODO"
-    end
-    
-    def initialize(scope, &block)
-      @scope, @block = scope, block
-    end
-
-    def self.create(stwing)
-      bhw = BeHtmlWith.new(nil)
-      bhw.doc = Nokogiri::HTML(stwing)
-      return bhw
-    end
-
+    @first_samples += samples if samples.any? and index == 0
+    return samples
   end
+  
+  attr_accessor :doc,
+                :scope
+  
+  def matches?(stwing, &block)
+    @scope.wrap_expectation self do  #  TODO  put that back online
+      begin
+        bwock = block || @block || proc{} #  TODO  what to do with no block? validate?
+        builder = Nokogiri::HTML::Builder.new(&bwock)
+        @doc = Nokogiri::HTML(stwing)
+        @reason = nil
+        @first_samples = []
+
+        builder.doc.children.each do |child|
+            # TODO warn if child is text
+          path = build_deep_xpath(child)
+
+          matchers = doc.root.xpath_with_callback path, :refer do |elements, index|
+                      collect_samples(elements, index.to_i)
+                    end
+          
+          if matchers.empty?
+            @first_samples << @doc.root if @first_samples.empty?  #  TODO  test the first_samples system
+            @failure_message = complain_about(builder.doc.root, @first_samples)
+            return false
+          end  #  TODO  use or lose @reason
+        end
+        
+        # TODO complain if too many matchers
+
+        return true
+      end
+    end
+  end
+
+  def build_deep_xpath(element)
+    @references = []
+    return '//' + build_xpath(element)
+  end
+
+  attr_reader :references
+
+  def build_xpath(element)
+    path = element.name
+    element_kids = element.children.grep(Nokogiri::XML::Element)
+    path << "[ refer(., '#{@references.length}')"
+    @references << element
+
+    if element_kids.any?
+      path << ' and ' +
+              element_kids.map{|child|
+                './descendant::' + build_xpath(child)
+              }.join(' and ')
+    end
+
+    path << ' ]'
+    return path
+  end
+
+  def complain_about(refered, samples, reason = nil)  #  TODO  put argumnets in order
+    reason = " (#{reason})" if reason
+    "\nCould not find this reference#{reason}...\n\n" +
+      refered.to_html +
+      "\n\n...in these sample(s)...\n\n" +  #  TODO  how many samples?
+      samples.map{|s|s.to_html}.join("\n\n...or...\n\n")
+  end
+
+  def count_elements_to_node(container, element)
+    return 0 if elements_equal(container, element)
+    count = 0
+    
+    container.children.each do |child|
+      sub_count = count_elements_to_node(child, element)
+      return count + sub_count if sub_count        
+      count += 1
+    end
+    
+    return nil
+  end  #  TODO  use or lose these
+
+#  TODO does a multi-modal top axis work?
+# TODO      this_match = node.xpath('preceding::*').length
+    
+    # http://www.zvon.org/xxl/XPathTutorial/Output/example18.html
+    # The preceding axis contains all nodes in the same document 
+    # as the context node that are before the context node in 
+    # document order, excluding any ancestors and excluding 
+    # attribute nodes and namespace nodes 
+
+  attr_accessor :failure_message
+
+  def negative_failure_message
+    "TODO"
+  end
+  
+  def initialize(scope, &block)
+    @scope, @block = scope, block
+  end
+
+  def self.create(stwing)
+    bhw = BeHtmlWith.new(nil)
+    bhw.doc = Nokogiri::HTML(stwing)
+    return bhw
+  end
+
+end
 
 
 module Test; module Unit; module Assertions
