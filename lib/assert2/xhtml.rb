@@ -155,7 +155,7 @@ class BeHtmlWith
   attr_reader :references
 
   def build_xpath(element)
-    path = element.name
+    path = element.name.sub(/\!$/, '')
     element_kids = element.children.grep(Nokogiri::XML::Element)
     path << "[ refer(., '#{@references.length}')"
     @references << element

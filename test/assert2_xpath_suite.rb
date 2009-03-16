@@ -786,6 +786,14 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
 
+  def test_censor_bangs
+    assert_flunk /Could not find/ do
+      assert_xhtml SAMPLE_FORM do
+        select! :id => 42
+      end
+    end
+  end
+
   def test_build_xpath
     bhw = BeHtmlWith.create(SAMPLE_FORM)
     built = Nokogiri::HTML::Builder.new do
