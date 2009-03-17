@@ -131,8 +131,8 @@ class BeHtmlWith
           next if path == "//html[ refer(., '0') ]" # CONSIDER wtf is this?
 
           matchers = doc.root.xpath_with_callback path, :refer do |elements, index|
-                      collect_samples(elements, index.to_i)
-                    end
+                       collect_samples(elements, index.to_i)
+                     end
           
           if matchers.empty?
             @first_samples << @doc.root if @first_samples.empty?  #  TODO  test the first_samples system
@@ -158,17 +158,18 @@ class BeHtmlWith
   def build_xpath(element)
     path = element.name.sub(/\!$/, '')
     element_kids = element.children.grep(Nokogiri::XML::Element)
-    path << "[ refer(., '#{@references.length}')"
+    path << '[ '
+    count = @references.length
     @references << element
 
     if element_kids.any?
-      path << ' and ' +
-              element_kids.map{|child|
+      path << element_kids.map{|child|
                 './descendant::' + build_xpath(child)
               }.join(' and ')
+      path << ' and '
     end
 
-    path << ' ]'
+    path << "refer(., '#{count}') ]"  #  last so boolean short-circuiting optimizes
     return path
   end
 
