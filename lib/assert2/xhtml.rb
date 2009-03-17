@@ -127,10 +127,10 @@ class BeHtmlWith
         builder.doc.children.each do |child|
           @first_samples = []
             # TODO warn if child is text
-          path = build_deep_xpath(child)
-          next if path == "//html[ refer(., '0') ]" # CONSIDER wtf is this?
+          @path = build_deep_xpath(child)
+          next if @path == "//html[ refer(., '0') ]" # CONSIDER wtf is this?
 
-          matchers = doc.root.xpath_with_callback path, :refer do |elements, index|
+          matchers = @doc.root.xpath_with_callback @path, :refer do |elements, index|
                        collect_samples(elements, index.to_i)
                      end
           
