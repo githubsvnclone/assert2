@@ -184,13 +184,21 @@ class BeHtmlWith
     path << '[ '
     count = @references.length
     @references << element
+    brackets_owed = 0
 
-    if element_kids.any?
-      path << element_kids.map{|child|
-                './descendant::' + build_xpath(child)
-              }.join(' and ')
-      path << ' and '
+    if element_kids.length > 0
+      child = element_kids[0]
+      path << './descendant::' + build_xpath_too(child)
+#               }.join(' and ')
+#       path << ' and '
     end
+
+    if element_kids.length > 1
+      path << element_kids[1..-1].map{|child|
+                '/following-sibling::*[ ./descendant-or-self::' + build_xpath_too(child) + ' ]'
+               }.join # (' and ')
+    end
+       path << ' and ' if element_kids.any?
 
     path << "refer(., '#{count}') ]"  #  last so boolean short-circuiting optimizes
     return path
