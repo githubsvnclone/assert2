@@ -153,9 +153,32 @@ class BeHtmlWith
     return '//' + build_xpath(element)
   end
 
+  def build_deep_xpath_too(element)
+    @references = []
+    return '//' + build_xpath_too(element)
+  end
+
   attr_reader :references
 
   def build_xpath(element)
+    path = element.name.sub(/\!$/, '')
+    element_kids = element.children.grep(Nokogiri::XML::Element)
+    path << '[ '
+    count = @references.length
+    @references << element
+
+    if element_kids.any?
+      path << element_kids.map{|child|
+                './descendant::' + build_xpath(child)
+              }.join(' and ')
+      path << ' and '
+    end
+
+    path << "refer(., '#{count}') ]"  #  last so boolean short-circuiting optimizes
+    return path
+  end
+
+  def build_xpath_too(element)
     path = element.name.sub(/\!$/, '')
     element_kids = element.children.grep(Nokogiri::XML::Element)
     path << '[ '

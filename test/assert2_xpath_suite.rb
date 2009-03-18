@@ -821,6 +821,34 @@ to <code>xpath</code>'s block, then run your tests:
     bhw.references[4] = built.doc.root.xpath('//input').first
   end
 
+  def test_build_xpath_too
+    bhw = BeHtmlWith.create(SAMPLE_FORM)
+    built = Nokogiri::HTML::Builder.new do
+      fieldset do
+        legend 'Personal Information'
+        li do
+          label 'First name', :for=> :user_first_name
+          input :type => :text, :name => 'user[first_name]'
+          br
+        end
+      end
+    end
+
+    path = bhw.build_deep_xpath_too(built.doc.root)
+    assert{ path.index("//fieldset[ ./descendant::legend") == 0 }
+    assert(path){ path.index("label[ refer(., '3') ]") }
+    assert{ path =~ / \]/ }
+    return
+    assert{ built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.length == 1 }
+    assert{ bhw.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.length == 1 }
+    path = bhw.build_xpath(built.doc.root.xpath('//br').first)
+    assert{ path == "br[ refer(., '6') ]" }
+    bhw.references[0] = built.doc.root.xpath('//fieldset').first
+    bhw.references[1] = built.doc.root.xpath('//legend' ).first
+    bhw.references[3] = built.doc.root.xpath('//label' ).first
+    bhw.references[4] = built.doc.root.xpath('//input').first
+  end
+
 #  TODO does the latest assert_raise take a Regexp
 
   def test_assert_xhtml_queries_by_complete_path
