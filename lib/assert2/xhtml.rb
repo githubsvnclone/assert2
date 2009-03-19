@@ -51,7 +51,7 @@ requirements:
      must match
  - the specification only requires the attributes and structural 
      elements that its matcher demands; we skip the rest - 
-     such as the <ol> and <li> fields. They can change
+     such as the <ol> and <li> elements. They can change
      freely as our website upgrades
  - at fault time, the matcher prints out the failing elements
      and their immediate context.
@@ -195,8 +195,8 @@ class BeHtmlWith
 
     if element_kids.length > 1
       path << element_kids[1..-1].map{|child|
-                '/following-sibling::*[ ./descendant-or-self::' + build_xpath_too(child) + ' ]'
-               }.join # (' and ')
+                '[ ./following-sibling::*[ ./descendant-or-self::' + build_xpath_too(child) + ' ] ]'
+               }.join #(' and .')
     end
        path << ' and ' if element_kids.any?
 

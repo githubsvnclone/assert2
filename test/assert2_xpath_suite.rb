@@ -827,9 +827,9 @@ to <code>xpath</code>'s block, then run your tests:
       fieldset do
         legend 'Personal Information'
         li do
-          label 'First name', :for=> :user_first_name
-          input :type => :text, :name => 'user[first_name]'
+          label 'First name', :for => :user_first_name
           br
+          input :type => :text, :name => 'user[first_name]'
         end
       end
     end
@@ -838,6 +838,26 @@ to <code>xpath</code>'s block, then run your tests:
     p path
     assert{ built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.length == 1 }
     assert{ path.index("//fieldset[ ./descendant::legend") == 0 }
+    
+    path = "//fieldset[ 
+               descendant::legend[ 
+                following-sibling::*[ 
+                 descendant-or-self::li[ 
+                  descendant::label[ 
+                   following-sibling::*[ 
+                    descendant-or-self::br[ 
+                     following-sibling::*[ 
+                      descendant-or-self::input ] ] ] ] ] ] ] ]"
+    
+    path = "//li[ 
+                  descendant::label[ 
+                   following-sibling::*[ 
+                    descendant-or-self::br[ 
+                     following-sibling::*[ 
+                      descendant-or-self::input ] ] ] ] ]"
+    
+    assert{ built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.length == 1 }
+p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.name
     return
     assert{ path.index("./descendant::legend[ ./following-sibling::*[ ./descendant-or-self::li") == 0 }
     assert(path){ path.index("label[ refer(., '3') ]") }
@@ -860,6 +880,25 @@ to <code>xpath</code>'s block, then run your tests:
     assert_xhtml SAMPLE_LIST do
       ul{ li{ ul{ li 'Sales report'              } }
           li{ ul{ li 'All Sales report criteria' } } }
+    end
+  end
+
+  def TODO_test_assert_xhtml_matches_ampersandage
+    uri = 'http://kexp.org/playlist/newplaylist.aspx?t=1&year=2009&month=3&day=19&hour=7'
+    sample = "<div><a href='#{uri}'>King Khan &amp; The Shrines</a></div>"
+
+    assert_xhtml sample do
+      a 'King Khan & The Shrines'
+    end
+
+    assert_xhtml sample do
+      a :href => uri
+    end
+
+    assert_flunk /Could not find/ do
+      assert_xhtml sample do
+        a 'King Khan & The Shrines', :href => uri + '_ringer'
+      end
     end
   end
 
