@@ -173,20 +173,30 @@ class BeHtmlWith
 
   attr_reader :references
 
-  def build_xpath(element)
-    path = element.name.sub(/\!$/, '')
+  def build_predicate(element)
+    path = ''
     element_kids = element.children.grep(Nokogiri::XML::Element)
-    path << '[ '
-    count = @references.length
-    @references << element
 
     if element_kids.any?
       path << element_kids.map{|child|
-                './descendant::' + build_xpath(child)
+                if child.name == 'without' # TODO throw away nested withouts?
+                  'not( ' + build_predicate(child) + '1=1 )'
+                else
+                  './descendant::' + build_xpath(child)
+                end
               }.join(' and ')
       path << ' and '
     end
 
+    return path
+  end
+
+  def build_xpath(element)
+    count = @references.length
+    @references << element  #  note we skip the without @reference!
+    path = element.name.sub(/\!$/, '')
+    path << '[ '
+    path << build_predicate(element)
     path << "refer(., '#{count}') ]"  #  last so boolean short-circuiting optimizes
     return path
   end

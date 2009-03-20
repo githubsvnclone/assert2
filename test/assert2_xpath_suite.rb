@@ -820,6 +820,54 @@ to <code>xpath</code>'s block, then run your tests:
     bhw.references[3] = built.doc.root.xpath('//label' ).first
     bhw.references[4] = built.doc.root.xpath('//input').first
   end
+  
+  def test_without
+    assert_xhtml SAMPLE_FORM do
+      fieldset do
+        legend 'Personal Information'
+        li do
+          without do
+            libel 
+          end
+        end
+      end
+    end
+    
+    assert_flunk /Could not find/ do
+      assert_xhtml SAMPLE_FORM do
+        fieldset do
+          legend 'Personal Information'
+          li do
+            without do
+              label 
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def test_in_denial
+    bhw = BeHtmlWith.create(SAMPLE_FORM)
+    built = Nokogiri::HTML::Builder.new do
+      fieldset do
+        legend 'Personal Information'
+        li do
+          without do
+            libel 
+          end
+        end
+      end
+    end
+    
+    path = bhw.build_deep_xpath(built.doc.root)
+    deny{ path =~ /descendant::without/ }
+    assert{ path =~ / not\( \.\/descendant\:\:libel/ }
+#     p path
+#     assert{ built.doc.root.xpath_with_callback(path, :refer){|nodes, index| 
+# p    nodes.map{|q|q.name}
+#       nodes}.length == 1 }
+  end
 
   def test_build_xpath_too
     return # ERGO await fix from libxml2!
