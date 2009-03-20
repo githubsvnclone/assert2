@@ -80,7 +80,6 @@ end
 class BeHtmlWith
 
   def deAmpAmp(stwing)
-   p stwing
     stwing.gsub('&amp;amp;', '&').gsub('&amp;', '&')
   end  #  ERGO await a fix in Nokogiri, and hope nobody actually means &amp;amp; !!!
 
@@ -96,7 +95,6 @@ class BeHtmlWith
 
   def match_attributes_and_text(reference, sample)
     reference.attribute_nodes.each do |attr|
-    p sample[attr.name]
       deAmpAmp(sample[attr.name]) == deAmpAmp(attr.value) or return false
     end
 
