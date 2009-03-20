@@ -80,7 +80,7 @@ end
 class BeHtmlWith
 
   def deAmpAmp(stwing)
-    stwing.gsub('&amp;amp;', '&').gsub('&amp;', '&')
+    stwing.to_s.gsub('&amp;amp;', '&').gsub('&amp;', '&')
   end  #  ERGO await a fix in Nokogiri, and hope nobody actually means &amp;amp; !!!
 
   def get_texts(element)
