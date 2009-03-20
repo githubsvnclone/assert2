@@ -888,7 +888,7 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     uri = 'http://kexp.org/playlist/newplaylist.aspx?t=1&year=2009&month=3&day=19&hour=7'
     sample_1 = "<div><a href='#{uri}'>King Khan &amp; The Shrines</a></div>"
     
-     p RUBY_VERSION
+#      p RUBY_VERSION
     
     built = Nokogiri::HTML::Builder.new{
                    div{ a(:href => uri) { text 'King Khan & The Shrines' } }
