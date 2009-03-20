@@ -875,6 +875,16 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     bhw.references[4] = built.doc.root.xpath('//input').first
   end
 
+  def test_regices_where_you_least_expect_them
+    assert_xhtml SAMPLE_LIST do
+      ul{ li /Sales/ }
+    end
+
+    assert_xhtml SAMPLE_FORM do
+      li{ input :name => /user.first/ }
+    end
+  end
+
 #  TODO does the latest assert_raise take a Regexp
 
   def test_assert_xhtml_queries_by_complete_path

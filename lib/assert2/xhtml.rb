@@ -87,15 +87,24 @@ class BeHtmlWith
     element.xpath('text()').map{|x|x.to_s.strip}.reject{|x|x==''}.compact
   end
 
+  def match_regexp(reference, sample)
+    reference =~ /^\(\?-mix/ and 
+        Regexp.new(reference) =~ sample
+  end
+
   def match_text(ref, sam)
     ref_text = get_texts(ref)
       #  TODO regices?
-    ref_text.empty? or ( ref_text - get_texts(sam) ).empty?
-  end
+    ref_text.empty? or ( ref_text - (sam_text = get_texts(sam)) ).empty? or
+      (ref_text.length == 1 and 
+        match_regexp(ref_text.first, sam_text.join) )
+  end  #  The irony _is_ lost on us
 
   def match_attributes_and_text(reference, sample)
     reference.attribute_nodes.each do |attr|
-      deAmpAmp(sample[attr.name]) == deAmpAmp(attr.value) or return false
+      ref, sam = deAmpAmp(attr.value), deAmpAmp(sample[attr.name])
+      ref == sam or match_regexp(ref, sam) or
+        return false
     end
 
     return match_text(reference, sample)
@@ -281,3 +290,9 @@ module Spec; module Matchers
     BeHtmlWith.new(self, &block)
   end
 end; end
+
+class Nokogiri::XML::Node
+      def content= string
+        self.native_content = encode_special_chars(string.to_s)
+      end
+end
