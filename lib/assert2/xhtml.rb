@@ -88,7 +88,7 @@ class BeHtmlWith
   end
 
   def match_regexp(reference, sample)
-    reference =~ /^\(\?-mix/ and 
+    reference =~ /^\(\?/ and 
         Regexp.new(reference) =~ sample
   end
 

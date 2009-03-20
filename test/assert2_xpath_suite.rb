@@ -881,7 +881,7 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     end
 
     assert_xhtml SAMPLE_FORM do
-      li{ input :name => /user.first/ }
+      li{ input :name => /(user.first)/i }
     end
   end
 
