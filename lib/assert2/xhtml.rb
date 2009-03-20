@@ -79,10 +79,15 @@ end
 
 class BeHtmlWith
 
+  def deAmpAmp(stwing)
+   p stwing
+    stwing.gsub('&amp;amp;', '&').gsub('&amp;', '&')
+  end  #  ERGO await a fix in Nokogiri, and hope nobody actually means &amp;amp; !!!
+
   def get_texts(element)
     element.xpath('text()').map{|x|x.to_s.strip}.reject{|x|x==''}.compact
   end
-  
+
   def match_text(ref, sam)
     ref_text = get_texts(ref)
       #  TODO regices?
@@ -91,7 +96,8 @@ class BeHtmlWith
 
   def match_attributes_and_text(reference, sample)
     reference.attribute_nodes.each do |attr|
-      sample[attr.name] == attr.value or return false
+    p sample[attr.name]
+      deAmpAmp(sample[attr.name]) == deAmpAmp(attr.value) or return false
     end
 
     return match_text(reference, sample)
