@@ -49,9 +49,7 @@ module Test; module Unit; module Assertions
   #  a string of disassembled Ruby
   #  
   def reflect_source(&block)
-    rf = RubyReflector.new(nil, false)
-    rf.block = block
-    return rf.result
+    RubyReflector.new(nil, block, false).result
   end
 
   #  This compiles a string and +reflect+s its source...
