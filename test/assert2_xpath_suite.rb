@@ -763,34 +763,26 @@ to <code>xpath</code>'s block, then run your tests:
       li 'model'
     end
       
-    assert_flunk /could not find/i do
-      assert_xhtml SAMPLE_LIST do
-        li 'not found'
-      end
+    assert_xhtml_flunk SAMPLE_LIST do
+      li 'not found'
     end
 
-    assert_flunk /Could not find/ do
-      assert_xhtml SAMPLE_FORM do
-        li 'not found'
-      end
+    assert_xhtml_flunk SAMPLE_FORM do
+      li 'not found'
     end
   end
 
   def test_bad_attributes_flunk
-    assert_flunk /Could not find/ do
-      assert_xhtml SAMPLE_FORM do
-        legend
-        input :type => :text,
-              :name => 'user[first_nome]'
-      end
+    assert_xhtml_flunk SAMPLE_FORM do
+      legend
+      input :type => :text,
+            :name => 'user[first_nome]'
     end
   end
 
   def test_censor_bangs
-    assert_flunk /Could not find/ do
-      assert_xhtml SAMPLE_FORM do
-        select! :id => 42
-      end
+    assert_xhtml_flunk SAMPLE_FORM do
+      select! :id => 42
     end
   end
 
@@ -821,6 +813,12 @@ to <code>xpath</code>'s block, then run your tests:
     bhw.references[4] = built.doc.root.xpath('//input').first
   end
   
+  def assert_xhtml_flunk(sample, &block)
+    assert_flunk /Could not find/ do
+      assert_xhtml sample, &block
+    end
+  end
+  
   def test_without!
     assert_xhtml SAMPLE_FORM do
       fieldset do
@@ -837,19 +835,19 @@ to <code>xpath</code>'s block, then run your tests:
       without!{ fieldset 'naba' }
     end
 
-    assert_flunk /Could not find/ do
-      assert_xhtml SAMPLE_FORM do
-        without!{ fieldset }
-      end
+    assert_xhtml_flunk SAMPLE_FORM do
+      without!{ fieldset }
     end
     
-    assert_flunk /Could not find/ do
-      assert_xhtml SAMPLE_FORM do
-        fieldset do
-          legend 'Personal Information'
-          li do
-            without! do  label  end
-          end
+    assert_xhtml_flunk SAMPLE_FORM do
+      without!{ fieldset }
+    end
+    
+    assert_xhtml_flunk SAMPLE_FORM do
+      fieldset do
+        legend 'Personal Information'
+        li do
+          without! do  label  end
         end
       end
     end
@@ -968,10 +966,8 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     assert_xhtml sample_1 do  a :href => uri  end
     assert_xhtml sample_2 do  a :href => uri  end
 
-    assert_flunk /Could not find/ do
-      assert_xhtml sample_1 do
-        a :href => uri + '_ringer' do text 'King Khan & The Shrines' end
-      end
+    assert_xhtml_flunk sample_1 do
+      a :href => uri + '_ringer' do text 'King Khan & The Shrines' end
     end
   end
 
