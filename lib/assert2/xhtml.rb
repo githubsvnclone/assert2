@@ -168,7 +168,7 @@ class BeHtmlWith
 
   def build_deep_xpath_too(element)
     @references = []
-    return '//' + build_xpath_too(element)
+    return 'descendant::' + build_xpath_too(element)
   end
 
   attr_reader :references
