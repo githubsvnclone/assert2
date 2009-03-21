@@ -128,30 +128,31 @@ class BeHtmlWith
   
   attr_accessor :doc,
                 :scope
-  
+
+  def assemble_complaint
+    @first_samples << @doc.root if @first_samples.empty?  #  TODO  test the first_samples system
+    @failure_message = complain_about(@builder.doc.root, @first_samples)
+  end
+
   def matches?(stwing, &block)
     @scope.wrap_expectation self do  #  TODO  put that back online
       begin
         bwock = block || @block || proc{} #  TODO  what to do with no block? validate?
-        builder = Nokogiri::HTML::Builder.new(&bwock)
+        @builder = Nokogiri::HTML::Builder.new(&bwock)
         @doc = Nokogiri::HTML(stwing)
         @reason = nil
 
-        builder.doc.children.each do |child|
+        @builder.doc.children.each do |child|
           @first_samples = []
-            # TODO warn if child is text
           @path = build_deep_xpath(child)
-          next if @path == "//html[ refer(., '0') ]" # CONSIDER wtf is this?
+          next if @path == "//descendant::html[ refer(., '0') ]" # CONSIDER wtf is this?
 
           matchers = @doc.root.xpath_with_callback @path, :refer do |elements, index|
                        collect_samples(elements, index.to_i)
                      end
           
-          if matchers.empty?
-            @first_samples << @doc.root if @first_samples.empty?  #  TODO  test the first_samples system
-            @failure_message = complain_about(builder.doc.root, @first_samples)
-            return false
-          end  #  TODO  use or lose @reason
+          matchers.empty? and assemble_complaint and return false
+           #  TODO  use or lose @reason
         end
         
         # TODO complain if too many matchers
@@ -163,7 +164,11 @@ class BeHtmlWith
 
   def build_deep_xpath(element)
     @references = []
-    return '//' + build_xpath(element)
+    path = build_xpath(element)
+    if path.index('not') == 0
+      path = '*[ ' + path + ' ]'  #  ERGO  uh, is there a cleaner way?
+    end
+    return '//' + path
   end
 
   def build_deep_xpath_too(element)
@@ -179,11 +184,11 @@ class BeHtmlWith
 
     if element_kids.any?
       path << element_kids.map{|child|
-                if child.name == 'without' # TODO throw away nested withouts?
-                  'not( ' + build_predicate(child) + '1=1 )'
-                else
+#                 if child.name == 'without' # TODO throw away nested withouts?
+#                   'not( ' + build_predicate(child) + '1=1 )'
+#                 else
                   build_xpath(child)
-                end
+#                 end
               }.join(' and ')
       path << ' and '
     end
@@ -194,12 +199,17 @@ class BeHtmlWith
   def build_xpath(element)
     count = @references.length
     @references << element  #  note we skip the without @reference!
-    path = 'descendant::'
-    path << element.name.sub(/\!$/, '')
-    path << '[ '
-    path << build_predicate(element)
-    path << "refer(., '#{count}') ]"  #  last so boolean short-circuiting optimizes
-    return path
+    
+    if element.name == 'without'
+      return 'not( ' + build_predicate(element) + '1=1 )'
+    else
+      path = 'descendant::'
+      path << element.name.sub(/\!$/, '')
+      path << '[ '
+      path << build_predicate(element)
+      path << "refer(., '#{count}') ]"  #  last so boolean short-circuiting optimizes
+      return path
+    end
   end
 
   def build_xpath_too(element)
