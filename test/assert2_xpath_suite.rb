@@ -840,6 +840,21 @@ to <code>xpath</code>'s block, then run your tests:
     end
     
     assert_xhtml_flunk SAMPLE_FORM do
+      form{ without!{ fieldset } }
+    end
+    
+    assert_xhtml_flunk SAMPLE_FORM do
+      without!{ fieldset }
+      form{ without!{ fieldset } }
+    end
+    
+    assert_xhtml_flunk SAMPLE_FORM do
+      form{ without!{ fieldset } }
+      without!{ fieldset }
+    end
+    
+    assert_xhtml_flunk SAMPLE_FORM do
+      form
       without!{ fieldset }
     end
     
