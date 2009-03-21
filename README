@@ -22,12 +22,16 @@ All assert{ 2.0 } dependencies are optional. If you have Nokogiri
       end
     end
 
-
+=== escapes ===
 
 TODO 
- - xpath! =>
- - diagnostic message
  - top level without
+ - more than one without
+ - exclusive without
+ 
+ - xpath! =>
+ - blog that h3{ text } wont work if the actual is <h3><span>
+ - diagnostic message
  - cleanup:
  eprecated.  Use XML.default_pedantic_parser= value instead
 ../usr/local/lib/ruby/gems/1.8/gems/assert_xpath-0.4.7/lib/assert_xpath.rb:361: warning: Passing no parameters to XML::HTMLParser.new is deprecated.  Pass an instance of XML::Parser::Context instead.

@@ -821,12 +821,12 @@ to <code>xpath</code>'s block, then run your tests:
     bhw.references[4] = built.doc.root.xpath('//input').first
   end
   
-  def test_without
+  def test_without!
     assert_xhtml SAMPLE_FORM do
       fieldset do
         legend 'Personal Information'
         li do
-          without do
+          without! do
             libel 
           end
         end
@@ -834,7 +834,7 @@ to <code>xpath</code>'s block, then run your tests:
     end
     
     assert_xhtml SAMPLE_FORM do
-      without{ fieldset 'naba' }
+      without!{ fieldset 'naba' }
     end
     
     assert_flunk /Could not find/ do
@@ -842,9 +842,7 @@ to <code>xpath</code>'s block, then run your tests:
         fieldset do
           legend 'Personal Information'
           li do
-            without do
-              label 
-            end
+            without! do  label  end
           end
         end
       end
@@ -857,9 +855,7 @@ to <code>xpath</code>'s block, then run your tests:
       fieldset do
         legend 'Personal Information'
         li do
-          without do
-            libel 
-          end
+          without! do  libel  end
         end
       end
     end

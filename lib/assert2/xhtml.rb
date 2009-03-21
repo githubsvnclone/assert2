@@ -200,7 +200,7 @@ class BeHtmlWith
     count = @references.length
     @references << element  #  note we skip the without @reference!
     
-    if element.name == 'without'
+    if element.name == 'without!'
       return 'not( ' + build_predicate(element) + '1=1 )'
     else
       path = 'descendant::'
