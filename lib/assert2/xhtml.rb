@@ -168,7 +168,7 @@ class BeHtmlWith
 
   def build_deep_xpath_too(element)
     @references = []
-    return 'descendant::' + build_xpath_too(element)
+    return '//' + build_xpath_too(element)
   end
 
   attr_reader :references
@@ -182,7 +182,7 @@ class BeHtmlWith
                 if child.name == 'without' # TODO throw away nested withouts?
                   'not( ' + build_predicate(child) + '1=1 )'
                 else
-                  'descendant::' + build_xpath(child)
+                  build_xpath(child)
                 end
               }.join(' and ')
       path << ' and '
@@ -194,7 +194,8 @@ class BeHtmlWith
   def build_xpath(element)
     count = @references.length
     @references << element  #  note we skip the without @reference!
-    path = element.name.sub(/\!$/, '')
+    path = 'descendant::'
+    path << element.name.sub(/\!$/, '')
     path << '[ '
     path << build_predicate(element)
     path << "refer(., '#{count}') ]"  #  last so boolean short-circuiting optimizes
