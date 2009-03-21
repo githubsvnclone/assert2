@@ -1,0 +1,33 @@
+The assert{ 2.0 } project asks a simple question:
+
+  How the leanest possible assertions 
+  can yield the maximum diagnostics?
+
+To begin, grab it with:
+
+  gem install nokogiri assert2
+
+==require 'assert2/xhtml'==
+
+All assert{ 2.0 } dependencies are optional. If you have Nokogiri 
+(>=1.2.2), you can test Rails views like this:
+
+
+
+    get :info, :record_id => record.id
+    
+    assert_xhtml do
+      div :class => :content do
+        without{ div :class => :download }
+      end
+    end
+
+
+
+TODO 
+ - xpath! =>
+ - diagnostic message
+ - top level without
+ - cleanup:
+ eprecated.  Use XML.default_pedantic_parser= value instead
+../usr/local/lib/ruby/gems/1.8/gems/assert_xpath-0.4.7/lib/assert_xpath.rb:361: warning: Passing no parameters to XML::HTMLParser.new is deprecated.  Pass an instance of XML::Parser::Context instead.

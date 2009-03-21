@@ -643,7 +643,7 @@ to <code>xpath</code>'s block, then run your tests:
       end
     end
  
-    hits = [nil, form = doc.doc.root.xpath("//form[2]").first, form.xpath("./descendant::label[2]").first]
+    hits = [nil, form = doc.doc.root.xpath("//form[2]").first, form.xpath("descendant::label[2]").first]
 
     node = doc.doc.root.xpath("//form[hit(., 1)]/descendant::label[hit(., 2)]", Class.new {
  
@@ -808,7 +808,7 @@ to <code>xpath</code>'s block, then run your tests:
     end
 
     path = bhw.build_deep_xpath(built.doc.root)
-    assert{ path.index("//fieldset[ ./descendant::legend") == 0 }
+    assert{ path.index("//fieldset[ descendant::legend") == 0 }
     assert(path){ path.index("label[ refer(., '3') ]") }
     assert{ path =~ / \]/ }
     assert{ built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.length == 1 }
@@ -862,7 +862,7 @@ to <code>xpath</code>'s block, then run your tests:
     
     path = bhw.build_deep_xpath(built.doc.root)
     deny{ path =~ /descendant::without/ }
-    assert{ path =~ / not\( \.\/descendant\:\:libel/ }
+    assert{ path =~ / not\( descendant\:\:libel/ }
 #     p path
 #     assert{ built.doc.root.xpath_with_callback(path, :refer){|nodes, index| 
 # p    nodes.map{|q|q.name}

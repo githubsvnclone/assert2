@@ -182,7 +182,7 @@ class BeHtmlWith
                 if child.name == 'without' # TODO throw away nested withouts?
                   'not( ' + build_predicate(child) + '1=1 )'
                 else
-                  './descendant::' + build_xpath(child)
+                  'descendant::' + build_xpath(child)
                 end
               }.join(' and ')
       path << ' and '
