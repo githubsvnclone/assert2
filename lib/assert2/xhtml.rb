@@ -166,7 +166,7 @@ class BeHtmlWith
     @references = []
     path = build_xpath(element)
     if path.index('not') == 0
-      path = '*[ ' + path + ' ]'  #  ERGO  uh, is there a cleaner way?
+      return '/*[ ' + path + ' ]'  #  ERGO  uh, is there a cleaner way?
     end
     return '//' + path
   end

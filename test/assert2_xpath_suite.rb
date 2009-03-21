@@ -836,6 +836,12 @@ to <code>xpath</code>'s block, then run your tests:
     assert_xhtml SAMPLE_FORM do
       without!{ fieldset 'naba' }
     end
+
+    assert_flunk /Could not find/ do
+      assert_xhtml SAMPLE_FORM do
+        without!{ fieldset }
+      end
+    end
     
     assert_flunk /Could not find/ do
       assert_xhtml SAMPLE_FORM do
