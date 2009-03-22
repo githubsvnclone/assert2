@@ -1033,7 +1033,7 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     end
   end
 
-  def teest_class_is_magic
+  def test_class_is_magic
     assert_xhtml SAMPLE_LIST do
       ul :class => :kalika do  #  goddess
         li 'Billings report'  #  passes despite other ul :class => :kalika

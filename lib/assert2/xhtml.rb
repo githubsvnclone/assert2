@@ -111,15 +111,21 @@ class BeHtmlWith
     end
   end
 
+  def match_class(attr_name, ref, sam)
+    return false unless attr_name == 'class'
+    return " #{sam} ".index(" #{ref} ")
+  end  #  NOTE  if you call it a class, but ref contains 
+       #        something fruity, you are on your own!
+  
   def match_attributes(reference, sample)
     reference.attribute_nodes.each do |attr|
-      unless %w( xpath! verbose! ).include? attr.name
-        ref_value = attr.value
-        sam_value = sample[attr.name]
-        ref, sam = deAmpAmp(ref_value), 
-                    deAmpAmp(sam_value)
+      unless %w( xpath! verbose! ).include? attr.name       
+        ref, sam = deAmpAmp(attr.value),
+                    deAmpAmp(sample[attr.name])
         
-        ref == sam or match_regexp(ref, sam) or
+        ref == sam or 
+          match_regexp(ref, sam) or 
+          match_class(attr.name, ref, sam) or
           return false
       end
     end
