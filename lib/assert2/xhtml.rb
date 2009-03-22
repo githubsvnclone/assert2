@@ -132,9 +132,23 @@ class BeHtmlWith
     return true
   end
 
+  def match_xpath(reference, sample)
+    value = reference['xpath!']
+
+      if value
+        matches = sample.parent.xpath("*[ #{value} ]")
+        match_paths = matches.map{|m| m.path }
+        return match_paths.include? sample.path
+      end
+#     end
+    
+    return true
+  end
+
   def match_attributes_and_text(reference, sample)
     if match_attributes(reference, sample) and
-        match_text(reference, sample)
+        match_text(reference, sample) and
+        match_xpath(reference, sample)
       
       verbose_spew(reference, sample)
       return true
@@ -251,8 +265,8 @@ class BeHtmlWith
       path << '[ '
       path << build_predicate(element)
       path << "refer(., '#{count}') ]"  #  last so boolean short-circuiting optimizes
-      xpath = element['xpath!']
-      path << "[ #{ xpath } ]" if xpath
+#       xpath = element['xpath!']
+#       path << "[ #{ xpath } ]" if xpath
       return path
     end
   end

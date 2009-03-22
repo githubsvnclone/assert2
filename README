@@ -158,6 +158,9 @@ you know works, and run the tests:
 The verbose option works as "spew", not as a diagnostic, and it reports 
 each considered element's contents - each possibly more than once!
 
+Because XPath evaluates the label, in our example, before the li, you
+might need to comment the label out to see a successful spew on the li.
+
 === scope ===
 
 TODO: :class=> is magic

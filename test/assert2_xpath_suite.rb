@@ -745,14 +745,22 @@ to <code>xpath</code>'s block, then run your tests:
   end
 
   def TODO_test_assert_xhtml_counts_its_shots
-    assert_flunk /out of order/ do
-      assert_xhtml SAMPLE_LIST do
-        ul :style => 'font-size: 18' do
-          li 'model' do
-            li 'Sales report'  #  out of order!
-            li 'Billings report'
-            li 'Billings criteria'
-          end
+    assert_xhtml SAMPLE_LIST do
+      ul :style => 'font-size: 18' do
+        li 'model' do
+          li(:xpath! => 'position() = 1'){ text 'Sales report'  }  #  out of order!
+          li(:xpath! => 'position() = 1'){ text 'Sales report'  }  #  out of order!
+#           li(:xpath! => '2'){ text 'Billings report' }
+#           li(:xpath! => '3'){ text 'Billings criteria' }
+        end
+      end
+    end
+    assert_xhtml_flunk SAMPLE_LIST do
+      ul :style => 'font-size: 18' do
+        li 'model' do
+          li(:xpath! => '1'){ text 'Sales report'  }  #  out of order!
+          li(:xpath! => '2'){ text 'Billings report' }
+          li(:xpath! => '3'){ text 'Billings criteria' }
         end
       end
     end
@@ -789,8 +797,15 @@ to <code>xpath</code>'s block, then run your tests:
   def test_xpath
     bhw  = BeHtmlWith.create(SAMPLE_FORM)
     path = bhw.build_xpaths{ legend :xpath! => 'parent::fieldset' }.first
-    assert{ path == "//descendant::legend[ refer(., '0') ][ parent::fieldset ]" }
-    assert{ bhw.doc.xpath_with_callback(path, :refer){|nodes, index| nodes}.length == 1 }
+    denigh{ path == "//descendant::legend[ refer(., '0') ][ parent::fieldset ]" }
+    
+    assert_xhtml SAMPLE_FORM do
+      legend :xpath! => 'parent::fieldset'
+    end
+    
+    assert_xhtml_flunk SAMPLE_FORM do
+      legend :xpath! => 'parent::noodles'
+    end
 
 #  TODO  without! xpath! ? top level without! xpath! ?
 
