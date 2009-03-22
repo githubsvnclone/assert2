@@ -25,10 +25,9 @@ All assert{ 2.0 } dependencies are optional. If you have Nokogiri
 === escapes ===
 
 TODO 
- - top level without
  - more than one without
  - exclusive without
- 
+ - are two top-level node inside a without! disjoint? 
  - xpath! =>
  - blog that h3{ text } wont work if the actual is <h3><span>
  - diagnostic message
