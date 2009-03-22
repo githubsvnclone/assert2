@@ -179,6 +179,22 @@ might need to comment the <label> out to see a successful spew on the <li>.
 === scope ===
 
 TODO: :class=> is magic
+
+=== :class=> ===
+
+The :class attribute is magic. This assertion passes...
+
+    assert_xhtml SAMPLE_LIST do
+      ul :class => :kalika do
+        li 'Billings report'
+      end
+    end
+
+...despite the actual HTML contains <ul class='kalika goddess'>. This feature
+simulates the CSS Selector notation that matches classes by their cascading 
+effects.
+
+
 :xpath!=>
 without! :xpath!
 explicate the &amp;amp; bug
