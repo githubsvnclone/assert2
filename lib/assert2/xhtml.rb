@@ -157,7 +157,8 @@ class BeHtmlWith
       match_attributes_and_text(@references[index], element)
     end
 
-    @first_samples += samples # if index == 0  #  TODO  this could use more testage
+    @first_samples += elements # if index == 0  
+      #  TODO  this could use more testage, and it could enforce a link to the parent
     return samples
   end
   

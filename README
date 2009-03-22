@@ -171,7 +171,7 @@ you know works, and run the tests:
     end
 
 The verbose option works as "spew", not as a diagnostic, and it reports 
-each considered element's contents - each possibly more than once!
+each considered element's contents.
 
 Because XPath evaluates the <label>, in our example, before the <li>, you
 might need to comment the <label> out to see a successful spew on the <li>.
@@ -188,9 +188,7 @@ explicate the &amp;amp; bug
 When this assertion fails, it prints out...
 
  - your reference elements, rendered as HTML
- 
- - each region of your sample HTML that matched
-   the first element of your reference
+ - each "near-miss" region of your sample HTML
 
 === RSpec ===
 
