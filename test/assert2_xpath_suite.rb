@@ -848,12 +848,23 @@ to <code>xpath</code>'s block, then run your tests:
       form{ without!{ fieldset } }
     end
     
-#     assert_xhtml_flunk SAMPLE_FORM do
-#       without! do  TODO
-#         fieldset
-#         wax_museum
-#       end
-#     end
+    bhw = BeHtmlWith.create(SAMPLE_FORM)
+
+    paths = bhw.build_xpaths do
+              without! do  
+                fieldset
+                wax_museum
+              end
+            end
+    path = paths.first
+    assert{ path =~ /or descendant::wax_museum/ }
+    
+    assert_xhtml_flunk SAMPLE_FORM do
+      without! do
+        fieldset
+        wax_museum
+      end
+    end
     
     assert_xhtml_flunk SAMPLE_FORM do
       form{ without!{ fieldset } }

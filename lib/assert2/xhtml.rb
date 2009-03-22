@@ -134,7 +134,7 @@ class BeHtmlWith
     @failure_message = complain_about(@builder.doc.root, @first_samples)
   end
 
-  def build_paths(&block)
+  def build_xpaths(&block)
     paths = []
     bwock = block || @block || proc{} #  TODO  what to do with no block? validate?
     @builder = Nokogiri::HTML::Builder.new(&bwock)
@@ -147,12 +147,12 @@ class BeHtmlWith
     end
 
     return paths
-  end
+  end  #  TODO  refactor more to actually use this
   
   def matches?(stwing, &block)
     @scope.wrap_expectation self do  #  TODO  put that back online
       begin
-        paths = build_paths(&block)
+        paths = build_xpaths(&block)
         @doc = Nokogiri::HTML(stwing)
         @reason = nil
 
@@ -192,8 +192,9 @@ class BeHtmlWith
 
   attr_reader :references
 
-  def build_predicate(element)
+  def build_predicate(element, conjunction = 'and')
     path = ''
+    conjunction = " #{ conjunction } "
     element_kids = element.children.grep(Nokogiri::XML::Element)
 
     if element_kids.any?
@@ -201,10 +202,10 @@ class BeHtmlWith
 #                 if child.name == 'without' # TODO throw away nested withouts?
 #                   'not( ' + build_predicate(child) + '1=1 )'
 #                 else
-                  build_xpath(child)
+                build_xpath(child)
 #                 end
-              }.join(' and ')
-      path << ' and '
+              }.join(conjunction)
+      path << ' and ' # conjunction
     end
 
     return path
@@ -215,7 +216,7 @@ class BeHtmlWith
     @references << element  #  note we skip the without @reference!
     
     if element.name == 'without!'
-      return 'not( ' + build_predicate(element) + '1=1 )'
+      return 'not( ' + build_predicate(element, 'or') + '1=1 )'
     else
       path = 'descendant::'
       path << element.name.sub(/\!$/, '')
