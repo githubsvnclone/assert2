@@ -791,10 +791,15 @@ to <code>xpath</code>'s block, then run your tests:
     node = bhw.doc.xpath('//legend[ parent::fieldset ]').first
     path = bhw.build_xpaths{ legend :xpath! => 'parent::fieldset' }.first
     assert{ path == "//descendant::legend[ refer(., '0') ][ parent::fieldset ]" }
+    assert{ bhw.doc.xpath_with_callback(path, :refer){|nodes, index| nodes}.length == 1 }
 
 #  TODO  take xpath! out of the thing
 #  TODO  without! xpath! ? top level without! xpath! ?
 
+  end
+
+  def test_xpath_matcher_does_not_use_refer
+    # match_attributes(reference, sample)
   end
 
   def test_build_xpath

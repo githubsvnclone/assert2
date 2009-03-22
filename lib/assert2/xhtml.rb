@@ -100,14 +100,20 @@ class BeHtmlWith
         match_regexp(ref_text.first, sam_text.join) )
   end  #  The irony _is_ lost on us
 
-  def match_attributes_and_text(reference, sample)
+  def match_attributes(reference, sample)
     reference.attribute_nodes.each do |attr|
       ref, sam = deAmpAmp(attr.value), deAmpAmp(sample[attr.name])
+      
       ref == sam or match_regexp(ref, sam) or
         return false
     end
+    
+    return true
+  end
 
-    return match_text(reference, sample)
+  def match_attributes_and_text(reference, sample)
+    match_attributes(reference, sample) and
+      match_text(reference, sample)
   end
 
   def elements_equal(element_1, element_2)
@@ -233,8 +239,6 @@ class BeHtmlWith
     if element_kids.length > 0
       child = element_kids[0]
       path << './descendant::' + build_xpath_too(child)
-#               }.join(' and ')
-#       path << ' and '
     end
 
     if element_kids.length > 1
