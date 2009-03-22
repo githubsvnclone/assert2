@@ -134,11 +134,25 @@ class BeHtmlWith
     @failure_message = complain_about(@builder.doc.root, @first_samples)
   end
 
+  def build_paths(&block)
+    paths = []
+    bwock = block || @block || proc{} #  TODO  what to do with no block? validate?
+    @builder = Nokogiri::HTML::Builder.new(&bwock)
+
+    @builder.doc.children.each do |child|
+      @first_samples = []
+      @path = build_deep_xpath(child)
+      next if @path == "//descendant::html[ refer(., '0') ]" # CONSIDER wtf is this?
+      paths << @path
+    end
+
+    return paths
+  end
+  
   def matches?(stwing, &block)
     @scope.wrap_expectation self do  #  TODO  put that back online
       begin
-        bwock = block || @block || proc{} #  TODO  what to do with no block? validate?
-        @builder = Nokogiri::HTML::Builder.new(&bwock)
+        paths = build_paths(&block)
         @doc = Nokogiri::HTML(stwing)
         @reason = nil
 
