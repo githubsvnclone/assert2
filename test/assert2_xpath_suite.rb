@@ -1010,6 +1010,10 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
       ul{ li{ ul{ li 'Sales report'
                   li 'All Sales report criteria' } } }
     end
+    assert_xhtml SAMPLE_LIST do
+      ul{ li{ ul{ li 'Sales report'
+          without!{ li 'All Sales report criteria ' } } } }
+    end
   end
 
 end

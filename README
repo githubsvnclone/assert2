@@ -3,6 +3,9 @@ The assert{ 2.0 } project asks a simple question:
   How the leanest possible assertions 
   can yield the maximum diagnostics?
 
+It's latest assertion, assert_xhtml, answers this question for
+HTML.
+
 To begin, grab it with:
 
   gem install nokogiri assert2
@@ -34,12 +37,12 @@ This is a Rails functional test on an HTML form:
 That's a Rails functional test on a form. The assertion expects the form
 to target the given action, and contain a fieldset, a legend, a label, and 
 a populated text input field. The assertion forgives any other details, 
-such as intervening structural tags, and complains if any required detail 
-is missing, out of order, or ill-formed.
+such as intervening structural tags, excess spaces, or extra attributes; 
+and complains if any required detail is missing, out of order, or ill-formed.
 
 === arguments ===
 
-call assert_xhtml(my_xml){} to interrogate your XML. When called without
+Call assert_xhtml(my_xml){} to interrogate your XML. When called without
 an argument, the method reads @response.body.
 
 === without! ===
@@ -55,20 +58,72 @@ do indeed appear in your output:
       end
     end
 
-That assertion will fail if the out
+That assertion will fail if the outer <div class='content'> tag does not
+exist, or if any inner <div class='download'> does exist.
 
-The committee does not know what without!{ without!{} } does, so please
+The without! element respects your document layout. This assertion 
+passes...
+
+    assert_xhtml SAMPLE_LIST do
+      ul{ li{ ul{ li 'Sales report'
+          without!{ li 'All Sales report criteria' } } } }
+    end
+
+...even though the target document contains an <li>All Sales report
+criteria</li>:
+
+    <ul style='font-size: 18'>
+      <li>model
+        <ul>
+          <li>Billings report</li>
+          <li>Sales report</li>
+          <li>Billings criteria</li>
+          <li>Common system</li>
+        </ul>
+      </li>
+      <li>controller
+        <ul>
+          <li>All Sales report criteria</li>
+          <li>All Billings reports</li>
+        </ul>
+      </li>
+    </ul>
+
+The two <li> elements appear in different <ul>, so the assertion does not
+associate them.
+
+The committee does not yet know what without!{ without!{} } does, so please
 do not rely on its current behavior, whatever that is!
 
 === escapes ===
 
-TODO 
- - more than one without
- - exclusive without
- - are two top-level node inside a without! disjoint? 
- - xpath! =>
- - blog that h3{ text } wont work if the actual is <h3><span>
- - diagnostic message
- - cleanup:
- eprecated.  Use XML.default_pedantic_parser= value instead
-../usr/local/lib/ruby/gems/1.8/gems/assert_xpath-0.4.7/lib/assert_xpath.rb:361: warning: Passing no parameters to XML::HTMLParser.new is deprecated.  Pass an instance of XML::Parser::Context instead.
+Certain elements, such as <select> and <id>, have the same names as internal
+methods. If you experience a bizarre error message, such as "wrong argument 
+type Hash (expected Array)", add a ! to the end of the element, like this:
+
+    assert_xhtml do
+      h2 'Sites'
+      
+      select! :id => 'sites',
+              :name => 'sites[]',
+              :multiple => :multiple,
+              :size => CrossSaleController::LIST_SIZE
+    end
+
+=== text ===
+
+An element such as h3{ 'text' } will match <h3>  text  </h3>, with leading and
+trailing blanks, but it won't match <h3><span> text </span></h3>. This rule
+prevents runaway matches between high- and low-level elements.
+
+=== diagnostic message ===
+
+When this assertion fails, it prints out...
+
+ - your reference elements, rendered as HTML
+ 
+ - each region of your sample HTML that matched
+   the first element of your reference
+
+=== RSpec ===
+
