@@ -116,6 +116,12 @@ An element such as h3{ 'text' } will match <h3>  text  </h3>, with leading and
 trailing blanks, but it won't match <h3><span> text </span></h3>. This rule
 prevents runaway matches between high- and low-level elements.
 
+=== scope ===
+
+TODO: :class=> is magic
+:xpath!=>
+without! :xpath!
+
 === diagnostic message ===
 
 When this assertion fails, it prints out...

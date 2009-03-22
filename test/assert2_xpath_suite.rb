@@ -786,6 +786,15 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
 
+  def test_xpath
+    bhw = BeHtmlWith.create(SAMPLE_FORM)
+
+#     paths = bhw.build_xpaths do
+#               legend :xpath! => ''
+#             end
+
+  end
+
   def test_build_xpath
     bhw = BeHtmlWith.create(SAMPLE_FORM)
     built = Nokogiri::HTML::Builder.new do
