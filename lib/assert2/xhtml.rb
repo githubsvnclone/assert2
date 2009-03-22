@@ -133,15 +133,12 @@ class BeHtmlWith
   end
 
   def match_xpath(reference, sample)
-    value = reference['xpath!']
+    if value = reference['xpath!']
+      matches = sample.parent.xpath("*[ #{value} ]")
+      match_paths = matches.map{|m| m.path }
+      return match_paths.include? sample.path
+    end
 
-      if value
-        matches = sample.parent.xpath("*[ #{value} ]")
-        match_paths = matches.map{|m| m.path }
-        return match_paths.include? sample.path
-      end
-#     end
-    
     return true
   end
 
