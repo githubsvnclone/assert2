@@ -89,7 +89,7 @@ class BeHtmlWith
 
   def match_regexp(reference, sample)
     reference =~ /^\(\?/ and 
-        Regexp.new(reference) =~ sample
+      Regexp.new(reference) =~ sample
   end
 
   def match_text(ref, sam)

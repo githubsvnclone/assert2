@@ -127,3 +127,20 @@ When this assertion fails, it prints out...
 
 === RSpec ===
 
+The matching "specification", in RSpec language, is be_html_with{}.
+Its syntax and behavior are the same:
+
+  it 'should have a cute form' do
+    render '/users/new'
+
+    response.body.should be_html_with{
+      form :action => '/users' do
+        fieldset do
+          legend 'Personal Information'
+          label 'First nome'
+          input :type => 'text', :name => 'user[first_name]'
+        end
+      end
+    }
+  end
+
