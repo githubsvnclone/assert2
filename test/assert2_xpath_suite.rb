@@ -744,21 +744,26 @@ to <code>xpath</code>'s block, then run your tests:
     assert{ count == 4 }
   end
 
-  def TODO_test_assert_xhtml_counts_its_shots
+  def test_assert_xhtml_counts_its_shots
     assert_xhtml SAMPLE_LIST do
       ul :style => 'font-size: 18' do
         li 'model' do
-          li(:xpath! => 'position() = 1'){ text 'Sales report'  }  #  out of order!
-          li(:xpath! => 'position() = 1'){ text 'Sales report'  }  #  out of order!
-#           li(:xpath! => '2'){ text 'Billings report' }
-#           li(:xpath! => '3'){ text 'Billings criteria' }
+          li(:xpath! => 'position() = 1'){ text 'Billings report'  }
+          li(:xpath! => 'position() = 2'){ text /sales report/i  }  
+          li(:xpath! => '1'){ text 'Billings report' }
+          li(:xpath! => '3'){ text 'Billings criteria' }
         end
+      end
+    end
+    assert_xhtml SAMPLE_LIST do
+      li /model/ do
+        without!{ li(:xpath! => 'position() = 2'){ text 'Billings report'  } }
       end
     end
     assert_xhtml_flunk SAMPLE_LIST do
       ul :style => 'font-size: 18' do
         li 'model' do
-          li(:xpath! => '1'){ text 'Sales report'  }  #  out of order!
+          li(:xpath! => '1'){ text 'Sales report'  }
           li(:xpath! => '2'){ text 'Billings report' }
           li(:xpath! => '3'){ text 'Billings criteria' }
         end

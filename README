@@ -112,12 +112,14 @@ type Hash (expected Array)", add a ! to the end of the element, like this:
 
 === text ===
 
-An element such as h3{ 'text' } will match <h3>  text  </h3>, with leading and
-trailing blanks, but it won't match <h3><span> text </span></h3>. This rule
+An element such as h3{ 'text' } will match <h3> text </h3>, with leading and
+trailing blanks, but it won't match <h3><span>text</span></h3>. This rule
 prevents runaway matches between high- and low-level elements.
 
 The example for the next section illustrates how to mix text and attribute
 specifications on the same element.
+
+A text specification may be a /regexp/.
 
 === xpath! ===
 
@@ -139,6 +141,19 @@ That code also shows the 'text' directive, inserting text contents directly
 into the enclosing element. A future version of Nokogiri will allow the 
 element's first argument to specify its text.
 
+An :xpath! of a number evaluates to the 1-based index of an item in its
+parent. This assertion forces list items to appear in the correct order:
+
+    assert_xhtml do
+      ul :style => 'font-size: 18' do
+        li 'model' do
+          li(:xpath! => '1'){ text 'Sales report'  }  #  out of order!
+          li(:xpath! => '2'){ text 'Billings report' }
+          li(:xpath! => '3'){ text 'Billings criteria' }
+        end
+      end
+    end
+
 TODO  document nokogiri
 
 === :verbose! => true ===
@@ -158,8 +173,8 @@ you know works, and run the tests:
 The verbose option works as "spew", not as a diagnostic, and it reports 
 each considered element's contents - each possibly more than once!
 
-Because XPath evaluates the label, in our example, before the li, you
-might need to comment the label out to see a successful spew on the li.
+Because XPath evaluates the <label>, in our example, before the <li>, you
+might need to comment the <label> out to see a successful spew on the <li>.
 
 === scope ===
 

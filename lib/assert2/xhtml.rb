@@ -364,3 +364,10 @@ class Nokogiri::XML::Node
         self.native_content = encode_special_chars(string.to_s)
       end
 end
+
+class Nokogiri::XML::Builder
+      def text(string)
+        node = Nokogiri::XML::Text.new(string.to_s, @doc)
+        insert(node)
+      end
+end
