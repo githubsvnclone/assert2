@@ -151,15 +151,13 @@ class BeHtmlWith
     raise 'programming error: mismatched elements' unless element_1.document == element_2.document
     element_1.path == element_2.path
   end
-  
-#       end  #  TODO  more "elements" less "nodes"
 
   def collect_samples(elements, index)
     samples = elements.find_all do |element|
       match_attributes_and_text(@references[index], element)
     end
 
-    @first_samples += samples if samples.any? and index == 0
+    @first_samples += samples if index == 0
     return samples
   end
   
