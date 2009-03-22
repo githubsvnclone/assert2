@@ -100,10 +100,11 @@ class BeHtmlWith
         match_regexp(ref_text.first, sam_text.join) )
   end  #  The irony _is_ lost on us
 
-  def match_attributes(reference, sample)
+  def verbose_spew(reference, sample)
     reference.attribute_nodes.each do |attr|
       if attr.name == 'verbose!'
         yo_path = sample.path
+        
         if attr.value == 'true' and @spewed[yo_path] == nil
           puts
           puts '-' * 60
@@ -111,7 +112,15 @@ class BeHtmlWith
           puts sample.to_xhtml
           @spewed[yo_path] = true
         end
-      elsif attr.name != 'xpath!'
+        
+        return
+      end
+    end
+  end
+
+  def match_attributes(reference, sample)
+    reference.attribute_nodes.each do |attr|
+      unless %w( xpath! verbose! ).include? attr.name
         ref, sam = deAmpAmp(attr.value), 
                     deAmpAmp(sample[attr.name])
         
@@ -124,8 +133,14 @@ class BeHtmlWith
   end
 
   def match_attributes_and_text(reference, sample)
-    match_attributes(reference, sample) and
-      match_text(reference, sample)
+    if match_attributes(reference, sample) and
+        match_text(reference, sample)
+      
+      verbose_spew(reference, sample)
+      return true
+    end
+
+    return false
   end
 
   def elements_equal(element_1, element_2)
