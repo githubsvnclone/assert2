@@ -788,12 +788,10 @@ to <code>xpath</code>'s block, then run your tests:
 
   def test_xpath
     bhw  = BeHtmlWith.create(SAMPLE_FORM)
-    node = bhw.doc.xpath('//legend[ parent::fieldset ]').first
     path = bhw.build_xpaths{ legend :xpath! => 'parent::fieldset' }.first
     assert{ path == "//descendant::legend[ refer(., '0') ][ parent::fieldset ]" }
     assert{ bhw.doc.xpath_with_callback(path, :refer){|nodes, index| nodes}.length == 1 }
 
-#  TODO  take xpath! out of the thing
 #  TODO  without! xpath! ? top level without! xpath! ?
 
   end
