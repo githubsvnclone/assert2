@@ -797,7 +797,11 @@ to <code>xpath</code>'s block, then run your tests:
   end
 
   def test_xpath_matcher_does_not_use_refer
-    # match_attributes(reference, sample)
+    bhw  = BeHtmlWith.create(SAMPLE_FORM)
+    path = bhw.build_xpaths{ legend :xpath! => 'parent::fieldset' }.first
+    reference = bhw.builder.doc.root
+    sample = bhw.doc.xpath('//legend').first
+    assert('skip the xpath!'){ bhw.match_attributes(reference, sample) }
   end
 
   def test_build_xpath

@@ -102,10 +102,13 @@ class BeHtmlWith
 
   def match_attributes(reference, sample)
     reference.attribute_nodes.each do |attr|
-      ref, sam = deAmpAmp(attr.value), deAmpAmp(sample[attr.name])
-      
-      ref == sam or match_regexp(ref, sam) or
-        return false
+      if attr.name != 'xpath!'
+        ref, sam = deAmpAmp(attr.value), 
+                    deAmpAmp(sample[attr.name])
+        
+        ref == sam or match_regexp(ref, sam) or
+          return false
+      end
     end
     
     return true
@@ -133,7 +136,8 @@ class BeHtmlWith
   end
   
   attr_accessor :doc,
-                :scope
+                :scope,
+                :builder
 
   def assemble_complaint
     @first_samples << @doc.root if @first_samples.empty?  #  TODO  test the first_samples system
