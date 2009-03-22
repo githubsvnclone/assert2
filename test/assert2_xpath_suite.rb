@@ -755,11 +755,13 @@ to <code>xpath</code>'s block, then run your tests:
         end
       end
     end
+    
     assert_xhtml SAMPLE_LIST do
       li /model/ do
         without!{ li(:xpath! => 'position() = 2'){ text 'Billings report'  } }
       end
     end
+    
     assert_xhtml_flunk SAMPLE_LIST do
       ul :style => 'font-size: 18' do
         li 'model' do
@@ -1031,6 +1033,14 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     end
   end
 
+  def teest_class_is_magic
+    assert_xhtml SAMPLE_LIST do
+      ul :class => :kalika do  #  goddess
+        li 'Billings report'  #  passes despite other ul :class => :kalika
+      end
+    end
+  end
+
   def test_assert_xhtml_matches_ampersandage
     uri = 'http://kexp.org/playlist/newplaylist.aspx?t=1&year=2009&month=3&day=19&hour=7'
     sample_1 = "<div><a href='#{uri}'>King Khan &amp; The Shrines</a></div>"
@@ -1090,7 +1100,7 @@ SAMPLE_LIST = <<EOH
   <body>
     <ul style='font-size: 18'>
       <li>model
-        <ul>
+        <ul class='kalika goddess'>
           <li>Billings report</li>
           <li>Sales report</li>
           <li>Billings criteria</li>
@@ -1098,7 +1108,7 @@ SAMPLE_LIST = <<EOH
         </ul>
       </li>
       <li>controller
-        <ul>
+        <ul class='kalika'>
           <li>All Sales report criteria</li>
           <li>All Billings reports</li>
         </ul>

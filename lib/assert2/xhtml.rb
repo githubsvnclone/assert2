@@ -114,8 +114,10 @@ class BeHtmlWith
   def match_attributes(reference, sample)
     reference.attribute_nodes.each do |attr|
       unless %w( xpath! verbose! ).include? attr.name
-        ref, sam = deAmpAmp(attr.value), 
-                    deAmpAmp(sample[attr.name])
+        ref_value = attr.value
+        sam_value = sample[attr.name]
+        ref, sam = deAmpAmp(ref_value), 
+                    deAmpAmp(sam_value)
         
         ref == sam or match_regexp(ref, sam) or
           return false
