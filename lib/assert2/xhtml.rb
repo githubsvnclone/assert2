@@ -140,7 +140,7 @@ class BeHtmlWith
     @builder = Nokogiri::HTML::Builder.new(&bwock)
 
     @builder.doc.children.each do |child|
-      @first_samples = []
+#       @first_samples = []
       @path = build_deep_xpath(child)
       next if @path == "//descendant::html[ refer(., '0') ]" # CONSIDER wtf is this?
       paths << @path
