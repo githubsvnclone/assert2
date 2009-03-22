@@ -101,20 +101,13 @@ class BeHtmlWith
   end  #  The irony _is_ lost on us
 
   def verbose_spew(reference, sample)
-    reference.attribute_nodes.each do |attr|
-      if attr.name == 'verbose!'
-        yo_path = sample.path
-        
-        if attr.value == 'true' and @spewed[yo_path] == nil
-          puts
-          puts '-' * 60
-          p yo_path
-          puts sample.to_xhtml
-          @spewed[yo_path] = true
-        end
-        
-        return
-      end
+    if reference['verbose!'] == 'true' and
+       @spewed[yo_path = sample.path] == nil
+      puts
+      puts '-' * 60
+      p yo_path
+      puts sample.to_xhtml
+      @spewed[yo_path] = true
     end
   end
 
