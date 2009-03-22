@@ -986,12 +986,10 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     end
   end
 
-  def TODO_test_assert_xhtml_queries_by_congruent_path
-    assert_flunk /nodes found in different contexts/ do
-      assert_xhtml SAMPLE_LIST do
-        ul{ li{ ul{ li 'Sales report'
-                    li 'All Sales report criteria' } } }
-      end
+  def test_assert_xhtml_queries_by_congruent_path
+    assert_xhtml_flunk SAMPLE_LIST do
+      ul{ li{ ul{ li 'Sales report'
+                  li 'All Sales report criteria' } } }
     end
   end
 
