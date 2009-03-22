@@ -116,11 +116,36 @@ An element such as h3{ 'text' } will match <h3>  text  </h3>, with leading and
 trailing blanks, but it won't match <h3><span> text </span></h3>. This rule
 prevents runaway matches between high- and low-level elements.
 
+The example for the next section illustrates how to mix text and attribute
+specifications on the same element.
+
+=== xpath! ===
+assert_xhtml works by throwing away structural information. If you need
+greater control, use :xpath! => to inject raw XPath commands into the
+giant XPath query that assert_xhtml uses to resolve your query.
+
+This assertion detect the rather pedestrian fact that your <title>
+element remains inside your <html><head> block - and it did not
+escape and rampage off to somewhere else:
+
+    assert_xhtml do
+      title :xpath! => 'parent::head/parent::html' do
+        text 'Chamber of Commerce - Info - Hope Orphanage'
+      end
+    end
+
+That code also shows the 'text' directive, inserting text contents directly
+into the enclosing element. A future version of Nokogiri will allow the 
+element's first argument to specify its text.
+
+TODO  document nokogiri
+
 === scope ===
 
 TODO: :class=> is magic
 :xpath!=>
 without! :xpath!
+explicate the &amp;amp; bug
 
 === diagnostic message ===
 

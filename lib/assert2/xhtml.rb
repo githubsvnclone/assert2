@@ -102,7 +102,10 @@ class BeHtmlWith
 
   def match_attributes(reference, sample)
     reference.attribute_nodes.each do |attr|
-      if attr.name != 'xpath!'
+      if attr.name == 'verbose!' and attr.value == 'true'
+        p '-' * 20
+        puts sample.to_xhtml
+      elsif attr.name != 'xpath!'
         ref, sam = deAmpAmp(attr.value), 
                     deAmpAmp(sample[attr.name])
         

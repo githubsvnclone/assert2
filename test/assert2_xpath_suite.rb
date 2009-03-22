@@ -804,12 +804,25 @@ to <code>xpath</code>'s block, then run your tests:
     assert('skip the xpath!'){ bhw.match_attributes(reference, sample) }
   end
 
+  def test_verbosity
+    assert_xhtml SAMPLE_FORM do
+      fieldset do
+        legend 'Personal Information'
+        li :verbose! => true do
+          label 'First name', :for => :user_first_name
+          input :type => :text, :name => 'user[first_name]'
+          br
+        end
+      end
+    end
+  end
+
   def test_build_xpath
     bhw = BeHtmlWith.create(SAMPLE_FORM)
     built = Nokogiri::HTML::Builder.new do
       fieldset do
         legend 'Personal Information'
-        li do
+        li :verbose => true do
           label 'First name', :for => :user_first_name
           input :type => :text, :name => 'user[first_name]'
           br
