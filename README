@@ -120,6 +120,7 @@ The example for the next section illustrates how to mix text and attribute
 specifications on the same element.
 
 === xpath! ===
+
 assert_xhtml works by throwing away structural information. If you need
 greater control, use :xpath! => to inject raw XPath commands into the
 giant XPath query that assert_xhtml uses to resolve your query.
@@ -139,6 +140,23 @@ into the enclosing element. A future version of Nokogiri will allow the
 element's first argument to specify its text.
 
 TODO  document nokogiri
+
+=== :verbose! => true ===
+
+Sometimes you can't tell why an assertion fails. To see each context
+the assertion considers, add :verbose! => true to the lowest element
+you know works, and run the tests:
+
+    assert_xhtml SAMPLE_FORM do
+      fieldset do
+        li :verbose! => true do
+          label 'First name', :for => :user_first_name
+        end
+      end
+    end
+
+The verbose option works as "spew", not as a diagnostic, and it reports 
+each considered element's contents - each possibly more than once!
 
 === scope ===
 

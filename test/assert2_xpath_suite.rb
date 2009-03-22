@@ -804,7 +804,7 @@ to <code>xpath</code>'s block, then run your tests:
     assert('skip the xpath!'){ bhw.match_attributes(reference, sample) }
   end
 
-  def test_verbosity
+  def toast_verbosity
     assert_xhtml SAMPLE_FORM do
       fieldset do
         legend 'Personal Information'

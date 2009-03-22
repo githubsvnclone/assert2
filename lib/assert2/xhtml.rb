@@ -102,9 +102,15 @@ class BeHtmlWith
 
   def match_attributes(reference, sample)
     reference.attribute_nodes.each do |attr|
-      if attr.name == 'verbose!' and attr.value == 'true'
-        p '-' * 20
-        puts sample.to_xhtml
+      if attr.name == 'verbose!'
+        yo_path = sample.path
+        if attr.value == 'true' and @spewed[yo_path] == nil
+          puts
+          puts '-' * 60
+          p yo_path
+          puts sample.to_xhtml
+          @spewed[yo_path] = true
+        end
       elsif attr.name != 'xpath!'
         ref, sam = deAmpAmp(attr.value), 
                     deAmpAmp(sample[attr.name])
@@ -170,6 +176,7 @@ class BeHtmlWith
 
         @builder.doc.children.each do |child|
           @first_samples = []
+          @spewed = {}
           @path = build_deep_xpath(child)
           next if @path == "//descendant::html[ refer(., '0') ]" # CONSIDER wtf is this?
 
