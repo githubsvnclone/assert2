@@ -140,7 +140,6 @@ class BeHtmlWith
     @builder = Nokogiri::HTML::Builder.new(&bwock)
 
     @builder.doc.children.each do |child|
-#       @first_samples = []
       @path = build_deep_xpath(child)
       next if @path == "//descendant::html[ refer(., '0') ]" # CONSIDER wtf is this?
       paths << @path
@@ -180,7 +179,7 @@ class BeHtmlWith
     @references = []
     path = build_xpath(element)
     if path.index('not') == 0
-      return '/*[ ' + path + ' ]'  #  ERGO  uh, is there a cleaner way?
+      return '/*[ ' + path + ' ]'   #  ERGO  uh, is there a cleaner way?
     end
     return '//' + path
   end
@@ -198,14 +197,8 @@ class BeHtmlWith
     element_kids = element.children.grep(Nokogiri::XML::Element)
 
     if element_kids.any?
-      path << element_kids.map{|child|
-#                 if child.name == 'without' # TODO throw away nested withouts?
-#                   'not( ' + build_predicate(child) + '1=1 )'
-#                 else
-                build_xpath(child)
-#                 end
-              }.join(conjunction)
-      path << ' and ' # conjunction
+      path << element_kids.map{|child|  build_xpath(child)  }.join(conjunction)
+      path << ' and '
     end
 
     return path
@@ -223,6 +216,8 @@ class BeHtmlWith
       path << '[ '
       path << build_predicate(element)
       path << "refer(., '#{count}') ]"  #  last so boolean short-circuiting optimizes
+      xpath = element['xpath!']
+      path << "[ #{ xpath } ]" if xpath
       return path
     end
   end
