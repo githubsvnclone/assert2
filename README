@@ -12,15 +12,53 @@ To begin, grab it with:
 All assert{ 2.0 } dependencies are optional. If you have Nokogiri 
 (>=1.2.2), you can test Rails views like this:
 
+This is a Rails functional test on an HTML form:
 
+     user = users(:Moses)
+     get :edit_user, :id =>  user.id
+
+     assert_xhtml do
+
+       form :action =>  '/users' do
+         fieldset do
+           legend 'Personal Information'
+           label 'First name'
+           input :type =>  'text',
+                 :name =>  'user[first_name]'
+                 :value =>  user.first_name
+         end
+       end
+
+     end
+
+That's a Rails functional test on a form. The assertion expects the form
+to target the given action, and contain a fieldset, a legend, a label, and 
+a populated text input field. The assertion forgives any other details, 
+such as intervening structural tags, and complains if any required detail 
+is missing, out of order, or ill-formed.
+
+=== arguments ===
+
+call assert_xhtml(my_xml){} to interrogate your XML. When called without
+an argument, the method reads @response.body.
+
+=== without! ===
+
+Every assert* has a matching deny* method. assert_xhtml recognizes the
+special element without! as a request to fail if the given elements
+do indeed appear in your output:
 
     get :info, :record_id => record.id
-    
     assert_xhtml do
       div :class => :content do
-        without{ div :class => :download }
+        without!{ div :class => :download }
       end
     end
+
+That assertion will fail if the out
+
+The committee does not know what without!{ without!{} } does, so please
+do not rely on its current behavior, whatever that is!
 
 === escapes ===
 
