@@ -856,6 +856,7 @@ to <code>xpath</code>'s block, then run your tests:
                 wax_museum
               end
             end
+
     path = paths.first
     assert{ path =~ /or descendant::wax_museum/ }
     
