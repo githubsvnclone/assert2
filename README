@@ -3,19 +3,16 @@ The assert{ 2.0 } project asks a simple question:
   How the leanest possible assertions 
   can yield the maximum diagnostics?
 
-It's latest assertion, assert_xhtml, answers this question for
-HTML.
+Its latest assertion, assert_xhtml, answers this question for HTML.
 
 To begin, grab it with:
 
   gem install nokogiri assert2
 
-==require 'assert2/xhtml'==
+== require 'assert2/xhtml' ==
 
 All assert{ 2.0 } dependencies are optional. If you have Nokogiri 
 (>=1.2.2), you can test Rails views like this:
-
-This is a Rails functional test on an HTML form:
 
      user = users(:Moses)
      get :edit_user, :id =>  user.id
