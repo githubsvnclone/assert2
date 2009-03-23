@@ -89,8 +89,8 @@ criteria</li>:
       </li>
     </ul>
 
-The two <li> elements appear in different <ul>, so the assertion does not
-associate them.
+The two <li> elements appear in different <ul> lists, so the assertion 
+does not associate them.
 
 The committee does not yet know what without!{ without!{} } does, so please
 do not rely on its current behavior, whatever that is!
@@ -235,3 +235,4 @@ Its syntax and behavior are the same:
     }
   end
 
+Good hunting!
