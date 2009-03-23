@@ -40,6 +40,9 @@ a populated text input field. The assertion forgives any other details,
 such as intervening structural tags, excess spaces, or extra attributes; 
 and complains if any required detail is missing, out of order, or ill-formed.
 
+The DSL inside that block is Nokogiri::HTML::Builder notation. Generally
+speaking, anything Nokogiri can build, you can specify.
+
 === arguments ===
 
 Call assert_xhtml(my_xml){} to interrogate your XML. When called without
@@ -121,11 +124,11 @@ specifications on the same element.
 
 A text specification may be a /regexp/.
 
-=== xpath! ===
+=== :xpath!=> ===
 
 assert_xhtml works by throwing away structural information. If you need
-greater control, use :xpath! => to inject raw XPath commands into the
-giant XPath query that assert_xhtml uses to resolve your query.
+more control over your structure, use an :xpath! attribute to apply raw 
+XPath specifications to your target elements.
 
 This assertion detect the rather pedestrian fact that your <title>
 element remains inside your <html><head> block - and it did not
@@ -147,20 +150,18 @@ parent. This assertion forces list items to appear in the correct order:
     assert_xhtml do
       ul :style => 'font-size: 18' do
         li 'model' do
-          li(:xpath! => '1'){ text 'Sales report'  }  #  out of order!
-          li(:xpath! => '2'){ text 'Billings report' }
-          li(:xpath! => '3'){ text 'Billings criteria' }
+          li(:xpath! => 1){ text 'Sales report'  }
+          li(:xpath! => 2){ text 'Billings report' }
+          li(:xpath! => 3){ text 'Billings criteria' }
         end
       end
     end
 
-TODO  document nokogiri
-
 === :verbose! => true ===
 
-Sometimes you can't tell why an assertion fails. To see each context
-the assertion considers, add :verbose! => true to the lowest element
-you know works, and run the tests:
+Sometimes when an assertion fails, you can't tell why. To see each 
+context the assertion considers, add :verbose! => true to the lowest 
+element you know works, and run the tests:
 
     assert_xhtml SAMPLE_FORM do
       fieldset do
@@ -178,7 +179,24 @@ might need to comment the <label> out to see a successful spew on the <li>.
 
 === scope ===
 
-TODO: :class=> is magic
+assert_xhtml{} yields its block to Nokogiri::HTML::Builder, which turns
+every method call into an HTML element. This freedom comes at a price -
+you can't easily call your own methods!
+
+Use this scope trick to pass your outer scope into the specification:
+
+     get :edit_user, :id => users(:Moses).id
+     scope = self
+
+     assert_xhtml do
+       form :action => '/users' do
+         input :value => scope.users(:Moses).first_name
+       end
+     end
+
+Notice we could improve that test by declaring a variable,
+user = users(:Moses), in the outer scope, and simply passing
+the user variable itself into the specification.
 
 === :class=> ===
 
@@ -193,11 +211,6 @@ The :class attribute is magic. This assertion passes...
 ...despite the actual HTML contains <ul class='kalika goddess'>. This feature
 simulates the CSS Selector notation that matches classes by their cascading 
 effects.
-
-
-:xpath!=>
-without! :xpath!
-explicate the &amp;amp; bug
 
 === diagnostic message ===
 

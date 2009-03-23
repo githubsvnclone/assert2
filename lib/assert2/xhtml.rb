@@ -94,7 +94,7 @@ class BeHtmlWith
 
   def match_text(ref, sam)
     ref_text = get_texts(ref)
-      #  TODO regices?
+
     ref_text.empty? or ( ref_text - (sam_text = get_texts(sam)) ).empty? or
       (ref_text.length == 1 and 
         match_regexp(ref_text.first, sam_text.join) )
@@ -194,7 +194,7 @@ class BeHtmlWith
   end  #  TODO  refactor more to actually use this
   
   def matches?(stwing, &block)
-    @scope.wrap_expectation self do  #  TODO  put that back online
+    @scope.wrap_expectation self do
       begin
         paths = build_xpaths(&block)
         @doc = Nokogiri::HTML(stwing)
@@ -312,15 +312,6 @@ class BeHtmlWith
     
     return nil
   end  #  TODO  use or lose these
-
-#  TODO does a multi-modal top axis work?
-# TODO      this_match = node.xpath('preceding::*').length
-    
-    # http://www.zvon.org/xxl/XPathTutorial/Output/example18.html
-    # The preceding axis contains all nodes in the same document 
-    # as the context node that are before the context node in 
-    # document order, excluding any ancestors and excluding 
-    # attribute nodes and namespace nodes 
 
   attr_accessor :failure_message
 
