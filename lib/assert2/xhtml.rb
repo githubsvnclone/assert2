@@ -88,7 +88,7 @@ class BeHtmlWith
   end
 
   def match_regexp(reference, sample)
-    reference =~ /^\(\?/ and 
+    reference.index('(?') == 0 and 
       Regexp.new(reference) =~ sample
   end
 
@@ -98,7 +98,7 @@ class BeHtmlWith
     ref_text.empty? or 
       (ref_text - (sam_text = get_texts(sam))).empty? or
         (ref_text.length == 1 and match_regexp(ref_text.first, sam_text.join) )
-  end  #  The irony _is_ lost on us
+  end
 
   def verbose_spew(reference, sample)
     if reference['verbose!'] == 'true' and
