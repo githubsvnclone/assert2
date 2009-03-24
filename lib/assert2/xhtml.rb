@@ -140,9 +140,8 @@ class BeHtmlWith
 
   def match_attributes_and_text(reference, sample)
     if match_attributes(reference, sample) and
-        match_text(reference, sample) and
+        match_text(reference, sample)     and
         match_xpath(reference, sample)
-      
       verbose_spew(reference, sample)
       return true
     end
