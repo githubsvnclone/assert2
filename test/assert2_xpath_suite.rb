@@ -1069,6 +1069,13 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
 
 end
 
+class BeHtmlWith
+  def self.create(stwing)
+    bhw = BeHtmlWith.new(nil)
+    bhw.doc = Nokogiri::HTML(stwing)
+    return bhw
+  end
+end
 
 SAMPLE_FORM = <<EOH
 <form action="/users">

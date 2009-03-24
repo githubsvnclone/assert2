@@ -301,12 +301,6 @@ class BeHtmlWith
     @scope, @block = scope, block
   end
 
-  def self.create(stwing)
-    bhw = BeHtmlWith.new(nil)
-    bhw.doc = Nokogiri::HTML(stwing)
-    return bhw
-  end
-
 end
 
 
