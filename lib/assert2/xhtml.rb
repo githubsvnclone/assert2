@@ -93,9 +93,7 @@ class BeHtmlWith
   end
 
   def match_text(ref, sam)
-    ref_text = get_texts(ref)
-
-    ref_text.empty? or 
+    (ref_text = get_texts(ref)).empty? or 
       (ref_text - (sam_text = get_texts(sam))).empty? or
         (ref_text.length == 1 and match_regexp(ref_text.first, sam_text.join) )
   end
