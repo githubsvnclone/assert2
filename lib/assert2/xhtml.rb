@@ -130,9 +130,11 @@ class BeHtmlWith
 
   def match_xpath(reference, sample)
     if value = reference['xpath!']
-      matches = sample.parent.xpath("*[ #{value} ]")
-      match_paths = matches.map{|m| m.path }
-      return match_paths.include? sample.path
+      sample.parent.xpath("*[ #{value} ]").each do |m|
+        m.path == sample.path and return true
+      end
+
+      return false
     end
 
     return true
@@ -158,7 +160,7 @@ class BeHtmlWith
       #  TODO  this could use more testage, and it could enforce a link to the parent
     return samples
   end
-  
+
   attr_accessor :doc,
                 :scope,
                 :builder
