@@ -26,6 +26,9 @@ TODO  trash-talk:
       assert_select 'span.disabled:first-child', "&laquo; Previous"
       assert_select 'span.current', entries.current_page.to_s
     end
+    
+  assert_select "div#logo_box img[src=/0000/0001/logo.gif][alt=My Company]"
+
 
 
 To begin, grab it with:

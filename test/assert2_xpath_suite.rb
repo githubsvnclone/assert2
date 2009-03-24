@@ -1067,6 +1067,19 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     end
   end
 
+  def test_via_builder_shortcuts
+    assert_xhtml SAMPLE_LIST do
+      ul.kalika do
+        li 'Billings report'
+      end
+    end
+    assert_xhtml SAMPLE_FORM do
+      li.control_user_first_name! do
+        label 'First name', :for => :user_first_name
+      end
+    end
+  end
+
 end
 
 class BeHtmlWith
