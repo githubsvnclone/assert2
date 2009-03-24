@@ -62,7 +62,7 @@ require 'nokogiri'
 
 class Nokogiri::XML::Node
 
-  class XPathYielder
+  class XPathPredicateYielder
     def initialize(method_name, &block)
       self.class.send :define_method, method_name do |*args|
         raise 'must call with block' unless block
@@ -72,7 +72,7 @@ class Nokogiri::XML::Node
   end
 
   def xpath_with_callback(path, method_name, &block)
-    xpath path, XPathYielder.new(method_name, &block)
+    xpath path, XPathPredicateYielder.new(method_name, &block)
   end
 
 end
@@ -84,7 +84,7 @@ class BeHtmlWith
   end  #  ERGO await a fix in Nokogiri, and hope nobody actually means &amp;amp; !!!
 
   def get_texts(element)
-    element.xpath('text()').map{|x|x.to_s.strip}.reject{|x|x==''}.compact
+    element.xpath('text()').map{|x|x.to_s.strip}.select{|x|x.any?}
   end
 
   def match_regexp(reference, sample)
@@ -95,9 +95,9 @@ class BeHtmlWith
   def match_text(ref, sam)
     ref_text = get_texts(ref)
 
-    ref_text.empty? or ( ref_text - (sam_text = get_texts(sam)) ).empty? or
-      (ref_text.length == 1 and 
-        match_regexp(ref_text.first, sam_text.join) )
+    ref_text.empty? or 
+      (ref_text - (sam_text = get_texts(sam))).empty? or
+        (ref_text.length == 1 and match_regexp(ref_text.first, sam_text.join) )
   end  #  The irony _is_ lost on us
 
   def verbose_spew(reference, sample)
@@ -153,11 +153,6 @@ class BeHtmlWith
     end
 
     return false
-  end
-
-  def elements_equal(element_1, element_2)
-    raise 'programming error: mismatched elements' unless element_1.document == element_2.document
-    element_1.path == element_2.path
   end
 
   def collect_samples(elements, index)
@@ -299,19 +294,6 @@ class BeHtmlWith
       "\n\n...in these sample(s)...\n\n" +  #  TODO  how many samples?
       samples.map{|s|s.to_html}.join("\n\n...or...\n\n")
   end
-
-  def count_elements_to_node(container, element)
-    return 0 if elements_equal(container, element)
-    count = 0
-    
-    container.children.each do |child|
-      sub_count = count_elements_to_node(child, element)
-      return count + sub_count if sub_count        
-      count += 1
-    end
-    
-    return nil
-  end  #  TODO  use or lose these
 
   attr_accessor :failure_message
 

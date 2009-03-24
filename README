@@ -1,5 +1,7 @@
 The assert{ 2.0 } project asks a simple question:
 
+# TODO div.rad.thing! { and other builder shortcuts!
+
   How the leanest possible assertions 
   can yield the maximum diagnostics?
 

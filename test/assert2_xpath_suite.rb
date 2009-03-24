@@ -734,16 +734,6 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
   
-  def test_distance_algorithm
-    bhw = BeHtmlWith.create(SAMPLE_FORM)
-    element = bhw.doc.xpath('//input').first
-    count = bhw.count_elements_to_node(element.document, element)
-    assert{ count == 7 }
-    element = bhw.doc.xpath('//li').first
-    count = bhw.count_elements_to_node(element.document, element)
-    assert{ count == 4 }
-  end
-
   def test_assert_xhtml_counts_its_shots
     assert_xhtml SAMPLE_LIST do
       ul :style => 'font-size: 18' do
