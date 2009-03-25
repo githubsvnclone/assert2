@@ -170,6 +170,16 @@ class BeHtmlWith
     @failure_message = complain_about(@builder.doc.root, @first_samples)
   end
 
+  def build_shallow_xpath(root = @builder.doc)
+    return '//*[ ' +
+      root.children.reject{|kid|kid.name=='html'}.map{|kid|
+        index = kid.xpath('ancestor::*').length +
+                kid.xpath('preceding::*').length
+      
+        "descendant::#{kid.name}[ refer(., '#{index}') ]"
+      }.join(' or ') + ' ]'
+  end
+  
   def build_xpaths(&block)
     paths = []
     bwock = block || @block || proc{} #  TODO  what to do with no block? validate?

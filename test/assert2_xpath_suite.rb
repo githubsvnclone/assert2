@@ -831,7 +831,7 @@ to <code>xpath</code>'s block, then run your tests:
 
   def test_build_xpath
     bhw = BeHtmlWith.create(SAMPLE_FORM)
-    built = Nokogiri::HTML::Builder.new do
+    built = Nokogiri::HTML::Builder.new do  #  TODO  use build_xpaths
       fieldset do
         legend 'Personal Information'
         li :verbose => true do
@@ -854,6 +854,34 @@ to <code>xpath</code>'s block, then run your tests:
     bhw.references[1] = built.doc.root.xpath('//legend' ).first
     bhw.references[3] = built.doc.root.xpath('//label' ).first
     bhw.references[4] = built.doc.root.xpath('//input').first
+  end
+  
+  def test_build_shallow_xpath
+    bhw = BeHtmlWith.create(SAMPLE_FORM)
+    
+    bhw.build_xpaths do
+      fieldset do
+        legend 'Personal Information'
+        li
+      end
+    end
+#     path = bhw.build_deep_xpath(bhw.builder.doc.root)  #  TODO default arg
+    path = bhw.build_shallow_xpath(bhw.builder.doc)  #  TODO  default arg
+    assert{ path == "//*[ descendant::fieldset[ refer(., '0') ] ]" }
+    #  TODO  test it finds something!
+  end
+  
+  def test_build_shallow_xpaths
+    bhw = BeHtmlWith.create(SAMPLE_FORM)
+    
+    bhw.build_xpaths do
+      fieldset do  legend 'Personal Information'  end
+      gonzo
+    end
+#     path = bhw.build_deep_xpath(bhw.builder.doc.root)  #  TODO default arg
+    path = bhw.build_shallow_xpath(bhw.builder.doc)  #  TODO  default arg
+    assert{ path == "//*[ descendant::fieldset[ refer(., '0') ] or " +
+                         "descendant::gonzo[ refer(., '2') ] ]" }
   end
   
   def assert_xhtml_flunk(sample, &block)
