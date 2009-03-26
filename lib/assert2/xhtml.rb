@@ -173,7 +173,7 @@ class BeHtmlWith
 
       build_xpaths(&block).each do |path|
         break if match_path(path, proc{|e,i|
-          @first_samples = e.map{|q|q}
+          @first_samples = e
           e}).empty? and @first_samples.any?
           
       end
