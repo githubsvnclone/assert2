@@ -79,6 +79,15 @@ end
 
 class BeHtmlWith
 
+  def initialize(scope, &block)
+    @scope, @block = scope, block
+    @references = []  #  TODO  soften this!
+  end
+
+  attr_accessor :doc,
+                :scope,
+                :builder
+
   def deAmpAmp(stwing)
     stwing.to_s.gsub('&amp;amp;', '&').gsub('&amp;', '&')
   end  #  ERGO await a fix in Nokogiri, and hope nobody actually means &amp;amp; !!!
@@ -161,10 +170,6 @@ class BeHtmlWith
     return samples
   end
 
-  attr_accessor :doc,
-                :scope,
-                :builder
-
   def assemble_complaint
     @first_samples << @doc.root if @first_samples.empty?  #  TODO  test the first_samples system
     @failure_message = complain_about(@builder.doc.root, @first_samples)
@@ -178,6 +183,7 @@ class BeHtmlWith
     paths = []
     bwock = block || @block || proc{} #  TODO  what to do with no block? validate?
     @builder = Nokogiri::HTML::Builder.new(&bwock)
+    @references = []
 
     elemental_children.each do |child|
       @path = build_deep_xpath(child)
@@ -185,7 +191,7 @@ class BeHtmlWith
     end
 
     return paths
-  end  #  TODO  refactor more to actually use this
+  end
   
   def matches?(stwing, &block)
     @scope.wrap_expectation self do
@@ -193,10 +199,10 @@ class BeHtmlWith
         paths = build_xpaths(&block)
         @doc = Nokogiri::HTML(stwing)
 
-        elemental_children.each do |child|
+        paths.each do |_path|
           @first_samples = []
           @spewed = {}
-          @path = build_deep_xpath(child)
+          @path = _path
 
           matchers = @doc.root.xpath_with_callback @path, :refer do |elements, index|
                        collect_samples(elements, index.to_i)
@@ -205,8 +211,6 @@ class BeHtmlWith
           matchers.empty? and assemble_complaint and return false
         end
         
-        # TODO complain if too many matchers
-
         return true
       end
     end
@@ -223,7 +227,6 @@ class BeHtmlWith
   end
   
   def build_deep_xpath(element)
-    @references = []
     path = build_xpath(element)
     if path.index('not') == 0
       return '/*[ ' + path + ' ]'   #  ERGO  uh, is there a cleaner way?
@@ -232,7 +235,6 @@ class BeHtmlWith
   end
 
   def build_deep_xpath_too(element)
-    @references = []
     return '//' + build_xpath_too(element)
   end
 
@@ -306,10 +308,6 @@ class BeHtmlWith
     "TODO"
   end
   
-  def initialize(scope, &block)
-    @scope, @block = scope, block
-  end
-
 end
 
 
