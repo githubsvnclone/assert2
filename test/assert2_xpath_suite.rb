@@ -730,7 +730,7 @@ to <code>xpath</code>'s block, then run your tests:
 
     assert complaint do
       complaint =~ /Could not find this reference.../ and
-      complaint.index(refered.to_html)
+        complaint.index(refered.to_html)
     end
   end
   
