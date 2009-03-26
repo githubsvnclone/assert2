@@ -168,7 +168,7 @@ class BeHtmlWith
   end
 
   def assemble_complaint
-    @first_samples << @doc.root if @first_samples.empty?
+#     @first_samples << @doc.root if @first_samples.empty?
     @failure_message = complain_about(@builder.doc.root, @first_samples)
   end
 
