@@ -138,15 +138,13 @@ class BeHtmlWith
   end
 
   def match_xpath(reference, sample)
-    if value = reference['xpath!']
-      sample.parent.xpath("*[ #{value} ]").each do |m|
-        m.path == sample.path and return true
-      end
+    return true unless value = reference['xpath!']
 
-      return false
+    sample.parent.xpath("*[ #{value} ]").each do |m|
+      m.path == sample.path and return true
     end
 
-    return true
+    return false
   end
 
   def match_attributes_and_text(reference, sample)
