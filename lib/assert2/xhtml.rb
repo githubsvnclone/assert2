@@ -184,8 +184,7 @@ class BeHtmlWith
     @references = []
 
     elemental_children.each do |child|
-      @path = build_deep_xpath(child)
-      paths << @path
+      paths << build_deep_xpath(child)
     end
 
     return paths
