@@ -191,7 +191,9 @@ class BeHtmlWith
     return paths
   end
 
-  def match_path
+  def match_path(_path)
+    @first_samples = []
+    @path = _path
     @doc.root.xpath_with_callback @path, :refer do |elements, index|
       collect_samples(elements, index.to_i)
     end
@@ -203,9 +205,10 @@ class BeHtmlWith
       @spewed = {}
 
       build_xpaths(&block).each do |_path|
-        @first_samples = []
-        @path = _path
-        match_path.empty? and assemble_complaint and return false
+        if match_path(_path).empty?
+          assemble_complaint
+          return false
+        end
       end
       
       return true
