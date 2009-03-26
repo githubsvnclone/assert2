@@ -1135,11 +1135,21 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
 
   def test_disambiguate_diagnostic_elements
     diagnostic = assert_xhtml_flunk SAMPLE_LIST do
-      li.kali! do  ul.kaluka  end
+      li.kali!{ ul.kaluka }
     end
     
-    assert{ diagnostic =~ /kalika/ }  #  it tells you HOW TO FIX IT!
+    assert(diagnostic){ diagnostic =~ /kalika/ }
     denigh{ diagnostic =~ /font-size/ }
+    denigh{ diagnostic.index('...or...') }
+  end
+
+  def test_disambiguate_tertiary_diagnostic_elements
+    diagnostic = assert_xhtml_flunk SAMPLE_LIST do
+      ul{ li.kali!{ ul.kaluka{ li 'All Billings reports' } } }
+    end
+    return # TODO
+    assert(diagnostic){ diagnostic =~ /kalika/ }  #  it tells you HOW TO FIX IT!
+    deny(diagnostic){ diagnostic =~ /font-size/ }  #  ERGO  fix assert{ 2.0 } it calls denigh "assert"...
     denigh{ diagnostic.index('...or...') }
   end
 
