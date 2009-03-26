@@ -137,7 +137,7 @@ class BeHtmlWith
     return true
   end
 
-  def match_xpath(reference, sample)
+  def match_xpath(reference, sample)  #  TODO  better method names!
     return true unless value = reference['xpath!']
 
     sample.parent.xpath("*[ #{value} ]").each do |m|
@@ -163,26 +163,25 @@ class BeHtmlWith
       match_attributes_and_text(@references[index], element)
     end
 
-    @first_samples += elements if index == 0 # a root sample!
+    @first_samples += samples if @first_samples.empty? or index == 0  # a root sample!
     return samples
   end
 
-  def rip_attribute_free_paths
+  def find_better_diagnostics
     build_xpaths.each do |path|
       samples = match_path(path){|e,i| @first_samples = e }
       samples.empty? and 
         @first_samples.any? and 
-        return true
+        return
     end
-      
-    return false
+
+    match_path(build_shallow_xpath)
   end
 
-  def assemble_complaint
-    @first_samples.any? or 
-      rip_attribute_free_paths or 
-      match_path(build_shallow_xpath)
+#  TODO  put at least id matchers into the raw XPath, optionally!
 
+  def assemble_complaint
+    @first_samples.any? or find_better_diagnostics
     @failure_message = complain_about(@builder.doc.root, @first_samples)
   end
 
@@ -311,7 +310,7 @@ class BeHtmlWith
     "\nCould not find this reference...\n\n" +
       refered.to_html +
       "\n\n...in these sample(s)...\n\n" +  #  TODO  how many samples?
-      samples.map{|s|s.to_html}.join("\n\n...or...\n\n")
+      samples.map{|s|s.to_html}.uniq.join("\n\n...or...\n\n")
   end
 
   attr_accessor :failure_message

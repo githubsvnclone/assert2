@@ -1134,9 +1134,13 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
   end
 
   def test_disambiguate_diagnostic_elements
-    assert_xhtml_flunk SAMPLE_LIST do
+    diagnostic = assert_xhtml_flunk SAMPLE_LIST do
       li.kali! do  ul.kaluka  end
     end
+    
+    assert{ diagnostic =~ /kalika/ }  #  it tells you HOW TO FIX IT!
+    denigh{ diagnostic =~ /font-size/ }
+    denigh{ diagnostic.index('...or...') }
   end
 
 end
