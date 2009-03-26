@@ -623,7 +623,7 @@ to <code>xpath</code>'s block, then run your tests:
           legend 'Personal Information'
           li do
             label 'First name'
-            input :type => 'text', :name => 'user[first_name]'
+            input :type => 'text', :name => 'user[name]'
           end
         end
       end
@@ -821,8 +821,8 @@ to <code>xpath</code>'s block, then run your tests:
       fieldset do
         legend 'Personal Information'
         li :verbose! => true do
-          label 'First name', :for => :user_first_name
-          input :type => :text, :name => 'user[first_name]'
+          label 'First name', :for => :user_name
+          input :type => :text, :name => 'user[name]'
           br
         end
       end
@@ -835,8 +835,8 @@ to <code>xpath</code>'s block, then run your tests:
       fieldset do
         legend 'Personal Information'
         li :verbose => true do
-          label 'First name', :for => :user_first_name
-          input :type => :text, :name => 'user[first_name]'
+          label 'First name', :for => :user_name
+          input :type => :text, :name => 'user[name]'
           br
         end
       end
@@ -958,6 +958,17 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
 
+  def test_diagnostic_fallback_plan_A
+    diagnostic = assert_xhtml_flunk SAMPLE_FORM do
+      li do # is there
+        input.aint_there
+      end
+    end
+    
+    denigh{ diagnostic =~ /form/ }  #  outside the found context
+#     assert{ diagnostic =~ /li.*input.*user_name/ }
+  end
+
   def test_in_denial
     bhw = BeHtmlWith.create(SAMPLE_FORM)
     built = Nokogiri::HTML::Builder.new do
@@ -985,9 +996,9 @@ to <code>xpath</code>'s block, then run your tests:
       fieldset do
         legend 'Personal Information'
         li do
-          label 'First name', :for => :user_first_name
+          label 'First name', :for => :user_name
           br
-          input :type => :text, :name => 'user[first_name]'
+          input :type => :text, :name => 'user[name]'
         end
       end
     end
@@ -1038,7 +1049,7 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     end
 
     assert_xhtml SAMPLE_FORM do
-      li{ input :name => /(user.first)/i }
+      li{ input :name => /(user.name)/i }
     end
   end
 
@@ -1102,8 +1113,8 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
       end
     end
     assert_xhtml SAMPLE_FORM do
-      li.control_user_first_name! do
-        label 'First name', :for => :user_first_name
+      li.control_user_name! do
+        label 'First name', :for => :user_name
       end
     end
   end
@@ -1123,9 +1134,9 @@ SAMPLE_FORM = <<EOH
   <fieldset>
     <legend>Personal Information</legend>
     <ol>
-      <li id="control_user_first_name">
-        <label for="user_first_name">First name</label>
-        <input type="text" name="user[first_name]" id="user_first_name" />
+      <li id="control_user_name">
+        <label for="user_name">First name</label>
+        <input type="text" name="user[name]" id="user_name" />
         <br/>
       </li>
     </ol>
