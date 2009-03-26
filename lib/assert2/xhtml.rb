@@ -198,7 +198,6 @@ class BeHtmlWith
           @first_samples = []
           @spewed = {}
           @path = build_deep_xpath(child)
-          next if @path == "//descendant::html[ refer(., '0') ]" # CONSIDER wtf is this?
 
           matchers = @doc.root.xpath_with_callback @path, :refer do |elements, index|
                        collect_samples(elements, index.to_i)
