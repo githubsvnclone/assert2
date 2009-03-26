@@ -968,7 +968,7 @@ to <code>xpath</code>'s block, then run your tests:
       end
     end
 
-    denigh{ diagnostic =~ /form/ }  #  outside the found context
+    denigh{ diagnostic =~ /form action/ }  #  outside the found context
     assert{ diagnostic =~ /li.*input.*user_name/m }
   end
 
@@ -979,7 +979,7 @@ to <code>xpath</code>'s block, then run your tests:
       end
     end
 
-    denigh{ diagnostic =~ /form/ }  #  outside the found context
+    denigh{ diagnostic =~ /form action/ }  #  outside the found context
     assert{ diagnostic =~ /li.*input.*user_name/m }
   end
 

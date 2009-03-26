@@ -169,24 +169,17 @@ class BeHtmlWith
 
   def assemble_complaint
     if @first_samples.empty?
-      @spewed = {}
-
       build_xpaths.each do |path|
-        break if match_path(path){|e,i|
-          @first_samples = e
-          }.empty? and @first_samples.any?
-          
+        match_path(path){|e,i| @first_samples = e }.
+          empty? and 
+          @first_samples.any? and 
+          break
       end
     end
 
     if @first_samples.empty?
-#       raise 'wtf'
       path = build_shallow_xpath(root = @builder.doc)
-
       match_path(path)
-#       {|e,i|
-#           @first_samples = e
-#           }
     end
 
     @failure_message = complain_about(@builder.doc.root, @first_samples)
