@@ -178,22 +178,19 @@ class BeHtmlWith
   end
 
   def build_xpaths(&block)
-    paths = []
     bwock = block || @block || proc{} #  TODO  what to do with no block? validate?
     @builder = Nokogiri::HTML::Builder.new(&bwock)
     @references = []
 
-    elemental_children.each do |child|
-      paths << build_deep_xpath(child)
+    elemental_children.map do |child|
+      build_deep_xpath(child)
     end
-
-    return paths
   end
 
-  def match_path(_path)
+  def match_path(path)
     @first_samples = []
-    @path = _path
-    @doc.root.xpath_with_callback @path, :refer do |elements, index|
+
+    @doc.root.xpath_with_callback path, :refer do |elements, index|
       collect_samples(elements, index.to_i)
     end
   end
@@ -203,8 +200,8 @@ class BeHtmlWith
       @doc = Nokogiri::HTML(stwing)
       @spewed = {}
 
-      build_xpaths(&block).each do |_path|
-        if match_path(_path).empty?
+      build_xpaths(&block).each do |path|
+        if match_path(path).empty?
           assemble_complaint
           return false
         end
