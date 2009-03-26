@@ -170,12 +170,16 @@ class BeHtmlWith
     @failure_message = complain_about(@builder.doc.root, @first_samples)
   end
 
+  def elemental_children
+    @builder.doc.children.grep(Nokogiri::XML::Element)
+  end
+
   def build_xpaths(&block)
     paths = []
     bwock = block || @block || proc{} #  TODO  what to do with no block? validate?
     @builder = Nokogiri::HTML::Builder.new(&bwock)
 
-    @builder.doc.children.grep(Nokogiri::XML::Element).each do |child|
+    elemental_children.each do |child|
       @path = build_deep_xpath(child)
       p child.class
       p child.name
@@ -193,7 +197,7 @@ class BeHtmlWith
         @doc = Nokogiri::HTML(stwing)
         @reason = nil
 
-        @builder.doc.children.each do |child|
+        elemental_children.each do |child|
           @first_samples = []
           @spewed = {}
           @path = build_deep_xpath(child)
