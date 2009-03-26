@@ -190,27 +190,26 @@ class BeHtmlWith
 
     return paths
   end
-  
+
+  def match_path
+    @doc.root.xpath_with_callback @path, :refer do |elements, index|
+      collect_samples(elements, index.to_i)
+    end
+  end
+
   def matches?(stwing, &block)
     @scope.wrap_expectation self do
-      begin
-        paths = build_xpaths(&block)
-        @doc = Nokogiri::HTML(stwing)
+      paths = build_xpaths(&block)
+      @doc = Nokogiri::HTML(stwing)
+      @spewed = {}
 
-        paths.each do |_path|
-          @first_samples = []
-          @spewed = {}
-          @path = _path
-
-          matchers = @doc.root.xpath_with_callback @path, :refer do |elements, index|
-                       collect_samples(elements, index.to_i)
-                     end
-          
-          matchers.empty? and assemble_complaint and return false
-        end
-        
-        return true
+      paths.each do |_path|
+        @first_samples = []
+        @path = _path
+        match_path.empty? and assemble_complaint and return false
       end
+      
+      return true
     end
   end
 
