@@ -172,9 +172,9 @@ class BeHtmlWith
       @spewed = {}
 
       build_xpaths(&block).each do |path|
-        break if match_path(path, proc{|e,i|
+        break if match_path(path){|e,i|
           @first_samples = e
-          e}).empty? and @first_samples.any?
+          }.empty? and @first_samples.any?
           
       end
     end
@@ -196,7 +196,8 @@ class BeHtmlWith
     end
   end
 
-  def match_path(path, refer = proc{|e,i| collect_samples(e, i.to_i)})
+  def match_path(path, &refer)
+    refer ||= lambda{|e,i| collect_samples(e, i.to_i) }
     @first_samples = []
     @doc.root.xpath_with_callback path, :refer, &refer
   end
