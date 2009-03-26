@@ -167,11 +167,11 @@ class BeHtmlWith
     return samples
   end
 
-  def assemble_complaint(&block)  #  TODO  use the @block already!
+  def assemble_complaint
     if @first_samples.empty?
       @spewed = {}
 
-      build_xpaths(&block).each do |path|
+      build_xpaths.each do |path|
         break if match_path(path){|e,i|
           @first_samples = e
           }.empty? and @first_samples.any?
@@ -203,13 +203,14 @@ class BeHtmlWith
   end
 
   def matches?(stwing, &block)
+    @block = block
     @scope.wrap_expectation self do
       @doc = Nokogiri::HTML(stwing)
       @spewed = {}
 
-      build_xpaths(&block).each do |path|
+      build_xpaths.each do |path|
         if match_path(path).empty?
-          assemble_complaint(&block)
+          assemble_complaint
           return false
         end
       end
@@ -269,8 +270,6 @@ class BeHtmlWith
       path << '[ '
       path << build_predicate(element)
       path << "refer(., '#{count}') ]"  #  last so boolean short-circuiting optimizes
-#       xpath = element['xpath!']
-#       path << "[ #{ xpath } ]" if xpath
       return path
     end
   end
