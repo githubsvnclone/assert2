@@ -163,13 +163,12 @@ class BeHtmlWith
       match_attributes_and_text(@references[index], element)
     end
 
-    @first_samples += elements # if index == 0  
-      #  TODO  this could use more testage, and it could enforce a link to the parent
+    @first_samples += elements
     return samples
   end
 
   def assemble_complaint
-    @first_samples << @doc.root if @first_samples.empty?  #  TODO  test the first_samples system
+    @first_samples << @doc.root if @first_samples.empty?
     @failure_message = complain_about(@builder.doc.root, @first_samples)
   end
 
@@ -178,7 +177,7 @@ class BeHtmlWith
   end
 
   def build_xpaths(&block)
-    bwock = block || @block || proc{} #  TODO  what to do with no block? validate?
+    bwock = block || @block || proc{} #  CONSIDER  what to do with no block? validate?
     @builder = Nokogiri::HTML::Builder.new(&bwock)
     @references = []
 
@@ -223,9 +222,11 @@ class BeHtmlWith
   
   def build_deep_xpath(element)
     path = build_xpath(element)
+
     if path.index('not') == 0
       return '/*[ ' + path + ' ]'   #  ERGO  uh, is there a cleaner way?
     end
+
     return '//' + path
   end
 
