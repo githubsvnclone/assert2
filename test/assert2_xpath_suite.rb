@@ -780,6 +780,7 @@ to <code>xpath</code>'s block, then run your tests:
   def test_bad_attributes_flunk
     assert_xhtml_flunk SAMPLE_FORM do
       legend
+
       input :type => :text,
             :name => 'user[first_nome]'
     end
@@ -964,6 +965,17 @@ to <code>xpath</code>'s block, then run your tests:
     diagnostic = assert_xhtml_flunk SAMPLE_FORM do
       li do # is there
         input.aint_there
+      end
+    end
+
+    denigh{ diagnostic =~ /form/ }  #  outside the found context
+    assert{ diagnostic =~ /li.*input.*user_name/m }
+  end
+
+  def test_diagnostic_fallback_plan_B
+    diagnostic = assert_xhtml_flunk SAMPLE_FORM do
+      li do # is there
+        output # totally ain't there!
       end
     end
 
