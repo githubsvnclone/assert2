@@ -167,21 +167,21 @@ class BeHtmlWith
     return samples
   end
 
+  def rip_attribute_free_paths
+    build_xpaths.each do |path|
+      match_path(path){|e,i| @first_samples = e }.
+        empty? and 
+        @first_samples.any? and 
+        return true
+    end
+      
+    return false
+  end
+
   def assemble_complaint
-    if @first_samples.empty?
-      build_xpaths.each do |path|
-        match_path(path){|e,i| @first_samples = e }.
-          empty? and 
-          @first_samples.any? and 
-          break
-      end
-    end
-
-    if @first_samples.empty?
-      path = build_shallow_xpath(root = @builder.doc)
-      match_path(path)
-    end
-
+    @first_samples.any? or 
+      rip_attribute_free_paths or 
+      match_path(build_shallow_xpath)
     @failure_message = complain_about(@builder.doc.root, @first_samples)
   end
 
