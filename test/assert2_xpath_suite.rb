@@ -1133,7 +1133,36 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     end
   end
 
+  def test_disambiguate_diagnostic_elements
+    assert_xhtml_flunk SAMPLE_LIST do
+      li.kali! do  ul.kaluka  end
+    end
+  end
+
 end
+
+SAMPLE_LIST = <<EOH
+<html>
+  <body>
+    <ul style='font-size: 18'>
+      <li id='zone'>model
+        <ul class='kalika goddess'>
+          <li>Billings report</li>
+          <li>Sales report</li>
+          <li>Billings criteria</li>
+          <li>Common system</li>
+        </ul>
+      </li>
+      <li id='kali'>controller
+        <ul class='kalika'>
+          <li>All Sales report criteria</li>
+          <li>All Billings reports</li>
+        </ul>
+      </li>
+    </ul>
+  </body>
+</html>
+EOH
 
 class BeHtmlWith
   def self.create(stwing)
@@ -1158,28 +1187,6 @@ SAMPLE_FORM = <<EOH
 </form>
 EOH
 
-SAMPLE_LIST = <<EOH
-<html>
-  <body>
-    <ul style='font-size: 18'>
-      <li id='kali'>model
-        <ul class='kalika goddess'>
-          <li>Billings report</li>
-          <li>Sales report</li>
-          <li>Billings criteria</li>
-          <li>Common system</li>
-        </ul>
-      </li>
-      <li id='zone'>controller
-        <ul class='kalika'>
-          <li>All Sales report criteria</li>
-          <li>All Billings reports</li>
-        </ul>
-      </li>
-    </ul>
-  </body>
-</html>
-EOH
 
 #  TODO  document we do strings correctly now
 
