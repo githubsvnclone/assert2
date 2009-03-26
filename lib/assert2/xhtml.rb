@@ -181,9 +181,6 @@ class BeHtmlWith
 
     elemental_children.each do |child|
       @path = build_deep_xpath(child)
-      p child.class
-      p child.name
-      p child.children.any?
       paths << @path
     end
 
