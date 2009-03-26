@@ -964,9 +964,9 @@ to <code>xpath</code>'s block, then run your tests:
         input.aint_there
       end
     end
-    
+
     denigh{ diagnostic =~ /form/ }  #  outside the found context
-#     assert{ diagnostic =~ /li.*input.*user_name/ }
+    assert{ diagnostic =~ /li.*input.*user_name/m }
   end
 
   def test_in_denial

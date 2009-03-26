@@ -167,8 +167,18 @@ class BeHtmlWith
     return samples
   end
 
-  def assemble_complaint
-#     @first_samples << @doc.root if @first_samples.empty?
+  def assemble_complaint(&block)  #  TODO  use the @block already!
+    if @first_samples.empty?
+      @spewed = {}
+
+      build_xpaths(&block).each do |path|
+        break if match_path(path, proc{|e,i|
+          @first_samples = e.map{|q|q}
+          e}).empty? and @first_samples.any?
+          
+      end
+    end
+
     @failure_message = complain_about(@builder.doc.root, @first_samples)
   end
 
@@ -186,12 +196,9 @@ class BeHtmlWith
     end
   end
 
-  def match_path(path)
+  def match_path(path, refer = proc{|e,i| collect_samples(e, i.to_i)})
     @first_samples = []
-
-    @doc.root.xpath_with_callback path, :refer do |elements, index|
-      collect_samples(elements, index.to_i)
-    end
+    @doc.root.xpath_with_callback path, :refer, &refer
   end
 
   def matches?(stwing, &block)
@@ -201,7 +208,7 @@ class BeHtmlWith
 
       build_xpaths(&block).each do |path|
         if match_path(path).empty?
-          assemble_complaint
+          assemble_complaint(&block)
           return false
         end
       end
