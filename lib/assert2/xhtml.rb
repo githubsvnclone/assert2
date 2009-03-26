@@ -182,7 +182,7 @@ class BeHtmlWith
     if @first_samples.empty?
 #       raise 'wtf'
       path = build_shallow_xpath(root = @builder.doc)
-      p path
+
       match_path(path)
 #       {|e,i|
 #           @first_samples = e
