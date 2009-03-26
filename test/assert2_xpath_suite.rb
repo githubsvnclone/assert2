@@ -726,10 +726,10 @@ to <code>xpath</code>'s block, then run your tests:
                                         <c d="g"></c></b></a>')
     samples   = bhw.doc.xpath('//a/b/c')
     refered   = reference.xpath('//b/c').first
-    complaint = bhw.complain_about(refered, samples, 'nodes found in different contexts')
+    complaint = bhw.complain_about(refered, samples)
 
     assert complaint do
-      complaint =~ /Could not find this reference \(nodes found in different contexts\).../ and
+      complaint =~ /Could not find this reference.../ and
       complaint.index(refered.to_html)
     end
   end

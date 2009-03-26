@@ -192,7 +192,6 @@ class BeHtmlWith
       begin
         paths = build_xpaths(&block)
         @doc = Nokogiri::HTML(stwing)
-        @reason = nil
 
         elemental_children.each do |child|
           @first_samples = []
@@ -204,7 +203,6 @@ class BeHtmlWith
                      end
           
           matchers.empty? and assemble_complaint and return false
-           #  TODO  use or lose @reason
         end
         
         # TODO complain if too many matchers
@@ -295,9 +293,8 @@ class BeHtmlWith
     return path
   end
 
-  def complain_about(refered, samples, reason = nil)  #  TODO  put argumnets in order
-    reason = " (#{reason})" if reason
-    "\nCould not find this reference#{reason}...\n\n" +
+  def complain_about(refered, samples)  #  TODO  put argumnets in order
+    "\nCould not find this reference...\n\n" +
       refered.to_html +
       "\n\n...in these sample(s)...\n\n" +  #  TODO  how many samples?
       samples.map{|s|s.to_html}.join("\n\n...or...\n\n")
