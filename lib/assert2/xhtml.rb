@@ -163,7 +163,7 @@ class BeHtmlWith
       match_attributes_and_text(@references[index], element)
     end
 
-    @first_samples += elements
+    @first_samples += elements if index == 0 # a root sample!
     return samples
   end
 
