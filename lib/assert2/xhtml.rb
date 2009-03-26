@@ -182,6 +182,7 @@ class BeHtmlWith
     @first_samples.any? or 
       rip_attribute_free_paths or 
       match_path(build_shallow_xpath)
+
     @failure_message = complain_about(@builder.doc.root, @first_samples)
   end
 

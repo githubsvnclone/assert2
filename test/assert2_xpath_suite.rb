@@ -1162,7 +1162,7 @@ SAMPLE_LIST = <<EOH
 <html>
   <body>
     <ul style='font-size: 18'>
-      <li>model
+      <li id='kali'>model
         <ul class='kalika goddess'>
           <li>Billings report</li>
           <li>Sales report</li>
@@ -1170,7 +1170,7 @@ SAMPLE_LIST = <<EOH
           <li>Common system</li>
         </ul>
       </li>
-      <li>controller
+      <li id='zone'>controller
         <ul class='kalika'>
           <li>All Sales report criteria</li>
           <li>All Billings reports</li>
