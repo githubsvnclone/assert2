@@ -199,11 +199,10 @@ class BeHtmlWith
 
   def matches?(stwing, &block)
     @scope.wrap_expectation self do
-      paths = build_xpaths(&block)
       @doc = Nokogiri::HTML(stwing)
       @spewed = {}
 
-      paths.each do |_path|
+      build_xpaths(&block).each do |_path|
         @first_samples = []
         @path = _path
         match_path.empty? and assemble_complaint and return false
