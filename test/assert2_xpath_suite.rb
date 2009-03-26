@@ -786,6 +786,8 @@ to <code>xpath</code>'s block, then run your tests:
   end
 
   def test_censor_bangs
+    assert_xhtml '<select/>' do  select! end
+
     assert_xhtml_flunk SAMPLE_FORM do
       select! :id => 42
     end

@@ -179,6 +179,10 @@ class BeHtmlWith
       end
     end
 
+    if @first_samples.empty?
+#       raise 'wtf'
+    end
+
     @failure_message = complain_about(@builder.doc.root, @first_samples)
   end
 
