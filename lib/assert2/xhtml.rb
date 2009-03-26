@@ -183,9 +183,10 @@ class BeHtmlWith
 #       raise 'wtf'
       path = build_shallow_xpath(root = @builder.doc)
       p path
-      match_path(path){|e,i|
-          @first_samples = e
-          }
+      match_path(path)
+#       {|e,i|
+#           @first_samples = e
+#           }
     end
 
     @failure_message = complain_about(@builder.doc.root, @first_samples)
@@ -230,11 +231,15 @@ class BeHtmlWith
 
   def build_shallow_xpath(root = @builder.doc)
     return '//*[ ' +
+    
     #  TODO  use the greppy thing
+    
       root.children.reject{|kid|kid.name=='html'}.map{|kid|
         index = kid.xpath('ancestor::*').length +
                 kid.xpath('preceding::*').length
+      
       # TODO common bang remover
+      
         "descendant::#{kid.name.sub(/\!$/, '')}[ refer(., '#{index}') ]"
       }.join(' or ') + ' ]'
   end
@@ -318,7 +323,7 @@ class BeHtmlWith
   attr_accessor :failure_message
 
   def negative_failure_message
-    "TODO"
+    "please don't negate - use without!"
   end
   
 end
