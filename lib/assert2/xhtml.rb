@@ -169,8 +169,8 @@ class BeHtmlWith
 
   def rip_attribute_free_paths
     build_xpaths.each do |path|
-      match_path(path){|e,i| @first_samples = e }.
-        empty? and 
+      samples = match_path(path){|e,i| @first_samples = e }
+      samples.empty? and 
         @first_samples.any? and 
         return true
     end
