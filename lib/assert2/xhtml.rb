@@ -175,9 +175,11 @@ class BeHtmlWith
     bwock = block || @block || proc{} #  TODO  what to do with no block? validate?
     @builder = Nokogiri::HTML::Builder.new(&bwock)
 
-    @builder.doc.children.each do |child|
+    @builder.doc.children.grep(Nokogiri::XML::Element).each do |child|
       @path = build_deep_xpath(child)
-      next if @path == "//descendant::html[ refer(., '0') ]" # CONSIDER wtf is this?
+      p child.class
+      p child.name
+      p child.children.any?
       paths << @path
     end
 
