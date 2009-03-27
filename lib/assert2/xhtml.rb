@@ -149,7 +149,8 @@ class BeHtmlWith
   end
 
   def match_attributes_and_text(reference, sample)
-    @max_depth < depth(reference) and return true
+    @max_depth < depth(reference) and 
+      return true
   
     if match_attributes(reference, sample) and
         match_text(reference, sample)     and
