@@ -664,7 +664,7 @@ to <code>xpath</code>'s block, then run your tests:
     assert_xhtml @bhw.builder.doc.to_xhtml do
       form do
         legend 'Personal Information'
-        li do  without!{ input }  end
+        li{ without!{ input } }
       end
     end
   end
