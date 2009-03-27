@@ -648,6 +648,14 @@ to <code>xpath</code>'s block, then run your tests:
     deny{ @bhw.run_all_xpaths(@xpaths) }
   end
   
+  def test_if_the_lowest_level_attributes_fault_collect_the_next_higher_level
+    createBeHtmlWith(SAMPLE_FORM, &assemble_form_example)  #  TODO  use this more
+    @bhw.builder.doc.xpath('//input').first['type'] = 'tox'
+    nodes = @bhw.find_better_diagnostics
+    assert{ nodes.length == 1 }
+    assert_xhtml nodes.first.to_xhtml, &assemble_form_example
+  end
+  
   def test_prototype_recursive_algorithm
     bhw = BeHtmlWith.create(SAMPLE_FORM)
 

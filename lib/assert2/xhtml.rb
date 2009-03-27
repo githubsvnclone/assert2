@@ -155,7 +155,7 @@ class BeHtmlWith
     if match_attributes(reference, sample) and
         match_text(reference, sample)     and
         match_xpath(reference, sample)
-      verbose_spew(reference, sample)
+      verbose_spew(reference, sample)  #  CONSIDER  get verbose spew working at fault time too?
       return true
     end
 
@@ -163,25 +163,20 @@ class BeHtmlWith
   end
 
   def collect_samples(elements, index)
-    samples = elements.find_all do |element|
-        match_attributes_and_text(@references[index], element)
+    elements.find_all do |element|
+       match_attributes_and_text(@references[index], element)
     end
-
-# p samples.map{|n|n.name}
-#     @first_samples += samples if @first_samples.empty? or index == 0  # a root sample!
-    return samples
   end
 
-#   def find_better_diagnostics
-#     build_xpaths.each do |path|
-#       samples = match_path(path){|e,i| @first_samples = e }
-#       samples.empty? and 
-#         @first_samples.any? and 
-#         return
-#     end
-# 
-#     match_path(build_shallow_xpath)
-#   end
+  def find_better_diagnostics
+    @max_depth = maximum_depth - 1
+      #  TODO  give up if @max_depth goes negative!!
+    @xpaths.each do |path|
+      samples = match_path(path) #{|e,i| @first_samples = e }
+      samples.any? and
+        return samples  #  TODO  what about subsequent top-levels?
+    end
+  end
 
 #  TODO  put at least id matchers into the raw XPath, optionally!
 
@@ -199,9 +194,9 @@ class BeHtmlWith
     @builder = Nokogiri::HTML::Builder.new(&bwock)
     @references = []
 
-    elemental_children.map do |child|
-      build_deep_xpath(child)
-    end
+    @xpaths = elemental_children.map do |child|
+                build_deep_xpath(child)
+              end
   end
 
   def match_path(path, &refer)
@@ -227,9 +222,9 @@ class BeHtmlWith
     @scope.wrap_expectation self do
       @doc = Nokogiri::HTML(stwing)
       @spewed = {}
-      xpaths = build_xpaths
+      build_xpaths
       @max_depth = maximum_depth
-      return run_all_xpaths(xpaths)
+      return run_all_xpaths(@xpaths)
     end
   end
 
