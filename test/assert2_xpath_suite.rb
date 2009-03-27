@@ -655,7 +655,20 @@ to <code>xpath</code>'s block, then run your tests:
     assert{ nodes.length == 1 }
     assert_xhtml nodes.first.to_xhtml, &assemble_form_example
   end
-  
+
+#  TODO  preserve the builder's reference HTML before reporting the diagnostic!
+
+  def test_shave_off_nodes_from_builder_that_are_too_deep
+    createBeHtmlWith(SAMPLE_FORM, &assemble_form_example)  #  TODO  use this more
+    @bhw.shave_builder_nodes(3)
+    assert_xhtml @bhw.builder.doc.to_xhtml do
+      form do
+        legend 'Personal Information'
+        li do  without!{ input }  end
+      end
+    end
+  end
+
   def test_prototype_recursive_algorithm
     bhw = BeHtmlWith.create(SAMPLE_FORM)
 

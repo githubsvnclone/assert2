@@ -178,6 +178,12 @@ class BeHtmlWith
     end
   end
 
+  def shave_builder_nodes(max)  #  TODO  _elements_
+    elements = @builder.doc.root.xpath("//*[ count(ancestor-or-self::*) > #{max} ]")
+#     puts (elements.first.public_methods - public_methods).sort
+    elements.map{|e|e.unlink}
+  end
+
 #  TODO  put at least id matchers into the raw XPath, optionally!
 
   def assemble_complaint
