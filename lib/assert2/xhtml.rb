@@ -163,26 +163,26 @@ class BeHtmlWith
       match_attributes_and_text(@references[index], element)
     end
 
-    @first_samples += samples if @first_samples.empty? or index == 0  # a root sample!
+#     @first_samples += samples if @first_samples.empty? or index == 0  # a root sample!
     return samples
   end
 
-  def find_better_diagnostics
-    build_xpaths.each do |path|
-      samples = match_path(path){|e,i| @first_samples = e }
-      samples.empty? and 
-        @first_samples.any? and 
-        return
-    end
-
-    match_path(build_shallow_xpath)
-  end
+#   def find_better_diagnostics
+#     build_xpaths.each do |path|
+#       samples = match_path(path){|e,i| @first_samples = e }
+#       samples.empty? and 
+#         @first_samples.any? and 
+#         return
+#     end
+# 
+#     match_path(build_shallow_xpath)
+#   end
 
 #  TODO  put at least id matchers into the raw XPath, optionally!
 
   def assemble_complaint
-    @first_samples.any? or find_better_diagnostics
-    @failure_message = complain_about(@builder.doc.root, @first_samples)
+#     @first_samples.any? or find_better_diagnostics
+    @failure_message = complain_about(@builder.doc.root, []) # @first_samples)
   end
 
   def elemental_children
@@ -222,20 +222,20 @@ class BeHtmlWith
     end
   end
 
-  def build_shallow_xpath(root = @builder.doc)
-    return '//*[ ' +
-    
-    #  TODO  use the greppy thing
-    
-      root.children.reject{|kid|kid.name=='html'}.map{|kid|
-        index = kid.xpath('ancestor::*').length +
-                kid.xpath('preceding::*').length
-      
-      # TODO common bang remover
-      
-        "descendant::#{kid.name.sub(/\!$/, '')}[ refer(., '#{index}') ]"
-      }.join(' or ') + ' ]'
-  end
+#   def build_shallow_xpath(root = @builder.doc)
+#     return '//*[ ' +
+#     
+#     #  TODO  use the greppy thing
+#     
+#       root.children.reject{|kid|kid.name=='html'}.map{|kid|
+#         index = kid.xpath('ancestor::*').length +
+#                 kid.xpath('preceding::*').length
+#       
+#       # TODO common bang remover
+#       
+#         "descendant::#{kid.name.sub(/\!$/, '')}[ refer(., '#{index}') ]"
+#       }.join(' or ') + ' ]'
+#   end
   
   def build_deep_xpath(element)
     path = build_xpath(element)

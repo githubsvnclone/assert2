@@ -1,7 +1,5 @@
 The assert{ 2.0 } project asks a simple question:
 
-# TODO div.rad.thing! { and other builder shortcuts!
-
   How the leanest possible assertions 
   can yield the maximum diagnostics?
 
@@ -133,7 +131,7 @@ type Hash (expected Array)", add a ! to the end of the element, like this:
       select! :id => 'sites',
               :name => 'sites[]',
               :multiple => :multiple,
-              :size => CrossSaleController::LIST_SIZE
+              :size => SaleController::LIST_SIZE
     end
 
 === text ===
@@ -234,6 +232,13 @@ The :class attribute is magic. This assertion passes...
 ...despite the actual HTML contains <ul class='kalika goddess'>. This feature
 simulates the CSS Selector notation that matches classes by their cascading 
 effects.
+
+=== class & ID shortcuts ===
+
+Nokogiri expands div.rad.thing! to <div class='rad' id='thing'/>. That 
+means you don't need to write div :class => 'rad', :id => 'thing' (or 
+ul :class => :kalika). You can then put other arguments after the shortcut,
+and the <div> in our example receives them, too.
 
 === diagnostic message ===
 

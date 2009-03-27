@@ -859,7 +859,7 @@ to <code>xpath</code>'s block, then run your tests:
     bhw.references[4] = built.doc.root.xpath('//input').first
   end
   
-  def test_build_shallow_xpath
+  def TODO_test_build_shallow_xpath
     bhw = BeHtmlWith.create(SAMPLE_FORM)
     
     bhw.build_xpaths do
@@ -874,7 +874,7 @@ to <code>xpath</code>'s block, then run your tests:
     #  TODO  test it finds something!
   end
   
-  def test_build_shallow_xpaths
+  def TODO_test_build_shallow_xpaths
     bhw = BeHtmlWith.create(SAMPLE_FORM)
     
     bhw.build_xpaths do
@@ -961,7 +961,7 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
 
-  def test_diagnostic_fallback_plan_A
+  def TODO_test_diagnostic_fallback_plan_A
     diagnostic = assert_xhtml_flunk SAMPLE_FORM do
       li do # is there
         input.aint_there
@@ -972,7 +972,7 @@ to <code>xpath</code>'s block, then run your tests:
     assert{ diagnostic =~ /li.*input.*user_name/m }
   end
 
-  def test_diagnostic_fallback_plan_B
+  def TODO_test_diagnostic_fallback_plan_B
     diagnostic = assert_xhtml_flunk SAMPLE_FORM do
       li do # is there
         output # totally ain't there!
@@ -1133,7 +1133,7 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     end
   end
 
-  def test_disambiguate_diagnostic_elements
+  def TODO_test_disambiguate_diagnostic_elements
     diagnostic = assert_xhtml_flunk SAMPLE_LIST do
       li.kali!{ ul.kaluka }
     end
@@ -1143,7 +1143,7 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     denigh{ diagnostic.index('...or...') }
   end
 
-  def test_disambiguate_tertiary_diagnostic_elements
+  def TODO_test_disambiguate_tertiary_diagnostic_elements
     diagnostic = assert_xhtml_flunk SAMPLE_LIST do
       ul{ li.kali!{ ul.kaluka{ li 'All Billings reports' } } }
     end
