@@ -182,7 +182,7 @@ class BeHtmlWith
     elements = @builder.doc.root.xpath("//*[ count(ancestor-or-self::*) > #{max} ]")
 #     puts (elements.first.public_methods - public_methods).sort
     elements.map{|e|e.unlink}
-  end
+  end #  TODO  croak all these
 
 #  TODO  put at least id matchers into the raw XPath, optionally!
 
@@ -271,8 +271,8 @@ class BeHtmlWith
     element_kids = element.children.grep(Nokogiri::XML::Element)
 
     if element_kids.any?
+      path << 'and '
       path << element_kids.map{|child|  build_xpath(child)  }.join(conjunction)
-      path << ' and '
     end
 
     return path
@@ -293,13 +293,14 @@ class BeHtmlWith
     @references << element  #  note we skip the without @reference!
     
     if element.name == 'without!'
-      return 'not( ' + build_predicate(element, 'or') + '1=1 )'
+      return 'not( 1=1 ' + build_predicate(element, 'or') + ' )'
     else
       path = 'descendant::'
       path << element.name.sub(/\!$/, '')
-      path << '[ '
+      path << "[ refer(., '#{count}') "
+        #  refer() is first so we collect lots of samples, despite boolean short-circuiting
       path << build_predicate(element)
-      path << "refer(., '#{count}') ]"  #  last so boolean short-circuiting optimizes
+      path << ']'
       return path
     end
   end

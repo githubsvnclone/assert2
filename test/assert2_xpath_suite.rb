@@ -885,7 +885,7 @@ to <code>xpath</code>'s block, then run your tests:
     end
 
     path = bhw.build_deep_xpath(built.doc.root)
-    assert{ path.index("//descendant::fieldset[ descendant::legend") == 0 }
+    assert{ path.index("//descendant::fieldset[ refer(., '0') and descendant::legend") == 0 }
     assert(path){ path.index("label[ refer(., '3') ]") }
     assert{ path =~ / \]/ }
     assert{ built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.length == 1 }
@@ -1033,9 +1033,11 @@ to <code>xpath</code>'s block, then run your tests:
       end
     end
     
+    #  TODO  more reality-check tests on without! - and lose the silly 1=1
+    
     path = bhw.build_deep_xpath(built.doc.root)
     deny{ path =~ /descendant::without/ }
-    assert{ path =~ / not\( descendant\:\:libel/ }
+    assert(path){ path =~ / not\( 1=1 and descendant\:\:libel/ }
 #     p path
 #     assert{ built.doc.root.xpath_with_callback(path, :refer){|nodes, index| 
 # p    nodes.map{|q|q.name}
