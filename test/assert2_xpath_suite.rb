@@ -616,7 +616,7 @@ to <code>xpath</code>'s block, then run your tests:
 
 #  TODO  become a new suite
 
-  def assemble_form_builder
+  def assemble_form_example
     lambda do
       form :action => '/users' do
         fieldset do
@@ -631,9 +631,15 @@ to <code>xpath</code>'s block, then run your tests:
   end
 
   def test_assert_xhtml_for_forms
-    assert_xhtml SAMPLE_FORM, &assemble_form_builder
+    assert_xhtml SAMPLE_FORM, &assemble_form_example
   end
 
+  def test_find_depth
+    bhw = BeHtmlWith.create(SAMPLE_FORM)
+    bhw.build_xpaths &assemble_form_example  #  TODO  pass this into create
+#     assert{ 4 == bhw.maximum_depth }
+  end
+  
   def test_prototype_recursive_algorithm
     bhw = BeHtmlWith.create(SAMPLE_FORM)
 
@@ -861,10 +867,6 @@ to <code>xpath</code>'s block, then run your tests:
     bhw.references[1] = built.doc.root.xpath('//legend' ).first
     bhw.references[3] = built.doc.root.xpath('//label' ).first
     bhw.references[4] = built.doc.root.xpath('//input').first
-  end
-  
-  def test_find_depth
-#     fieldset do
   end
   
   def TODO_test_build_shallow_xpath
