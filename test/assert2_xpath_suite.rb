@@ -616,8 +616,8 @@ to <code>xpath</code>'s block, then run your tests:
 
 #  TODO  become a new suite
 
-  def test_assert_xhtml_for_forms
-    assert_xhtml SAMPLE_FORM do
+  def assemble_form_builder
+    lambda do
       form :action => '/users' do
         fieldset do
           legend 'Personal Information'
@@ -628,6 +628,10 @@ to <code>xpath</code>'s block, then run your tests:
         end
       end
     end
+  end
+
+  def test_assert_xhtml_for_forms
+    assert_xhtml SAMPLE_FORM, &assemble_form_builder
   end
 
   def test_prototype_recursive_algorithm
@@ -857,6 +861,10 @@ to <code>xpath</code>'s block, then run your tests:
     bhw.references[1] = built.doc.root.xpath('//legend' ).first
     bhw.references[3] = built.doc.root.xpath('//label' ).first
     bhw.references[4] = built.doc.root.xpath('//input').first
+  end
+  
+  def test_find_depth
+#     fieldset do
   end
   
   def TODO_test_build_shallow_xpath
