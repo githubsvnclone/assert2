@@ -149,6 +149,8 @@ class BeHtmlWith
   end
 
   def match_attributes_and_text(reference, sample)
+    @max_depth < depth(reference) and return true
+  
     if match_attributes(reference, sample) and
         match_text(reference, sample)     and
         match_xpath(reference, sample)
@@ -161,9 +163,10 @@ class BeHtmlWith
 
   def collect_samples(elements, index)
     samples = elements.find_all do |element|
-      match_attributes_and_text(@references[index], element)
+        match_attributes_and_text(@references[index], element)
     end
 
+# p samples.map{|n|n.name}
 #     @first_samples += samples if @first_samples.empty? or index == 0  # a root sample!
     return samples
   end
@@ -206,8 +209,9 @@ class BeHtmlWith
     @doc.root.xpath_with_callback path, :refer, &refer
   end
 
-  def run_all_xpaths
-    build_xpaths.each do |path|
+  def run_all_xpaths(paths)
+    paths.each do |path|
+#     p path
       if match_path(path).empty?
         assemble_complaint
         return false
@@ -222,7 +226,9 @@ class BeHtmlWith
     @scope.wrap_expectation self do
       @doc = Nokogiri::HTML(stwing)
       @spewed = {}
-      return run_all_xpaths
+      xpaths = build_xpaths
+      @max_depth = maximum_depth
+      return run_all_xpaths(xpaths)
     end
   end
 

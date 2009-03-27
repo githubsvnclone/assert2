@@ -635,16 +635,17 @@ to <code>xpath</code>'s block, then run your tests:
   end
 
   def test_find_depth
-    bhw = BeHtmlWith.create(SAMPLE_FORM, &assemble_form_example)  #  TODO  use this more
+    bhw = BeHtmlWith.create(SAMPLE_FORM, &assemble_form_example)  #  TODO  use this less
     assert{ 4 == bhw.maximum_depth }
   end
   
   def test_dont_sample_depth_4_but_do_sample_depth_3_in_depth_mode
-    bhw = BeHtmlWith.create(SAMPLE_FORM, &assemble_form_example)  #  TODO  use this more
-    knockout = bhw.builder.doc.xpath('//input').first
-    knockout['type'] = 'tox'
-    bhw.max_depth = 3
-    
+    createBeHtmlWith(SAMPLE_FORM, &assemble_form_example)  #  TODO  use this more
+    @bhw.builder.doc.xpath('//input').first['type'] = 'tox'
+    @bhw.max_depth = 3
+    assert{ @bhw.run_all_xpaths(@xpaths) }
+    @bhw.builder.doc.xpath('//legend').first.inner_html = 'foobar'
+    deny{ @bhw.run_all_xpaths(@xpaths) }
   end
   
   def test_prototype_recursive_algorithm
@@ -1170,6 +1171,13 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     denigh{ diagnostic.index('...or...') }
   end
 
+  def createBeHtmlWith(stwing, &block)
+    @bhw = BeHtmlWith.new(nil)
+    @bhw.doc = Nokogiri::HTML(stwing)
+    @xpaths = @bhw.build_xpaths &block if block
+    return @bhw
+  end
+
 end
 
 SAMPLE_LIST = <<EOH
@@ -1195,7 +1203,7 @@ SAMPLE_LIST = <<EOH
 </html>
 EOH
 
-class BeHtmlWith
+class BeHtmlWith  #  TODO  replace with internal version
   def self.create(stwing, &block)
     bhw = BeHtmlWith.new(nil)
     bhw.doc = Nokogiri::HTML(stwing)
