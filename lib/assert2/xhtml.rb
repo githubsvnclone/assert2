@@ -84,9 +84,10 @@ class BeHtmlWith
     @references = []  #  TODO  soften this!
   end
 
-  attr_accessor :doc,
-                :scope,
-                :builder
+  attr_accessor :builder,
+                :doc,
+                :max_depth,
+                :scope
 
   def deAmpAmp(stwing)
     stwing.to_s.gsub('&amp;amp;', '&').gsub('&amp;', '&')

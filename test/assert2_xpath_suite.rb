@@ -635,9 +635,16 @@ to <code>xpath</code>'s block, then run your tests:
   end
 
   def test_find_depth
-    bhw = BeHtmlWith.create(SAMPLE_FORM)
-    bhw.build_xpaths &assemble_form_example  #  TODO  pass this into create
+    bhw = BeHtmlWith.create(SAMPLE_FORM, &assemble_form_example)  #  TODO  use this more
     assert{ 4 == bhw.maximum_depth }
+  end
+  
+  def test_dont_sample_depth_4_but_do_sample_depth_3_in_depth_mode
+    bhw = BeHtmlWith.create(SAMPLE_FORM, &assemble_form_example)  #  TODO  use this more
+    knockout = bhw.builder.doc.xpath('//input').first
+    knockout['type'] = 'tox'
+    bhw.max_depth = 3
+    
   end
   
   def test_prototype_recursive_algorithm
@@ -1189,9 +1196,10 @@ SAMPLE_LIST = <<EOH
 EOH
 
 class BeHtmlWith
-  def self.create(stwing)
+  def self.create(stwing, &block)
     bhw = BeHtmlWith.new(nil)
     bhw.doc = Nokogiri::HTML(stwing)
+    bhw.build_xpaths &block if block
     return bhw
   end
 end
@@ -1210,7 +1218,6 @@ SAMPLE_FORM = <<EOH
   </fieldset>
 </form>
 EOH
-
 
 #  TODO  document we do strings correctly now
 
