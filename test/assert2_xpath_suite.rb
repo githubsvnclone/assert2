@@ -1174,7 +1174,7 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     end
     assert(diagnostic){ diagnostic =~ /kalika/ }
     denigh{ diagnostic =~ /font-size/ }
-    assert{ diagnostic.index('...or') }
+    assert{ diagnostic =~ /...or in this.*All Billings reports/m }
   end
 
   def TODO_test_disambiguate_tertiary_diagnostic_elements
