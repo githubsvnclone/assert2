@@ -206,20 +206,23 @@ class BeHtmlWith
     @doc.root.xpath_with_callback path, :refer, &refer
   end
 
+  def run_all_xpaths
+    build_xpaths.each do |path|
+      if match_path(path).empty?
+        assemble_complaint
+        return false
+      end
+    end
+    
+    return true
+  end
+  
   def matches?(stwing, &block)
     @block = block
     @scope.wrap_expectation self do
       @doc = Nokogiri::HTML(stwing)
       @spewed = {}
-
-      build_xpaths.each do |path|
-        if match_path(path).empty?
-          assemble_complaint
-          return false
-        end
-      end
-      
-      return true
+      return run_all_xpaths
     end
   end
 
