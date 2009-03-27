@@ -637,7 +637,7 @@ to <code>xpath</code>'s block, then run your tests:
   def test_find_depth
     bhw = BeHtmlWith.create(SAMPLE_FORM)
     bhw.build_xpaths &assemble_form_example  #  TODO  pass this into create
-#     assert{ 4 == bhw.maximum_depth }
+    assert{ 4 == bhw.maximum_depth }
   end
   
   def test_prototype_recursive_algorithm

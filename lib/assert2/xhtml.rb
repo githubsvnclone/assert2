@@ -266,6 +266,16 @@ class BeHtmlWith
     return path
   end
 
+  def depth(e)
+    e.xpath('ancestor-or-self::*').length
+  end
+  
+  def maximum_depth
+    @builder.doc.xpath('descendant::*[not(*)]').
+      map{|e| depth(e) }.
+        sort.last
+  end
+
   def build_xpath(element)
     count = @references.length
     @references << element  #  note we skip the without @reference!
