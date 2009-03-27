@@ -749,13 +749,7 @@ to <code>xpath</code>'s block, then run your tests:
     end
     
     assert complaint do
-      complaint =~ /...in these sample\(s\).../
-    end
-    
-    assert complaint do
-      complaint.index(samples.first.to_html) and
-      complaint =~ /...or.../ and
-      complaint.index(samples.last.to_html)
+      complaint =~ /...in this sample.../
     end
   end
 
@@ -1174,14 +1168,13 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     end
   end
 
-  def TODO_test_disambiguate_diagnostic_elements
+  def test_disambiguate_diagnostic_elements
     diagnostic = assert_xhtml_flunk SAMPLE_LIST do
       li.kali!{ ul.kaluka }
     end
-    
     assert(diagnostic){ diagnostic =~ /kalika/ }
     denigh{ diagnostic =~ /font-size/ }
-    denigh{ diagnostic.index('...or...') }
+    assert{ diagnostic.index('...or') }
   end
 
   def TODO_test_disambiguate_tertiary_diagnostic_elements

@@ -163,18 +163,31 @@ class BeHtmlWith
   end
 
   def collect_samples(elements, index)
-    elements.find_all do |element|
-       match_attributes_and_text(@references[index], element)
+    samples = elements.find_all do |element|
+                match_attributes_and_text(@references[index], element)
+              end
+    if sample = samples.first and
+       (index == 0 or @best_sample == @doc.root or depth(@best_sample) > depth(sample))
+      @best_sample = sample
     end
+    if sample = elements.first and
+        (index == 0 or @doc.root or depth(@worst_sample) > depth(sample))
+      @worst_sample = sample
+    end
+    samples
+  end
+
+  def assemble_complaint
+    @failure_message = complain_about(@builder.doc.root, @best_sample)
   end
 
   def find_better_diagnostics
     @max_depth = maximum_depth - 1
       #  TODO  give up if @max_depth goes negative!!
     @xpaths.each do |path|
-      samples = match_path(path) #{|e,i| @first_samples = e }
+      samples = match_path(path)
       samples.any? and
-        return samples  #  TODO  what about subsequent top-levels?
+        return samples  #  TODO croak this method
     end
   end
 
@@ -185,11 +198,6 @@ class BeHtmlWith
   end #  TODO  croak all these
 
 #  TODO  put at least id matchers into the raw XPath, optionally!
-
-  def assemble_complaint
-#     @first_samples.any? or find_better_diagnostics
-    @failure_message = complain_about(@builder.doc.root, []) # @first_samples)
-  end
 
   def elemental_children
     @builder.doc.children.grep(Nokogiri::XML::Element)
@@ -207,7 +215,8 @@ class BeHtmlWith
 
   def match_path(path, &refer)
     refer ||= lambda{|e,i| collect_samples(e, i.to_i) }
-    @first_samples = []
+    @best_sample = @doc.root
+    @worst_sample = @doc.root
     @doc.root.xpath_with_callback path, :refer, &refer
   end
 
@@ -329,11 +338,21 @@ class BeHtmlWith
     return path
   end
 
-  def complain_about(refered, samples)  #  TODO  put argumnets in order
-    "\nCould not find this reference...\n\n" +
+  def complain_about(refered, sample)  #  TODO  toss arguments
+    complaint = "\nCould not find this reference...\n\n" +
       refered.to_html +
-      "\n\n...in these sample(s)...\n\n" +  #  TODO  how many samples?
-      samples.map{|s|s.to_html}.uniq.join("\n\n...or...\n\n")
+      "\n\n...in this sample...\n\n" +
+      sample.to_html
+      
+    if @worst_sample and  # TODO  fix tests who need this
+        @best_sample.path != @worst_sample.path and
+        @worst_sample != @doc.root
+      
+      complaint += "\n\n...or in this...\n\n" +
+        @worst_sample.to_html
+    end
+    
+    return complaint
   end
 
   attr_accessor :failure_message
