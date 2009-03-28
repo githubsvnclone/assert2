@@ -80,7 +80,6 @@ class BeHtmlWith
       @doc = Nokogiri::HTML(stwing)
       @spewed = {}
       build_xpaths
-#       @max_depth = maximum_depth  # TODO  croak maximum_depth
       return run_all_xpaths(@xpaths)
     end
   end
