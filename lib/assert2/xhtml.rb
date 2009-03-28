@@ -64,7 +64,7 @@ class BeHtmlWith
 
   def initialize(scope, &block)
     @scope, @block = scope, block
-    @references = []  #  TODO  soften this!
+    @references = []
     @spewed = {}
   end
 
@@ -72,11 +72,11 @@ class BeHtmlWith
                 :doc,
                 :failure_message,
                 :scope
-  attr_reader :references
-  attr_writer :reference, :sample
+  attr_reader   :references
 
   def matches?(stwing, &block)
     @block = block
+
     @scope.wrap_expectation self do
       @doc = Nokogiri::HTML(stwing)
       return run_all_xpaths(build_xpaths)
@@ -86,7 +86,6 @@ class BeHtmlWith
   def build_xpaths(&block)
     bwock = block || @block || proc{} #  CONSIDER  what to do with no block? validate?
     @builder = Nokogiri::HTML::Builder.new(&bwock)
-    @references = []
 
     elemental_children.map do |child|
       build_deep_xpath(child)
@@ -137,8 +136,6 @@ class BeHtmlWith
     return path
   end
 
-#       samples = match_xpath(path) TODO simplify match_xpath
-
   def run_all_xpaths(xpaths)
     xpaths.each do |path|
       if match_xpath(path).empty?
@@ -169,9 +166,8 @@ class BeHtmlWith
 
   def match_attributes_and_text(reference, sample)
     @reference, @sample = reference, sample
-    if match_attributes and
-        match_text      and
-        match_xpath_predicate
+
+    if match_attributes and match_text and match_xpath_predicate
       verbose_spew
       return true
     end
@@ -223,7 +219,8 @@ class BeHtmlWith
     return true unless value = reference['xpath!']
 
     sample.parent.xpath("*[ #{value} ]").each do |m|
-      m.path == sample.path and return true
+      m.path == sample.path and 
+        return true
     end
 
     return false
@@ -299,7 +296,7 @@ module Test; module Unit; module Assertions
 
   def wrap_expectation whatever;  yield;  end unless defined? wrap_expectation
 
-  def assert_xhtml(xhtml = @response.body, &block)  # TODO merge
+  def assert_xhtml(xhtml = @response.body, &block)  # ERGO merge
     if block
       matcher = BeHtmlWith.new(self, &block)
       matcher.matches?(xhtml, &block)
