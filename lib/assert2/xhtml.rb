@@ -145,7 +145,7 @@ class BeHtmlWith
 
 #  ERGO  match text with internal spacies?
 
-  def collect_samples(elements, index)
+  def collect_samples(elements, index) # TODO  rename these samples to specimens
     samples = elements.find_all do |element|
                 match_attributes_and_text(@references[index], element)
               end
