@@ -168,19 +168,21 @@ class BeHtmlWith
 #  TODO  document without! and xpath! in the diagnostic
 #  TODO  uh, indenting mebbe?
 
+#   def match_attribute(
+
   def match_attributes(reference = @reference, sample = @sample)
     sort_nodes(reference).each do |attr|
       value = attr.value
-      case attr.name
+      case attr_name = attr.name
         when 'verbose!'
           verbose_spew(value)
         when 'xpath!'
           match_xpath_predicate(value) or return false
         else
           (ref = deAmpAmp(value)) ==
-          (sam = deAmpAmp(sample[attr.name])) or 
+          (sam = deAmpAmp(@sample[attr_name])) or 
             match_regexp(ref, sam)            or 
-            match_class(attr.name, ref, sam)  or
+            match_class(attr_name, ref, sam)  or
             return false
       end
     end
