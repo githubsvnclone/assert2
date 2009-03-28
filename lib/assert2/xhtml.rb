@@ -205,9 +205,9 @@ class BeHtmlWith
   end  #   ERGO  this could use a test...
 
   def match_attribute(attr)
-    (ref = deAmpAmp(attr.value)) ==
-    (sam = deAmpAmp(@sample[attr.name])) or 
-      match_regexp(ref, sam)            or 
+    ref = deAmpAmp(attr.value)
+    sam = deAmpAmp(@sample[attr.name])
+    ref == sam or match_regexp(ref, sam) or 
       match_class(attr.name, ref, sam)
   end
 
@@ -216,20 +216,22 @@ class BeHtmlWith
   end  #  ERGO await a fix in Nokogiri, and hope nobody actually means &amp;amp; !!!
 
   def match_regexp(reference, sample)
-    reference.index('(?') == 0 and 
+    reference =~ /\(\?.*\)/ and   #  the irony _is_ lost on us...
       Regexp.new(reference) =~ sample
   end
 
   def match_class(attr_name, ref, sam)
-    return false unless attr_name == 'class'
-    return " #{ sam } ".index(" #{ ref } ")
+    attr_name == 'class' and
+      " #{ sam } ".index(" #{ ref } ")
   end  #  NOTE  if you call it a class, but ref contains 
        #        something fruity, you are on your own!
-  
+
   def match_text(ref = @reference, sam = @sample)
-    (ref_text = get_texts(ref)).empty? or 
-      (ref_text - (sam_text = get_texts(sam))).empty? or
-        (ref_text.length == 1 and match_regexp(ref_text.first, sam_text.join) )
+    ref_text = get_texts(ref)
+    ref_text.empty? and return true
+    sam_text = get_texts(sam)
+    (ref_text - sam_text).empty? and return true
+    ref_text.length == 1 and match_regexp(ref_text.first, sam_text.join)
   end
 
   def get_texts(element)
