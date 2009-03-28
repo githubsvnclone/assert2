@@ -158,6 +158,26 @@ class BeHtmlWith
     @doc.root.xpath_with_callback path, :refer, &refer
   end
 
+#  ERGO  match text with internal spacies?
+
+  def collect_samples(elements, index)
+    samples = elements.find_all do |element|
+                match_attributes_and_text(@references[index], element)
+              end
+    
+    collect_best_sample(samples, index)
+    samples
+  end
+
+  def collect_best_sample(samples, index)
+    if sample = samples.first and
+       (index == 0 or 
+          @best_sample == @doc.root or 
+          depth(@best_sample) > depth(sample))
+      @best_sample = sample
+    end
+  end
+
 
 
  
@@ -233,26 +253,6 @@ class BeHtmlWith
     end
 
     return false
-  end
-
-  def collect_best_sample(samples, index)
-    if sample = samples.first and
-       (index == 0 or 
-          @best_sample == @doc.root or 
-          depth(@best_sample) > depth(sample))
-      @best_sample = sample
-    end
-  end
-
-#  ERGO  match text with internal spacies?
-
-  def collect_samples(elements, index)
-    samples = elements.find_all do |element|
-                match_attributes_and_text(@references[index], element)
-              end
-    
-    collect_best_sample(samples, index)
-    samples
   end
 
   def assemble_complaint  #  TODO  reduce this
