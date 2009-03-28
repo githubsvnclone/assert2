@@ -69,9 +69,9 @@ class BeHtmlWith
 
   attr_accessor :builder,
                 :doc,
-                :max_depth,
                 :scope
   attr_reader :references
+  attr_writer :reference, :sample
 
   def matches?(stwing, &block)
     @block = block
@@ -170,6 +170,7 @@ class BeHtmlWith
   end
 
   def match_attributes_and_text(reference, sample)
+    @reference, @sample = reference, @sample  #  TODO etc!
     if match_attributes(reference, sample) and
         match_text(reference, sample)     and
         match_xpath(reference, sample)
@@ -197,7 +198,10 @@ class BeHtmlWith
     stwing.to_s.gsub('&amp;amp;', '&').gsub('&amp;', '&')
   end  #  ERGO await a fix in Nokogiri, and hope nobody actually means &amp;amp; !!!
 
-#  TODO  put match_regexp here
+  def match_regexp(reference, sample)
+    reference.index('(?') == 0 and 
+      Regexp.new(reference) =~ sample
+  end
 
   def match_class(attr_name, ref, sam)
     return false unless attr_name == 'class'
@@ -213,11 +217,6 @@ class BeHtmlWith
 
   def get_texts(element)
     element.xpath('text()').map{|x|x.to_s.strip}.select{|x|x.any?}
-  end
-
-  def match_regexp(reference, sample)
-    reference.index('(?') == 0 and 
-      Regexp.new(reference) =~ sample
   end
 
 #  TODO  why we have no :css! yet??
