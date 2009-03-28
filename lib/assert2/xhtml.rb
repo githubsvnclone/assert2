@@ -73,6 +73,7 @@ class BeHtmlWith
                 :failure_message,
                 :scope
   attr_reader   :references
+  attr_writer   :sample
 
   def matches?(stwing, &block)
     @block = block
@@ -155,7 +156,7 @@ class BeHtmlWith
 
   def match_attributes_and_text(reference, sample)
     @reference, @sample = reference, sample
-    match_attributes and match_text and match_xpath_predicate
+    match_attributes and match_text
   end
 
   def sort_nodes(reference)
@@ -164,16 +165,19 @@ class BeHtmlWith
     end  #  put the verbose! first so it always runs, even if attributes don't match
   end  #  put the xpath! last, so if attributes don't match, it does not waste time
 
+#  TODO  document without! and xpath! in the diagnostic
+#  TODO  uh, indenting mebbe?
+
   def match_attributes(reference = @reference, sample = @sample)
     sort_nodes(reference).each do |attr|
-      case attr.name.to_sym
-        when :verbose!
-          verbose_spew(attr.value)
-          next
-        when :xpath!
-          next
+      value = attr.value
+      case attr.name
+        when 'verbose!'
+          verbose_spew(value)
+        when 'xpath!'
+          match_xpath_predicate(value) or return false
         else
-          (ref = deAmpAmp(attr.value)) ==
+          (ref = deAmpAmp(value)) ==
           (sam = deAmpAmp(sample[attr.name])) or 
             match_regexp(ref, sam)            or 
             match_class(attr.name, ref, sam)  or
@@ -211,11 +215,9 @@ class BeHtmlWith
 
 #  TODO  why we have no :css! yet??
 
-  def match_xpath_predicate(reference = @reference, sample = @sample)
-    return true unless value = reference['xpath!']
-
-    sample.parent.xpath("*[ #{ value } ]").each do |m|
-      m.path == sample.path and 
+  def match_xpath_predicate(value)
+    @sample.parent.xpath("*[ #{ value } ]").each do |m|
+      m.path == @sample.path and 
         return true
     end
 

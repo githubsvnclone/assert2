@@ -165,8 +165,8 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     bhw  = BeHtmlWith.create(SAMPLE_FORM)
     path = bhw.build_xpaths{ legend :xpath! => 'parent::fieldset' }.first
     reference = bhw.builder.doc.root
-    sample = bhw.doc.xpath('//legend').first
-    assert('skip the xpath!'){ bhw.match_attributes(reference, sample) }
+    bhw.sample = bhw.doc.xpath('//legend').first
+    assert('skip the xpath!'){ bhw.match_attributes(reference) }
   end
 
   def toast_verbosity
