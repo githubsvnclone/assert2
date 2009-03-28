@@ -249,7 +249,7 @@ class BeHtmlWith
     e.xpath('ancestor-or-self::*').length
   end
   
-  def complain( refered = @builder.doc.root, 
+  def complain( refered = @builder.doc, 
                  sample = @best_sample || @doc.root )
     @failure_message = "\nCould not find this reference...\n\n" +
                          refered.to_html +

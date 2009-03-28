@@ -128,12 +128,12 @@ class AssertXhtmlSuite < Test::Unit::TestCase
   end
 
   def test_bad_attributes_flunk
-    assert_xhtml_flunk SAMPLE_FORM do
+    diagnostic = assert_xhtml_flunk SAMPLE_FORM do
       legend
-
-      input :type => :text,
-            :name => 'user[first_nome]'
+      input :type => :text, :name => 'user[first_nome]'
     end
+
+    assert(diagnostic){ diagnostic =~ /first_nome/ }
   end
 
   def test_censor_bangs
