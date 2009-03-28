@@ -203,10 +203,10 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     assert{ bhw.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.length == 1 }
     path = bhw.build_xpath(built.doc.root.xpath('//br').first)
     assert{ path == "descendant::br[ refer(., '6') ]" }
-    bhw.references[0] = built.doc.root.xpath('//fieldset').first
-    bhw.references[1] = built.doc.root.xpath('//legend' ).first
-    bhw.references[3] = built.doc.root.xpath('//label' ).first
-    bhw.references[4] = built.doc.root.xpath('//input').first
+    assert{ bhw.references[0].path == built.doc.root.xpath('//fieldset').first.path }
+    assert{ bhw.references[1] == built.doc.root.xpath('//legend' ).first }
+    assert{ bhw.references[3] == built.doc.root.xpath('//label' ).first }
+    assert{ bhw.references[4] == built.doc.root.xpath('//input').first }
   end
   
   def assert_xhtml_flunk(sample, &block)
