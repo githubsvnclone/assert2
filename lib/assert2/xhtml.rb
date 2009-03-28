@@ -92,8 +92,8 @@ class BeHtmlWith
     end
   end
 
-  def elemental_children
-    @builder.doc.children.grep(Nokogiri::XML::Element)
+  def elemental_children(element = @builder.doc)
+    element.children.grep(Nokogiri::XML::Element)
   end
 
   def build_deep_xpath(element)
@@ -116,8 +116,7 @@ class BeHtmlWith
       path = 'descendant::'
       path << element.name.sub(/\!$/, '')
       path << "[ refer(., '#{ count }') "
-      element_kids = element.children.grep(Nokogiri::XML::Element)  #  TODO  merge!
-      path << 'and '  if element_kids.any?
+      path << 'and '  if elemental_children(element).any?
         #  refer() is first so we collect lots of samples, despite boolean short-circuiting
       path << build_predicate(element)
       path << ']'
@@ -126,15 +125,9 @@ class BeHtmlWith
   end
 
   def build_predicate(element, conjunction = 'and')
-    path = ''
     conjunction = " #{ conjunction } "
-    element_kids = element.children.grep(Nokogiri::XML::Element)
-
-    if element_kids.any?
-      path << element_kids.map{|child|  build_xpath(child)  }.join(conjunction)
-    end
-
-    return path
+    element_kids = elemental_children(element)
+    return element_kids.map{|child|  build_xpath(child)  }.join(conjunction)
   end
 
   def run_all_xpaths(xpaths)
