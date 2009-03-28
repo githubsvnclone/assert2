@@ -181,6 +181,9 @@ class AssertXhtmlSuite < Test::Unit::TestCase
         end
       end
     end
+    
+    #  TODO  verbose is supposed to work even if the inner html has a bug!
+    
   end
 
   def test_build_xpath
