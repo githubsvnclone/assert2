@@ -130,7 +130,7 @@ class BeHtmlWith
   def run_all_xpaths(xpaths)
     xpaths.each do |path|
       if match_xpath(path).empty?
-        complain_about
+        complain
         return false
       end
     end
@@ -250,8 +250,8 @@ class BeHtmlWith
     e.xpath('ancestor-or-self::*').length
   end
   
-  def complain_about( refered = @builder.doc.root, 
-                       sample = @best_sample || @doc.root )
+  def complain( refered = @builder.doc.root, 
+                 sample = @best_sample || @doc.root )
     @failure_message = "\nCould not find this reference...\n\n" +
                          refered.to_html +
                          "\n\n...in this sample...\n\n" +

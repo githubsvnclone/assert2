@@ -58,7 +58,7 @@ class AssertXhtmlSuite < Test::Unit::TestCase
                                         <c d="g"></c></b></a>')
     samples   = bhw.doc.xpath('//a/b/c')
     refered   = reference.xpath('//b/c').first
-    complaint = bhw.complain_about(refered, samples)
+    complaint = bhw.complain(refered, samples)
 
     assert complaint do
       complaint =~ /Could not find this reference.../ and
@@ -76,7 +76,7 @@ class AssertXhtmlSuite < Test::Unit::TestCase
                                         <c d="g"></c></b></a>')
     samples   = bhw.doc.xpath('//a/b/c')
     refered   = reference.xpath('//b/c').first
-    complaint = bhw.complain_about(refered, samples)
+    complaint = bhw.complain(refered, samples)
 
     assert complaint do
       complaint =~ /Could not find this reference.../ and
