@@ -136,7 +136,7 @@ class BeHtmlWith
     
     return true
   end
-  
+
   def match_xpath(path, &refer)
     @doc.root.xpath_with_callback path, :refer do |element, index|
       collect_samples(element, index.to_i)
@@ -150,7 +150,7 @@ class BeHtmlWith
                 match_attributes_and_text(@references[index], element)
               end
     
-    collect_best_sample(samples, index)
+    collect_best_sample(samples)
     samples
   end
 
@@ -237,10 +237,10 @@ class BeHtmlWith
     element.xpath('text()').map{|x|x.to_s.strip}.select{|x|x.any?}
   end
 
-  def collect_best_sample(samples, index)
+  def collect_best_sample(samples)
     sample = samples.first or return
 
-    if index == 0 or @best_sample.nil? or depth(@best_sample) > depth(sample)
+    if @best_sample.nil? or depth(@best_sample) > depth(sample)
       @best_sample = sample
     end
   end
