@@ -71,6 +71,7 @@ class BeHtmlWith
                 :doc,
                 :max_depth,
                 :scope
+  attr_reader :references
 
   def matches?(stwing, &block)
     @block = block
@@ -97,7 +98,68 @@ class BeHtmlWith
     @builder.doc.children.grep(Nokogiri::XML::Element)
   end
 
- 
+  def build_deep_xpath(element)
+    path = build_xpath(element)
+
+    if path.index('not') == 0
+      return '/*[ ' + path + ' ]'   #  ERGO  uh, is there a cleaner way?
+    end
+
+    return '//' + path
+  end
+
+  def build_xpath(element)
+    count = @references.length
+    @references << element  #  note we skip the without @reference!
+    
+    if element.name == 'without!'
+      return 'not( 1=1 ' + build_predicate(element, 'or') + ' )'
+    else
+      path = 'descendant::'
+      path << element.name.sub(/\!$/, '')
+      path << "[ refer(., '#{count}') "
+        #  refer() is first so we collect lots of samples, despite boolean short-circuiting
+      path << build_predicate(element)
+      path << ']'
+      return path
+    end
+  end
+
+  def build_predicate(element, conjunction = 'and')
+    path = ''
+    conjunction = " #{ conjunction } "
+    element_kids = element.children.grep(Nokogiri::XML::Element)
+
+    if element_kids.any?
+      path << 'and '
+      path << element_kids.map{|child|  build_xpath(child)  }.join(conjunction)
+    end
+
+    return path
+  end
+
+#       samples = match_path(path) TODO simplify match_path
+
+  def run_all_xpaths(paths)
+    paths.each do |path|
+      if match_path(path).empty?  #  TODO  rename to match_xpath
+        assemble_complaint
+        return false
+      end
+    end
+    
+    return true
+  end
+  
+  def match_path(path, &refer)
+    refer ||= lambda{|e,i| collect_samples(e, i.to_i) }
+    @best_sample = @doc.root
+    @worst_sample = @doc.root
+    @doc.root.xpath_with_callback path, :refer, &refer
+  end
+
+
+
  
  
  
@@ -197,54 +259,12 @@ class BeHtmlWith
     @failure_message = complain_about(@builder.doc.root, @best_sample)
   end
 
-#       samples = match_path(path) TODO simplify match_path
 
-  def match_path(path, &refer)
-    refer ||= lambda{|e,i| collect_samples(e, i.to_i) }
-    @best_sample = @doc.root
-    @worst_sample = @doc.root
-    @doc.root.xpath_with_callback path, :refer, &refer
-  end
 
-  def run_all_xpaths(paths)
-    paths.each do |path|
-#     p path
-      if match_path(path).empty?
-        assemble_complaint
-        return false
-      end
-    end
-    
-    return true
-  end
-  
-  def build_deep_xpath(element)
-    path = build_xpath(element)
 
-    if path.index('not') == 0
-      return '/*[ ' + path + ' ]'   #  ERGO  uh, is there a cleaner way?
-    end
-
-    return '//' + path
-  end
 
   def build_deep_xpath_too(element)
     return '//' + build_xpath_too(element)
-  end
-
-  attr_reader :references
-
-  def build_predicate(element, conjunction = 'and')
-    path = ''
-    conjunction = " #{ conjunction } "
-    element_kids = element.children.grep(Nokogiri::XML::Element)
-
-    if element_kids.any?
-      path << 'and '
-      path << element_kids.map{|child|  build_xpath(child)  }.join(conjunction)
-    end
-
-    return path
   end
 
   def depth(e)
@@ -255,23 +275,6 @@ class BeHtmlWith
     @builder.doc.xpath('descendant::*[not(*)]').
       map{|e| depth(e) }.
         sort.last
-  end
-
-  def build_xpath(element)
-    count = @references.length
-    @references << element  #  note we skip the without @reference!
-    
-    if element.name == 'without!'
-      return 'not( 1=1 ' + build_predicate(element, 'or') + ' )'
-    else
-      path = 'descendant::'
-      path << element.name.sub(/\!$/, '')
-      path << "[ refer(., '#{count}') "
-        #  refer() is first so we collect lots of samples, despite boolean short-circuiting
-      path << build_predicate(element)
-      path << ']'
-      return path
-    end
   end
 
   def build_xpath_too(element)
