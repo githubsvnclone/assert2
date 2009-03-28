@@ -175,7 +175,7 @@ class BeHtmlWith
     samples
   end
 
-  def assemble_complaint
+  def assemble_complaint  #  TODO  reduce this
     @failure_message = complain_about(@builder.doc.root, @best_sample)
   end
 
