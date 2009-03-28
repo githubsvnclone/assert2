@@ -137,11 +137,11 @@ class BeHtmlWith
     return path
   end
 
-#       samples = match_path(path) TODO simplify match_path
+#       samples = match_xpath(path) TODO simplify match_xpath
 
   def run_all_xpaths(xpaths)
     xpaths.each do |path|
-      if match_path(path).empty?  #  TODO  rename to match_xpath
+      if match_xpath(path).empty?
         @failure_message = complain_about(@builder.doc.root, @best_sample)
         return false
       end
@@ -150,7 +150,7 @@ class BeHtmlWith
     return true
   end
   
-  def match_path(path, &refer)  #  TODO  take out argument
+  def match_xpath(path, &refer)  #  TODO  take out argument
     refer ||= lambda{|e,i| collect_samples(e, i.to_i) }
     @best_sample = @doc.root
     @worst_sample = @doc.root
