@@ -115,7 +115,7 @@ class BeHtmlWith
     else  #  TODO  SHORTER!!
       path = 'descendant::'
       path << element.name.sub(/\!$/, '')
-      path << "[ refer(., '#{count}') "
+      path << "[ refer(., '#{ count }') "
       element_kids = element.children.grep(Nokogiri::XML::Element)  #  TODO  merge!
       path << 'and '  if element_kids.any?
         #  refer() is first so we collect lots of samples, despite boolean short-circuiting
@@ -200,7 +200,7 @@ class BeHtmlWith
 
   def match_class(attr_name, ref, sam)
     return false unless attr_name == 'class'
-    return " #{sam} ".index(" #{ref} ")
+    return " #{ sam } ".index(" #{ ref } ")
   end  #  NOTE  if you call it a class, but ref contains 
        #        something fruity, you are on your own!
   
@@ -219,7 +219,7 @@ class BeHtmlWith
   def match_xpath_predicate(reference = @reference, sample = @sample)
     return true unless value = reference['xpath!']
 
-    sample.parent.xpath("*[ #{value} ]").each do |m|
+    sample.parent.xpath("*[ #{ value } ]").each do |m|
       m.path == sample.path and 
         return true
     end
@@ -282,7 +282,7 @@ class BeHtmlWith
     end
        path << ' and ' if element_kids.any?
 
-    path << "refer(., '#{count}') ]"  #  last so boolean short-circuiting optimizes
+    path << "refer(., '#{ count }') ]"  #  last so boolean short-circuiting optimizes
     return path
   end
 
