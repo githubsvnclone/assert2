@@ -155,23 +155,20 @@ class BeHtmlWith
 
   def match_attributes_and_text(reference, sample)
     @reference, @sample = reference, sample
-
-    if match_attributes and match_text and match_xpath_predicate
-      verbose_spew
-      return true
-    end
-
-    return false
+    match_attributes and match_text and match_xpath_predicate
   end
 
   def sort_nodes(reference)
-    reference.attribute_nodes.sort_by{|q| q.name == 'verbose!' ? 0 : 1 }
-  end  #  put the verbose! first so it always runs, even if attributes don't match
+    reference.attribute_nodes.sort_by do |q|
+      {'verbose!' => 0, 'xpath!' => 2 }.fetch(q.name, 1)
+    end  #  put the verbose! first so it always runs, even if attributes don't match
+  end  #  put the xpath! last, so if attributes don't match, it does not waste time
 
   def match_attributes(reference = @reference, sample = @sample)
     sort_nodes(reference).each do |attr|
       case attr.name.to_sym
         when :verbose!
+          verbose_spew(attr.value)
           next
         when :xpath!
           next
@@ -225,16 +222,15 @@ class BeHtmlWith
     return false
   end
 
-  def verbose_spew(reference = @reference, sample = @sample)
-    if reference['verbose!'] == 'true' and
-       @spewed[yo_path = sample.path] == nil
+  def verbose_spew(value)
+    if value == 'true' and @spewed[yo_path = @sample.path] == nil
       puts
       puts '-' * 60
       p yo_path
-      puts sample.to_xhtml
+      puts @sample.to_xhtml
       @spewed[yo_path] = true
     end
-  end
+  end  #   ERGO  this could use a test...
 
   def collect_best_sample(samples, index)
     sample = samples.first or return
