@@ -164,11 +164,17 @@ class BeHtmlWith
     return false
   end
 
+  def sort_nodes(reference)
+    reference.attribute_nodes.sort_by{|q| q.name == 'verbose!' ? 0 : 1 }
+  end  #  put the verbose! first so it always runs, even if attributes don't match
+
   def match_attributes(reference = @reference, sample = @sample)
-    reference.attribute_nodes.each do |attr|
+    sort_nodes(reference).each do |attr|
       case attr.name.to_sym
-        when :xpath! ; next
-        when :verbose! ; next
+        when :verbose!
+          next
+        when :xpath!
+          next
         else
           (ref = deAmpAmp(attr.value)) ==
           (sam = deAmpAmp(sample[attr.name])) or 
