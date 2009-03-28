@@ -24,6 +24,8 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     end
   end
 
+  #  TODO  use the xdoc if available
+
   def test_assert_xhtml_for_forms
     assert_xhtml SAMPLE_FORM, &assemble_form_example
   end
@@ -33,51 +35,7 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     assert{ 4 == bhw.maximum_depth }
   end
     
-#     createBeHtmlWith(SAMPLE_FORM, &assemble_form_example)  #  TODO  use this more, rename to assemble
-
-  def test_prototype_recursive_algorithm
-    bhw = BeHtmlWith.create(SAMPLE_FORM)
-
-    doc = Nokogiri::HTML::Builder.new do
-      div do
-        form do  label 'not me'  end
-        form :action => '/us"ers' do
-          label 'not me either'
-          fieldset do  label 'First \'name\''  end
-        end
-      end
-    end
- 
-    hits = [nil, form = doc.doc.root.xpath("//form[2]").first, form.xpath("descendant::label[2]").first]
-
-    node = doc.doc.root.xpath("//form[hit(., 1)]/descendant::label[hit(., 2)]", Class.new {
- 
-      def initialize(hits = [])
-        @hits = hits
-      end
- 
-      def match_text(node, hit)
-        node_text = node.xpath('text()').map{|x|x.to_s.strip}
-        hits_text = hit. xpath('text()').map{|x|x.to_s.strip}
-          #  TODO regices? zero-len strings?
-        ( hits_text - node_text ).length == 0
-      end
- 
-      def hit(nodes, index)  #  TODO  low-level test on this; merge with test-side copy
-        nodes.find_all{|node|
-          all_match = true
-          if all_match = match_text(node, @hits[index])
-            @hits[index].attribute_nodes.each do |attr|
-              break unless all_match = node[attr.name] == attr.value
-            end
-          end
-          all_match
-        }
-      end
- 
-    }.new(hits)).first
-    assert{ node.text == 'First \'name\'' }
-  end
+#     assemble_BeHtmlWith(SAMPLE_FORM, &assemble_form_example)  #  TODO  use this more, rename to assemble
 
   def test_node_matcher_matches_node_text
     doc = Nokogiri::HTML('<ul>
@@ -89,13 +47,11 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     node_2 = doc.xpath('//ul/li[2]').first
     node_3 = doc.xpath('//ul/li[3]').first
     matcher = BeHtmlWith.create('<yo>')
-    denigh{ matcher.match_text(node_1, node_2) } # CONSIDER some matches are hysteretic
+    denigh{ matcher.match_text(node_1, node_2) } # CONSIDER some matches are hysteretic?
     denigh{ matcher.match_text(node_2, node_1) }
     assert{ matcher.match_text(node_2, node_3) }
     assert{ matcher.match_text(node_3, node_2) }
   end
-  
-  #  TODO  use the xdoc if available
   
   def nodes_equal(node_1, node_2)
     node_1.document == node_2.document and node_1.path == node_2.path
@@ -492,7 +448,7 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     denigh{ diagnostic =~ /font-size/ } #  ERGO  fix assert{ 2.0 } it calls denigh "assert"...
   end
 
-  def createBeHtmlWith(stwing, &block)
+  def assemble_BeHtmlWith(stwing, &block)
     @bhw = BeHtmlWith.new(nil)
     @bhw.doc = Nokogiri::HTML(stwing)
     @xpaths = @bhw.build_xpaths &block if block

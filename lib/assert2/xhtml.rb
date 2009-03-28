@@ -83,6 +83,24 @@ class BeHtmlWith
     end
   end
  
+  def build_xpaths(&block)
+    bwock = block || @block || proc{} #  CONSIDER  what to do with no block? validate?
+    @builder = Nokogiri::HTML::Builder.new(&bwock)
+    @references = []
+
+    @xpaths = elemental_children.map do |child|
+                build_deep_xpath(child)
+              end
+  end
+
+  def elemental_children
+    @builder.doc.children.grep(Nokogiri::XML::Element)
+  end
+
+ 
+ 
+ 
+ 
   def deAmpAmp(stwing)
     stwing.to_s.gsub('&amp;amp;', '&').gsub('&amp;', '&')
   end  #  ERGO await a fix in Nokogiri, and hope nobody actually means &amp;amp; !!!
@@ -181,20 +199,6 @@ class BeHtmlWith
 
 #       samples = match_path(path) TODO simplify match_path
 
-  def elemental_children
-    @builder.doc.children.grep(Nokogiri::XML::Element)
-  end
-
-  def build_xpaths(&block)
-    bwock = block || @block || proc{} #  CONSIDER  what to do with no block? validate?
-    @builder = Nokogiri::HTML::Builder.new(&bwock)
-    @references = []
-
-    @xpaths = elemental_children.map do |child|
-                build_deep_xpath(child)
-              end
-  end
-
   def match_path(path, &refer)
     refer ||= lambda{|e,i| collect_samples(e, i.to_i) }
     @best_sample = @doc.root
@@ -247,7 +251,7 @@ class BeHtmlWith
     e.xpath('ancestor-or-self::*').length
   end
   
-  def maximum_depth
+  def maximum_depth  #  TODO  croak me
     @builder.doc.xpath('descendant::*[not(*)]').
       map{|e| depth(e) }.
         sort.last
