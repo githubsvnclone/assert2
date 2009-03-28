@@ -29,12 +29,7 @@ class AssertXhtmlSuite < Test::Unit::TestCase
   def test_assert_xhtml_for_forms
     assert_xhtml SAMPLE_FORM, &assemble_form_example
   end
-
-  def test_find_depth
-    bhw = BeHtmlWith.create(SAMPLE_FORM, &assemble_form_example)  #  TODO  use this less
-    assert{ 4 == bhw.maximum_depth }
-  end
-    
+   
 #     assemble_BeHtmlWith(SAMPLE_FORM, &assemble_form_example)  #  TODO  use this more, rename to assemble
 
   def test_node_matcher_matches_node_text

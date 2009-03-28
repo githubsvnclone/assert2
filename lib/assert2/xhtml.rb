@@ -69,6 +69,7 @@ class BeHtmlWith
 
   attr_accessor :builder,
                 :doc,
+                :failure_message,
                 :scope
   attr_reader :references
   attr_writer :reference, :sample
@@ -143,7 +144,7 @@ class BeHtmlWith
   def run_all_xpaths(paths)
     paths.each do |path|
       if match_path(path).empty?  #  TODO  rename to match_xpath
-        assemble_complaint
+        @failure_message = complain_about(@builder.doc.root, @best_sample)
         return false
       end
     end
@@ -151,7 +152,7 @@ class BeHtmlWith
     return true
   end
   
-  def match_path(path, &refer)
+  def match_path(path, &refer)  #  TODO  take out argument
     refer ||= lambda{|e,i| collect_samples(e, i.to_i) }
     @best_sample = @doc.root
     @worst_sample = @doc.root
@@ -242,11 +243,6 @@ class BeHtmlWith
     end
   end
 
-
-
-
-
-
   def collect_best_sample(samples, index)
     if sample = samples.first and
        (index == 0 or 
@@ -256,31 +252,19 @@ class BeHtmlWith
     end
   end
 
-
-
- 
- 
- 
-  def assemble_complaint  #  TODO  reduce this
-    @failure_message = complain_about(@builder.doc.root, @best_sample)
-  end
-
-
-
-
-
-  def build_deep_xpath_too(element)
-    return '//' + build_xpath_too(element)
-  end
-
   def depth(e)
     e.xpath('ancestor-or-self::*').length
   end
   
-  def maximum_depth  #  TODO  croak me
-    @builder.doc.xpath('descendant::*[not(*)]').
-      map{|e| depth(e) }.
-        sort.last
+  def complain_about(refered, sample)  #  TODO  toss arguments
+    "\nCould not find this reference...\n\n" +
+      refered.to_html +
+      "\n\n...in this sample...\n\n" +
+      sample.to_html
+  end
+
+  def build_deep_xpath_too(element)
+    return '//' + build_xpath_too(element)
   end
 
   def build_xpath_too(element)
@@ -306,15 +290,6 @@ class BeHtmlWith
     path << "refer(., '#{count}') ]"  #  last so boolean short-circuiting optimizes
     return path
   end
-
-  def complain_about(refered, sample)  #  TODO  toss arguments
-    "\nCould not find this reference...\n\n" +
-      refered.to_html +
-      "\n\n...in this sample...\n\n" +
-      sample.to_html
-  end
-
-  attr_accessor :failure_message
 
   def negative_failure_message
     "please don't negate - use without!"
