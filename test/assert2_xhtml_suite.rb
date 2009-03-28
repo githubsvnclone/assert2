@@ -132,7 +132,7 @@ class AssertXhtmlSuite < Test::Unit::TestCase
       legend
       input :type => :text, :name => 'user[first_nome]'
     end
-
+    deny(diagnostic){ diagnostic =~ /\<\!DOCTYPE/ }
     assert(diagnostic){ diagnostic =~ /first_nome/ }
   end
 

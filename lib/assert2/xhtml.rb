@@ -252,7 +252,7 @@ class BeHtmlWith
   def complain( refered = @builder.doc, 
                  sample = @best_sample || @doc.root )
     @failure_message = "\nCould not find this reference...\n\n" +
-                         refered.to_html +
+                         refered.to_html.sub(/^\<\!DOCTYPE.*/, '') +
                          "\n\n...in this sample...\n\n" +
                          sample.to_html
   end
