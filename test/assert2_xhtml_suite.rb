@@ -166,8 +166,9 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     path = bhw.build_xpaths{ legend :xpath! => 'parent::fieldset' }.first
     reference = bhw.builder.doc.root
     bhw.sample = bhw.doc.xpath('//legend').first
-    assert('skip the xpath!'){ bhw.match_attributes(reference) }
-  end
+    bhw.reference = reference
+    assert('skip the xpath!'){ bhw.match_attributes }
+  end  #  ERGO  this test does not actually cover anything...
 
   def toast_verbosity
     assert_xhtml SAMPLE_FORM do

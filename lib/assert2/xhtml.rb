@@ -73,7 +73,8 @@ class BeHtmlWith
                 :failure_message,
                 :scope
   attr_reader   :references
-  attr_writer   :sample
+  attr_writer   :reference,
+                :sample
 
   def matches?(stwing, &block)
     @block = block
@@ -159,24 +160,11 @@ class BeHtmlWith
     match_attributes and match_text
   end
 
-  def sort_nodes(reference)
-    reference.attribute_nodes.sort_by do |q|
-      {'verbose!' => 0, 'xpath!' => 2 }.fetch(q.name, 1)
-    end  #  put the verbose! first so it always runs, even if attributes don't match
-  end  #  put the xpath! last, so if attributes don't match, it does not waste time
-
 #  TODO  document without! and xpath! in the diagnostic
 #  TODO  uh, indenting mebbe?
 
-  def match_attribute(attr)
-    (ref = deAmpAmp(attr.value)) ==
-    (sam = deAmpAmp(@sample[attr.name])) or 
-      match_regexp(ref, sam)            or 
-      match_class(attr.name, ref, sam)
-  end
-
-  def match_attributes(reference = @reference)
-    sort_nodes(reference).each do |attr|
+  def match_attributes
+    sort_nodes.each do |attr|
       case attr.name
         when 'verbose!' ;  verbose_spew(attr)
         when 'xpath!'   ;  match_xpath_predicate(attr) or return false
@@ -185,6 +173,42 @@ class BeHtmlWith
     end
 
     return true
+  end
+
+  def sort_nodes
+    @reference.attribute_nodes.sort_by do |q|
+      { 'verbose!' => 0,  #  put this first, so it always runs, even if attributes don't match
+        'xpath!' => 2  #  put this last, so if attributes don't match, it does not waste time
+        }.fetch(q.name, 1)
+    end 
+  end
+
+#  TODO  why we have no :css! yet??
+
+  def match_xpath_predicate(attr)
+    @sample.parent.xpath("*[ #{ attr.value } ]").each do |m|
+      m.path == @sample.path and 
+        return true
+    end
+
+    return false
+  end
+
+  def verbose_spew(attr)
+    if attr.value == 'true' and @spewed[yo_path = @sample.path] == nil
+      puts
+      puts '-' * 60
+      p yo_path
+      puts @sample.to_xhtml
+      @spewed[yo_path] = true
+    end
+  end  #   ERGO  this could use a test...
+
+  def match_attribute(attr)
+    (ref = deAmpAmp(attr.value)) ==
+    (sam = deAmpAmp(@sample[attr.name])) or 
+      match_regexp(ref, sam)            or 
+      match_class(attr.name, ref, sam)
   end
 
   def deAmpAmp(stwing)
@@ -211,27 +235,6 @@ class BeHtmlWith
   def get_texts(element)
     element.xpath('text()').map{|x|x.to_s.strip}.select{|x|x.any?}
   end
-
-#  TODO  why we have no :css! yet??
-
-  def match_xpath_predicate(attr)
-    @sample.parent.xpath("*[ #{ attr.value } ]").each do |m|
-      m.path == @sample.path and 
-        return true
-    end
-
-    return false
-  end
-
-  def verbose_spew(attr)
-    if attr.value == 'true' and @spewed[yo_path = @sample.path] == nil
-      puts
-      puts '-' * 60
-      p yo_path
-      puts @sample.to_xhtml
-      @spewed[yo_path] = true
-    end
-  end  #   ERGO  this could use a test...
 
   def collect_best_sample(samples, index)
     sample = samples.first or return
