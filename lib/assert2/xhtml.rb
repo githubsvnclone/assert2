@@ -169,56 +169,17 @@ class BeHtmlWith
     samples
   end
 
-  def collect_best_sample(samples, index)
-    if sample = samples.first and
-       (index == 0 or 
-          @best_sample == @doc.root or 
-          depth(@best_sample) > depth(sample))
-      @best_sample = sample
+  def match_attributes_and_text(reference, sample)
+    if match_attributes(reference, sample) and
+        match_text(reference, sample)     and
+        match_xpath(reference, sample)
+      verbose_spew(reference, sample)  #  CONSIDER  get verbose spew working at fault time too?
+      return true
     end
+
+    return false
   end
 
-
-
- 
- 
- 
-  def deAmpAmp(stwing)
-    stwing.to_s.gsub('&amp;amp;', '&').gsub('&amp;', '&')
-  end  #  ERGO await a fix in Nokogiri, and hope nobody actually means &amp;amp; !!!
-
-  def get_texts(element)
-    element.xpath('text()').map{|x|x.to_s.strip}.select{|x|x.any?}
-  end
-
-  def match_regexp(reference, sample)
-    reference.index('(?') == 0 and 
-      Regexp.new(reference) =~ sample
-  end
-
-  def match_text(ref, sam)
-    (ref_text = get_texts(ref)).empty? or 
-      (ref_text - (sam_text = get_texts(sam))).empty? or
-        (ref_text.length == 1 and match_regexp(ref_text.first, sam_text.join) )
-  end
-
-  def verbose_spew(reference, sample)
-    if reference['verbose!'] == 'true' and
-       @spewed[yo_path = sample.path] == nil
-      puts
-      puts '-' * 60
-      p yo_path
-      puts sample.to_xhtml
-      @spewed[yo_path] = true
-    end
-  end
-
-  def match_class(attr_name, ref, sam)
-    return false unless attr_name == 'class'
-    return " #{sam} ".index(" #{ref} ")
-  end  #  NOTE  if you call it a class, but ref contains 
-       #        something fruity, you are on your own!
-  
   def match_attributes(reference, sample)
     reference.attribute_nodes.each do |attr|
       next if %w( xpath! verbose! ).include? attr.name       
@@ -230,6 +191,33 @@ class BeHtmlWith
     end
 
     return true
+  end
+
+  def deAmpAmp(stwing)
+    stwing.to_s.gsub('&amp;amp;', '&').gsub('&amp;', '&')
+  end  #  ERGO await a fix in Nokogiri, and hope nobody actually means &amp;amp; !!!
+
+#  TODO  put match_regexp here
+
+  def match_class(attr_name, ref, sam)
+    return false unless attr_name == 'class'
+    return " #{sam} ".index(" #{ref} ")
+  end  #  NOTE  if you call it a class, but ref contains 
+       #        something fruity, you are on your own!
+  
+  def match_text(ref, sam)
+    (ref_text = get_texts(ref)).empty? or 
+      (ref_text - (sam_text = get_texts(sam))).empty? or
+        (ref_text.length == 1 and match_regexp(ref_text.first, sam_text.join) )
+  end
+
+  def get_texts(element)
+    element.xpath('text()').map{|x|x.to_s.strip}.select{|x|x.any?}
+  end
+
+  def match_regexp(reference, sample)
+    reference.index('(?') == 0 and 
+      Regexp.new(reference) =~ sample
   end
 
 #  TODO  why we have no :css! yet??
@@ -244,17 +232,36 @@ class BeHtmlWith
     return false
   end
 
-  def match_attributes_and_text(reference, sample)
-    if match_attributes(reference, sample) and
-        match_text(reference, sample)     and
-        match_xpath(reference, sample)
-      verbose_spew(reference, sample)  #  CONSIDER  get verbose spew working at fault time too?
-      return true
+  def verbose_spew(reference, sample)
+    if reference['verbose!'] == 'true' and
+       @spewed[yo_path = sample.path] == nil
+      puts
+      puts '-' * 60
+      p yo_path
+      puts sample.to_xhtml
+      @spewed[yo_path] = true
     end
-
-    return false
   end
 
+
+
+
+
+
+  def collect_best_sample(samples, index)
+    if sample = samples.first and
+       (index == 0 or 
+          @best_sample == @doc.root or 
+          depth(@best_sample) > depth(sample))
+      @best_sample = sample
+    end
+  end
+
+
+
+ 
+ 
+ 
   def assemble_complaint  #  TODO  reduce this
     @failure_message = complain_about(@builder.doc.root, @best_sample)
   end
