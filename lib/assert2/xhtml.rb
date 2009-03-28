@@ -168,22 +168,19 @@ class BeHtmlWith
 #  TODO  document without! and xpath! in the diagnostic
 #  TODO  uh, indenting mebbe?
 
-#   def match_attribute(
+  def match_attribute(attr)
+    (ref = deAmpAmp(attr.value)) ==
+    (sam = deAmpAmp(@sample[attr.name])) or 
+      match_regexp(ref, sam)            or 
+      match_class(attr.name, ref, sam)
+  end
 
   def match_attributes(reference = @reference)
     sort_nodes(reference).each do |attr|
-      value = attr.value
-      case attr_name = attr.name
-        when 'verbose!'
-          verbose_spew(value)
-        when 'xpath!'
-          match_xpath_predicate(value) or return false
-        else
-          (ref = deAmpAmp(value)) ==
-          (sam = deAmpAmp(@sample[attr_name])) or 
-            match_regexp(ref, sam)            or 
-            match_class(attr_name, ref, sam)  or
-            return false
+      case attr.name
+        when 'verbose!' ;  verbose_spew(attr)
+        when 'xpath!'   ;  match_xpath_predicate(attr) or return false
+        else            ;  match_attribute(attr)       or return false
       end
     end
 
@@ -217,8 +214,8 @@ class BeHtmlWith
 
 #  TODO  why we have no :css! yet??
 
-  def match_xpath_predicate(value)
-    @sample.parent.xpath("*[ #{ value } ]").each do |m|
+  def match_xpath_predicate(attr)
+    @sample.parent.xpath("*[ #{ attr.value } ]").each do |m|
       m.path == @sample.path and 
         return true
     end
@@ -226,8 +223,8 @@ class BeHtmlWith
     return false
   end
 
-  def verbose_spew(value)
-    if value == 'true' and @spewed[yo_path = @sample.path] == nil
+  def verbose_spew(attr)
+    if attr.value == 'true' and @spewed[yo_path = @sample.path] == nil
       puts
       puts '-' * 60
       p yo_path
