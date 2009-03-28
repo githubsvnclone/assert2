@@ -234,7 +234,8 @@ class BeHtmlWith
   end
 
   def get_texts(element)
-    element.xpath('text()').map{|x|x.to_s.strip}.select{|x|x.any?}
+    element.children.grep(Nokogiri::XML::Text).
+      map{|x| x.to_s.strip}.select{|x|x.any?}
   end
 
   def collect_best_sample(samples)
@@ -252,9 +253,9 @@ class BeHtmlWith
   def complain( refered = @builder.doc, 
                  sample = @best_sample || @doc.root )
     @failure_message = "\nCould not find this reference...\n\n" +
-                         refered.to_html.sub(/^\<\!DOCTYPE.*/, '') +
-                         "\n\n...in this sample...\n\n" +
-                         sample.to_html
+                          refered.to_html.sub(/^\<\!DOCTYPE.*/, '') +
+                     "\n\n...in this sample...\n\n" +
+                          sample.to_html
   end
 
   def build_deep_xpath_too(element)
