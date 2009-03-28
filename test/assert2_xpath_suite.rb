@@ -1113,18 +1113,8 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     diagnostic = assert_xhtml_flunk SAMPLE_LIST do
       li.kali!{ ul.kaluka }
     end
-    assert(diagnostic){ diagnostic =~ /kalika/ }
-    denigh{ diagnostic =~ /font-size/ }
-  end
-
-  def TODO_test_disambiguate_tertiary_diagnostic_elements
-    diagnostic = assert_xhtml_flunk SAMPLE_LIST do
-      ul{ li.kali!{ ul.kaluka{ li 'All Billings reports' } } }
-    end
-    return # TODO
     assert(diagnostic){ diagnostic =~ /kalika/ }  #  it tells you HOW TO FIX IT!
-    deny(diagnostic){ diagnostic =~ /font-size/ }  #  ERGO  fix assert{ 2.0 } it calls denigh "assert"...
-    denigh{ diagnostic.index('...or...') }
+    denigh{ diagnostic =~ /font-size/ } #  ERGO  fix assert{ 2.0 } it calls denigh "assert"...
   end
 
   def createBeHtmlWith(stwing, &block)
