@@ -168,14 +168,12 @@ class BeHtmlWith
     samples = elements.find_all do |element|
                 match_attributes_and_text(@references[index], element)
               end
+    
     if sample = samples.first and
        (index == 0 or @best_sample == @doc.root or depth(@best_sample) > depth(sample))
       @best_sample = sample
     end
-    if sample = elements.first and
-        (index == 0 or @doc.root or depth(@worst_sample) > depth(sample))
-      @worst_sample = sample
-    end
+    
     samples
   end
 
@@ -318,20 +316,10 @@ class BeHtmlWith
   end
 
   def complain_about(refered, sample)  #  TODO  toss arguments
-    complaint = "\nCould not find this reference...\n\n" +
+    "\nCould not find this reference...\n\n" +
       refered.to_html +
       "\n\n...in this sample...\n\n" +
       sample.to_html
-      
-    if @worst_sample and  # TODO  fix tests who need this
-        @best_sample.path != @worst_sample.path and
-        @worst_sample != @doc.root
-      
-      complaint += "\n\n...or in this...\n\n" +
-        @worst_sample.to_html
-    end
-    
-    return complaint
   end
 
   attr_accessor :failure_message
