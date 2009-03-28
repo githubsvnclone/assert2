@@ -114,10 +114,10 @@ class BeHtmlWith
       return 'not( ' + build_predicate(element, 'or') + ' )'
     else  #  TODO  SHORTER!!
       path = 'descendant::'
-      path << element.name.sub(/\!$/, '')
+      path << element.name.sub(/\!$/, '')  #  TODO  merge the bang removers
       path << "[ refer(., '#{ count }') "
+        #  refer() is first so we collect many samples, despite boolean short-circuiting
       path << 'and '  if elemental_children(element).any?
-        #  refer() is first so we collect lots of samples, despite boolean short-circuiting
       path << build_predicate(element)
       path << ']'
       return path
