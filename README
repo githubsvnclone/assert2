@@ -5,30 +5,6 @@ The assert{ 2.0 } project asks a simple question:
 
 Its latest assertion, assert_xhtml, answers this question for HTML.
 
-TODO  trash-talk:
-  def test_model_form_for
-    assert_renders model_form_for_content do
-      assert_select "form[action=/forms/]"
-      assert_select "form input[type=hidden][name=form_memento][value=model:signup:/form-using-page/]"
-      assert_select("form input[type=text]") { assert_select "[name=?]", /signup\[first_name\]/ }
-      assert_select "form input[type=submit]"
-    end
-  end
-
-    assert_select 'div.pagination', 1, 'no main DIV' do |el|
-      assert_select 'a[href]', 3 do |elements|
-        validate_page_numbers [2,3,2], elements
-        assert_select elements.last, ':last-child', "Next &raquo;"
-      end
-      assert_select 'span', 2
-      assert_select 'span.disabled:first-child', "&laquo; Previous"
-      assert_select 'span.current', entries.current_page.to_s
-    end
-    
-  assert_select "div#logo_box img[src=/0000/0001/logo.gif][alt=My Company]"
-
-
-
 To begin, grab it with:
 
   gem install nokogiri assert2
@@ -245,7 +221,9 @@ and the <div> in our example receives them, too.
 When this assertion fails, it prints out...
 
  - your reference elements, rendered as HTML
- - each "near-miss" region of your sample HTML
+ - the best "near-miss" region of your sample HTML
+
+Note that the diagnostic displays without! and xpath! tags literally...
 
 === RSpec ===
 
