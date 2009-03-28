@@ -2,15 +2,13 @@ require File.dirname(__FILE__) + '/test_helper'
 require 'assert2/xpath'
 require 'assert2/xhtml'
 
-#  FIXME  given :' why is the tick not colored?
+#  ERGO ripdoc:  given :' why is the tick not colored?
 
 class AssertXhtmlSuite < Test::Unit::TestCase
 
   def setup
     colorize(false)
   end
-
-#  TODO  become a new suite
 
   def assemble_form_example
     lambda do
