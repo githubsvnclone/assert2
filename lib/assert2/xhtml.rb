@@ -113,7 +113,7 @@ class BeHtmlWith
     
     if element.name == 'without!'
       return 'not( 1=1 ' + build_predicate(element, 'or') + ' )'
-    else
+    else  #  TODO  SHORTER!!
       path = 'descendant::'
       path << element.name.sub(/\!$/, '')
       path << "[ refer(., '#{count}') "
@@ -142,7 +142,7 @@ class BeHtmlWith
   def run_all_xpaths(xpaths)
     xpaths.each do |path|
       if match_xpath(path).empty?
-        @failure_message = complain_about(@builder.doc.root, @best_sample)
+        complain_about
         return false
       end
     end
@@ -151,7 +151,6 @@ class BeHtmlWith
   end
   
   def match_xpath(path, &refer)
-    @best_sample = @doc.root
     @doc.root.xpath_with_callback path, :refer do |element, index|
       collect_samples(element, index.to_i)
     end
@@ -242,10 +241,9 @@ class BeHtmlWith
   end
 
   def collect_best_sample(samples, index)
-    if sample = samples.first and
-       (index == 0 or 
-          @best_sample == @doc.root or 
-          depth(@best_sample) > depth(sample))
+    sample = samples.first or return
+
+    if index == 0 or @best_sample.nil? or depth(@best_sample) > depth(sample)
       @best_sample = sample
     end
   end
@@ -254,11 +252,12 @@ class BeHtmlWith
     e.xpath('ancestor-or-self::*').length
   end
   
-  def complain_about(refered, sample)  #  TODO  toss arguments
-    "\nCould not find this reference...\n\n" +
-      refered.to_html +
-      "\n\n...in this sample...\n\n" +
-      sample.to_html
+  def complain_about( refered = @builder.doc.root, 
+                       sample = @best_sample || @doc.root )
+    @failure_message = "\nCould not find this reference...\n\n" +
+                         refered.to_html +
+                         "\n\n...in this sample...\n\n" +
+                         sample.to_html
   end
 
   def build_deep_xpath_too(element)
