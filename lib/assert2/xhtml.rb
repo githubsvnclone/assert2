@@ -170,7 +170,7 @@ class BeHtmlWith
 
 #   def match_attribute(
 
-  def match_attributes(reference = @reference, sample = @sample)
+  def match_attributes(reference = @reference)
     sort_nodes(reference).each do |attr|
       value = attr.value
       case attr_name = attr.name
