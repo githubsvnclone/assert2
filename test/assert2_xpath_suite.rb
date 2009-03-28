@@ -966,28 +966,6 @@ to <code>xpath</code>'s block, then run your tests:
     end
   end
 
-  def TODO_test_diagnostic_fallback_plan_A
-    diagnostic = assert_xhtml_flunk SAMPLE_FORM do
-      li do # is there
-        input.aint_there
-      end
-    end
-
-    denigh{ diagnostic =~ /form action/ }  #  outside the found context
-    assert{ diagnostic =~ /li.*input.*user_name/m }
-  end
-
-  def TODO_test_diagnostic_fallback_plan_B
-    diagnostic = assert_xhtml_flunk SAMPLE_FORM do
-      li do # is there
-        output # totally ain't there!
-      end
-    end
-
-    denigh{ diagnostic =~ /form action/ }  #  outside the found context
-    assert{ diagnostic =~ /li.*input.*user_name/m }
-  end
-
   def test_in_denial
     bhw = BeHtmlWith.create(SAMPLE_FORM)
     built = Nokogiri::HTML::Builder.new do
