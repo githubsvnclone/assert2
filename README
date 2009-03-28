@@ -223,7 +223,26 @@ When this assertion fails, it prints out...
  - your reference elements, rendered as HTML
  - the best "near-miss" region of your sample HTML
 
-Note that the diagnostic displays without! and xpath! tags literally...
+Note that the diagnostic displays without! and xpath! tags literally.
+
+If your assertion fails, and the diagnostic does not display a relevant
+near-miss, the best recourse is to wrap your target element with a known
+container element. Don't do this:
+
+  assert_xhtml do
+    li 'my one lonely list item'
+  end
+
+Do this:
+
+  assert_xhtml do
+    ul.my_unordered_list! do
+      li 'my one lonely list item'
+    end
+  end
+
+That is guaranteed to match the first <ul id='my_unordered_list'> in your
+document.
 
 === RSpec ===
 
