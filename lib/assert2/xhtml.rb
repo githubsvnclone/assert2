@@ -65,6 +65,7 @@ class BeHtmlWith
   def initialize(scope, &block)
     @scope, @block = scope, block
     @references = []  #  TODO  soften this!
+    @spewed = {}
   end
 
   attr_accessor :builder,
@@ -78,9 +79,7 @@ class BeHtmlWith
     @block = block
     @scope.wrap_expectation self do
       @doc = Nokogiri::HTML(stwing)
-      @spewed = {}
-      build_xpaths
-      return run_all_xpaths(@xpaths)
+      return run_all_xpaths(build_xpaths)
     end
   end
  
@@ -89,9 +88,9 @@ class BeHtmlWith
     @builder = Nokogiri::HTML::Builder.new(&bwock)
     @references = []
 
-    @xpaths = elemental_children.map do |child|
-                build_deep_xpath(child)
-              end
+    elemental_children.map do |child|
+      build_deep_xpath(child)
+    end
   end
 
   def elemental_children
@@ -140,8 +139,8 @@ class BeHtmlWith
 
 #       samples = match_path(path) TODO simplify match_path
 
-  def run_all_xpaths(paths)
-    paths.each do |path|
+  def run_all_xpaths(xpaths)
+    xpaths.each do |path|
       if match_path(path).empty?  #  TODO  rename to match_xpath
         @failure_message = complain_about(@builder.doc.root, @best_sample)
         return false
