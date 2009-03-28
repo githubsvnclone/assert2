@@ -171,8 +171,8 @@ class BeHtmlWith
     @reference, @sample = reference, sample
     if match_attributes and
         match_text      and
-        match_xpath_predicate(reference, sample)
-      verbose_spew(reference, sample)  #  CONSIDER  get verbose spew working at fault time too?
+        match_xpath_predicate
+      verbose_spew
       return true
     end
 
@@ -219,7 +219,7 @@ class BeHtmlWith
 
 #  TODO  why we have no :css! yet??
 
-  def match_xpath_predicate(reference, sample)
+  def match_xpath_predicate(reference = @reference, sample = @sample)
     return true unless value = reference['xpath!']
 
     sample.parent.xpath("*[ #{value} ]").each do |m|
@@ -229,7 +229,7 @@ class BeHtmlWith
     return false
   end
 
-  def verbose_spew(reference, sample)
+  def verbose_spew(reference = @reference, sample = @sample)
     if reference['verbose!'] == 'true' and
        @spewed[yo_path = sample.path] == nil
       puts
