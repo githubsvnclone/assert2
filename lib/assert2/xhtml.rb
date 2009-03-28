@@ -98,11 +98,7 @@ class BeHtmlWith
 
   def build_deep_xpath(element)
     path = build_xpath(element)
-
-    if path.index('not') == 0
-      return '/*[ ' + path + ' ]'   #  ERGO  uh, is there a cleaner way?
-    end
-
+    path.index('not(') == 0 and return '/*[ ' + path + ' ]'
     return '//' + path
   end
 
@@ -113,9 +109,8 @@ class BeHtmlWith
     if element.name == 'without!'
       return 'not( ' + build_predicate(element, 'or') + ' )'
     else  #  TODO  SHORTER!!
-      path = 'descendant::'
-      path << element.name.sub(/\!$/, '')  #  TODO  merge the bang removers
-      path << "[ refer(., '#{ count }') "
+      target = element.name.sub(/\!$/, '')
+      path = "descendant::#{ target }[ refer(., '#{ count }') "
         #  refer() is first so we collect many samples, despite boolean short-circuiting
       path << 'and '  if elemental_children(element).any?
       path << build_predicate(element)
@@ -171,12 +166,16 @@ class BeHtmlWith
 
   def match_attributes(reference = @reference, sample = @sample)
     reference.attribute_nodes.each do |attr|
-      next if %w( xpath! verbose! ).include? attr.name       
-      (ref = deAmpAmp(attr.value)) ==
-      (sam = deAmpAmp(sample[attr.name])) or 
-        match_regexp(ref, sam)            or 
-        match_class(attr.name, ref, sam)  or
-        return false
+      case attr.name.to_sym
+        when :xpath! ; next
+        when :verbose! ; next
+        else
+          (ref = deAmpAmp(attr.value)) ==
+          (sam = deAmpAmp(sample[attr.name])) or 
+            match_regexp(ref, sam)            or 
+            match_class(attr.name, ref, sam)  or
+            return false
+      end
     end
 
     return true
