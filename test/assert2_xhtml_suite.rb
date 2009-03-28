@@ -294,11 +294,11 @@ class AssertXhtmlSuite < Test::Unit::TestCase
       end
     end
     
-    #  TODO  more reality-check tests on without! - and lose the silly 1=1
+    #  TODO  more reality-check tests on without!
     
     path = bhw.build_deep_xpath(built.doc.root)
     deny{ path =~ /descendant::without/ }
-    assert(path){ path =~ / not\( 1=1 and descendant\:\:libel/ }
+    assert(path){ path =~ / not\( descendant\:\:libel/ }
 #     p path
 #     assert{ built.doc.root.xpath_with_callback(path, :refer){|nodes, index| 
 # p    nodes.map{|q|q.name}

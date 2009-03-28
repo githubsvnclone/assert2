@@ -111,11 +111,13 @@ class BeHtmlWith
     @references << element  #  note we skip the without @reference!
     
     if element.name == 'without!'
-      return 'not( 1=1 ' + build_predicate(element, 'or') + ' )'
+      return 'not( ' + build_predicate(element, 'or') + ' )'
     else  #  TODO  SHORTER!!
       path = 'descendant::'
       path << element.name.sub(/\!$/, '')
       path << "[ refer(., '#{count}') "
+      element_kids = element.children.grep(Nokogiri::XML::Element)  #  TODO  merge!
+      path << 'and '  if element_kids.any?
         #  refer() is first so we collect lots of samples, despite boolean short-circuiting
       path << build_predicate(element)
       path << ']'
@@ -129,7 +131,6 @@ class BeHtmlWith
     element_kids = element.children.grep(Nokogiri::XML::Element)
 
     if element_kids.any?
-      path << 'and '
       path << element_kids.map{|child|  build_xpath(child)  }.join(conjunction)
     end
 
