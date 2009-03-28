@@ -10,9 +10,11 @@ task :default do
   sh 'ruby191 test/assert2_suite.rb'
   
   sh 'ruby186 test/assert2_xpath_suite.rb'
+  sh 'ruby186 test/assert2_xhtml_suite.rb'
 #  sh 'ruby187 test/assert2_xpath_suite.rb'
 #  sh 'ruby190 test/assert2_xpath_suite.rb'
-#  sh 'ruby191 test/assert2_xpath_suite.rb'
+#  sh 'ruby191 test/assert2_xpath_suite.rb'  #  TODO  get that back online
+#  sh 'ruby191 test/assert2_xhtml_suite.rb'
   
   sh 'ruby186 test/assert2_utilities_suite.rb'
 #  sh 'ruby187 test/assert2_utilities_suite.rb'
