@@ -150,11 +150,11 @@ class BeHtmlWith
     return true
   end
   
-  def match_xpath(path, &refer)  #  TODO  take out argument
-    refer ||= lambda{|e,i| collect_samples(e, i.to_i) }
+  def match_xpath(path, &refer)
     @best_sample = @doc.root
-    @worst_sample = @doc.root
-    @doc.root.xpath_with_callback path, :refer, &refer
+    @doc.root.xpath_with_callback path, :refer do |element, index|
+      collect_samples(element, index.to_i)
+    end
   end
 
 #  ERGO  match text with internal spacies?
