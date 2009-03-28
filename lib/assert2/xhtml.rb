@@ -168,9 +168,9 @@ class BeHtmlWith
   end
 
   def match_attributes_and_text(reference, sample)
-    @reference, @sample = reference, @sample  #  TODO etc!
-    if match_attributes(reference, sample) and
-        match_text(reference, sample)     and
+    @reference, @sample = reference, sample
+    if match_attributes and
+        match_text      and
         match_xpath_predicate(reference, sample)
       verbose_spew(reference, sample)  #  CONSIDER  get verbose spew working at fault time too?
       return true
@@ -179,7 +179,7 @@ class BeHtmlWith
     return false
   end
 
-  def match_attributes(reference, sample)
+  def match_attributes(reference = @reference, sample = @sample)
     reference.attribute_nodes.each do |attr|
       next if %w( xpath! verbose! ).include? attr.name       
       (ref = deAmpAmp(attr.value)) ==
@@ -207,7 +207,7 @@ class BeHtmlWith
   end  #  NOTE  if you call it a class, but ref contains 
        #        something fruity, you are on your own!
   
-  def match_text(ref, sam)
+  def match_text(ref = @reference, sam = @sample)
     (ref_text = get_texts(ref)).empty? or 
       (ref_text - (sam_text = get_texts(sam))).empty? or
         (ref_text.length == 1 and match_regexp(ref_text.first, sam_text.join) )
