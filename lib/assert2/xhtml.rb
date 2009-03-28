@@ -110,13 +110,12 @@ class BeHtmlWith
     
     if element.name == 'without!'
       return 'not( ' + build_predicate(element, 'or') + ' )'
-    else  #  TODO  SHORTER!!
+    else
       target = element.name.sub(/\!$/, '')
       path = "descendant::#{ target }[ refer(., '#{ count }') "
         #  refer() is first so we collect many samples, despite boolean short-circuiting
       path << 'and '  if elemental_children(element).any?
-      path << build_predicate(element)
-      path << ']'
+      path << build_predicate(element) + ']'
       return path
     end
   end
@@ -183,6 +182,16 @@ class BeHtmlWith
     end 
   end
 
+  def verbose_spew(attr)
+    if attr.value == 'true' and @spewed[yo_path = @sample.path] == nil
+      puts
+      puts '-' * 60
+      p yo_path
+      puts @sample.to_xhtml
+      @spewed[yo_path] = true
+    end
+  end  #   ERGO  this could use a test...
+
 #  TODO  why we have no :css! yet??
 
   def match_xpath_predicate(attr)
@@ -193,16 +202,6 @@ class BeHtmlWith
 
     return false
   end
-
-  def verbose_spew(attr)
-    if attr.value == 'true' and @spewed[yo_path = @sample.path] == nil
-      puts
-      puts '-' * 60
-      p yo_path
-      puts @sample.to_xhtml
-      @spewed[yo_path] = true
-    end
-  end  #   ERGO  this could use a test...
 
   def match_attribute(attr)
     ref = deAmpAmp(attr.value)
