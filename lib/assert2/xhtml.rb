@@ -60,23 +60,6 @@ requirements:
 
 require 'nokogiri'
 
-class Nokogiri::XML::Node
-
-  class XPathPredicateYielder
-    def initialize(method_name, &block)
-      self.class.send :define_method, method_name do |*args|
-        raise 'must call with block' unless block
-        block.call(*args)
-      end
-    end
-  end
-
-  def xpath_with_callback(path, method_name, &block)
-    xpath path, XPathPredicateYielder.new(method_name, &block)
-  end
-
-end
-
 class BeHtmlWith
 
   def initialize(scope, &block)
@@ -89,6 +72,17 @@ class BeHtmlWith
                 :max_depth,
                 :scope
 
+  def matches?(stwing, &block)
+    @block = block
+    @scope.wrap_expectation self do
+      @doc = Nokogiri::HTML(stwing)
+      @spewed = {}
+      build_xpaths
+#       @max_depth = maximum_depth  # TODO  croak maximum_depth
+      return run_all_xpaths(@xpaths)
+    end
+  end
+ 
   def deAmpAmp(stwing)
     stwing.to_s.gsub('&amp;amp;', '&').gsub('&amp;', '&')
   end  #  ERGO await a fix in Nokogiri, and hope nobody actually means &amp;amp; !!!
@@ -151,9 +145,6 @@ class BeHtmlWith
   end
 
   def match_attributes_and_text(reference, sample)
-    @max_depth < depth(reference) and 
-      return true
-  
     if match_attributes(reference, sample) and
         match_text(reference, sample)     and
         match_xpath(reference, sample)
@@ -173,6 +164,8 @@ class BeHtmlWith
     end
   end
 
+#  ERGO  match text with internal spacies?
+
   def collect_samples(elements, index)
     samples = elements.find_all do |element|
                 match_attributes_and_text(@references[index], element)
@@ -186,15 +179,7 @@ class BeHtmlWith
     @failure_message = complain_about(@builder.doc.root, @best_sample)
   end
 
-  def find_better_diagnostics
-    @max_depth = maximum_depth - 1
-      #  TODO  give up if @max_depth goes negative!!
-    @xpaths.each do |path|
-      samples = match_path(path)
-      samples.any? and
-        return samples
-    end
-  end
+#       samples = match_path(path) TODO simplify match_path
 
   def elemental_children
     @builder.doc.children.grep(Nokogiri::XML::Element)
@@ -229,17 +214,6 @@ class BeHtmlWith
     return true
   end
   
-  def matches?(stwing, &block)
-    @block = block
-    @scope.wrap_expectation self do
-      @doc = Nokogiri::HTML(stwing)
-      @spewed = {}
-      build_xpaths
-      @max_depth = maximum_depth
-      return run_all_xpaths(@xpaths)
-    end
-  end
- 
   def build_deep_xpath(element)
     path = build_xpath(element)
 
@@ -372,4 +346,22 @@ class Nokogiri::XML::Builder
         node = Nokogiri::XML::Text.new(string.to_s, @doc)
         insert(node)
       end
+end  #  ERGO  retire these monkey patches as Nokogiri catches up
+
+class Nokogiri::XML::Node
+
+  class XPathPredicateYielder
+    def initialize(method_name, &block)
+      self.class.send :define_method, method_name do |*args|
+        raise 'must call with block' unless block
+        block.call(*args)
+      end
+    end
+  end
+
+  def xpath_with_callback(path, method_name, &block)
+    xpath path, XPathPredicateYielder.new(method_name, &block)
+  end
+
 end
+
