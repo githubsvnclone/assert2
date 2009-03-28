@@ -1,5 +1,5 @@
 =begin
-One Yury Kotlyarov recently posted this Rails project as a question:
+One Yury Kotlyarov recently this Rails project as a question:
 
   http://github.com/yura/howto-rspec-custom-matchers/tree/master
 
@@ -244,22 +244,7 @@ class BeHtmlWith
       return run_all_xpaths(@xpaths)
     end
   end
-
-#   def build_shallow_xpath(root = @builder.doc)
-#     return '//*[ ' +
-#     
-#     #  TODO  use the greppy thing
-#     
-#       root.children.reject{|kid|kid.name=='html'}.map{|kid|
-#         index = kid.xpath('ancestor::*').length +
-#                 kid.xpath('preceding::*').length
-#       
-#       # TODO common bang remover
-#       
-#         "descendant::#{kid.name.sub(/\!$/, '')}[ refer(., '#{index}') ]"
-#       }.join(' or ') + ' ]'
-#   end
-  
+ 
   def build_deep_xpath(element)
     path = build_xpath(element)
 
