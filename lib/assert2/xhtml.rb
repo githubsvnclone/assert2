@@ -189,17 +189,9 @@ class BeHtmlWith
     @xpaths.each do |path|
       samples = match_path(path)
       samples.any? and
-        return samples  #  TODO croak this method
+        return samples
     end
   end
-
-  def shave_builder_nodes(max)  #  TODO  _elements_
-    elements = @builder.doc.root.xpath("//*[ count(ancestor-or-self::*) > #{max} ]")
-#     puts (elements.first.public_methods - public_methods).sort
-    elements.map{|e|e.unlink}
-  end #  TODO  croak all these
-
-#  TODO  put at least id matchers into the raw XPath, optionally!
 
   def elemental_children
     @builder.doc.children.grep(Nokogiri::XML::Element)
