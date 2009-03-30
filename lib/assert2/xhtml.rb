@@ -1,5 +1,5 @@
 =begin
-One Yury Kotlyarov recently this Rails project as a question:
+One Yury Kotlyarov recently posted this Rails project as a question:
 
   http://github.com/yura/howto-rspec-custom-matchers/tree/master
 
@@ -159,7 +159,6 @@ class BeHtmlWith
     match_attributes and match_text
   end
 
-#  TODO  document without! and xpath! in the diagnostic
 #  TODO  uh, indenting mebbe?
 
   def match_attributes
@@ -235,7 +234,7 @@ class BeHtmlWith
 
   def get_texts(element)
     element.children.grep(Nokogiri::XML::Text).
-      map{|x| x.to_s.strip}.select{|x|x.any?}
+      map{|x|x.to_s.strip}.select{|x|x.any?}
   end
 
   def collect_best_sample(samples)
