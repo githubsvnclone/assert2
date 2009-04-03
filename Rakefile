@@ -1,6 +1,8 @@
 require 'fileutils'
 
 task :default do
+  sh 'ruby186 test/assert_rjs_suite.rb'
+  
   sh 'ruby186 test/rubynode_reflector_suite.rb'
 #  sh 'ruby190 test/ripper_reflector_suite.rb'
   sh 'ruby191 test/ripper_reflector_suite.rb'
