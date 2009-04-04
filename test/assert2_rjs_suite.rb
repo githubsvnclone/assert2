@@ -1,12 +1,9 @@
 require File.dirname(__FILE__) + '/test_helper'
 require 'assert2/rjs'
 require 'ostruct'
-
 require 'action_controller'
-# require 'action_controller/status_codes'
-# require 'action_controller/base'
 
-# faux controller SHAMELESSLY ripped off from Rich Poirier's assert_rjs test code!
+# faux controller & tests SHAMELESSLY ripped off from Rich Poirier's assert_rjs test code!
 require 'action_controller/test_process'  #  thanks, bra!
 
 ActionController::Base.logger = nil
@@ -121,7 +118,9 @@ class ArtsController < ActionController::Base
 end
 
 
-class AssertRjsSuite < Test::Unit::TestCase
+# class AssertRjsSuite < Test::Unit::TestCase
+class AssertRjsSuite < ActionController::TestCase
+  tests ArtsController  #  TODO  rename
   
   def test_assert_rjs
     @response = OpenStruct.new(:body => "Element.update(\"label_7\", \"<input checked=\\\"checked\\\" id=\\\"Top_Ranking\\\" name=\\\"Top_Ranking\\\" type=\\\"checkbox\\\" value=\\\"Y\\\" \\/>I want a pet &lt; than a chihuahua<input id=\\\"cross_sale_1\\\" name=\\\"cross_sale_1\\\" type=\\\"hidden\\\" value=\\\"7\\\" \\/>\");")
@@ -133,6 +132,21 @@ class AssertRjsSuite < Test::Unit::TestCase
       input.Top_Ranking! :type => :checkbox, :value => :Y
       input.cross_sale_1! :type => :hidden, :value => 7
     end
+  end
+  
+#   def setup
+#     @controller = ArtsController.new
+#     @request = ActionController::TestRequest.new
+#     @response = ActionController::TestResponse.new
+#   end  
+  
+  def test_alert
+    get :alert
+    return 
+    puts @response.body
+    rjs = AssertRjs.new(js = @response.body)
+    text = rjs.alert :alert, 'This is an alert'
+    assert{ text == 'This is an alert' }
   end
   
 end
