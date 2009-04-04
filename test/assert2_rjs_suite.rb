@@ -171,7 +171,7 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
 
   def test_alert
     get :alert
-    rjs = AssertRjs.new(js = @response.body)
+    rjs = AssertRjs::ALERT.new(js = @response.body)
     text = rjs.alert :alert, 'This is an alert'
     assert{ text == 'This is an alert' }
     text = rjs.alert :alert, 'This is not an alert'

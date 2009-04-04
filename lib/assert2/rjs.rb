@@ -28,20 +28,20 @@ module Test; module Unit; module Assertions
       return false
     end
     
-    def alert command, matcher, &block
-      @ast.pointcut('alert()').matches.each do |updater|
-        updater.grep(RKelly::Nodes::ArgumentsNode).each do |thang|
-          text = thang.value.first
-          text = eval(text.value)
-          @passed = text =~ /#{matcher}/ or text.index(matcher.to_s)
-          return text 
-        end
-      end
-      
-      return nil
-    end
     
     class ALERT < AssertRjs
+      def alert command, matcher, &block
+        @ast.pointcut('alert()').matches.each do |updater|
+          updater.grep(RKelly::Nodes::ArgumentsNode).each do |thang|
+            text = thang.value.first
+            text = eval(text.value)
+            @passed = text =~ /#{matcher}/ or text.index(matcher.to_s)
+            return text 
+          end
+        end
+        
+        return nil
+      end
     end
     
     class REPLACE_HTML < AssertRjs
