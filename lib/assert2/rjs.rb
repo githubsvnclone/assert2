@@ -49,7 +49,8 @@ module Test; module Unit; module Assertions
             if div_id == target.to_s
               cornplaint = "#{ command } for ID #{ target } has incorrect payload, in #{ js }"
               scope.assert_match matcher, html, cornplaint
-              block.call(div_id, html, cornplaint)
+              scope.assert_xhtml html, cornplaint, &block if block
+              return html
             end
           end
         end
@@ -72,10 +73,8 @@ module Test; module Unit; module Assertions
       rjs.passed or flunk("#{ command } has incorrect payload. #{ target.inspect } should match #{ js }")
       return text
     else
-      rjs.pwn target, matcher do |div_id, html, cornplaint|
-        assert_xhtml html, cornplaint, &block if block
-        return html
-      end
+      html = rjs.pwn(target, matcher, &block)
+      html and return html
     end
     
     flunk "#{ command } for ID #{ target } not found in #{ js }"
