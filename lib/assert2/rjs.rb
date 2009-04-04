@@ -7,7 +7,7 @@ require 'assert2/xhtml'
 
 module Test; module Unit; module Assertions
 
-  def assert_rjs(command, target, matcher = //)
+  def assert_rjs(command, target, matcher = //, &block)
     ast = RKelly.parse(@response.body)
     command == :replace_html or 
       flunk("assert_rjs's alpha version only respects :replace_html")
@@ -21,6 +21,7 @@ module Test; module Unit; module Assertions
           html   = eval(html.value)
           if div_id == target.to_s
             assert_match matcher, html
+            assert_xhtml html, &block if block
             return html
           end
         end

@@ -9,6 +9,11 @@ class AssertRjsSuite < Test::Unit::TestCase
     
     assert_rjs :replace_html, :label_7
     assert_rjs :replace_html, :label_7, /Top_Ranking/
+    assert_rjs :replace_html, :label_7, /pet &lt; than a chihuahua/
+    assert_rjs :replace_html, :label_7 do
+      input.Top_Ranking! :type => :checkbox, :value => :Y
+      input.cross_sale_1! :type => :hidden, :value => 7
+    end
   end
   
 end
