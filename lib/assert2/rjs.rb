@@ -8,11 +8,15 @@ require 'assert2/xhtml'
 module Test; module Unit; module Assertions
 
   class AssertRjs
-    def initialize(js);  @ast = RKelly.parse(@js = js);  end
+    def initialize(js)
+      @ast = RKelly.parse(@js = js)
+      @command = self.class.name.downcase.to_sym
+    end
     attr_reader :passed
+    attr_reader :command
 
     class ALERT < AssertRjs
-      def pwn command, matcher, &block
+      def pwn matcher, &block
         @ast.pointcut('alert()').matches.each do |updater|
           updater.grep(RKelly::Nodes::ArgumentsNode).each do |thang|
             text = thang.value.first
@@ -27,7 +31,7 @@ module Test; module Unit; module Assertions
     end
     
     class REPLACE_HTML < AssertRjs
-      def pwn command, target, &block
+      def pwn target, &block
         @ast.pointcut('Element.update()').matches.each do |updater|
           updater.grep(RKelly::Nodes::ArgumentsNode).each do |thang|
             div_id, html = thang.value
@@ -55,12 +59,12 @@ module Test; module Unit; module Assertions
 #   TODO  also crack out the args correctly and gripe if they wrong
 
     if command == :alert
-      text = rjs.pwn(:alert, target)
+      text = rjs.pwn(target)
       text or flunk("#{ command } not found in #{ js }")
       rjs.passed or flunk("#{ command } has incorrect payload. #{ target.inspect } should match #{ js }")
       return text
     else
-      rjs.pwn command, target do |div_id, html|
+      rjs.pwn target do |div_id, html|
         cornplaint = "#{ command } for ID #{ target } has incorrect payload, in #{ js }"
         assert_match matcher, html, cornplaint
         assert_xhtml html, cornplaint, &block if block
