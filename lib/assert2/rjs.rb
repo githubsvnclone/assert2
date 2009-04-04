@@ -16,6 +16,7 @@ module Test; module Unit; module Assertions
 
     def match(kode)
       ast = RKelly.parse(@js = js)
+      
       ast.pointcut(kode).matches.each do |updater|
         updater.grep(RKelly::Nodes::ArgumentsNode).each do |thang|
           yield thang
@@ -34,6 +35,7 @@ module Test; module Unit; module Assertions
           passed or 
       scope.flunk("#{ command } has incorrect payload. #{ matcher.inspect } should match #{ js }")
           return text 
+            #  TODO  find any alert with the given payload not just the first
         end
         
         scope.flunk("#{ command } not found in #{ js }")
@@ -65,7 +67,7 @@ module Test; module Unit; module Assertions
 
   def assert_rjs(command, target, matcher = //, &block)
     klass = command.to_s.upcase
-    rjs = eval("AssertRjs::#{klass}").new(js = @response.body, command, self)
+    rjs   = eval("AssertRjs::#{klass}").new(@response.body, command, self)
     return rjs.pwn(target, matcher, &block)
   end
     
