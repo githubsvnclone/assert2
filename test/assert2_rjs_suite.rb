@@ -184,6 +184,11 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
       assert_rjs :alert, 'This is not a drill'
     end
     
+    @response = OpenStruct.new(:body => 'negatory()')
+    
+    assert_flunk /alert not found in.*negatory/m do
+      assert_rjs :alert, 'This is an alert'
+    end
   end
 
 

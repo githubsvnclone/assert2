@@ -37,7 +37,8 @@ module Test; module Unit; module Assertions
           return text 
         end
       end
-      return false
+      
+      return nil
     end
   end
 
@@ -50,6 +51,7 @@ module Test; module Unit; module Assertions
 
     if command == :alert
       text = rjs.alert(:alert, target)
+      text or flunk("#{ command } not found in #{ js }")
       rjs.passed or flunk("#{ command } has incorrect payload. #{ target.inspect } should match #{ js }")
       return text
     else
