@@ -136,6 +136,11 @@ class AssertRjsSuite < ActionController::TestCase
     assert_flunk /replace_html for ID lay_belle_7 not found in.*Top_Ranking/ do
       assert_rjs :replace_html, :lay_belle_7
     end
+    
+x = assert_flunk /replace_html for ID label_7 has incorrect payload.*Top_Ranking/ do
+      assert_rjs :replace_html, :label_7, /Toop_Roonking/
+    end
+    puts x
   end
 
   # ERGO add "interrupt-and-integrate" to autotask
