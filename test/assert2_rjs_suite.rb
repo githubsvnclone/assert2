@@ -7,7 +7,7 @@ require 'action_controller'
 require 'action_controller/test_process'  #  thanks, bra!
 
 
-class AssertRjsSuite < Test::Unit::TestCase  #  TODO  move me up
+class AssertRjsSuite < Test::Unit::TestCase
   def setup
     @response = OpenStruct.new(:body => "Element.update(\"label_7\", \"<input checked=\\\"checked\\\" id=\\\"Top_Ranking\\\" name=\\\"Top_Ranking\\\" type=\\\"checkbox\\\" value=\\\"Y\\\" \\/>I want a pet &lt; than a chihuahua<input id=\\\"cross_sale_1\\\" name=\\\"cross_sale_1\\\" type=\\\"hidden\\\" value=\\\"7\\\" \\/>\");")
   end
