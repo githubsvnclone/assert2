@@ -40,10 +40,17 @@ module Test; module Unit; module Assertions
       
       return nil
     end
+    
+    class ALERT < AssertRjs
+    end
+    
+    class REPLACE_HTML < AssertRjs
+    end
   end
 
   def assert_rjs(command, target, matcher = //, &block)
-    rjs = AssertRjs.new(js = @response.body)
+    klass = command.to_s.upcase
+    rjs = eval("AssertRjs::#{klass}").new(js = @response.body)
     
 #     command == :replace_html or  #  TODO  put me inside the method_missing!
 #       flunk("assert_rjs's alpha version only respects :replace_html")
