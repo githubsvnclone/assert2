@@ -66,9 +66,9 @@ module Test; module Unit; module Assertions
   end
 
   def assert_rjs(command, target, matcher = //, &block)
-    klass = command.to_s.upcase
-    rjs   = eval("AssertRjs::#{klass}").new(@response.body, command, self)
-    return rjs.pwn(target, matcher, &block)
+    klass    = command.to_s.upcase
+    asserter = eval("AssertRjs::#{klass}").new(@response.body, command, self)
+    return asserter.pwn(target, matcher, &block)
   end
     
 #     command == :replace_html or  #  TODO  put me inside the method_missing!
