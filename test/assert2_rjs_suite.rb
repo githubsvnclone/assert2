@@ -171,7 +171,7 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
 
   def test_alert
     get :alert
-    rjs = AssertRjs::ALERT.new(@response.body, self)
+    rjs = AssertRjs::ALERT.new(@response.body, :alert, self)
     text = rjs.pwn 'This is an alert', ''
     assert{ text == 'This is an alert' }
 

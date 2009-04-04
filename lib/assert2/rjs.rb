@@ -8,16 +8,17 @@ require 'assert2/xhtml'
 module Test; module Unit; module Assertions
 
   class AssertRjs
-    def initialize(js, scope)
-      @ast = RKelly.parse(@js = js)
-      @command = self.class.name.downcase.split('::').last.to_sym  # TODO  uh.. elegantly??
-      @scope = scope
+    def initialize(js, command, scope)
+      @js      = js
+      @command = command
+      @scope   = scope
     end
 
     attr_reader :command, :js, :passed, :scope
 
     def match(kode)
-      @ast.pointcut(kode).matches.each do |updater|
+      ast = RKelly.parse(@js = js)
+      ast.pointcut(kode).matches.each do |updater|
         updater.grep(RKelly::Nodes::ArgumentsNode).each do |thang|
           yield thang
         end
@@ -59,29 +60,20 @@ module Test; module Unit; module Assertions
           end
         end
 
-        return false
+        scope.flunk "#{ command } for ID #{ target } not found in #{ js }"
       end
     end
   end
 
   def assert_rjs(command, target, matcher = //, &block)
     klass = command.to_s.upcase
-    rjs = eval("AssertRjs::#{klass}").new(js = @response.body, self)
+    rjs = eval("AssertRjs::#{klass}").new(js = @response.body, command, self)
+    return rjs.pwn(target, matcher, &block)
+  end
     
 #     command == :replace_html or  #  TODO  put me inside the method_missing!
 #       flunk("assert_rjs's alpha version only respects :replace_html")
 #   TODO  also crack out the args correctly and gripe if they wrong
 #  TODO TDD the matcher can be a string or regexp
-
-    if command == :alert
-      text = rjs.pwn(target, matcher, &block)
-      return text
-    else
-      html = rjs.pwn(target, matcher, &block)
-      html and return html
-    end
-    
-    flunk "#{ command } for ID #{ target } not found in #{ js }"
-  end
 
 end; end; end
