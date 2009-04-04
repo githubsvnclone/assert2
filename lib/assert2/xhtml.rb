@@ -251,10 +251,11 @@ class BeHtmlWith
   
   def complain( refered = @builder.doc, 
                  sample = @best_sample || @doc.root )
+           #  ERGO  use to_xml? or what?
     @failure_message = "\nCould not find this reference...\n\n" +
-                          refered.to_html.sub(/^\<\!DOCTYPE.*/, '') +
+                          refered.to_xhtml.sub(/^\<\!DOCTYPE.*/, '') +
                      "\n\n...in this sample...\n\n" +
-                          sample.to_html
+                          sample.to_xml
   end
 
   def build_deep_xpath_too(element)
