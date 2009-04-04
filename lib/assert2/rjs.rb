@@ -24,6 +24,10 @@ module Test; module Unit; module Assertions
       end
     end
 
+    def complain(about)
+      "#{ command } #{ about }, in\n#{ js }"
+    end
+
     class ALERT < AssertRjs
       def pwn target, matcher, &block
         matcher = target
@@ -52,7 +56,7 @@ module Test; module Unit; module Assertions
             html   = eval(html.value)
             
             if div_id == target.to_s
-              cornplaint = "#{ command } for ID #{ target } has incorrect payload, in #{ js }"
+              cornplaint = complain("for ID #{ target } has incorrect payload")
               scope.assert_match matcher, html, cornplaint
               scope.assert_xhtml html, cornplaint, &block if block
               return html
