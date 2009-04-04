@@ -25,7 +25,11 @@ module Test; module Unit; module Assertions
     end
 
     def complain(about)
-      "#{ command } #{ about }, in\n#{ js }"
+      "#{ command } #{ about }\n#{ js }"
+    end
+    
+    def flunk(about)
+      scope.flunk(complain(about))
     end
 
     class ALERT < AssertRjs
@@ -35,9 +39,11 @@ module Test; module Unit; module Assertions
         match 'alert()' do |thang|
           text = thang.value.first
           text = eval(text.value)
-          passed = text =~ /#{matcher}/ or text.index(matcher.to_s)
-          passed or 
-      scope.flunk("#{ command } has incorrect payload. #{ matcher.inspect } should match #{ js }")
+          
+          text =~ /#{matcher}/ or 
+            text.index(matcher.to_s) or
+            flunk("has incorrect payload. #{ matcher.inspect } should match #{ text }, in")
+            
           return text 
             #  TODO  find any alert with the given payload not just the first
         end
@@ -56,7 +62,7 @@ module Test; module Unit; module Assertions
             html   = eval(html.value)
             
             if div_id == target.to_s
-              cornplaint = complain("for ID #{ target } has incorrect payload")
+              cornplaint = complain("for ID #{ target } has incorrect payload, in")
               scope.assert_match matcher, html, cornplaint
               scope.assert_xhtml html, cornplaint, &block if block
               return html
