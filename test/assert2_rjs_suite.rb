@@ -127,7 +127,7 @@ class AssertRjsSuite < ActionController::TestCase
     
     assert_rjs :replace_html, :label_7
     assert_rjs :replace_html, :label_7, /Top_Ranking/
-    assert_rjs :replace_html, :label_7, /pet &lt; than a chihuahua/
+    assert_rjs :replace_html, :label_7, /pet &lt; than a chihuahua/ # ERGO ouch!
     assert_rjs :replace_html, :label_7 do
       input.Top_Ranking! :type => :checkbox, :value => :Y
       input.cross_sale_1! :type => :hidden, :value => 7
@@ -137,8 +137,15 @@ class AssertRjsSuite < ActionController::TestCase
       assert_rjs :replace_html, :lay_belle_7
     end
     
-x = assert_flunk /replace_html for ID label_7 has incorrect payload.*Top_Ranking/ do
+    assert_flunk /replace_html for ID label_7 has incorrect payload.*Top_Ranking/ do
       assert_rjs :replace_html, :label_7, /Toop_Roonking/
+    end
+
+x = assert_flunk /Could.not.find.this.reference.*Top_Ranking/mx do
+      assert_rjs :replace_html, :label_7 do
+        input.Top_Ranking! :type => :checkbox, :value => :Y
+        input.cross_sale_1! :type => :hidden, :valyoo => 7
+      end
     end
     puts x
   end
