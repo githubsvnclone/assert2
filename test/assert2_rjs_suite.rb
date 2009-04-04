@@ -10,7 +10,7 @@ ActionController::Base.logger = nil
 # ActionController::Base.ignore_missing_templates = false
 ActionController::Routing::Routes.reload rescue nil
  
-class ArtsController < ActionController::Base
+class AssertRjsStubController < ActionController::Base
   def alert
     render :update do |page|
       page.alert 'This is an alert'
@@ -120,7 +120,7 @@ end
 
 # class AssertRjsSuite < Test::Unit::TestCase
 class AssertRjsSuite < ActionController::TestCase
-  tests ArtsController  #  TODO  rename
+  tests AssertRjsStubController
   
   def test_assert_rjs
     @response = OpenStruct.new(:body => "Element.update(\"label_7\", \"<input checked=\\\"checked\\\" id=\\\"Top_Ranking\\\" name=\\\"Top_Ranking\\\" type=\\\"checkbox\\\" value=\\\"Y\\\" \\/>I want a pet &lt; than a chihuahua<input id=\\\"cross_sale_1\\\" name=\\\"cross_sale_1\\\" type=\\\"hidden\\\" value=\\\"7\\\" \\/>\");")
