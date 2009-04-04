@@ -32,28 +32,46 @@ module Test; module Unit; module Assertions
       scope.flunk(complain(about))
     end
 
-    class ALERT < AssertRjs
-      def pwn target, matcher, &block
-        matcher = target
+    def match_or_flunk(why)
+      @text =~ /#{@matcher}/ or 
+        @text == @matcher.to_s or
+        flunk why
+    end
 
-        match 'alert()' do |thang|
-          text = thang.value.first
-          text = eval(text.value)
-          
-          text =~ /#{matcher}/ or 
-            text.index(matcher.to_s) or
-            flunk("has incorrect payload. #{ matcher.inspect } should match #{ text }, in")
-            
-          return text 
-            #  TODO  find any alert with the given payload not just the first
+    def pwn_call *args, &block  #  TODO  use or reject the block
+      target, matchers = args[0], args[1..-1]
+      
+      match "#{target}()" do |thang|
+        thang.value.each do |arg|
+          @text = eval(arg.value)
+          @matcher = matchers.shift or return @text
+          match_or_flunk "to #{target} with #{ @matcher.inspect } not found in"
         end
         
-        scope.flunk("#{ command } not found in #{ js }")
+        matchers.empty? and return @text
+      end
+      
+      scope.flunk("#{ command } to #{ target } not found in #{ js }")
+    end
+
+    class ALERT < AssertRjs
+      def pwn *args, &block
+        @command = :call
+        pwn_call :alert, *args, &block
+      end
+    end
+
+    class CALL < AssertRjs
+      def pwn *args, &block  #  TODO  use or reject the block
+        pwn_call *args, &block
       end
     end
 
     class REPLACE_HTML < AssertRjs
-      def pwn target, matcher, &block
+      def pwn *args, &block
+        target, @matcher = args
+        @matcher ||= //
+        
         match 'Element.update()' do |thang|
           div_id, html = thang.value
           
@@ -63,7 +81,7 @@ module Test; module Unit; module Assertions
             
             if div_id == target.to_s
               cornplaint = complain("for ID #{ target } has incorrect payload, in")
-              scope.assert_match matcher, html, cornplaint
+              scope.assert_match @matcher, html, cornplaint
               scope.assert_xhtml html, cornplaint, &block if block
               return html
             end
@@ -75,15 +93,15 @@ module Test; module Unit; module Assertions
     end
   end
 
-  def assert_rjs(command, target, matcher = //, &block)
+  def assert_rjs(command, *args, &block)
     klass    = command.to_s.upcase
     asserter = eval("AssertRjs::#{klass}").new(@response.body, command, self)
-    return asserter.pwn(target, matcher, &block)
+    return asserter.pwn(*args, &block)
   end
     
 #     command == :replace_html or  #  TODO  put me inside the method_missing!
 #       flunk("assert_rjs's alpha version only respects :replace_html")
 #   TODO  also crack out the args correctly and gripe if they wrong
-#  TODO TDD the matcher can be a string or regexp
+#  TODO TDD the @matcher can be a string or regexp
 
 end; end; end

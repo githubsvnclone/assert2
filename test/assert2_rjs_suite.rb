@@ -172,17 +172,17 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
   def test_alert
     get :alert
     rjs = AssertRjs::ALERT.new(@response.body, :alert, self)
-    text = rjs.pwn 'This is an alert', ''
+    text = rjs.pwn 'This is an alert'
     assert{ text == 'This is an alert' }
 
-    assert_flunk /incorrect payload/ do
-      text = rjs.pwn 'This is not an alert', ''
+    assert_flunk /not found in/ do
+      text = rjs.pwn 'This is not an alert'
     end  #  TODO  lower than pwn? easy to test?
 
     assert_rjs :alert, 'This is an alert'
     
-    assert_flunk /alert.has.incorrect.payload .* 
-                  drill .*
+    assert_flunk /alert.with .*
+                  This.is.not.a.drill .* 
                   alert .* This.is.an.alert/mx do
       assert_rjs :alert, 'This is not a drill'
     end
@@ -211,12 +211,17 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
   
   def test_call
     get :call
-    
-#     assert_nothing_raised { assert_rjs :call, 'foo', 'bar', 'baz' }
-#     assert_raises(Test::Unit::AssertionFailedError) do
-#       assert_rjs :call, 'foo', 'bar'
-#     end
-#     
+    assert_rjs :call, 'foo', 'bar'
+    assert_rjs :call, 'foo', 'bar', 'baz'
+
+    assert_flunk /frob.not.found.in .* foo\("bar",."baz"\)/mx do
+      assert_rjs :call, :frob, :bar, :baz
+    end
+
+    assert_flunk /zap.not.found.in .* foo\("bar",."baz"\)/mx do
+      assert_rjs :call, :foo, :bar, :zap
+    end
+
 #     assert_nothing_raised { assert_no_rjs :call, 'foo', 'bar' }
 #     assert_raises(Test::Unit::AssertionFailedError) do
 #       assert_no_rjs :call, 'foo', 'bar', 'baz'
