@@ -133,15 +133,18 @@ class AssertRjsSuite < ActionController::TestCase
       input.cross_sale_1! :type => :hidden, :value => 7
     end
     
-    assert_flunk /replace_html for ID lay_belle_7 not found in.*Top_Ranking/ do
+    assert_flunk /replace_html.for.ID.lay_belle_7.not.found.in .*
+                       Top_Ranking/mx do
       assert_rjs :replace_html, :lay_belle_7
     end
     
-    assert_flunk /replace_html for ID label_7 has incorrect payload.*Top_Ranking/ do
+    assert_flunk /replace_html.for.ID.label_7.has.incorrect.payload .*
+                       Top_Ranking/mx do
       assert_rjs :replace_html, :label_7, /Toop_Roonking/
     end
 
-x = assert_flunk /Could.not.find.this.reference.*Top_Ranking/mx do
+x = assert_flunk /Could.not.find.this.reference .* 
+                     Top_Ranking/mx do
       assert_rjs :replace_html, :label_7 do
         input.Top_Ranking! :type => :checkbox, :value => :Y
         input.cross_sale_1! :type => :hidden, :valyoo => 7
