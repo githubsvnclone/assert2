@@ -42,14 +42,21 @@ module Test; module Unit; module Assertions
   def assert_rjs(command, target, matcher = //, &block)
     rjs = AssertRjs.new(js = @response.body)
     
-    command == :replace_html or  #  TODO  put me inside the method_missing!
-      flunk("assert_rjs's alpha version only respects :replace_html")
-      
-    rjs.send command, command, target do |div_id, html|
-      cornplaint = "#{ command } for ID #{ target } has incorrect payload, in #{ js }"
-      assert_match matcher, html, cornplaint
-      assert_xhtml html, cornplaint, &block if block
-      return html
+#     command == :replace_html or  #  TODO  put me inside the method_missing!
+#       flunk("assert_rjs's alpha version only respects :replace_html")
+#   TODO  also crack out the args correctly and gripe if they wrong
+
+    if command == :alert
+      text = rjs.alert(:alert, target)
+      p text
+      text and return text
+    else
+      rjs.send command, command, target do |div_id, html|
+        cornplaint = "#{ command } for ID #{ target } has incorrect payload, in #{ js }"
+        assert_match matcher, html, cornplaint
+        assert_xhtml html, cornplaint, &block if block
+        return html
+      end
     end
     
     flunk "#{ command } for ID #{ target } not found in #{ js }"

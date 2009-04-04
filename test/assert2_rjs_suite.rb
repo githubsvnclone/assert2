@@ -167,7 +167,8 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
   end
 
   # ERGO add "interrupt-and-integrate" to autotask
-  
+  # TODO  test all their return values
+
   def test_alert
     get :alert
     rjs = AssertRjs.new(js = @response.body)
@@ -175,6 +176,9 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
     assert{ text == 'This is an alert' }
     text = rjs.alert :alert, 'This is not an alert'
     deny{ text }
+    
+    assert_rjs :alert, 'This is an alert'
+    
   end
 
 
