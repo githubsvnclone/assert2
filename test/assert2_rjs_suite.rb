@@ -6,6 +6,47 @@ require 'action_controller'
 # faux controller & tests SHAMELESSLY ripped off from Rich Poirier's assert_rjs test code!
 require 'action_controller/test_process'  #  thanks, bra!
 
+
+class AssertRjsSuite < Test::Unit::TestCase  #  TODO  move me up
+  def setup
+    @response = OpenStruct.new(:body => "Element.update(\"label_7\", \"<input checked=\\\"checked\\\" id=\\\"Top_Ranking\\\" name=\\\"Top_Ranking\\\" type=\\\"checkbox\\\" value=\\\"Y\\\" \\/>I want a pet &lt; than a chihuahua<input id=\\\"cross_sale_1\\\" name=\\\"cross_sale_1\\\" type=\\\"hidden\\\" value=\\\"7\\\" \\/>\");")
+  end
+  
+  def test_assert_rjs_passes
+    assert_rjs :replace_html, :label_7
+    assert_rjs :replace_html, :label_7, /Top_Ranking/
+    assert_rjs :replace_html, :label_7, /pet &lt; than a chihuahua/ # ERGO ouch!
+    
+    assert_rjs :replace_html, :label_7 do
+      input.Top_Ranking! :type => :checkbox, :value => :Y
+      input.cross_sale_1! :type => :hidden, :value => 7
+    end
+  end
+
+  def test_assert_rjs_flunks
+    assert_flunk /replace_html.for.ID.lay_belle_7.not.found.in .*
+                       Top_Ranking/mx do
+      assert_rjs :replace_html, :lay_belle_7
+    end
+    
+    assert_flunk /replace_html.for.ID.label_7.has.incorrect.payload .*
+                       Top_Ranking/mx do
+      assert_rjs :replace_html, :label_7, /Toop_Roonking/
+    end
+
+x = assert_flunk /Could.not.find.this.reference .* 
+                     Top_Ranking/mx do
+      assert_rjs :replace_html, :label_7 do
+        input.Top_Ranking! :type => :checkbox, :value => :Y
+        input.cross_sale_1! :type => :hidden, :valyoo => 7
+      end
+    end
+    puts x
+  end
+
+end
+
+
 ActionController::Base.logger = nil
 # ActionController::Base.ignore_missing_templates = false
 ActionController::Routing::Routes.reload rescue nil
@@ -118,45 +159,6 @@ class AssertRjsStubController < ActionController::Base
 end
 
 
-class AssertRjsSuite < Test::Unit::TestCase  #  TODO  move me up
-  def setup
-    @response = OpenStruct.new(:body => "Element.update(\"label_7\", \"<input checked=\\\"checked\\\" id=\\\"Top_Ranking\\\" name=\\\"Top_Ranking\\\" type=\\\"checkbox\\\" value=\\\"Y\\\" \\/>I want a pet &lt; than a chihuahua<input id=\\\"cross_sale_1\\\" name=\\\"cross_sale_1\\\" type=\\\"hidden\\\" value=\\\"7\\\" \\/>\");")
-  end
-  
-  def test_assert_rjs_passes
-    assert_rjs :replace_html, :label_7
-    assert_rjs :replace_html, :label_7, /Top_Ranking/
-    assert_rjs :replace_html, :label_7, /pet &lt; than a chihuahua/ # ERGO ouch!
-    
-    assert_rjs :replace_html, :label_7 do
-      input.Top_Ranking! :type => :checkbox, :value => :Y
-      input.cross_sale_1! :type => :hidden, :value => 7
-    end
-  end
-
-  def test_assert_rjs_flunks
-    assert_flunk /replace_html.for.ID.lay_belle_7.not.found.in .*
-                       Top_Ranking/mx do
-      assert_rjs :replace_html, :lay_belle_7
-    end
-    
-    assert_flunk /replace_html.for.ID.label_7.has.incorrect.payload .*
-                       Top_Ranking/mx do
-      assert_rjs :replace_html, :label_7, /Toop_Roonking/
-    end
-
-x = assert_flunk /Could.not.find.this.reference .* 
-                     Top_Ranking/mx do
-      assert_rjs :replace_html, :label_7 do
-        input.Top_Ranking! :type => :checkbox, :value => :Y
-        input.cross_sale_1! :type => :hidden, :valyoo => 7
-      end
-    end
-    puts x
-  end
-
-end
-
 class AssertRjsStubControllerSuite < ActionController::TestCase
   tests AssertRjsStubController
   
@@ -219,3 +221,8 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
   end
 
 end
+
+# "It's a big house this, and very peculiar.  Always a bit more to discover,
+#  and no knowing what you'll find around a corner.  And Elves, sir!" --Samwise
+
+# "Sam? Would you please STFU??" --Frodo
