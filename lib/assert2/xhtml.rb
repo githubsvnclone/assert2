@@ -71,6 +71,7 @@ class BeHtmlWith
   attr_accessor :builder,
                 :doc,
                 :failure_message,
+                :message,
                 :scope
   attr_reader   :references
   attr_writer   :reference,
@@ -252,7 +253,8 @@ class BeHtmlWith
   def complain( refered = @builder.doc, 
                  sample = @best_sample || @doc.root )
            #  ERGO  use to_xml? or what?
-    @failure_message = "\nCould not find this reference...\n\n" +
+    @failure_message = "#{message}\n".lstrip +
+                       "\nCould not find this reference...\n\n" +
                           refered.to_xhtml.sub(/^\<\!DOCTYPE.*/, '') +
                      "\n\n...in this sample...\n\n" +
                           sample.to_xml
@@ -297,13 +299,21 @@ module Test; module Unit; module Assertions
 
   def wrap_expectation whatever;  yield;  end unless defined? wrap_expectation
 
-  def assert_xhtml(xhtml = @response.body, &block)  # ERGO merge
+  def assert_xhtml(*args, &block)  # ERGO merge
+    xhtml, message = args
+    
+    if @response and message.nil?
+      message = xhtml
+      xhtml = @response.body
+    end
+    
     if block
       matcher = BeHtmlWith.new(self, &block)
+      matcher.message = message
       matcher.matches?(xhtml, &block)
       message = matcher.failure_message
       flunk message if message.to_s != ''
-#       return matcher.builder.doc.to_html # TODO return something reasonable
+#      return matcher.builder.doc.to_html # TODO return something reasonable
     else
      _assert_xml(xhtml)
       return @xdoc
@@ -321,13 +331,6 @@ end; end
 class Nokogiri::XML::Node
       def content= string
         self.native_content = encode_special_chars(string.to_s)
-      end
-end
-
-class Nokogiri::XML::Builder
-      def text(string)
-        node = Nokogiri::XML::Text.new(string.to_s, @doc)
-        insert(node)
       end
 end  #  ERGO  retire these monkey patches as Nokogiri catches up
 

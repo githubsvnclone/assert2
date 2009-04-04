@@ -48,7 +48,7 @@ module Test; module Unit; module Assertions
     rjs.send command, command, target do |div_id, html|
       assert_match matcher, html, 
   "#{ command } for ID #{ target } has incorrect payload, in #{ js }"
-      assert_xhtml html, &block if block
+      assert_xhtml html, '', &block if block
       return html
     end
     

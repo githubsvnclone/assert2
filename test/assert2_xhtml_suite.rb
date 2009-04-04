@@ -136,6 +136,28 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     assert(diagnostic){ diagnostic =~ /first_nome/ }
   end
 
+  def test_diagnostic_message
+    assert_flunk /whatever .* moodel/mx do
+      assert_xhtml SAMPLE_LIST, 'whatever' do
+        li 'moodel'
+      end
+    end
+    
+    @response = OpenStruct.new(:body => SAMPLE_LIST)
+
+    assert_flunk /whatever .* moodel/mx do
+      assert_xhtml 'whatever' do
+        li 'moodel'
+      end
+    end
+
+    assert_flunk /whatever .* moodel/mx do
+      assert_xhtml SAMPLE_LIST, 'whatever' do
+        li 'moodel'
+      end
+    end
+  end  #  TODO  diagnostic message for be_html_with!
+
   def test_censor_bangs
     assert_xhtml '<select/>' do  select! end
 
