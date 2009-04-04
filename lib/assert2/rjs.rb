@@ -8,22 +8,29 @@ require 'assert2/xhtml'
 module Test; module Unit; module Assertions
 
   class AssertRjs
-    def initialize(js)
+    def initialize(js, scope)
       @ast = RKelly.parse(@js = js)
       @command = self.class.name.downcase.to_sym
+      @scope = scope
     end
-    attr_reader :passed
-    attr_reader :command
+
+    attr_reader :command, :passed, :scope
+
+    def match(kode)
+      @ast.pointcut(kode).matches.each do |updater|
+        updater.grep(RKelly::Nodes::ArgumentsNode).each do |thang|
+          yield thang
+        end
+      end
+    end
 
     class ALERT < AssertRjs
       def pwn matcher, &block
-        @ast.pointcut('alert()').matches.each do |updater|
-          updater.grep(RKelly::Nodes::ArgumentsNode).each do |thang|
-            text = thang.value.first
-            text = eval(text.value)
-            @passed = text =~ /#{matcher}/ or text.index(matcher.to_s)
-            return text 
-          end
+        match 'alert()' do |thang|
+          text = thang.value.first
+          text = eval(text.value)
+          @passed = text =~ /#{matcher}/ or text.index(matcher.to_s)
+          return text 
         end
         
         return nil
@@ -32,16 +39,15 @@ module Test; module Unit; module Assertions
     
     class REPLACE_HTML < AssertRjs
       def pwn target, &block
-        @ast.pointcut('Element.update()').matches.each do |updater|
-          updater.grep(RKelly::Nodes::ArgumentsNode).each do |thang|
-            div_id, html = thang.value
+        match 'Element.update()' do |thang|
+          div_id, html = thang.value
+          
+          if target and html
+            div_id = eval(div_id.value)
+            html   = eval(html.value)
             
-            if target and html
-              div_id = eval(div_id.value)
-              html   = eval(html.value)
-              if div_id == target.to_s
-                block.call(div_id, html)
-              end
+            if div_id == target.to_s
+              block.call(div_id, html)
             end
           end
         end
@@ -52,7 +58,7 @@ module Test; module Unit; module Assertions
 
   def assert_rjs(command, target, matcher = //, &block)
     klass = command.to_s.upcase
-    rjs = eval("AssertRjs::#{klass}").new(js = @response.body)
+    rjs = eval("AssertRjs::#{klass}").new(js = @response.body, self)
     
 #     command == :replace_html or  #  TODO  put me inside the method_missing!
 #       flunk("assert_rjs's alpha version only respects :replace_html")
