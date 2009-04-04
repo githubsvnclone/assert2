@@ -133,11 +133,12 @@ class AssertRjsSuite < ActionController::TestCase
       input.cross_sale_1! :type => :hidden, :value => 7
     end
     
-    assert_flunk /Top_Ranking/ do
+    assert_flunk /replace_html for ID lay_belle_7 not found in.*Top_Ranking/ do
       assert_rjs :replace_html, :lay_belle_7
     end
-    
   end
+
+  # ERGO add "interrupt-and-integrate" to autotask
   
   def test_alert
     get :alert
