@@ -175,9 +175,14 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
     text = rjs.alert :alert, 'This is an alert'
     assert{ text == 'This is an alert' }
     text = rjs.alert :alert, 'This is not an alert'
-    deny{ text }
-    
+    assert{ !rjs.passed and text == 'This is an alert' }
     assert_rjs :alert, 'This is an alert'
+    
+    assert_flunk /alert.has.incorrect.payload .* 
+                  drill .*
+                  alert .* This.is.an.alert/mx do
+      assert_rjs :alert, 'This is not a drill'
+    end
     
   end
 

@@ -8,7 +8,8 @@ require 'assert2/xhtml'
 module Test; module Unit; module Assertions
 
   class AssertRjs
-    def initialize(js); @ast = RKelly.parse(@js = js); end
+    def initialize(js);  @ast = RKelly.parse(@js = js);  end
+    attr_reader :passed
     
     def replace_html command, target, &block
       @ast.pointcut('Element.update()').matches.each do |updater|
@@ -32,7 +33,8 @@ module Test; module Unit; module Assertions
         updater.grep(RKelly::Nodes::ArgumentsNode).each do |thang|
           text = thang.value.first
           text = eval(text.value)
-          return text if text =~ /#{matcher}/ or text.index(matcher.to_s)
+          @passed = text =~ /#{matcher}/ or text.index(matcher.to_s)
+          return text 
         end
       end
       return false
@@ -48,7 +50,8 @@ module Test; module Unit; module Assertions
 
     if command == :alert
       text = rjs.alert(:alert, target)
-      text and return text
+      rjs.passed or flunk("#{ command } has incorrect payload. #{ target.inspect } should match #{ js }")
+      return text
     else
       rjs.send command, command, target do |div_id, html|
         cornplaint = "#{ command } for ID #{ target } has incorrect payload, in #{ js }"
