@@ -48,7 +48,6 @@ module Test; module Unit; module Assertions
 
     if command == :alert
       text = rjs.alert(:alert, target)
-      p text
       text and return text
     else
       rjs.send command, command, target do |div_id, html|
