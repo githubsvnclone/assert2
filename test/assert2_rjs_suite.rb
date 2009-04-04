@@ -134,19 +134,56 @@ class AssertRjsSuite < ActionController::TestCase
     end
   end
   
-#   def setup
-#     @controller = ArtsController.new
-#     @request = ActionController::TestRequest.new
-#     @response = ActionController::TestResponse.new
-#   end  
-  
   def test_alert
     get :alert
-    return 
-    puts @response.body
     rjs = AssertRjs.new(js = @response.body)
     text = rjs.alert :alert, 'This is an alert'
     assert{ text == 'This is an alert' }
+    text = rjs.alert :alert, 'This is not an alert'
+    deny{ text }
+  end
+
+
+  def test_assign
+    get :assign
+    
+#     assert_nothing_raised { assert_rjs :assign, 'a', '2' }
+#     assert_raises(Test::Unit::AssertionFailedError) do
+#       assert_rjs :assign, 'a', '3'
+#     end
+#     
+#     assert_nothing_raised { assert_no_rjs :assign, 'a', '3' }
+#     assert_raises(Test::Unit::AssertionFailedError) do
+#       assert_no_rjs :assign, 'a', '2'
+#     end
   end
   
+  def test_call
+    get :call
+    
+#     assert_nothing_raised { assert_rjs :call, 'foo', 'bar', 'baz' }
+#     assert_raises(Test::Unit::AssertionFailedError) do
+#       assert_rjs :call, 'foo', 'bar'
+#     end
+#     
+#     assert_nothing_raised { assert_no_rjs :call, 'foo', 'bar' }
+#     assert_raises(Test::Unit::AssertionFailedError) do
+#       assert_no_rjs :call, 'foo', 'bar', 'baz'
+#     end
+  end
+  
+  def test_draggable
+    get :draggable
+    
+#     assert_nothing_raised { assert_rjs :draggable, 'my_image', :revert => true }
+#     assert_raises(Test::Unit::AssertionFailedError) do
+#       assert_rjs :draggable, 'not_my_image'
+#     end
+#     
+#     assert_nothing_raised { assert_no_rjs :draggable, 'not_my_image' }
+#     assert_raises(Test::Unit::AssertionFailedError) do
+#       assert_no_rjs :draggable, 'my_image', :revert => true
+#     end
+  end
+
 end

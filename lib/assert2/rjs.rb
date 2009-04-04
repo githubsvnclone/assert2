@@ -10,7 +10,7 @@ module Test; module Unit; module Assertions
   class AssertRjs
     def initialize(js); @ast = RKelly.parse(@js = js); end
     
-    def replace_html(command, target, &block)
+    def replace_html command, target, &block
       @ast.pointcut('Element.update()').matches.each do |updater|
         updater.grep(RKelly::Nodes::ArgumentsNode).each do |thang|
           div_id, html = thang.value
@@ -22,6 +22,17 @@ module Test; module Unit; module Assertions
               block.call(div_id, html)
             end
           end
+        end
+      end
+      return false
+    end
+    
+    def alert command, matcher, &block
+      @ast.pointcut('alert()').matches.each do |updater|
+        updater.grep(RKelly::Nodes::ArgumentsNode).each do |thang|
+          text = thang.value.first
+          text = eval(text.value)
+          return text if text =~ /#{matcher}/ or text.index(matcher.to_s)
         end
       end
       return false
