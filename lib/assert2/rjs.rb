@@ -1,5 +1,9 @@
-$:.unshift '~/projects/ruby/rkelly/lib'  #  TODO  correct path!
+require 'rkelly/visitors'  #  ERGO  advise AP these requirers are broke!
+require 'rkelly/visitable'
+require 'rkelly/nodes/node'
+require 'rkelly/nodes/postfix_node'
 require 'rkelly'
+require 'assert2/xhtml'
 
 module Test; module Unit; module Assertions
 
@@ -15,8 +19,6 @@ module Test; module Unit; module Assertions
         if target and html
           div_id = eval(div_id.value)
           html   = eval(html.value)
-p target
-p html
           if div_id == target.to_s
             assert_match matcher, html
             return html
