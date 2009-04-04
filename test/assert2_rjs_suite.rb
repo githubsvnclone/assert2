@@ -132,6 +132,11 @@ class AssertRjsSuite < ActionController::TestCase
       input.Top_Ranking! :type => :checkbox, :value => :Y
       input.cross_sale_1! :type => :hidden, :value => 7
     end
+    
+    assert_flunk /Top_Ranking/ do
+      assert_rjs :replace_html, :lay_belle_7
+    end
+    
   end
   
   def test_alert
