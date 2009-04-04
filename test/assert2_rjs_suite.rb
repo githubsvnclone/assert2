@@ -174,8 +174,11 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
     rjs = AssertRjs::ALERT.new(@response.body, self)
     text = rjs.pwn 'This is an alert'
     assert{ text == 'This is an alert' }
-    text = rjs.pwn 'This is not an alert'
-    assert{ !rjs.passed and text == 'This is an alert' }
+    
+    assert_flunk /incorrect payload/ do
+      text = rjs.pwn 'This is not an alert'
+    end
+
     assert_rjs :alert, 'This is an alert'
     
     assert_flunk /alert.has.incorrect.payload .* 

@@ -10,7 +10,7 @@ module Test; module Unit; module Assertions
   class AssertRjs
     def initialize(js, scope)
       @ast = RKelly.parse(@js = js)
-      @command = self.class.name.downcase.to_sym
+      @command = self.class.name.downcase.split('::').last.to_sym  # TODO  uh.. elegantly??
       @scope = scope
     end
 
@@ -30,10 +30,12 @@ module Test; module Unit; module Assertions
           text = thang.value.first
           text = eval(text.value)
           @passed = text =~ /#{matcher}/ or text.index(matcher.to_s)
+          @passed or  # TODO  retire passed?!
+      scope.flunk("#{ command } has incorrect payload. #{ matcher.inspect } should match #{ js }")
           return text 
         end
         
-        return nil
+        scope.flunk("#{ command } not found in #{ js }")
       end
     end
     
@@ -66,11 +68,10 @@ module Test; module Unit; module Assertions
 #     command == :replace_html or  #  TODO  put me inside the method_missing!
 #       flunk("assert_rjs's alpha version only respects :replace_html")
 #   TODO  also crack out the args correctly and gripe if they wrong
+#  TODO TDD the matcher can be a string or regexp
 
     if command == :alert
       text = rjs.pwn(target)
-      text or flunk("#{ command } not found in #{ js }")
-      rjs.passed or flunk("#{ command } has incorrect payload. #{ target.inspect } should match #{ js }")
       return text
     else
       html = rjs.pwn(target, matcher, &block)
