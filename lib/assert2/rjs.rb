@@ -14,7 +14,7 @@ module Test; module Unit; module Assertions
       @scope = scope
     end
 
-    attr_reader :command, :passed, :scope
+    attr_reader :command, :js, :passed, :scope
 
     def match(kode)
       @ast.pointcut(kode).matches.each do |updater|
@@ -38,7 +38,7 @@ module Test; module Unit; module Assertions
     end
     
     class REPLACE_HTML < AssertRjs
-      def pwn target, &block
+      def pwn target, matcher, &block
         match 'Element.update()' do |thang|
           div_id, html = thang.value
           
@@ -47,7 +47,9 @@ module Test; module Unit; module Assertions
             html   = eval(html.value)
             
             if div_id == target.to_s
-              block.call(div_id, html)
+              cornplaint = "#{ command } for ID #{ target } has incorrect payload, in #{ js }"
+              scope.assert_match matcher, html, cornplaint
+              block.call(div_id, html, cornplaint)
             end
           end
         end
@@ -70,9 +72,7 @@ module Test; module Unit; module Assertions
       rjs.passed or flunk("#{ command } has incorrect payload. #{ target.inspect } should match #{ js }")
       return text
     else
-      rjs.pwn target do |div_id, html|
-        cornplaint = "#{ command } for ID #{ target } has incorrect payload, in #{ js }"
-        assert_match matcher, html, cornplaint
+      rjs.pwn target, matcher do |div_id, html, cornplaint|
         assert_xhtml html, cornplaint, &block if block
         return html
       end
