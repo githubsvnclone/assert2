@@ -9,12 +9,10 @@ module Test; module Unit; module Assertions
 
   class AssertRjs
     def initialize(js, command, scope)
-      @js      = js
-      @command = command
-      @scope   = scope
+      @js, @command, @scope = js, command, scope
     end
 
-    attr_reader :command, :js, :passed, :scope
+    attr_reader :command, :js, :scope
 
     def match(kode)
       ast = RKelly.parse(@js = js)
@@ -32,8 +30,8 @@ module Test; module Unit; module Assertions
         match 'alert()' do |thang|
           text = thang.value.first
           text = eval(text.value)
-          @passed = text =~ /#{matcher}/ or text.index(matcher.to_s)
-          @passed or  # TODO  retire passed?!
+          passed = text =~ /#{matcher}/ or text.index(matcher.to_s)
+          passed or 
       scope.flunk("#{ command } has incorrect payload. #{ matcher.inspect } should match #{ js }")
           return text 
         end
