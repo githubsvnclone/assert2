@@ -46,9 +46,9 @@ module Test; module Unit; module Assertions
       flunk("assert_rjs's alpha version only respects :replace_html")
       
     rjs.send command, command, target do |div_id, html|
-      assert_match matcher, html, 
-  "#{ command } for ID #{ target } has incorrect payload, in #{ js }"
-      assert_xhtml html, '', &block if block
+      cornplaint = "#{ command } for ID #{ target } has incorrect payload, in #{ js }"
+      assert_match matcher, html, cornplaint
+      assert_xhtml html, cornplaint, &block if block
       return html
     end
     

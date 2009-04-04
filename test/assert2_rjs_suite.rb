@@ -34,14 +34,14 @@ class AssertRjsSuite < Test::Unit::TestCase
       assert_rjs :replace_html, :label_7, /Toop_Roonking/
     end
 
-x = assert_flunk /Could.not.find.this.reference .* 
+    assert_flunk /replace_html.for.ID.label_7.has.incorrect.payload .*
+                  Could.not.find.this.reference .* 
                      Top_Ranking/mx do
       assert_rjs :replace_html, :label_7 do
         input.Top_Ranking! :type => :checkbox, :value => :Y
         input.cross_sale_1! :type => :hidden, :valyoo => 7
       end
     end
-    puts x
   end
 
 end
