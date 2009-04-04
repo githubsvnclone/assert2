@@ -25,7 +25,9 @@ module Test; module Unit; module Assertions
     end
 
     class ALERT < AssertRjs
-      def pwn matcher, &block
+      def pwn target, matcher, &block
+        matcher = target
+
         match 'alert()' do |thang|
           text = thang.value.first
           text = eval(text.value)
@@ -38,7 +40,7 @@ module Test; module Unit; module Assertions
         scope.flunk("#{ command } not found in #{ js }")
       end
     end
-    
+
     class REPLACE_HTML < AssertRjs
       def pwn target, matcher, &block
         match 'Element.update()' do |thang|
@@ -56,6 +58,7 @@ module Test; module Unit; module Assertions
             end
           end
         end
+
         return false
       end
     end
@@ -71,7 +74,7 @@ module Test; module Unit; module Assertions
 #  TODO TDD the matcher can be a string or regexp
 
     if command == :alert
-      text = rjs.pwn(target)
+      text = rjs.pwn(target, matcher, &block)
       return text
     else
       html = rjs.pwn(target, matcher, &block)
