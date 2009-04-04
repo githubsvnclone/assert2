@@ -118,21 +118,23 @@ class AssertRjsStubController < ActionController::Base
 end
 
 
-# class AssertRjsSuite < Test::Unit::TestCase
-class AssertRjsSuite < ActionController::TestCase
-  tests AssertRjsStubController
-  
-  def test_assert_rjs
+class AssertRjsSuite < Test::Unit::TestCase  #  TODO  move me up
+  def setup
     @response = OpenStruct.new(:body => "Element.update(\"label_7\", \"<input checked=\\\"checked\\\" id=\\\"Top_Ranking\\\" name=\\\"Top_Ranking\\\" type=\\\"checkbox\\\" value=\\\"Y\\\" \\/>I want a pet &lt; than a chihuahua<input id=\\\"cross_sale_1\\\" name=\\\"cross_sale_1\\\" type=\\\"hidden\\\" value=\\\"7\\\" \\/>\");")
-    
+  end
+  
+  def test_assert_rjs_passes
     assert_rjs :replace_html, :label_7
     assert_rjs :replace_html, :label_7, /Top_Ranking/
     assert_rjs :replace_html, :label_7, /pet &lt; than a chihuahua/ # ERGO ouch!
+    
     assert_rjs :replace_html, :label_7 do
       input.Top_Ranking! :type => :checkbox, :value => :Y
       input.cross_sale_1! :type => :hidden, :value => 7
     end
-    
+  end
+
+  def test_assert_rjs_flunks
     assert_flunk /replace_html.for.ID.lay_belle_7.not.found.in .*
                        Top_Ranking/mx do
       assert_rjs :replace_html, :lay_belle_7
@@ -151,6 +153,15 @@ x = assert_flunk /Could.not.find.this.reference .*
       end
     end
     puts x
+  end
+
+end
+
+class AssertRjsStubControllerSuite < ActionController::TestCase
+  tests AssertRjsStubController
+  
+  def test_assert_rjs_misses_its_response_body
+     #  TODO  test that a missing response_body provides a good error
   end
 
   # ERGO add "interrupt-and-integrate" to autotask
