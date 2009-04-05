@@ -116,16 +116,18 @@ An element such as h3{ 'text' } will match <h3> text </h3>, with leading and
 trailing blanks, but it won't match <h3><span>text</span></h3>. This rule
 prevents runaway matches between high- and low-level elements.
 
-The example for the next section illustrates how to mix text and attribute
-specifications on the same element.
+A text specification may be a /regexp/, and an element may contain both text 
+and attributes:
 
-A text specification may be a /regexp/.
+  h2 /Sites/, :style => /right/
+
+The next section illustrates the text() directive.
 
 === :xpath!=> ===
 
-assert_xhtml works by throwing away structural information. If you need
-more control over your structure, use an :xpath! attribute to apply raw 
-XPath specifications to your target elements.
+assert_xhtml works by throwing away structural information. If your document
+structure is more unruly and wild, it might need more constraints. Use an :xpath!
+attribute to apply raw XPath specifications to your target elements.
 
 This assertion detect the rather pedestrian fact that your <title>
 element remains inside your <html><head> block - and it did not
@@ -137,9 +139,9 @@ escape and rampage off to somewhere else:
       end
     end
 
-That code also shows the 'text' directive, inserting text contents directly
-into the enclosing element. A future version of Nokogiri will allow the 
-element's first argument to specify its text.
+(That code also shows the 'text' directive, inserting text contents directly
+into the enclosing element. Sometimes the directive is the most convenient
+way to specify the content.)
 
 An :xpath! of a number evaluates to the 1-based index of an item in its
 parent. This assertion forces list items to appear in the correct order:

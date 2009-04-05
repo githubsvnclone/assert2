@@ -115,7 +115,7 @@ module Test; module Unit; module Assertions
     end
   end
 
-  def assert_rjs(command, *args, &block)
+  def assert_rjs_(command, *args, &block)
     klass = command.to_s.upcase
     klass = eval("AssertRjs::#{klass}") rescue
       flunk("#{command} not implemented!")

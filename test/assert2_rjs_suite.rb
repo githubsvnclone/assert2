@@ -13,11 +13,11 @@ class AssertRjsSuite < Test::Unit::TestCase
   end
   
   def test_assert_rjs_passes
-    assert_rjs :replace_html, :label_7
-    assert_rjs :replace_html, :label_7, /Top_Ranking/
-    assert_rjs :replace_html, :label_7, /pet &lt; than a chihuahua/ # ERGO ouch!
+    assert_rjs_ :replace_html, :label_7
+    assert_rjs_ :replace_html, :label_7, /Top_Ranking/
+    assert_rjs_ :replace_html, :label_7, /pet &lt; than a chihuahua/ # ERGO ouch!
     
-    assert_rjs :replace_html, :label_7 do
+    assert_rjs_ :replace_html, :label_7 do
       input.Top_Ranking! :type => :checkbox, :value => :Y
       input.cross_sale_1! :type => :hidden, :value => 7
     end
@@ -26,18 +26,18 @@ class AssertRjsSuite < Test::Unit::TestCase
   def test_assert_rjs_flunks
     assert_flunk /replace_html.for.ID.lay_belle_7.not.found.in .*
                        Top_Ranking/mx do
-      assert_rjs :replace_html, :lay_belle_7
+      assert_rjs_ :replace_html, :lay_belle_7
     end
     
     assert_flunk /replace_html.for.ID.label_7.has.incorrect.payload .*
                        Top_Ranking/mx do
-      assert_rjs :replace_html, :label_7, /Toop_Roonking/
+      assert_rjs_ :replace_html, :label_7, /Toop_Roonking/
     end
 
     assert_flunk /replace_html.for.ID.label_7.has.incorrect.payload .*
                   Could.not.find.this.reference .* 
                      Top_Ranking/mx do
-      assert_rjs :replace_html, :label_7 do
+      assert_rjs_ :replace_html, :label_7 do
         input.Top_Ranking! :type => :checkbox, :value => :Y
         input.cross_sale_1! :type => :hidden, :valyoo => 7
       end
@@ -186,18 +186,18 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
       text = rjs.pwn 'This is not an alert'
     end  #  TODO  lower than pwn? easy to test?
 
-    assert_rjs :alert, 'This is an alert'
+    assert_rjs_ :alert, 'This is an alert'
     
 #     assert_flunk /alert.with .*
 #                   This.is.not.a.drill .* 
 #                   alert .* This.is.an.alert/mx do
-#       assert_rjs :alert, 'This is not a drill'
+#       assert_rjs_ :alert, 'This is not a drill'
 #     end
     
     @response = OpenStruct.new(:body => 'negatory()')
     
 #     assert_flunk /alert not found in.*negatory/m do
-#       assert_rjs :alert, 'This is an alert'
+#       assert_rjs_ :alert, 'This is an alert'
 #     end
   end
 
@@ -205,9 +205,9 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
   def test_assign
     get :assign
     
-#     assert_nothing_raised { assert_rjs :assign, 'a', '2' }
+#     assert_nothing_raised { assert_rjs_ :assign, 'a', '2' }
 #     assert_raises(Test::Unit::AssertionFailedError) do
-#       assert_rjs :assign, 'a', '3'
+#       assert_rjs_ :assign, 'a', '3'
 #     end
 #     
 #     assert_nothing_raised { assert_no_rjs :assign, 'a', '3' }
@@ -218,21 +218,21 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
 
   def test_call
     get :call
-    assert_rjs :call, 'foo', 'bar', 'baz'
+    assert_rjs_ :call, 'foo', 'bar', 'baz'
 
     assert_flunk /foo .* not.found.in .* 
                   foo\("bar",."baz"\)/mx do
-      assert_rjs :call, 'foo', 'bar'
+      assert_rjs_ :call, 'foo', 'bar'
     end
 
     assert_flunk /frob .* not.found.in .* 
                   foo\("bar",."baz"\)/mx do
-      assert_rjs :call, :frob, :bar, :baz
+      assert_rjs_ :call, :frob, :bar, :baz
     end
 
     assert_flunk /zap .* not.found.in .* 
                   foo\("bar",."baz"\)/mx do
-      assert_rjs :call, :foo, :bar, :zap
+      assert_rjs_ :call, :foo, :bar, :zap
     end
 
 #     assert_nothing_raised{ assert_no_rjs :call, 'foo', 'bar' }
@@ -247,22 +247,22 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
 
   def test_call_twice
     get :call_twice
-    assert_rjs :call, 'foo', 'bar', 'baz'
+    assert_rjs_ :call, 'foo', 'bar', 'baz'
 
     assert_flunk /foo .* not.found.in .* 
                   foo\("bar",."baz"\)/mx do
-      assert_rjs :call, 'foo', 'bar'
+      assert_rjs_ :call, 'foo', 'bar'
     end
 
     assert_flunk /frob.with.arguments .* bar .* baz .* 
                   not.found.in .* 
                   foo\("bar",."baz"\)/mx do
-      assert_rjs :call, :frob, :bar, :baz
+      assert_rjs_ :call, :frob, :bar, :baz
     end
 
     assert_flunk /zap .* not.found.in .* 
                  foo\("bar",."baz"\)/mx do
-      assert_rjs :call, :foo, :bar, :zap
+      assert_rjs_ :call, :foo, :bar, :zap
     end
 
 #     assert_nothing_raised { assert_no_rjs :call, 'foo', 'bar' }
@@ -274,9 +274,9 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
   def test_draggable
     get :draggable
     
-#     assert_nothing_raised { assert_rjs :draggable, 'my_image', :revert => true }
+#     assert_nothing_raised { assert_rjs_ :draggable, 'my_image', :revert => true }
 #     assert_raises(Test::Unit::AssertionFailedError) do
-#       assert_rjs :draggable, 'not_my_image'
+#       assert_rjs_ :draggable, 'not_my_image'
 #     end
 #     
 #     assert_nothing_raised { assert_no_rjs :draggable, 'not_my_image' }
@@ -289,12 +289,12 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
     get :remove
     
     assert_nothing_raised do
-      assert_rjs :remove, 'offending_div'
+      assert_rjs_ :remove, 'offending_div'
 #      assert_no_rjs :remove, 'dancing_happy_div'
     end
     
     assert_raises(Test::Unit::AssertionFailedError) do 
-      assert_rjs :remove, 'dancing_happy_div'
+      assert_rjs_ :remove, 'dancing_happy_div'
     end
     
 #     assert_raises(Test::Unit::AssertionFailedError) do 
@@ -307,13 +307,13 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
     
     assert_nothing_raised do
       # No content matching
-      assert_rjs :replace, 'person_45'
+      assert_rjs_ :replace, 'person_45'
       # String content matching
-      assert_rjs :replace, 'person_45', '<div>This replaces person_45</div>'
+      assert_rjs_ :replace, 'person_45', '<div>This replaces person_45</div>'
       # regexp content matching
-      assert_rjs :replace, 'person_45', /<div>.*person_45.*<\/div>/
+      assert_rjs_ :replace, 'person_45', /<div>.*person_45.*<\/div>/
       # assert_xhtml
-      assert_rjs :replace, 'person_45', /<div>.*person_45.*<\/div>/ do
+      assert_rjs_ :replace, 'person_45', /<div>.*person_45.*<\/div>/ do
         div /person_45/
       end
       
@@ -324,14 +324,14 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
     
 #     assert_raises(Test::Unit::AssertionFailedError) { assert_no_rjs :replace, 'person_45' }
 #     assert_raises(Test::Unit::AssertionFailedError) { assert_no_rjs :replace, 'person_45', /person_45/ }
-    assert_raises(Test::Unit::AssertionFailedError) { assert_rjs :replace, 'person_46' }
-    assert_raises(Test::Unit::AssertionFailedError) { assert_rjs :replace, 'person_45', 'bad stuff' }
-    assert_raises(Test::Unit::AssertionFailedError) { assert_rjs :replace, 'person_45', /not there/}
+    assert_raises(Test::Unit::AssertionFailedError) { assert_rjs_ :replace, 'person_46' }
+    assert_raises(Test::Unit::AssertionFailedError) { assert_rjs_ :replace, 'person_45', 'bad stuff' }
+    assert_raises(Test::Unit::AssertionFailedError) { assert_rjs_ :replace, 'person_45', /not there/}
   end
 
   def test_whatever
     assert_flunk /whatever not implemented/ do
-      assert_rjs :whatever
+      assert_rjs_ :whatever
     end
   end
 
