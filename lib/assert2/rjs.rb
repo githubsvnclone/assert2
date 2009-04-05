@@ -15,14 +15,15 @@ module Test; module Unit; module Assertions
     attr_reader :command, :js, :scope
 
     def match(kode)
-      ast = RKelly.parse(@js = js)
-      
-      ast.pointcut(kode).matches.each do |updater|
+      RKelly.parse(js).pointcut(kode).
+          matches.each do |updater|
         updater.grep(RKelly::Nodes::ArgumentsNode).each do |thang|
           yield thang
         end
       end
     end
+
+#  TODO  implement assert_no_rjs by upgrading scope to UnScope
 
     def complain(about)
       "#{ command } #{ about }\n#{ js }"
@@ -32,32 +33,46 @@ module Test; module Unit; module Assertions
       scope.flunk(complain(about))
     end
 
-    def match_or_flunk(why)
-      @text =~ /#{@matcher}/ or 
-        @text == @matcher.to_s or
-        flunk why
+    def match_or_flunk(why)  
+      @matcher = @matcher.to_s if @matcher.kind_of?(Symbol)
+      scope.assert_match @matcher, @text, complain(why)
     end
 
     def pwn_call *args, &block  #  TODO  use or reject the block
-      target, matchers = args[0], args[1..-1]
+      target, matchers_backup = args[0], args[1..-1]
       
       match "#{target}()" do |thang|
+        matchers = matchers_backup.dup
+        
         thang.value.each do |arg|
           @text = eval(arg.value)
-          @matcher = matchers.shift or return @text
-          match_or_flunk "to #{target} with #{ @matcher.inspect } not found in"
+          @matcher = matchers.first # or return @text
+          @matcher.to_s == @text or /#{ @matcher }/ =~ @text or break
+          matchers.shift
         end
         
-        matchers.empty? and return @text
+        matchers.empty? and 
+          matchers_backup.length == thang.value.length and 
+          return @text 
       end
       
-      scope.flunk("#{ command } to #{ target } not found in #{ js }")
+      matchers = matchers_backup.inspect
+
+      scope.flunk("#{ command } to #{ target } with arguments #{ 
+                        matchers } not found in #{ js }")
     end
 
     class ALERT < AssertRjs
       def pwn *args, &block
         @command = :call
         pwn_call :alert, *args, &block
+      end
+    end
+
+    class REMOVE < AssertRjs
+      def pwn *args, &block
+        @command = :call
+        pwn_call 'Element.remove', *args, &block
       end
     end
 
@@ -72,30 +87,39 @@ module Test; module Unit; module Assertions
         target, @matcher = args
         @matcher ||= //
         
-        match 'Element.update()' do |thang|
+        match concept do |thang|
           div_id, html = thang.value
           
           if target and html
             div_id = eval(div_id.value)
-            html   = eval(html.value)
-            
+            html   = html.value.gsub('\u003C', '<').
+                                gsub('\u003E', '>')  #  ERGO  give a crap about encoding! 
+            html   = eval(html)
+
             if div_id == target.to_s
               cornplaint = complain("for ID #{ target } has incorrect payload, in")
-              scope.assert_match @matcher, html, cornplaint
+              scope.assert_match @matcher, html, cornplaint if @matcher
               scope.assert_xhtml html, cornplaint, &block if block
               return html
             end
           end
         end
 
-        scope.flunk "#{ command } for ID #{ target } not found in #{ js }"
+        flunk "for ID #{ target } not found in"
       end
+      def concept;  'Element.update()';  end
+    end
+    
+    class REPLACE < REPLACE_HTML
+      def concept;  'Element.replace()';  end
     end
   end
 
   def assert_rjs(command, *args, &block)
-    klass    = command.to_s.upcase
-    asserter = eval("AssertRjs::#{klass}").new(@response.body, command, self)
+    klass = command.to_s.upcase
+    klass = eval("AssertRjs::#{klass}") rescue
+      flunk("#{command} not implemented!")
+    asserter = klass.new(@response.body, command, self)
     return asserter.pwn(*args, &block)
   end
     

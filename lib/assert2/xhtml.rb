@@ -78,7 +78,7 @@ class BeHtmlWith
                 :sample
 
   def matches?(stwing, &block)
-    @block = block
+    @block ||= block  #  ERGO  test that ||= - preferrably with a real RSpec suite!
 
     @scope.wrap_expectation self do
       @doc = Nokogiri::HTML(stwing)
