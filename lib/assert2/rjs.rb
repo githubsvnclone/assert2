@@ -1,6 +1,7 @@
 require 'rkelly/visitors'  #  ERGO  advise AP these requirers are broke!
 require 'rkelly/visitable'
 require 'rkelly/nodes/node'
+require 'rkelly/nodes/binary_node'
 require 'rkelly/nodes/postfix_node'
 require 'rkelly'
 require 'assert2/xhtml'

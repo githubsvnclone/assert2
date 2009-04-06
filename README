@@ -9,7 +9,7 @@ To begin, grab it with:
 
   gem install nokogiri assert2
 
-== require 'assert2/xhtml' ==
+==require 'assert2/xhtml'==
 
 All assert{ 2.0 } dependencies are optional. If you have Nokogiri 
 (>=1.2.2), you can test Rails views like this:
@@ -40,12 +40,12 @@ and complains if any required detail is missing, out of order, or ill-formed.
 The DSL inside that block is Nokogiri::HTML::Builder notation. Generally
 speaking, anything Nokogiri can build, you can specify.
 
-=== arguments ===
+===arguments===
 
 Call assert_xhtml(my_xml){} to interrogate your XML. When called without
 an argument, the method reads @response.body.
 
-=== without! ===
+===without!===
 
 Every assert* has a matching deny* method. assert_xhtml recognizes the
 special element without! as a request to fail if the given elements
@@ -95,7 +95,7 @@ does not associate them.
 The committee does not yet know what without!{ without!{} } does, so please
 do not rely on its current behavior, whatever that is!
 
-=== escapes ===
+===escapes===
 
 Certain elements, such as <select> and <id>, have the same names as internal
 methods. If you experience a bizarre error message, such as "wrong argument 
@@ -110,7 +110,7 @@ type Hash (expected Array)", add a ! to the end of the element, like this:
               :size => SaleController::LIST_SIZE
     end
 
-=== text ===
+===text===
 
 An element such as h3{ 'text' } will match <h3> text </h3>, with leading and
 trailing blanks, but it won't match <h3><span>text</span></h3>. This rule
@@ -123,7 +123,7 @@ and attributes:
 
 The next section illustrates the text() directive.
 
-=== :xpath!=> ===
+===:xpath!=>===
 
 assert_xhtml works by throwing away structural information. If your document
 structure is more unruly and wild, it might need more constraints. Use an :xpath!
@@ -156,7 +156,7 @@ parent. This assertion forces list items to appear in the correct order:
       end
     end
 
-=== :verbose! => true ===
+===:verbose! => true===
 
 Sometimes when an assertion fails, you can't tell why. To see each 
 context the assertion considers, add :verbose! => true to the lowest 
@@ -176,7 +176,7 @@ each considered element's contents.
 Because XPath evaluates the <label>, in our example, before the <li>, you
 might need to comment the <label> out to see a successful spew on the <li>.
 
-=== scope ===
+===scope===
 
 assert_xhtml{} yields its block to Nokogiri::HTML::Builder, which turns
 every method call into an HTML element. This freedom comes at a price -
@@ -197,7 +197,7 @@ Notice we could improve that test by declaring a variable,
 user = users(:Moses), in the outer scope, and simply passing
 the user variable itself into the specification.
 
-=== :class=> ===
+===:class=>===
 
 The :class attribute is magic. This assertion passes...
 
@@ -211,14 +211,14 @@ The :class attribute is magic. This assertion passes...
 simulates the CSS Selector notation that matches classes by their cascading 
 effects.
 
-=== class & ID shortcuts ===
+===class & ID shortcuts===
 
 Nokogiri expands div.rad.thing! to <div class='rad' id='thing'/>. That 
 means you don't need to write div :class => 'rad', :id => 'thing' (or 
 ul :class => :kalika). You can then put other arguments after the shortcut,
 and the <div> in our example receives them, too.
 
-=== diagnostic message ===
+===diagnostic message===
 
 When this assertion fails, it prints out...
 
@@ -246,7 +246,7 @@ Do this:
 That is guaranteed to match the first <ul id='my_unordered_list'> in your
 document.
 
-=== RSpec ===
+===RSpec===
 
 The matching "specification", in RSpec language, is be_html_with{}.
 Its syntax and behavior are the same:
