@@ -335,6 +335,22 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
     end
   end
 
+  def negator(asserter)
+    def asserter.flunk(why)
+  
+        @charlie_you_won = true
+  
+    end
+#     asserter.attr_reader :charlie_you_won
+  end
+
+  def test_Negator
+    caller = AssertRjs::CALL.new('foo(42)', :call, self)
+    negator(caller)
+    caller.flunk('because')
+    assert{ caller.charlie_you_won }
+  end
+
 end
 
 # "It's a big house this, and very peculiar.  Always a bit more to discover,

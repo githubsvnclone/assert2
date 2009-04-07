@@ -13,7 +13,7 @@ module Test; module Unit; module Assertions
       @js, @command, @scope = js, command, scope
     end
 
-    attr_reader :command, :js, :scope
+    attr_reader :command, :js, :scope, :charlie_you_won
 
     def match(kode)
       RKelly.parse(js).pointcut(kode).
@@ -38,6 +38,8 @@ module Test; module Unit; module Assertions
       @matcher = @matcher.to_s if @matcher.kind_of?(Symbol)
       scope.assert_match @matcher, @text, complain(why)
     end
+
+#  ERGO  blog about how bottom-up TDD decouples
 
     def assert_xhtml(why, &block)
       scope.assert_xhtml @text, complain(why), &block
