@@ -33,7 +33,7 @@ module Test; module Unit; module Assertions
     def flunk(about)
       scope.flunk(complain(about))
     end
-
+    
     def match_or_flunk(why)  
       @matcher = @matcher.to_s if @matcher.kind_of?(Symbol)
       scope.assert_match @matcher, @text, complain(why)
@@ -99,8 +99,9 @@ module Test; module Unit; module Assertions
 
             if div_id == target.to_s
               cornplaint = complain("for ID #{ target } has incorrect payload, in")
-              scope.assert_match @matcher, html, cornplaint if @matcher
-              scope.assert_xhtml html, cornplaint, &block if block
+              @text = html
+              match_or_flunk cornplaint if @matcher
+              scope.assert_xhtml html, complain(cornplaint), &block if block
               return html
             end
           end
