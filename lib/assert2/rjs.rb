@@ -39,6 +39,10 @@ module Test; module Unit; module Assertions
       scope.assert_match @matcher, @text, complain(why)
     end
 
+    def assert_xhtml(why, &block)
+      scope.assert_xhtml @text, complain(why), &block
+    end
+
     def pwn_call *args, &block  #  TODO  use or reject the block
       target, matchers_backup = args[0], args[1..-1]
       
@@ -101,8 +105,8 @@ module Test; module Unit; module Assertions
               cornplaint = complain("for ID #{ target } has incorrect payload, in")
               @text = html
               match_or_flunk cornplaint if @matcher
-              scope.assert_xhtml html, complain(cornplaint), &block if block
-              return html
+              assert_xhtml cornplaint, &block if block
+              return html  #  TODO  match any html not just the first. Because!
             end
           end
         end
