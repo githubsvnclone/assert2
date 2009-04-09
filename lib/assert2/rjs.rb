@@ -13,7 +13,7 @@ module Test; module Unit; module Assertions
       @js, @command, @scope = js, command, scope
     end
 
-    attr_reader :command, :js, :scope, :charlie_you_won
+    attr_reader :command, :js, :scope, :failure_message
 
     def match(kode)
       RKelly.parse(js).pointcut(kode).
@@ -31,18 +31,28 @@ module Test; module Unit; module Assertions
     end
     
     def flunk(about)
-      scope.flunk(complain(about))
+      @failure_message ||= complain(about)
     end
     
     def match_or_flunk(why)  
+      @text = @text.to_s
       @matcher = @matcher.to_s if @matcher.kind_of?(Symbol)
-      scope.assert_match @matcher, @text, complain(why)
+      return if Regexp.new(@matcher) =~ @text or @text.index(@matcher)
+      @failure_message = scope.build_message(complain(why),
+                                  "<?> expected to be =~\n<?>.", @text, @matcher)
     end
 
 #  ERGO  blog about how bottom-up TDD decouples
+#  ERGO  assert_no_rjs_ ...without! ... oh the humanity!
+
+    def wrap_expectation whatever;  yield;  end unless defined? wrap_expectation
 
     def assert_xhtml(why, &block)
-      scope.assert_xhtml @text, complain(why), &block
+        #  scope.assert_xhtml @text, complain(why), &block      
+      matcher = BeHtmlWith.new(self, &block)
+      matcher.message = complain(why)
+      matcher.matches?(@text, &block)
+      @failure_message = matcher.failure_message
     end
 
     def pwn_call *args, &block  #  TODO  use or reject the block
@@ -65,7 +75,7 @@ module Test; module Unit; module Assertions
       
       matchers = matchers_backup.inspect
 
-      scope.flunk("#{ command } to #{ target } with arguments #{ 
+      flunk("#{ command } to #{ target } with arguments #{ 
                         matchers } not found in #{ js }")
     end
 
@@ -123,12 +133,25 @@ module Test; module Unit; module Assertions
     end
   end
 
-  def assert_rjs_(command, *args, &block)
+  def __interpret_rjs(command, *args, &block)
     klass = command.to_s.upcase
     klass = eval("AssertRjs::#{klass}") rescue
       flunk("#{command} not implemented!")
     asserter = klass.new(@response.body, command, self)
-    return asserter.pwn(*args, &block)
+    sample = asserter.pwn(*args, &block)
+    return sample, asserter
+  end
+    
+  def assert_rjs_(command, *args, &block)
+    sample, asserter = __interpret_rjs(command, *args, &block)
+    flunk(asserter.failure_message) if asserter.failure_message
+    return sample
+  end
+    
+  def assert_no_rjs_(command, *args, &block)
+    sample, asserter = __interpret_rjs(command, *args, &block)
+    flunk('TODO asserter.failure_message') unless asserter.failure_message
+    return sample
   end
     
 #     command == :replace_html or  #  TODO  put me inside the method_missing!

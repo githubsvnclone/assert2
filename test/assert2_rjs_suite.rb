@@ -181,10 +181,8 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
     rjs = AssertRjs::ALERT.new(@response.body, :alert, self)
     text = rjs.pwn 'This is an alert'
     assert{ text == 'This is an alert' }
-
-    assert_flunk /not found in/ do
-      text = rjs.pwn 'This is not an alert'
-    end  #  TODO  lower than pwn? easy to test?
+    text = rjs.pwn 'This is not an alert'
+    assert{ /not found in/ =~ rjs.failure_message }
 
     assert_rjs_ :alert, 'This is an alert'
     
@@ -235,10 +233,11 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
       assert_rjs_ :call, :foo, :bar, :zap
     end
 
-#     assert_nothing_raised{ assert_no_rjs :call, 'foo', 'bar' }
-#     assert_raises(Test::Unit::AssertionFailedError) do
-#       assert_no_rjs :call, 'foo', 'bar', 'baz'
-#     end
+    assert_nothing_raised{ assert_no_rjs_ :call, 'foo', 'bar' }
+
+    assert_raises(Test::Unit::AssertionFailedError) do
+      assert_no_rjs_ :call, 'foo', 'bar', 'baz'
+    end
   end
 
 #  TODO  count all the assertions
@@ -265,10 +264,11 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
       assert_rjs_ :call, :foo, :bar, :zap
     end
 
-#     assert_nothing_raised { assert_no_rjs :call, 'foo', 'bar' }
-#     assert_raises(Test::Unit::AssertionFailedError) do
-#       assert_no_rjs :call, 'foo', 'bar', 'baz'
-#     end
+    assert_nothing_raised{ assert_no_rjs_ :call, 'foo', 'bar' }
+    
+    assert_raises(Test::Unit::AssertionFailedError) do
+      assert_no_rjs_ :call, 'foo', 'bar', 'baz'
+    end
   end
 
   def test_draggable
@@ -290,16 +290,16 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
     
     assert_nothing_raised do
       assert_rjs_ :remove, 'offending_div'
-#      assert_no_rjs :remove, 'dancing_happy_div'
+      assert_no_rjs_ :remove, 'dancing_happy_div'
     end
     
     assert_raises(Test::Unit::AssertionFailedError) do 
       assert_rjs_ :remove, 'dancing_happy_div'
     end
     
-#     assert_raises(Test::Unit::AssertionFailedError) do 
-#       assert_no_rjs :remove, 'offending_div'
-#     end
+    assert_raises(Test::Unit::AssertionFailedError) do 
+      assert_no_rjs_ :remove, 'offending_div'
+    end
   end
 
   def test_replace
@@ -317,13 +317,16 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
         div /person_45/
       end
       
-#       assert_no_rjs :replace, 'person_45', '<div>This replaces person_46</div>'
-#       
-#       assert_no_rjs :replace, 'person_45', /person_46/
+      assert_no_rjs_ :replace, 'person_45', '<div>This replaces person_46</div>'
+      assert_no_rjs_ :replace, 'person_45', /person_46/
+
+      assert_no_rjs_ :replace, 'person_45' do
+        div 'This replaces person_46'
+      end
     end
     
-#     assert_raises(Test::Unit::AssertionFailedError) { assert_no_rjs :replace, 'person_45' }
-#     assert_raises(Test::Unit::AssertionFailedError) { assert_no_rjs :replace, 'person_45', /person_45/ }
+    assert_raises(Test::Unit::AssertionFailedError) { assert_no_rjs_ :replace, 'person_45' }
+    assert_raises(Test::Unit::AssertionFailedError) { assert_no_rjs_ :replace, 'person_45', /person_45/ }
     assert_raises(Test::Unit::AssertionFailedError) { assert_rjs_ :replace, 'person_46' }
     assert_raises(Test::Unit::AssertionFailedError) { assert_rjs_ :replace, 'person_45', 'bad stuff' }
     assert_raises(Test::Unit::AssertionFailedError) { assert_rjs_ :replace, 'person_45', /not there/}
@@ -335,21 +338,21 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
     end
   end
 
-  def negator(asserter)
-    def asserter.flunk(why)
-  
-        @charlie_you_won = true
-  
-    end
-#     asserter.attr_reader :charlie_you_won
-  end
-
-  def test_Negator
-    caller = AssertRjs::CALL.new('foo(42)', :call, self)
-    negator(caller)
-    caller.flunk('because')
-    assert{ caller.charlie_you_won }
-  end
+#   def negator(asserter)
+#     def asserter.flunk(why)
+#   
+#         @charlie_you_won = true
+#   
+#     end
+# #     asserter.attr_reader :charlie_you_won
+#   end
+# 
+#   def test_Negator
+#     caller = AssertRjs::CALL.new('foo(42)', :call, self)
+#     negator(caller)
+#     caller.flunk('because')
+#     assert{ caller.charlie_you_won }
+#   end
 
 end
 
