@@ -152,7 +152,7 @@ module Test; module Unit; module Assertions
   def assert_no_rjs_(command, *args, &block)
     sample, asserter = __interpret_rjs(command, *args, &block)
     asserter.failure_message and return sample
-    flunk("#{sample} should not be found in\n#{asserter.js}")
+    flunk("should not find #{sample.inspect} in\n#{asserter.js}")
   end
 
 #  TODO  wrappers for RSpec

@@ -204,12 +204,12 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
     get :assign
     
 #     assert_nothing_raised { assert_rjs_ :assign, 'a', '2' }
-#     assert_raises(Test::Unit::AssertionFailedError) do
+#     assert_flunk(/./)do
 #       assert_rjs_ :assign, 'a', '3'
 #     end
 #     
 #     assert_nothing_raised { assert_no_rjs :assign, 'a', '3' }
-#     assert_raises(Test::Unit::AssertionFailedError) do
+#     assert_flunk(/./)do
 #       assert_no_rjs :assign, 'a', '2'
 #     end
   end
@@ -235,7 +235,7 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
 
     assert_nothing_raised{ assert_no_rjs_ :call, 'foo', 'bar' }
 
-    assert_raises(Test::Unit::AssertionFailedError) do
+    assert_flunk(/./)do
       assert_no_rjs_ :call, 'foo', 'bar', 'baz'
     end
   end
@@ -266,7 +266,7 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
 
     assert_nothing_raised{ assert_no_rjs_ :call, 'foo', 'bar' }
     
-    assert_raises(Test::Unit::AssertionFailedError) do
+    assert_flunk(/./)do
       assert_no_rjs_ :call, 'foo', 'bar', 'baz'
     end
   end
@@ -275,12 +275,12 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
     get :draggable
     
 #     assert_nothing_raised { assert_rjs_ :draggable, 'my_image', :revert => true }
-#     assert_raises(Test::Unit::AssertionFailedError) do
+#     assert_flunk(/./)do
 #       assert_rjs_ :draggable, 'not_my_image'
 #     end
 #     
 #     assert_nothing_raised { assert_no_rjs :draggable, 'not_my_image' }
-#     assert_raises(Test::Unit::AssertionFailedError) do
+#     assert_flunk(/./)do
 #       assert_no_rjs :draggable, 'my_image', :revert => true
 #     end
   end
@@ -295,11 +295,11 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
     
     #  TODO  don't say "call call" in diagnostics
     
-    assert_raises(Test::Unit::AssertionFailedError) do 
+    assert_flunk /dancing.*not found/ do 
       assert_rjs_ :remove, 'dancing_happy_div'
     end
     
-    assert_raises(Test::Unit::AssertionFailedError) do 
+    assert_flunk /should not find.*offending_div/ do 
       assert_no_rjs_ :remove, 'offending_div'
     end
   end
@@ -327,12 +327,14 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
       end
     end
     
-    assert_raises(Test::Unit::AssertionFailedError) { assert_no_rjs_ :replace, 'person_45' }
-    assert_raises(Test::Unit::AssertionFailedError) { assert_no_rjs_ :replace, 'person_45', /person_45/ }
-    assert_raises(Test::Unit::AssertionFailedError) { assert_rjs_ :replace, 'person_46' }
-    assert_raises(Test::Unit::AssertionFailedError) { assert_rjs_ :replace, 'person_45', 'bad stuff' }
-    assert_raises(Test::Unit::AssertionFailedError) { assert_rjs_ :replace, 'person_45', /not there/}
+    assert_flunk(/should not find.*person_45/){ assert_no_rjs_ :replace, 'person_45' }
+    assert_flunk(/./){ assert_no_rjs_ :replace, 'person_45', /person_45/ }
+    assert_flunk(/./){ assert_rjs_ :replace, 'person_46' }
+    assert_flunk(/./){ assert_rjs_ :replace, 'person_45', 'bad stuff' }
+    assert_flunk(/./){ assert_rjs_ :replace, 'person_45', /not there/}
   end
+
+#  TODO  grumble - count the assertions
 
   def test_whatever
     assert_flunk /whatever not implemented/ do
