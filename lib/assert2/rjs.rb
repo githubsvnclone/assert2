@@ -14,6 +14,7 @@ module Test; module Unit; module Assertions
     end
 
     attr_reader :command, :js, :scope, :failure_message
+      #  TODO  rename js to sample
 
     def match(kode)
       RKelly.parse(js).pointcut(kode).
@@ -141,19 +142,21 @@ module Test; module Unit; module Assertions
     sample = asserter.pwn(*args, &block)
     return sample, asserter
   end
-    
+
   def assert_rjs_(command, *args, &block)
     sample, asserter = __interpret_rjs(command, *args, &block)
-    flunk(asserter.failure_message) if asserter.failure_message
+    asserter.failure_message and flunk(asserter.failure_message)
     return sample
   end
     
   def assert_no_rjs_(command, *args, &block)
     sample, asserter = __interpret_rjs(command, *args, &block)
-    flunk('TODO asserter.failure_message') unless asserter.failure_message
-    return sample
+    asserter.failure_message and return sample
+    flunk("#{sample} should not be found in\n#{asserter.js}")
   end
-    
+
+#  TODO  wrappers for RSpec
+
 #     command == :replace_html or  #  TODO  put me inside the method_missing!
 #       flunk("assert_rjs's alpha version only respects :replace_html")
 #   TODO  also crack out the args correctly and gripe if they wrong

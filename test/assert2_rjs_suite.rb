@@ -293,6 +293,8 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
       assert_no_rjs_ :remove, 'dancing_happy_div'
     end
     
+    #  TODO  don't say "call call" in diagnostics
+    
     assert_raises(Test::Unit::AssertionFailedError) do 
       assert_rjs_ :remove, 'dancing_happy_div'
     end
