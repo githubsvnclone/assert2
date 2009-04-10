@@ -152,7 +152,7 @@ module Test; module Unit; module Assertions
   def assert_no_rjs_(command, *args, &block)
     sample, asserter = __interpret_rjs(command, *args, &block)
     asserter.failure_message and return sample
-    flunk("should not find #{sample.inspect} in\n#{asserter.js}")
+    flunk("should not find #{sample.inspect} in\n#{asserter.js}") #  TODO  complaint system
   end
 
 #  TODO  wrappers for RSpec
@@ -163,3 +163,25 @@ module Test; module Unit; module Assertions
 #  TODO TDD the @matcher can be a string or regexp
 
 end; end; end
+
+module Spec; module Matchers
+
+  class GenerateJsTo
+    def initialize(scope, command, *args, &block)
+      @scope, @command, @args, @block = scope, command, args, block
+    end
+ 
+    def matches?(response, &block)
+      @block = block if block
+      sample, asserter = __interpret_rjs(@command, @args, &block)
+      @failure_message = asserter.failure_message or
+        @negative_failure_message = "should not find #{sample.inspect} in\n#{asserter.js}" #  TODO  complaint system
+    end
+ 
+    attr_reader :failure_message, :negative_failure_message
+  end
+
+  def generate_js_to(*args, &block)
+    GenerateJsTo.new(self, *args, &block)
+  end
+end; end
