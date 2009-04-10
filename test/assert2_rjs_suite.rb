@@ -330,7 +330,7 @@ class AssertRjsStubControllerSuite < ActionController::TestCase
     assert_flunk(/should not find.*person_45/){ assert_no_rjs_ :replace, 'person_45' }
     assert_flunk(/45/){ assert_no_rjs_ :replace, 'person_45', /person_45/ }
     assert_flunk(/46/){ assert_rjs_ :replace, 'person_46' }
-    assert_flunk(/40 Bucks/){ assert_rjs_ :replace, 'person_45', 'Ballad of 40 Bucks by Tom T. Hall' }
+    assert_flunk(/40 Dollars/){ assert_rjs_ :replace, 'person_45', 'Ballad of 40 Dollars by Tom T. Hall' }
     assert_flunk(/./){ assert_rjs_ :replace, 'person_45', /your're always making things difficult/ }
   end
 
