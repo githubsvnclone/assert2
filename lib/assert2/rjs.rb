@@ -166,7 +166,7 @@ end; end; end
 
 module Spec; module Matchers
 
-  class GenerateJsTo
+  class SendJsTo
     def initialize(scope, command, *args, &block)
       @scope, @command, @args, @block = scope, command, args, block
     end
@@ -181,7 +181,20 @@ module Spec; module Matchers
     attr_reader :failure_message, :negative_failure_message
   end
 
+  def __interpret_rjs(command, *args, &block)
+    klass = command.to_s.upcase
+    klass = eval("AssertRjs::#{klass}") rescue
+      flunk("#{command} not implemented!")
+    asserter = klass.new(@response.body, command, self)
+    sample = asserter.pwn(*args, &block)
+    return sample, asserter
+  end  #  ERGO  further merging
+  
+  def send_js_to(*args, &block)
+    SendJsTo.new(self, *args, &block)
+  end
+  
   def generate_js_to(*args, &block)
-    GenerateJsTo.new(self, *args, &block)
+    send_js_to(*args, &block)
   end
 end; end

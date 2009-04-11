@@ -2,9 +2,7 @@ require File.dirname(__FILE__) + '/test_helper'
 require 'assert2/rjs'
 require 'ostruct'
 require 'action_controller'
-
-# faux controller & tests SHAMELESSLY ripped off from Rich Poirier's assert_rjs test code!
-require 'action_controller/test_process'  #  thanks, bra!
+require 'action_controller/test_process'
 
 
 class AssertRjsSuite < Test::Unit::TestCase
@@ -51,7 +49,9 @@ ActionController::Base.logger = nil
 # ActionController::Base.ignore_missing_templates = false
 ActionController::Routing::Routes.reload rescue nil
  
-class AssertRjsStubController < ActionController::Base
+# faux controller & tests SHAMELESSLY ripped off from
+# Rich Poirier's assert_rjs test code!
+class AssertRjsStubController < ActionController::Base  #  thanks, bra!
   def alert
     render :update do |page|
       page.alert 'This is an alert'
