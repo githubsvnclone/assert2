@@ -173,7 +173,7 @@ module Spec; module Matchers
  
     def matches?(response, &block)
       @block = block if block
-      sample, asserter = __interpret_rjs(@command, @args, &block)
+      sample, asserter = scope.__interpret_rjs(@command, @args, &block)
       @failure_message = asserter.failure_message or
         @negative_failure_message = "should not find #{sample.inspect} in\n#{asserter.js}" #  TODO  complaint system
     end
@@ -188,7 +188,7 @@ module Spec; module Matchers
     asserter = klass.new(@response.body, command, self)
     sample = asserter.pwn(*args, &block)
     return sample, asserter
-  end  #  ERGO  further merging
+  end  #  ERGO  further merging!
   
   def send_js_to(*args, &block)
     SendJsTo.new(self, *args, &block)
