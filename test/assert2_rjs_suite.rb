@@ -121,7 +121,7 @@ class AssertRjsStubController < ActionController::Base  #  thanks, bra!
   
   def replace_html
     render :update do |page|
-      page.replace_html 'person_45', 'This goes inside person_45'
+      page.replace_html 'person_45', '<div>This goes inside person_45'
     end
   end
   
