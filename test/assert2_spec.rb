@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + '/../lib/assert2'
 
 class Test::Spec::TestCase
   module ClassMethods
-    include Assert_2_0
+#    include Assert_2_0
     def specify(specname, &block)
       raise ArgumentError, "specify needs a block"  if block.nil?
 

@@ -173,7 +173,7 @@ module Spec; module Matchers
  
     def matches?(response, &block)
       @block = block if block
-      sample, asserter = @scope.__interpret_rjs(@command, @args, &block)
+      sample, asserter = @scope.__interpret_rjs(response, @command, @args, &@block)
       return !(@failure_message = asserter.failure_message) # or
 #         @negative_failure_message = "should not find #{sample.inspect} in\n#{asserter.js}" #  TODO  complaint system
     end
@@ -181,11 +181,11 @@ module Spec; module Matchers
     attr_reader :failure_message, :negative_failure_message
   end
 
-  def __interpret_rjs(command, *args, &block)
+  def __interpret_rjs(response, command, *args, &block)
     klass = command.to_s.upcase
     klass = eval("Test::Unit::Assertions::AssertRjs::#{klass}") rescue
       flunk("#{command} not implemented!")
-    asserter = klass.new(@response.body, command, self)
+    asserter = klass.new(response, command, self)
     sample = asserter.pwn(*args, &block)
     return sample, asserter
   end  #  ERGO  further merging!
