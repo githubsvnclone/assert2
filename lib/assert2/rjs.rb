@@ -183,7 +183,7 @@ module Spec; module Matchers
 
   def __interpret_rjs(command, *args, &block)
     klass = command.to_s.upcase
-    klass = eval("AssertRjs::#{klass}") rescue
+    klass = eval("Test::Unit::Assertions::AssertRjs::#{klass}") rescue
       flunk("#{command} not implemented!")
     asserter = klass.new(@response.body, command, self)
     sample = asserter.pwn(*args, &block)
