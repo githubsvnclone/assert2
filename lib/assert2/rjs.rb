@@ -174,8 +174,9 @@ module Spec; module Matchers
     def matches?(response, &block)
       @block = block if block
       sample, asserter = @scope.__interpret_rjs(response, @command, @args, &@block)
-      return !(@failure_message = asserter.failure_message) # or
-#         @negative_failure_message = "should not find #{sample.inspect} in\n#{asserter.js}" #  TODO  complaint system
+      @failure_message = asserter.failure_message or
+        @negative_failure_message = "should not find #{sample.inspect} in\n#{asserter.js}" #  TODO  complaint system
+      return @negative_failure_message
     end
  
     attr_reader :failure_message, :negative_failure_message
