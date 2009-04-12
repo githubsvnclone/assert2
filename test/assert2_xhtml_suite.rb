@@ -423,6 +423,14 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     end
   end
 
+  def test_anybang_is_magic
+    assert_xhtml SAMPLE_LIST do
+      ul :class => :kalika do  #  goddess
+        any! 'Billings report'  #  passes despite other ul :class => :kalika
+      end
+    end
+  end
+
   def test_assert_xhtml_matches_ampersandage
     uri = 'http://kexp.org/playlist/newplaylist.aspx?t=1&year=2009&month=3&day=19&hour=7'
     sample_1 = "<div><a href='#{ uri }'>King Khan &amp; The Shrines</a></div>"
