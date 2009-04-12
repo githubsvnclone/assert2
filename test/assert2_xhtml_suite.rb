@@ -185,6 +185,15 @@ class AssertXhtmlSuite < Test::Unit::TestCase
 
   end
 
+  def test_any_element
+    bhw = BeHtmlWith.create(SAMPLE_FORM)
+    any = Nokogiri::XML('<any attribute="whatever"/>')
+    assert{ bhw.translate_tag(any.root) == 'any' }
+    any = Nokogiri::XML::Builder.new{ any! :attribute => 'whatever' }
+    element = any.doc.xpath('/*').first
+    assert{ bhw.translate_tag(element) == '*' }
+  end
+
   def test_xpath_matcher_does_not_use_refer
     bhw  = BeHtmlWith.create(SAMPLE_FORM)
     path = bhw.build_xpaths{ legend :xpath! => 'parent::fieldset' }.first

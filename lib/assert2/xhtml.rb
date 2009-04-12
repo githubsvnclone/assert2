@@ -122,7 +122,12 @@ class BeHtmlWith
   end
 
   def translate_tag(element)
-    element.name.sub(/\!$/, '')
+#   p element.name if element.name =~ /\!/
+    if element.name == 'any!'
+      '*'
+    else
+      element.name.sub(/\!$/, '')
+    end
   end
 
   def build_predicate(element, conjunction = 'and')
