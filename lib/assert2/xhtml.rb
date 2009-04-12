@@ -112,13 +112,17 @@ class BeHtmlWith
     if element.name == 'without!'
       return 'not( ' + build_predicate(element, 'or') + ' )'
     else
-      target = element.name.sub(/\!$/, '')
+      target = translate_tag(element)
       path = "descendant::#{ target }[ refer(., '#{ count }') "
         #  refer() is first so we collect many samples, despite boolean short-circuiting
       path << 'and '  if elemental_children(element).any?
       path << build_predicate(element) + ']'
       return path
     end
+  end
+
+  def translate_tag(element)
+    element.name.sub(/\!$/, '')
   end
 
   def build_predicate(element, conjunction = 'and')
