@@ -72,10 +72,10 @@ class BeHtmlWith
                 :doc,
                 :failure_message,
                 :message,
+                :reference,
+                :references,
+                :sample,
                 :scope
-  attr_reader   :references
-  attr_writer   :reference,
-                :sample
 
   def matches?(stwing, &block)
     @block ||= block  #  ERGO  test that ||= - preferrably with a real RSpec suite!
