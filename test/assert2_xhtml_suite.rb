@@ -88,10 +88,10 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     assert_xhtml SAMPLE_LIST do
       ul :style => 'font-size: 18' do
         li 'model' do
-          li(:xpath! => 'position() = 1'){ text 'Billings report'  }
-          li(:xpath! => 'position() = 2'){ text /sales report/i  }  
-          li(:xpath! => '1'){ text 'Billings report' }
-          li(:xpath! => '3'){ text 'Billings criteria' }
+          li :xpath! => 'position() = 1' do  text 'Billings report'    end
+          li :xpath! => 'position() = 2' do  text /sales report/i      end
+          li :xpath! => '1'              do  text 'Billings report'    end
+          li :xpath! => '3'              do  text 'Billings criteria'  end
         end
       end
     end
