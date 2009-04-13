@@ -122,7 +122,6 @@ class BeHtmlWith
   end
 
   def translate_tag(element)
-#   p element.name if element.name =~ /\!/
     if element.name == 'any!'
       '*'
     else

@@ -30,8 +30,6 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     assert_xhtml SAMPLE_FORM, &assemble_form_example
   end
    
-#     assemble_BeHtmlWith(SAMPLE_FORM, &assemble_form_example)  #  TODO  use this more, rename to assemble
-
   def test_node_matcher_matches_node_text
     doc = Nokogiri::HTML('<ul>
                             <li>strange<ul><li>magic</li></ul>
@@ -186,9 +184,9 @@ class AssertXhtmlSuite < Test::Unit::TestCase
   end
 
   def test_any_element
-    bhw = BeHtmlWith.create(SAMPLE_FORM)
-    any = Nokogiri::XML('<any attribute="whatever"/>')
-    assert{ bhw.translate_tag(any.root) == 'any' }
+    bhw = assemble_BeHtmlWith{ any :attribute => 'whatever' }
+    element = bhw.builder.doc.root
+    assert{ bhw.translate_tag(element) == 'any' }
     any = Nokogiri::XML::Builder.new{ any! :attribute => 'whatever' }
     element = any.doc.xpath('/*').first
     assert{ bhw.translate_tag(element) == '*' }
@@ -494,12 +492,12 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
     denigh{ diagnostic =~ /font-size/ } #  ERGO  fix assert{ 2.0 } it calls denigh "assert"...
   end
 
-  def assemble_BeHtmlWith(stwing, &block)
+  def assemble_BeHtmlWith(stwing = SAMPLE_FORM, &block)
     @bhw = BeHtmlWith.new(nil)
     @bhw.doc = Nokogiri::HTML(stwing)
     @xpaths = @bhw.build_xpaths &block if block
     return @bhw
-  end
+  end  #  TODO  use this more
 
 end
 
