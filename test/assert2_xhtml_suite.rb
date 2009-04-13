@@ -193,7 +193,7 @@ class AssertXhtmlSuite < Test::Unit::TestCase
   end
 
   def test_xpath_matcher_does_not_use_refer
-    bhw  = BeHtmlWith.create(SAMPLE_FORM)
+    bhw  = assemble_BeHtmlWith
     path = bhw.build_xpaths{ legend :xpath! => 'parent::fieldset' }.first
     reference = bhw.builder.doc.root
     bhw.sample = bhw.doc.xpath('//legend').first
