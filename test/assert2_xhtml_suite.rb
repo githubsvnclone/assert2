@@ -187,8 +187,8 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     bhw = assemble_BeHtmlWith{ any :attribute => 'whatever' }
     element = bhw.builder.doc.root
     assert{ bhw.translate_tag(element) == 'any' }
-    any = Nokogiri::XML::Builder.new{ any! :attribute => 'whatever' }
-    element = any.doc.xpath('/*').first
+    bhw = assemble_BeHtmlWith{ any! :attribute => 'whatever' }
+    element = bhw.builder.doc.root
     assert{ bhw.translate_tag(element) == '*' }
   end
 
