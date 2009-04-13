@@ -417,7 +417,7 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
 
   def test_class_is_magic
     assert_xhtml SAMPLE_LIST do
-      ul :class => :kalika do  #  goddess
+      ul.kalika do  #  goddess
         li 'Billings report'  #  passes despite other ul :class => :kalika
       end
     end
@@ -425,8 +425,14 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
 
   def test_anybang_is_magic
     assert_xhtml SAMPLE_LIST do
-      ul :class => :kalika do  #  goddess
-        any! 'Billings report'  #  passes despite other ul :class => :kalika
+      ul.kalika do
+        any! 'Billings report'
+      end
+    end
+    
+    assert_xhtml_flunk SAMPLE_LIST do
+      without! do
+        any! 'Billings report'
       end
     end
   end
