@@ -250,6 +250,13 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     end
   end
   
+  def test_nokogiri_builder_likes_bangs
+    built = Nokogiri::HTML::Builder.new do
+              harlequin!
+            end
+    assert{ built.doc.to_html =~ /harlequin\!/ }
+  end
+  
   def test_without!
     assert_xhtml SAMPLE_FORM do
       fieldset do
@@ -465,6 +472,7 @@ p built.doc.root.xpath_with_callback(path, :refer){|nodes, index| nodes}.first.n
       ul{ li{ ul{ li 'Sales report'
                   li 'All Sales report criteria' } } }
     end
+    
     assert_xhtml SAMPLE_LIST do
       ul{ li{ ul{ li 'Sales report'
           without!{ li 'All Sales report criteria ' } } } }

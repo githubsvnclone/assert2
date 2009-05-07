@@ -359,3 +359,30 @@ class Nokogiri::XML::Node
 
 end
 
+module Nokogiri
+  module XML
+    class Builder
+      def cleanse_element_name(method)
+        method.to_s.sub(/[_]$/, '') # or [_!]
+      end  #  monkey patch me!
+    
+      def method_missing method, *args, &block # :nodoc:
+        if @context && @context.respond_to?(method)
+          @context.send(method, *args, &block)
+        else
+          node = Nokogiri::XML::Node.new(cleanse_element_name(method), @doc) { |n|
+            args.each do |arg|
+              case arg
+              when Hash
+                arg.each { |k,v| n[k.to_s] = v.to_s }
+              else
+                n.content = arg
+              end
+            end
+          }
+          insert(node, &block)
+        end
+      end
+    end
+  end
+end
