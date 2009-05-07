@@ -251,9 +251,7 @@ class AssertXhtmlSuite < Test::Unit::TestCase
   end
   
   def test_nokogiri_builder_likes_bangs
-    built = Nokogiri::HTML::Builder.new do
-              harlequin!
-            end
+    built = Nokogiri::HTML::Builder.new{ harlequin! }
     assert{ built.doc.to_html =~ /harlequin\!/ }
   end
   
