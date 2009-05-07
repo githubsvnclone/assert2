@@ -94,10 +94,10 @@ class AssertXhtmlSuite < Test::Unit::TestCase
       end
     end
     
-    assert_xhtml SAMPLE_LIST do
-      li /model/ do
-        without! do
-          li(:xpath! => 'position() = 2'){ text 'Billings report'  }
+    assert_xhtml SAMPLE_LIST do |x|
+      x.li /model/ do
+        x.without! do
+          x.li(:xpath! => 'position() = 2'){ x.text 'Billings report' }
         end
       end
     end
