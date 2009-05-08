@@ -94,10 +94,12 @@ class AssertXhtmlSuite < Test::Unit::TestCase
       end
     end
     
+    teh_scope_bug_be_fixed = 'Billings report'
+    
     assert_xhtml SAMPLE_LIST do |x|
       x.li /model/ do
         x.without! do
-          x.li(:xpath! => 'position() = 2'){ x.text 'Billings report' }
+          x.li(:xpath! => 'position() = 2'){ x.text teh_scope_bug_be_fixed }
         end
       end
     end
