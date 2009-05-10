@@ -55,6 +55,16 @@ class AssertRjsSuite < Test::Unit::TestCase
     end
   end
 
+  def test_assert_rjs_call_finds_arguments
+    onclick = 'Element.toggle("account");; return false;'
+    assert_rjs_ onclick, :call, 'Element.toggle', 'account'
+  end  #  ERGO  blog about these two
+
+  def test_assert_rjs_call_finds_arguments_fuzzily
+    onclick = 'Element.toggle("account");; return false;'
+    assert_rjs_ onclick, :call, 'Element.toggle', /count/
+  end
+
 end
 
 
