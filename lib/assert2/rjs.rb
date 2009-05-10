@@ -92,6 +92,13 @@ module Test; module Unit; module Assertions
         @command = :call
         pwn_call 'Element.remove', *args, &block
       end
+    end  #  TODO  get the call call out of the error message
+
+    class TOGGLE < AssertRjs
+      def pwn *args, &block
+        @command = :call
+        pwn_call 'Element.toggle', *args, &block
+      end
     end
 
     class CALL < AssertRjs

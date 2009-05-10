@@ -58,12 +58,18 @@ class AssertRjsSuite < Test::Unit::TestCase
   def test_assert_rjs_call_finds_arguments
     onclick = 'Element.toggle("account");; return false;'
     assert_rjs_ onclick, :call, 'Element.toggle', 'account'
-  end  #  ERGO  blog about these two
+  end  #  ERGO  blog about these three
 
   def test_assert_rjs_call_finds_arguments_fuzzily
     onclick = 'Element.toggle("account");; return false;'
     assert_rjs_ onclick, :call, 'Element.toggle', /count/
   end
+
+  def test_assert_rjs_call_finds_arguments
+    onclick = 'Element.toggle("account");; return false;'
+    assert_rjs_ onclick, :toggle, 'account'
+    assert_rjs_ onclick, :toggle, /count/
+  end  #  ERGO  does the FauxController have a toggle to also test?
 
 end
 
@@ -74,7 +80,7 @@ ActionController::Routing::Routes.reload rescue nil
  
 # faux controller & tests SHAMELESSLY ripped off from
 # Rich Poirier's assert_rjs test code!
-class AssertRjsStubController < ActionController::Base  #  thanks, bra!
+class FauxController < ActionController::Base  #  thanks, bra!
   def alert
     render :update do |page|
       page.alert 'This is an alert'
@@ -189,8 +195,8 @@ class AssertRjsStubController < ActionController::Base  #  thanks, bra!
 end
 
 
-class AssertRjsStubControllerSuite < ActionController::TestCase
-  tests AssertRjsStubController
+class FauxControllerSuite < ActionController::TestCase
+  tests FauxController
   
   def test_assert_rjs_misses_its_response_body
      #  TODO  test that a missing response_body provides a good error
