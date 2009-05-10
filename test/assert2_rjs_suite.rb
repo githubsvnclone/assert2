@@ -42,6 +42,19 @@ class AssertRjsSuite < Test::Unit::TestCase
     end
   end
 
+  def test_assert_rjs_passes_js_in_its_first_argument
+    source = @response.body
+    @response = nil
+    assert_rjs_ source, :replace_html, :label_7
+    assert_rjs_ source, :replace_html, :label_7, /Top_Ranking/
+    assert_rjs_ source, :replace_html, :label_7, /pet &lt; than a chihuahua/
+
+    assert_rjs_ source, :replace_html, :label_7 do
+      input.Top_Ranking! :type => :checkbox, :value => :Y
+      input.cross_sale_1! :type => :hidden, :value => 7
+    end
+  end
+
 end
 
 

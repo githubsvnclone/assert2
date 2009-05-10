@@ -143,14 +143,28 @@ module Test; module Unit; module Assertions
     return sample, asserter
   end
 
-  def assert_rjs_(command, *args, &block)
-    sample, asserter = __interpret_rjs(@response.body, command, *args, &block)
+  def assert_rjs_(*args, &block)
+    if args.first.class == Symbol
+      command, *args = *args
+      response = @response.body
+    else
+      response, command, *args = *args
+    end
+    
+    sample, asserter = __interpret_rjs(response, command, *args, &block)
     asserter.failure_message and flunk(asserter.failure_message)
     return sample
   end
     
-  def assert_no_rjs_(command, *args, &block)
-    sample, asserter = __interpret_rjs(@response.body, command, *args, &block)
+  def assert_no_rjs_(*args, &block)
+    if args.first.class == Symbol
+      command, *args = *args
+      response = @response.body
+    else
+      response, command, *args = *args  #  TODO  test me!
+    end
+    
+    sample, asserter = __interpret_rjs(response, command, *args, &block)
     asserter.failure_message and return sample
     flunk("should not find #{sample.inspect} in\n#{asserter.js}") #  TODO  complaint system
   end
