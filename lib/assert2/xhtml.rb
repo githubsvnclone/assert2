@@ -340,11 +340,6 @@ module Spec; module Matchers
   end
 end; end
 
-class Nokogiri::XML::Node
-      def content= string
-        self.native_content = encode_special_chars(string.to_s)
-      end
-end  #  ERGO  retire these monkey patches as Nokogiri catches up
 
 class Nokogiri::XML::Node
 
