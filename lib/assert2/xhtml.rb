@@ -74,6 +74,7 @@ class BeHtmlWith
                 :message,
                 :reference,
                 :references,
+                :returnable,
                 :sample,
                 :scope
 
@@ -147,9 +148,12 @@ class BeHtmlWith
   end
 
   def match_xpath(path, &refer)
-    @doc.root.xpath_with_callback path, :refer do |element, index|
-      collect_samples(element, index.to_i)
-    end
+    nodes = @doc.root.xpath_with_callback path, :refer do |element, index|
+       collect_samples(element, index.to_i)
+     end
+
+    @returnable ||= nodes.first  #  TODO  be_with_html must get on board too
+    return nodes
   end
 
 #  ERGO  match text with internal spacies?
@@ -321,7 +325,7 @@ module Test; module Unit; module Assertions
       matcher.matches?(xhtml, &block)
       message = matcher.failure_message
       flunk message if message.to_s != ''
-#      return matcher.builder.doc.to_html # TODO return something reasonable
+      return matcher.returnable
     else
      _assert_xml(xhtml)
       return @xdoc

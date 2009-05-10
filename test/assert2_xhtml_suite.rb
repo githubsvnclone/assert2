@@ -82,6 +82,14 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     end
   end
   
+  def test_assert_xhtml_returns_its_node
+    node = assert_xhtml SAMPLE_LIST do
+      ul :style => 'font-size: 18'
+    end  #  TODO  blog you can't name the outer node the same as ul
+
+    assert{ node[:style] == 'font-size: 18' }
+  end  #  TODO blog that we return the first top node!
+ 
   def test_assert_xhtml_counts_its_shots
     assert_xhtml SAMPLE_LIST do
       ul :style => 'font-size: 18' do
