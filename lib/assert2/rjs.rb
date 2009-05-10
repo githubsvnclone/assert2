@@ -134,28 +134,26 @@ module Test; module Unit; module Assertions
     end
   end
 
-  def __interpret_rjs(command, *args, &block)
+  def __interpret_rjs(response, command, *args, &block)
     klass = command.to_s.upcase
     klass = eval("AssertRjs::#{klass}") rescue
       flunk("#{command} not implemented!")
-    asserter = klass.new(@response.body, command, self)
+    asserter = klass.new(response, command, self)
     sample = asserter.pwn(*args, &block)
     return sample, asserter
   end
 
   def assert_rjs_(command, *args, &block)
-    sample, asserter = __interpret_rjs(command, *args, &block)
+    sample, asserter = __interpret_rjs(@response.body, command, *args, &block)
     asserter.failure_message and flunk(asserter.failure_message)
     return sample
   end
     
   def assert_no_rjs_(command, *args, &block)
-    sample, asserter = __interpret_rjs(command, *args, &block)
+    sample, asserter = __interpret_rjs(@response.body, command, *args, &block)
     asserter.failure_message and return sample
     flunk("should not find #{sample.inspect} in\n#{asserter.js}") #  TODO  complaint system
   end
-
-#  TODO  wrappers for RSpec
 
 #     command == :replace_html or  #  TODO  put me inside the method_missing!
 #       flunk("assert_rjs's alpha version only respects :replace_html")
