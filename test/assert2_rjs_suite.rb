@@ -71,6 +71,35 @@ class AssertRjsSuite < Test::Unit::TestCase
     assert_rjs_ onclick, :toggle, /count/
   end  #  ERGO  does the FauxController have a toggle to also test?
 
+  def prop_node(json)
+    @js = "foo(#{ json })"
+    nodes = RKelly.parse(@js)
+    foo = nodes.pointcut('foo()').matches.first
+    return foo.grep(RKelly::Nodes::ArgumentsNode).first.value.first
+  end
+
+  def test_props_to_hash
+    props = prop_node('{ bottom: "Stuff" }')
+    rjs = AssertRjs::CALL.new(@js, :alert, self)
+    assert{ rjs.props_to_hash(props.value).nil? }
+    assert{ rjs.props_to_hash(props) == { :bottom => 'Stuff' } }
+    hash = rjs.props_to_hash(props)
+  end  #  TODO  move me out
+
+  def test_hash_match
+    props = prop_node('{ bottom: "Stuff" }')
+    rjs = AssertRjs::CALL.new(@js, :alert, self)
+    hash = rjs.props_to_hash(props)
+    assert{ rjs.hash_match(hash, { :bottom => 'Stuff' }) }
+    assert{ rjs.hash_match(hash, { :bottom => /Stuff/ }) }
+    assert{ rjs.hash_match(hash, { :bottom => /Stu/   }) }
+    deny{ rjs.hash_match(hash, { :bottom => /Stew/   }) }
+    deny{ rjs.hash_match(hash, { :bottom => 'Stew'   }) }
+    deny{ rjs.hash_match(hash, { :top => 'Stuff'  }) }
+    assert{ rjs.hash_match(hash.merge(:also => 'whatever'), 
+                                 { :bottom => /Stuff/ }) }
+  end  #  TODO  move me out
+  
 end
 
 
@@ -333,36 +362,7 @@ class FauxControllerSuite < ActionController::TestCase
     end
   end
 
-  def prop_node(json)
-    @js = "foo(#{ json })"
-    nodes = RKelly.parse(@js)
-    foo = nodes.pointcut('foo()').matches.first
-    return foo.grep(RKelly::Nodes::ArgumentsNode).first.value.first
-  end
-
-  def test_props_to_hash
-    props = prop_node('{ bottom: "Stuff" }')
-    rjs = AssertRjs::CALL.new(@js, :alert, self)
-    assert{ rjs.props_to_hash(props.value).nil? }
-    assert{ rjs.props_to_hash(props) == { :bottom => 'Stuff' } }
-    hash = rjs.props_to_hash(props)
-  end  #  TODO  move me out
-
-  def TODO_test_hash_match
-    props = prop_node('{ bottom: "Stuff" }')
-    rjs = AssertRjs::CALL.new(@js, :alert, self)
-    hash = rjs.props_to_hash(props)
-    assert{ rjs.hash_match(hash, { :bottom => 'Stuff' }) }
-    assert{ rjs.hash_match(hash, { :bottom => /Stuff/ }) }
-    assert{ rjs.hash_match(hash, { :bottom => /Stu/   }) }
-    deny{ rjs.hash_match(hash, { :bottom => /Stew/   }) }
-    deny{ rjs.hash_match(hash, { :bottom => 'Stew'   }) }
-    deny{ rjs.hash_match(hash, { :top => 'Stuff'  }) }
-    assert{ rjs.hash_match(hash.merge(:also => 'whatever'), 
-                                 { :bottom => /Stuff/ }) }
-  end  #  TODO  move me out
-
-  def TODO_test_insert_html
+  def TODO_test_insert_html_raw
     get :insert_html
     puts @response.body
     assert_rjs_ :call, 'Element.insert', :content, { :bottom => /Stuff/ }

@@ -97,6 +97,16 @@ module Test; module Unit; module Assertions
       end
     end
 
+    def hash_match(sample, reference)
+      reference.each do |key, value|
+        sample[key] == value or
+          value.kind_of?(Regexp) && sample[key] =~ value or 
+            return false
+      end
+      
+      return true
+    end
+
     class ALERT < AssertRjs
       def pwn *args, &block
         @command = :call
