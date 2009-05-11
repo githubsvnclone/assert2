@@ -340,11 +340,26 @@ class FauxControllerSuite < ActionController::TestCase
     return foo.grep(RKelly::Nodes::ArgumentsNode).first.value.first
   end
 
-  def test_property_nodes_to_hash
+  def test_props_to_hash
     props = prop_node('{ bottom: "Stuff" }')
     rjs = AssertRjs::CALL.new(@js, :alert, self)
     assert{ rjs.props_to_hash(props.value).nil? }
     assert{ rjs.props_to_hash(props) == { :bottom => 'Stuff' } }
+    hash = rjs.props_to_hash(props)
+  end  #  TODO  move me out
+
+  def TODO_test_hash_match
+    props = prop_node('{ bottom: "Stuff" }')
+    rjs = AssertRjs::CALL.new(@js, :alert, self)
+    hash = rjs.props_to_hash(props)
+    assert{ rjs.hash_match(hash, { :bottom => 'Stuff' }) }
+    assert{ rjs.hash_match(hash, { :bottom => /Stuff/ }) }
+    assert{ rjs.hash_match(hash, { :bottom => /Stu/   }) }
+    deny{ rjs.hash_match(hash, { :bottom => /Stew/   }) }
+    deny{ rjs.hash_match(hash, { :bottom => 'Stew'   }) }
+    deny{ rjs.hash_match(hash, { :top => 'Stuff'  }) }
+    assert{ rjs.hash_match(hash.merge(:also => 'whatever'), 
+                                 { :bottom => /Stuff/ }) }
   end  #  TODO  move me out
 
   def TODO_test_insert_html
