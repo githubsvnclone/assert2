@@ -333,6 +333,16 @@ class FauxControllerSuite < ActionController::TestCase
     end
   end
 
+  def test_property_nodes_to_hash
+    js = '{ bottom: "Stuff in the content div" }'
+  end  #  TODO  move me out
+
+  def TODO_test_insert_html
+    get :insert_html
+    puts @response.body
+    assert_rjs_ :call, 'Element.insert', :content, { :bottom => /Stuff/ }
+  end
+
   def test_replace
     get :replace
     
