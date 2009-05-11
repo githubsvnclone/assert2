@@ -63,6 +63,7 @@ module Test; module Unit; module Assertions
         matchers = matchers_backup.dup
         
         thang.value.each do |arg|
+#         p arg
           @text = eval(arg.value)
           @matcher = matchers.first # or return @text
           @matcher.to_s == @text or /#{ @matcher }/ =~ @text or break

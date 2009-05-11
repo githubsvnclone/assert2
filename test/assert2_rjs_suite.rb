@@ -334,8 +334,8 @@ class FauxControllerSuite < ActionController::TestCase
   end
 
   def prop_node(json)
-    js = "foo(#{ json })"
-    nodes = RKelly.parse(js)
+    @js = "foo(#{ json })"
+    nodes = RKelly.parse(@js)
     foo = nodes.pointcut('foo()').matches.first
     return foo.grep(RKelly::Nodes::ArgumentsNode).first.value.first
   end
@@ -343,7 +343,9 @@ class FauxControllerSuite < ActionController::TestCase
   def test_property_nodes_to_hash
     props = prop_node('{ bottom: "Stuff in the content div" }')
 #    puts (nodes.public_methods - [].public_methods).sort
-    p props.value
+    p props #.value
+        rjs = AssertRjs::CALL.new(@js, :alert, self)
+
   end  #  TODO  move me out
 
   def TODO_test_insert_html
