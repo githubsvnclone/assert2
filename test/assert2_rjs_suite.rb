@@ -362,9 +362,8 @@ class FauxControllerSuite < ActionController::TestCase
     end
   end
 
-  def TODO_test_insert_html_raw
+  def test_insert_html_raw
     get :insert_html
-    puts @response.body
     assert_rjs_ :call, 'Element.insert', :content, { :bottom => /Stuff/ }
   end
 

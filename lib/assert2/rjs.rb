@@ -64,9 +64,16 @@ module Test; module Unit; module Assertions
         
         thang.value.each do |arg|
 #         p arg
-          @text = eval(arg.value)
           @matcher = matchers.first # or return @text
-          @matcher.to_s == @text or /#{ @matcher }/ =~ @text or break
+          
+          if @matcher.kind_of?(Hash) and
+             hash = props_to_hash(arg) 
+            hash_match(hash, @matcher) or break  #  TODO  rename to match_hash
+          else
+            @text = eval(arg.value)
+            @matcher.to_s == @text or /#{ @matcher }/ =~ @text or break
+          end
+          
           matchers.shift
         end
         
