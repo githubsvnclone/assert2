@@ -341,11 +341,10 @@ class FauxControllerSuite < ActionController::TestCase
   end
 
   def test_property_nodes_to_hash
-    props = prop_node('{ bottom: "Stuff in the content div" }')
-#    puts (nodes.public_methods - [].public_methods).sort
-    p props #.value
-        rjs = AssertRjs::CALL.new(@js, :alert, self)
-
+    props = prop_node('{ bottom: "Stuff" }')
+    rjs = AssertRjs::CALL.new(@js, :alert, self)
+    assert{ rjs.props_to_hash(props.value).nil? }
+    assert{ rjs.props_to_hash(props) == { :bottom => 'Stuff' } }
   end  #  TODO  move me out
 
   def TODO_test_insert_html

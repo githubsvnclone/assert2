@@ -81,6 +81,22 @@ module Test; module Unit; module Assertions
                         matchers } not found in #{ js }")
     end
 
+    def props_to_hash(props)
+      case props
+        when RKelly::Nodes::ObjectLiteralNode
+          hash = {}
+          
+          props.value.each do |thang|
+            hash[thang.name.to_sym] = eval(thang.value.value)
+          end
+
+          return hash
+
+        else
+          return nil
+      end
+    end
+
     class ALERT < AssertRjs
       def pwn *args, &block
         @command = :call
