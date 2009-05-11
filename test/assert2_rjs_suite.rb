@@ -367,6 +367,12 @@ class FauxControllerSuite < ActionController::TestCase
     assert_rjs_ :call, 'Element.insert', :content, { :bottom => /Stuff/ }
   end
 
+  def test_insert_html
+    get :insert_html
+    assert_rjs_ :insert_html, :bottom, :content, /Stuff/
+      #  TODO  block notation already
+  end
+
   def test_replace
     get :replace
     

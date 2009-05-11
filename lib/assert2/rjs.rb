@@ -76,7 +76,7 @@ module Test; module Unit; module Assertions
           
           matchers.shift
         end
-        
+
         matchers.empty? and 
           matchers_backup.length == thang.value.length and 
           return @text 
@@ -121,6 +121,12 @@ module Test; module Unit; module Assertions
       end
     end
 
+    class CALL < AssertRjs
+      def pwn *args, &block  #  TODO  use or reject the block
+        pwn_call *args, &block
+      end
+    end
+
     class REMOVE < AssertRjs
       def pwn *args, &block
         @command = :call
@@ -135,9 +141,11 @@ module Test; module Unit; module Assertions
       end
     end
 
-    class CALL < AssertRjs
-      def pwn *args, &block  #  TODO  use or reject the block
-        pwn_call *args, &block
+    class INSERT_HTML < AssertRjs
+      def pwn *args, &block
+        @command = :call
+        location, id, html = args
+        pwn_call 'Element.insert', id, { location.to_sym => html }, &block
       end
     end
 
