@@ -97,9 +97,16 @@ class BeHtmlWith
   end
 
   def elemental_children(element = @builder.doc)
-    element.children.grep(Nokogiri::XML::Element)
-  end
+    element_kids = element.children.grep(Nokogiri::XML::Node)
 
+    element_kids = element_kids.reject{|k| 
+                     k.class == Nokogiri::XML::Text ||
+                     k.class == Nokogiri::XML::DTD
+                     }  #  CONSIDER  rebuild to use not abuse the text nodage!
+
+    return element_kids
+  end
+  
   def build_deep_xpath(element)
     path = build_xpath(element)
     path.index('not(') == 0 and return '/*[ ' + path + ' ]'
@@ -149,9 +156,9 @@ class BeHtmlWith
 
   def match_xpath(path, &refer)
     nodes = @doc.root.xpath_with_callback path, :refer do |element, index|
-       collect_samples(element, index.to_i)
-     end
-
+      collect_samples(element, index.to_i)
+    end
+     
     @returnable ||= nodes.first  #  TODO  be_with_html must get on board too
     return nodes
   end
@@ -242,11 +249,12 @@ class BeHtmlWith
     ref_text.empty? and return true
     sam_text = get_texts(sam)
     (ref_text - sam_text).empty? and return true
-    ref_text.length == 1 and match_regexp(ref_text.first, sam_text.join)
+    got = (ref_text.length == 1 and match_regexp(ref_text.first, sam_text.join))
+    return got
   end
 
   def get_texts(element)
-    element.children.grep(Nokogiri::XML::Text).
+   element.children.grep(Nokogiri::XML::Text).
       map{|x|x.to_s.strip}.select{|x|x.any?}
   end
 
@@ -278,7 +286,7 @@ class BeHtmlWith
 
   def build_xpath_too(element)
     path = element.name.sub(/\!$/, '')
-    element_kids = element.children.grep(Nokogiri::XML::Element)
+    element_kids = element.children.grep(Nokogiri::XML::Node)
     path << '[ '
     count = @references.length
     @references << element

@@ -29,7 +29,7 @@ class AssertXhtmlSuite < Test::Unit::TestCase
   def test_assert_xhtml_for_forms
     assert_xhtml SAMPLE_FORM, &assemble_form_example
   end
-   
+
   def test_node_matcher_matches_node_text
     doc = Nokogiri::HTML('<ul>
                             <li>strange<ul><li>magic</li></ul>
@@ -45,7 +45,7 @@ class AssertXhtmlSuite < Test::Unit::TestCase
     assert{ matcher.match_text(node_2, node_3) }
     assert{ matcher.match_text(node_3, node_2) }
   end
-  
+
   def nodes_equal(node_1, node_2)
     node_1.document == node_2.document and node_1.path == node_2.path
   end
@@ -278,7 +278,7 @@ class AssertXhtmlSuite < Test::Unit::TestCase
         end
       end
     end
-    
+
     assert_xhtml SAMPLE_FORM do
       without!{ fieldset 'naba' }
     end
